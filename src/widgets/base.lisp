@@ -21,7 +21,7 @@
 
   ;; Just dependencies
   (:import-from #:log)
-  
+
   (:export #:defwidget
            #:render
            #:get-css-classes
@@ -77,9 +77,13 @@ inherits from 'widget' if no direct superclasses are provided."
 
 
 (defmethod get-html-tag ((widget t))
-  (if (find :table (get-html-path))
-      :tr
-      :div))
+  (case (first (get-html-path))
+    (:table
+     :tr)
+    (:tr
+     :td)
+    (t
+     :div)))
 
 
 (defgeneric get-css-classes (widget)

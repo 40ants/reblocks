@@ -2,12 +2,15 @@
  ChangeLog
 ===========
 
-0.35.4 (date here)
-==================
+0.35.4 (2019-04-03)
+===================
 
 * The function ``weblocks/widgets/base:get-html-tag`` was fixed to
-  return a ``:tr`` inside a table instead of a ``:div``, so widgets
-  inside a table are rendered correctly.
+  render tables correctly. If the widget's parent is a ``:table``
+  element, then this function returns ``:tr`` (instead of a
+  ``:div``). If it is ``:tr``, it returns ``:td``, and ``:div``
+  otherwise.
+* a new setting ``weblocks/html:*pretty-html*`` was created, to further control pretty printing of html both in code and in tests.
 
 0.35.3 (2019-03-31)
 ===================
