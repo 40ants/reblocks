@@ -2,15 +2,20 @@
  Quickstart
 ============
 
-.. warning:: This version of Weblocks is not in Quicklisp yet. To
-             install it you need to clone the repository somewhere where
-             ASDF will find it, for example, to the ``~/common-lisp/`` directory.
+.. warning:: This version of Weblocks is available only from
+             Ultralisp.org which is an unofficial Quicklisp
+             distribution.
+
+             During this tutorial, you'll learn how to plug
+             third-party distributions into your quicklisp client.
 
 
 Load weblocks and create a package for a sandbox:
 
 .. code-block:: common-lisp-repl
 
+   CL-USER> (ql-dist:install-dist "http://dist.ultralisp.org/"
+                                  :prompt nil)
    CL-USER> (ql:quickload '(:weblocks :weblocks-ui :find-port))
    CL-USER> (defpackage todo
               (:use #:cl
