@@ -2,6 +2,11 @@
  Forms
 =======
 
+.. warning:: This section is outdated and belong to the old Weblocks documention.
+
+             SHOULD BE REWRITTEN. Probably we need only to link to the
+             `weblocks-ui <https://github.com/40ants/weblocks-ui>`_ here.
+
 Forms enable the user to communicate with a web application.
 
 Usually the server side action boils down to selecting, modifying, creating or

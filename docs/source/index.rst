@@ -25,18 +25,13 @@ Contents
    installation
    quickstart
    components
-   stores
    widgets
    hooks
    forms
-   views
    continuations
    dependencies
    html
-   adapting
-   internals
    contributing
-   hints
    changelog
 
 

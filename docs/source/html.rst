@@ -2,6 +2,11 @@
  HTML generation
 =================
 
+.. warning:: This section is outdated and belong to the old Weblocks documention.
+
+             SHOULD BE REWRITTEN.
+
+
 At the moment only CL-WHO is supported out of the box, but YACLML and others may
 also be used.
 
