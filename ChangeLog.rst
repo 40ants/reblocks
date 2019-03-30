@@ -2,6 +2,24 @@
  ChangeLog
 ===========
 
+0.35.3 (2019-03-31)
+===================
+
+* Added a ``weblocks/response:add-retpath-to`` function, useful to add a
+  ``retpath`` GET parameter to the URL.
+
+  For example, calling::
+
+    (add-retpath-to "/login" :retpath
+    "http://example.com:10050/foo/bar")
+
+  Will return::
+
+    "/login?retpath=http%3A%2F%2Fexample.com%3A10050%2Ffoo%2Fbar"
+
+  Argument ``:retpath`` is optional. By default, function
+  will take an URL of the current web page.
+
 0.35.2 (2019-03-21)
 ===================
 
