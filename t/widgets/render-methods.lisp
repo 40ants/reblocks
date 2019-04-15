@@ -11,8 +11,6 @@
                 #:is-html))
 (in-package weblocks-test/widgets/render-methods)
 
-(setf weblocks/html:*pretty-html* nil)
-
 (defwidget simple-widget ()
   ())
 
