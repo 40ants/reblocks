@@ -13,6 +13,9 @@
    #:in-session-p
    #:init
    #:get-session-id
+   ;; this function is defined in session-reset.lisp
+   ;; to not introduce circular dependencies
+   #:reset
    #:expire
    #:get-number-of-sessions
    #:make-session-middleware
