@@ -2,15 +2,24 @@
  ChangeLog
 ===========
 
-0.35.4 (2019-04-03)
+0.36.0 (2019-05-03)
 ===================
 
+* Added function ``weblocks/session:expire``, which can be used to tell Weblocks to delete current session
+  after request processing.
+* Also, now session middleware is created explicitly along with memory store. This made possible to add
+  another two functions to gather some statistics about number of sessions:
+
+  * ``weblocks/session:get-number-of-sessions`;
+  * ``weblocks/session:get-number-of-anonymous-sessions`;
+  
 * The function ``weblocks/widgets/base:get-html-tag`` was fixed to
   render tables correctly. If the widget's parent is a ``:table``
   element, then this function returns ``:tr`` (instead of a
   ``:div``). If it is ``:tr``, it returns ``:td``, and ``:div``
   otherwise.
-* a new setting ``weblocks/html:*pretty-html*`` was created, to further control pretty printing of html both in code and in tests.
+* A new setting ``weblocks/html:*pretty-html*`` was created, to further control pretty printing of html
+  both in code and in tests.
 
 0.35.3 (2019-03-31)
 ===================
