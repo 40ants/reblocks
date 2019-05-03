@@ -2,8 +2,8 @@
  ChangeLog
 ===========
 
-Unreleased
-==========
+0.36.0 (2019-05-03)
+===================
 
 * Added function ``weblocks/session:expire``, which can be used to tell Weblocks to delete current session
   after request processing.
@@ -12,6 +12,14 @@ Unreleased
 
   * ``weblocks/session:get-number-of-sessions`;
   * ``weblocks/session:get-number-of-anonymous-sessions`;
+  
+* The function ``weblocks/widgets/base:get-html-tag`` was fixed to
+  render tables correctly. If the widget's parent is a ``:table``
+  element, then this function returns ``:tr`` (instead of a
+  ``:div``). If it is ``:tr``, it returns ``:td``, and ``:div``
+  otherwise.
+* A new setting ``weblocks/html:*pretty-html*`` was created, to further control pretty printing of html
+  both in code and in tests.
 
 0.35.3 (2019-03-31)
 ===================
@@ -133,7 +141,7 @@ Improvements
   ``log4cl-json`` library. To turn it on, just do:
 
   .. code:: common-lisp
-            
+
      (log4cl-json:setup)
 
 Fixes
@@ -150,11 +158,11 @@ Fixes
   For example:
 
   .. code:: common-lisp
-         
+
 
      (weblocks/hooks:on-application-hook-handle-request
        connect-to-database ()
-       
+
        (let ((success nil))
          (unwind-protect (progn (setup-transaction)
                                 (weblocks/hooks:call-next-hook)
@@ -245,7 +253,7 @@ Fixes
   crashes with error::
 
     Assertion failed: (("libev: a signal must not be attached to two different loops", !signals [w->signum - 1].loop || signals [w->signum - 1].loop == loop)), function ev_signal_start, file ev.c, line 4082
-  
+
 
 0.30.0 (2018-05-19)
 ===================
@@ -544,7 +552,7 @@ And macro for defining a special readers for them was removed as well:
 
 Also, these arguments to ``defapp`` was removed:
 ``:ignore-default-dependencies``, ``:dependencies``
-  
+
 Function ``update-thread-status`` and method ``webapp-update-thread-status``
 were removed.
 
@@ -833,7 +841,7 @@ can be useful when embedding links into emails, for example.
 * Now we are trying to call action only if action's name was given.
 * Old method ``weblocks:handle-client-request ((app weblocks-webapp))``
   was removed. Look at it's newer version in ``weblocks.request-handler``.
-  
+
 
 0.18.0 (2017-11-12)
 ===================
@@ -850,7 +858,7 @@ can be useful when embedding links into emails, for example.
 * Call to ``prepare-hooks`` was moved from ``weblocks.request-handler:handle-client-request``
   to the the weblocks.server:handler-request, to fix session hooks processing when
   ``:process-request`` hook is called.
-  
+
 0.17.2 (2017-11-11)
 ===================
 
@@ -884,7 +892,7 @@ can be useful when embedding links into emails, for example.
   executed in same order as they were added. If you want some code to be
   executed before widget update, just execute ``send-code`` before
   ``weblocks.widget:update``.
-  
+
 0.16.0 (2017-11-04)
 ===================
 
@@ -931,10 +939,10 @@ can be useful when embedding links into emails, for example.
 
   Also, a new macro ``catch-hooks`` was added to check if some
   hooks were called during a unittest.
-  
+
 * Now weblocks does not open a new tab or window on 500 error
   during an action execution.
-  
+
 0.14.4 (2017-10-07)
 ===================
 
@@ -948,10 +956,10 @@ can be useful when embedding links into emails, for example.
 
 * Default method of ``render-page`` was fixed to really wrap
   page with ``<html>...`` block.
-  
+
 * Fixed a way how weblocks.debug:*latest-session* is
   processed.
-  
+
 * Function ``weblocks.request:remove-request-header`` now
   returns a new instance of request object and does not modify the
   original request. This fixes issue in ``weblocks-websocket``.
@@ -1007,7 +1015,7 @@ can be useful when embedding links into emails, for example.
 
 0.13.10 (2017-09-06)
 ====================
-  
+
 Changes in weblocks.request-hooks:
 ----------------------------------
 
@@ -1018,7 +1026,7 @@ Changes in weblocks.request-hooks:
   should be used like:
 
   .. code-block:: lisp
-       
+
      (weblocks.hooks:add-session-hook
               :some-hook
               my-beautiful-callback (param)
@@ -1032,7 +1040,7 @@ Changes in weblocks.request-hooks:
      (weblocks.hooks:call :some-hook
            first-param
            second-param)
-           
+
 0.13.10 (2017-09-06)
 ====================
 
@@ -1047,7 +1055,7 @@ Changes in weblocks.request-hooks:
   Also, ``get-cross-origin`` and ``:cross-origin`` were removed to
   ``get-crossorigin`` and ``:crossorigin``, to conform the html
   attibute's spelling.
-  
+
 0.13.8 (2017-09-02)
 ===================
 
@@ -1063,7 +1071,7 @@ Changes in weblocks.request-hooks:
 
 * Reformatted documentation. Started to `keep a changelog
   <http://keepachangelog.com/>`_.
-  
+
 0.13.7 (2017-04-15)
 ===================
 

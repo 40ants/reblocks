@@ -4,6 +4,7 @@
                 #:*html*)
   (:export
    #:with-html
+   #:*pretty-html*
    #:*lang*
    #:with-html-string
    #:get-rendered-chunk))
@@ -24,12 +25,15 @@
 (defvar *lang* "en"
   "Language to add into the root html element.")
 
+(defvar *pretty-html* t
+  ;; pretty html, but allow to disable in tests.
+  "We want an HTML nice to read by default.")
 
 (defmacro with-html (&body body)
   `(let ((spinneret:*html-lang* *lang*)
          (spinneret:*html* *stream*)
          ;; We want to an HTML which is nice to read, by default
-         (*print-pretty* t))
+         (*print-pretty* *pretty-html*))
      (spinneret:with-html
        ,@body)))
 
