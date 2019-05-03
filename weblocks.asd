@@ -59,6 +59,7 @@
 
 
 (register-system-packages "lack-request" '(#:lack.request))
-(register-system-packages "lack-middleware-session" '(#:lack.middleware.session))
+(register-system-packages "lack-middleware-session" '(#:lack.middleware.session
+                                                      #:lack.middleware.session.store.memory))
 (register-system-packages "lack-util" '(#:lack.util))
 (register-system-packages "log4cl" '(#:log))
