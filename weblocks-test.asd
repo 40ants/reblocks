@@ -1,7 +1,8 @@
 (defsystem "weblocks-test"
   :class :package-inferred-system
   :pathname "t"
-  :depends-on (:weblocks
+  :depends-on ("weblocks"
+               "hamcrest"
                "weblocks-test/dependencies"
                "weblocks-test/hooks"
                "weblocks-test/weblocks"
