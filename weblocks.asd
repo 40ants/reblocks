@@ -48,7 +48,7 @@
 (defsystem weblocks
   :name "weblocks"
   :class :package-inferred-system
-  :versaion (:read-file-line "ChangeLog.rst" :at search-version-in-changelog)
+  :version (:read-file-line "ChangeLog.rst" :at search-version-in-changelog)
   :maintainer "Alexander Artemenko, Olexiy Zamkoviy, Scott L. Burson"
   :author "Slava Akhmechet"
   :licence "LLGPL"
