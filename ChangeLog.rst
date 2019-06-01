@@ -2,8 +2,8 @@
  ChangeLog
 ===========
 
-0.36.0
-======
+0.36.0 (2019-06-01)
+===================
 
 * Added function ``weblocks/session:expire``, which can be used to tell Weblocks to delete current session
   after request processing.
