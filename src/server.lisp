@@ -247,10 +247,6 @@ declared AUTOSTART."
 
     (reset-routes)
   
-    (unless (member :bordeaux-threads *features*)
-      (cerror "I know what I'm doing and will stubbornly continue."
-              "You're trying to start Weblocks without threading ~
-            support. Recompile your Lisp with threads enabled."))
     (if debug
         (weblocks/debug:on)
         (weblocks/debug:off))

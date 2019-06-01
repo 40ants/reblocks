@@ -2,16 +2,18 @@
  ChangeLog
 ===========
 
-Unreleased
-==========
+0.36.0
+======
 
 * Added function ``weblocks/session:expire``, which can be used to tell Weblocks to delete current session
   after request processing.
 * Also, now session middleware is created explicitly along with memory store. This made possible to add
   another two functions to gather some statistics about number of sessions:
 
-  * ``weblocks/session:get-number-of-sessions`;
-  * ``weblocks/session:get-number-of-anonymous-sessions`;
+  * ``weblocks/session:get-number-of-sessions``;
+  * ``weblocks/session:get-number-of-anonymous-sessions``;
+* Removed check if ``:bordeaux-threads`` is in the ``*features*``, because this does not work
+  in runtime in precompiled binary.
 
 0.35.3 (2019-03-31)
 ===================
