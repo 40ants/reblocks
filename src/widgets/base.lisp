@@ -16,10 +16,12 @@
                 #:make-keyword)
   (:import-from #:cl-strings
                 #:join)
+  (:import-from #:spinneret
+                #:get-html-path)
 
   ;; Just dependencies
   (:import-from #:log)
-  
+
   (:export #:defwidget
            #:render
            #:get-css-classes
@@ -70,11 +72,18 @@ inherits from 'widget' if no direct superclasses are provided."
 
 (defgeneric get-html-tag (widget)
   (:documentation "This method should return a keyword, like :div or :article.
-                   By default, it returns :div"))
+                   By default, it returns :div.
+                   If we are inside a table, it returns :tr"))
 
 
 (defmethod get-html-tag ((widget t))
-  :div)
+  (case (first (get-html-path))
+    (:table
+     :tr)
+    (:tr
+     :td)
+    (t
+     :div)))
 
 
 (defgeneric get-css-classes (widget)
