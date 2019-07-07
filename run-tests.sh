@@ -3,12 +3,10 @@
 set -e
 set -x
 
-if [[ ! -e /projects/weblocks ]]; then
+if [[ -e /projects/weblocks ]]; then
     echo 'Please, run docker container with option -v `pwd`:/projects/weblocks'
-    exit 1
+    cd /projects/weblocks
 fi
-
-cd /projects/weblocks
 
 qlot install
 qlot exec ros install rove

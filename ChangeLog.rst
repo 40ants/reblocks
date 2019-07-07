@@ -2,6 +2,17 @@
  ChangeLog
 ===========
 
+0.38.0 (2019-07-07)
+===================
+
+* Unhandled error processing was fixed. There were numerous problems with error processing:
+  * Previosly server stopped to work because clack tried to write into a closed stream.
+  * Also, before this fix, error page didn't showed propertly.
+  * Any error in the route lead to a server stop because there wasn't any handler at all.
+    Now they are handled with ``on-error`` method as errors in block/page rendering.
+
+  All of them are fixed now.
+
 0.37.0 (2019-06-01)
 ===================
 

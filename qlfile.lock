@@ -1,8 +1,8 @@
 ("quicklisp" .
  (:class qlot.source.ql:source-ql-all
   :initargs (:distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
-  :version "2019-03-07"))
+  :version "2019-05-21"))
 ("ultralisp" .
  (:class qlot.source.ql:source-ql-all
   :initargs (:distribution "http://dist.ultralisp.org" :%version :latest)
-  :version "20190502175003"))
+  :version "20190706110503"))

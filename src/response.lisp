@@ -29,7 +29,8 @@
            #:get-headers
            #:get-custom-headers
            #:get-content-type
-           #:add-retpath-to))
+           #:add-retpath-to
+           #:response))
 (in-package weblocks/response)
 
 
@@ -162,17 +163,19 @@
 
 HTTP code and headers are taken from *code* and *content-type*."
 
-  (log:debug "Aborting request processing"
-             code
-             content-type
-             headers)
+  ;; This abort could be a normal, like 302 redirect,
+  ;; that is why we are just informing here
+  (log:info "Aborting request processing"
+            code
+            content-type
+            headers)
 
-  (signal condition-class
-          :response (make-response 
-                     content
-                     :code code
-                     :content-type content-type
-                     :headers headers)))
+  (error condition-class
+         :response (make-response 
+                    content
+                    :code code
+                    :content-type content-type
+                    :headers headers)))
 
 
 (defun send-script (script &optional (place :after-load))

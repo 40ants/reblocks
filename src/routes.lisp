@@ -2,6 +2,8 @@
   (:use #:cl)
   (:import-from #:routes
                 #:route)
+  (:import-from #:weblocks/error-handler
+                #:with-handled-errors)
   (:export
    #:add-route
    #:route
@@ -44,3 +46,7 @@
 "))
 
 
+(defmethod serve :around (route env)
+  "This method handles unhandled exceptions, because this code is common for all routes."
+  (with-handled-errors
+    (call-next-method)))

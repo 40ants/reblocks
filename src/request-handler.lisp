@@ -33,13 +33,13 @@
                 #:get-collected-dependencies
                 #:register-dependencies)
   (:import-from #:weblocks/app
-                #:app
-                #:with-app)
+                #:app)
   (:import-from #:weblocks/actions
                 #:eval-action)
   (:import-from #:weblocks/commands
                 #:get-collected-commands)
   (:import-from #:weblocks/error-handler
+                #:with-handled-errors
                 #:on-error)
   (:import-from #:weblocks/variables
                 #:*backtrace-on-session-init-error*
@@ -128,25 +128,17 @@ customize behavior."))
 
 (defmethod handle-request :around ((app app))
   "This wrapper sets current application and suppresses error output from Hunchentoot."
-  (handler-bind ((error (lambda (c)
-                          (if *invoke-debugger-on-error*
-                              (invoke-debugger c)
-                              (return-from handle-request
-                                (on-error app c))))))
+  (with-handled-errors
     (let ((*print-pretty* t)
-          ; Hunchentoot already displays warnings into log file, we just suppress output
+          ;; Hunchentoot already displays warnings into log file, we just suppress output
           (*error-output* (make-string-output-stream)))
-      (with-app app
-        (with-log-unhandled ()
-          (handler-case
-              (let ((response (call-next-method)))
-                (typecase response
-                  (response response)
-                  (string (make-response response))
-                  (t (error "Responses of type ~A are not supported"
-                            (type-of response)))))
-            (immediate-response (c)
-              (get-response c))))))))
+      (with-log-unhandled ()
+        (let ((response (call-next-method)))
+          (typecase response
+            (response response)
+            (string (make-response response))
+            (t (error "Responses of type ~A are not supported"
+                      (type-of response)))))))))
 
 
 ;; TODO: make-this method an optional application mixin
@@ -351,85 +343,77 @@ customize behavior."))
 
 
 (defmethod handle-request ((app app))
-  (restart-case
-      (progn
-        ;; save it for splitting this up
-        ;; TODO: replace with lack.session
-        ;; (when (null weblocks::*session*)
-        ;;   (when (get-action-name-from-request)
-        ;;     (weblocks::expired-action-handler app))
-        ;;   (weblocks::start-session)
-        ;;   (when weblocks::*rewrite-for-session-urls*
-        ;;     (weblocks::redirect (weblocks::request-uri*))))
-        ;;
-        ;; (when weblocks::*maintain-last-session*
-        ;;   (bordeaux-threads:with-lock-held (weblocks::*maintain-last-session*)
-        ;;     (setf weblocks::*last-session*
-        ;;           weblocks::*session*)))
+  ;; save it for splitting this up
+  ;; TODO: replace with lack.session
+  ;; (when (null weblocks::*session*)
+  ;;   (when (get-action-name-from-request)
+  ;;     (weblocks::expired-action-handler app))
+  ;;   (weblocks::start-session)
+  ;;   (when weblocks::*rewrite-for-session-urls*
+  ;;     (weblocks::redirect (weblocks::request-uri*))))
+  ;;
+  ;; (when weblocks::*maintain-last-session*
+  ;;   (bordeaux-threads:with-lock-held (weblocks::*maintain-last-session*)
+  ;;     (setf weblocks::*last-session*
+  ;;           weblocks::*session*)))
 
-        (let ((path (get-path)))
-          (log:debug "Handling client request" path)
+  (let ((path (get-path)))
+    (log:debug "Handling client request" path)
 
-          ;; TODO: write a test
-          (when (null (weblocks/widgets/root:get))
-            (log:debug "Initializing session")
-            (handler-bind ((error (lambda (c) 
-                                    (when *backtrace-on-session-init-error*
-                                      (let ((traceback))
-                                        (log:error "Error during session initialization" traceback)))
-                                    (signal c))))
-              (setf (weblocks/widgets/root:get)
-                    (weblocks/session:init app))))
-          
-          ;; TODO: understand why there is coupling with Dialog here and
-          ;;       how to move it into the Dialog's code.
-          
-          ;; (weblocks/hooks:on-session-hook-action
-          ;;     update-dialog ()
-          ;;   (weblocks::update-dialog-on-request)))
+    ;; TODO: write a test
+    (when (null (weblocks/widgets/root:get))
+      (log:debug "Initializing session")
+      (handler-bind ((error (lambda (c) 
+                              (when *backtrace-on-session-init-error*
+                                (let ((traceback))
+                                  (log:error "Error during session initialization" traceback)))
+                              (signal c))))
+        (setf (weblocks/widgets/root:get)
+              (weblocks/session:init app))))
+    
+    ;; TODO: understand why there is coupling with Dialog here and
+    ;;       how to move it into the Dialog's code.
+    
+    ;; (weblocks/hooks:on-session-hook-action
+    ;;     update-dialog ()
+    ;;   (weblocks::update-dialog-on-request)))
 
-          (with-collected-dependencies
-            (let ((content nil) ;; this variable will be set to HTML string after rendering
-                  ;; TODO: may be remove uri-tokens
-                  ;; (weblocks::*uri-tokens*
-                  ;;   (make-instance 'weblocks::uri-tokens
-                  ;;                  :tokens (weblocks::tokenize-uri (get-path))))
-                  ;; weblocks.variables:*before-ajax-complete-scripts*
-                  ;; weblocks.variables:*on-ajax-complete-scripts*
-                  ;; weblocks::*current-page-title*
-                  ;; weblocks::*current-page-description*
-                  ;; weblocks::*current-page-keywords*
-                  ;; weblocks::*current-page-headers*
-                  )
+    (with-collected-dependencies
+      (let ((content nil) ;; this variable will be set to HTML string after rendering
+            ;; TODO: may be remove uri-tokens
+            ;; (weblocks::*uri-tokens*
+            ;;   (make-instance 'weblocks::uri-tokens
+            ;;                  :tokens (weblocks::tokenize-uri (get-path))))
+            ;; weblocks.variables:*before-ajax-complete-scripts*
+            ;; weblocks.variables:*on-ajax-complete-scripts*
+            ;; weblocks::*current-page-title*
+            ;; weblocks::*current-page-description*
+            ;; weblocks::*current-page-keywords*
+            ;; weblocks::*current-page-headers*
+            )
 
-              
-              (push-dependencies
-               (get-dependencies app))
-              
-              (handle-action-if-needed app)
+        
+        (push-dependencies
+         (get-dependencies app))
+        
+        (handle-action-if-needed app)
 
-              (setf content
-                    (with-html-string
-                      (timing "rendering (w/ hooks)"
-                        (weblocks/hooks:with-render-hook ()
-                          (if (ajax-request-p)
-                              (handle-ajax-request app)
-                              (handle-normal-request app))
+        (setf content
+              (with-html-string
+                (timing "rendering (w/ hooks)"
+                  (weblocks/hooks:with-render-hook ()
+                    (if (ajax-request-p)
+                        (handle-ajax-request app)
+                        (handle-normal-request app))
 
-                          ;; Now we'll add routes for each page dependency.
-                          ;; This way, a dependency for widgets, created by action
-                          ;; can be served when browser will follow up with next request.
-                          (let ((dependencies (get-collected-dependencies)))
-                            (log:debug "Collected dependencies"
-                                       dependencies)
+                    ;; Now we'll add routes for each page dependency.
+                    ;; This way, a dependency for widgets, created by action
+                    ;; can be served when browser will follow up with next request.
+                    (let ((dependencies (get-collected-dependencies)))
+                      (log:debug "Collected dependencies"
+                                 dependencies)
 
-                            (register-dependencies
-                             dependencies))))))
+                      (register-dependencies
+                       dependencies))))))
 
-              content))))
-
-    ;; Restart
-    (abort ()
-      :report "abort request processing and return 500"
-      (log:error "Aborting request processing")
-      (on-error app nil))))
+        content))))
