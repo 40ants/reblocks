@@ -73,8 +73,15 @@ copyright = u'2017, group of lisp hackers'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = open(join(dirname(__file__), "../..",
-                    "version.lisp-expr")).read().strip().strip('"')
+def read_version_from(filename, line_number=4):
+    with open(join(dirname(__file__), "../..", filename)) as f:
+        for idx, line in enumerate(f):
+            if idx == line_number:
+                version = line.split(' ', 1)[0]
+                return version
+        return 'unknown'
+    
+release = read_version_from('ChangeLog.rst')
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
 

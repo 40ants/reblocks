@@ -3,6 +3,8 @@
         #:f-underscore)
   ;; to load js dependencies after app was started
   (:import-from #:weblocks/app-dependencies)
+  (:import-from #:weblocks/app
+                #:with-app)
   ;; we need to depend on this package, because
   ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`
   ;; package
@@ -64,6 +66,10 @@
   object. Otherwise, nil.")
 
 
+(defvar *clack-output* nil
+  "Here we'll store all output from the Clack, because we don't want it to mix with weblocks own output.")
+
+
 (defclass server ()
   ((port :type integer
          :initarg :port
@@ -105,6 +111,17 @@ Make instance, then start it with ``start`` method."
           app)))))
 
 
+(defun make-response-for-clack (response)
+  (etypecase response
+    (weblocks/response:response
+     (list (get-code response)
+           (get-headers response)
+           ;; Here we use catch to allow to abort usual response
+           ;; processing and to return data immediately
+           (list (get-content response))))
+    (list response)))
+
+
 (defmethod handle-http-request ((server server) env)
   "Weblocks HTTP dispatcher.
 This function serves all started applications and their static files."
@@ -128,25 +145,22 @@ This function serves all started applications and their static files."
               (log:debug "Processing request to" path-info)
 
               ;; If dependency found, then return it's content along with content-type
-              (cond
-                (route
-                 (log:debug "Route was found" route)
-                 (weblocks/routes:serve route env))
-                (app
-                 (log:debug "App was found" route)
-                 (let* ((response (handle-request app)))
-                   (list (get-code response)
-                         (get-headers response)
-                         ;; Here we use catch to allow to abort usual response
-                         ;; processing and to return data immediately
-                         (list (get-content response)))))
-                (t
-                 (log:error "Application dispatch failed for" path-info)
+              (with-app app
+                (make-response-for-clack
+                 (cond
+                   (route
+                    (log:debug "Route was found" route)
+                    (weblocks/routes:serve route env))
+                   (app
+                    (log:debug "App was found" route)
+                    (handle-request app))
+                   (t
+                    (log:error "Application dispatch failed for" path-info)
 
-                 (list 404
-                       (list :content-type "text/html")
-                       (list (format nil "File \"~A\" was not found.~%"
-                                     path-info))))))))))))
+                    (list 404
+                          (list :content-type "text/html")
+                          (list (format nil "File \"~A\" was not found.~%"
+                                        path-info))))))))))))))
 
 
 (defun start-server (server &key debug)
@@ -183,13 +197,18 @@ If server is already started, then logs a warning and does nothing."
 
            ;; Suppressing output to stdout, because Clack writes message
            ;; about started server and we want to write into a log instead.
-           (with-output-to-string (*standard-output*)
+           (setf *clack-output* (make-string-output-stream))
+           (let ((*standard-output* *clack-output*))
              (setf (get-handler server)
                    (clackup app
                             :address interface
                             :server (get-server-type server)
                             :port port
-                            :debug debug))))))
+                            :debug debug
+                            ;; Here we are turning off :backtrace middleware from the Lack
+                            ;; and probably all other middlewares which may become "default"
+                            ;; in future.
+                            :use-default-middlewares nil))))))
   server)
 
 
