@@ -2,6 +2,11 @@
  ChangeLog
 ===========
 
+0.38.1 (2019-08-02)
+===================
+
+* A small fix to make it work with ``weblocks-websocket``.
+
 0.38.0 (2019-07-07)
 ===================
 
