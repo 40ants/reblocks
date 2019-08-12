@@ -119,7 +119,8 @@ Make instance, then start it with ``start`` method."
            ;; Here we use catch to allow to abort usual response
            ;; processing and to return data immediately
            (list (get-content response))))
-    (list response)))
+    (list response)
+    (function response)))
 
 
 (defmethod handle-http-request ((server server) env)
