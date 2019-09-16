@@ -2,6 +2,33 @@
  ChangeLog
 ===========
 
+0.39.0 (2019-09-16)
+===================
+
+Changes
+-------
+
+* A new macro ``weblocks/routes:defroute`` was added.
+
+  It defines a handler for a given route. By default route should return
+  a serialized JSON:
+
+  .. code:: common-lisp
+            
+     (defroute (app /api/data)
+         "{\"my-data\": [1, 2, 3]}")
+
+  but you can redefine the content type:
+
+  .. code:: common-lisp
+ 
+     (defroute (app /api/data :content-type "application/xml")
+         "<my-data><item>1</item><item>2</item></my-data>")
+
+  each route is associate with application class and these routes
+  are added to the mapper when you call a ``start`` method.
+
+
 0.38.1 (2019-08-02)
 ===================
 

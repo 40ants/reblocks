@@ -20,7 +20,6 @@
                 #:*current-app*)
   ;; Just dependencies
   (:import-from #:log)
-
   (:shadow #:restart)
   (:export
    #:defapp
@@ -259,7 +258,12 @@ called (primarily for backward compatibility"
   (let ((webapps (sort-webapps (remove-duplicates (cons app *active-apps*)))))
     (if (> (count "" (mapcar #'get-prefix *active-apps*) :test #'equal) 1)
         (error "Cannot have two defaults dispatchers with prefix \"\"")
-        (setf *active-apps* webapps))))
+        (setf *active-apps* webapps))
+    ;; Also, we should add app's routes to the mapper.
+    ;; we use symbol-call to hack around a circular dependency.
+    (uiop:symbol-call :weblocks/routes
+                      :add-routes
+                      app)))
 
 (defgeneric initialize-webapp (app)
   (:documentation "A protocol for performing any special initialization on the creation of a webapp object.")
