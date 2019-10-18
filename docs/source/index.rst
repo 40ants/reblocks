@@ -30,6 +30,7 @@ Contents
    hooks
    forms
    views
+   session
    continuations
    dependencies
    html
