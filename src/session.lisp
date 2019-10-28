@@ -8,7 +8,6 @@
    #:with-session
    #:delete-value
    #:get-value
-   #:set-value
    #:gen-id
    #:in-session-p
    #:init
@@ -39,9 +38,7 @@
 ;; previously webapp-session-value
 (defun get-value (key &optional default)
   "Get a session value from the currently running webapp.
-KEY is compared using EQUAL.
-
-It was made as a macro to not evaluate 'default' on each call."
+KEY is compared using EQUAL."
 
   (unless *session*
     (error "Session was not created for this request!"))
