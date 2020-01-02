@@ -5,6 +5,9 @@
 .. warning:: This version of Weblocks is not in Quicklisp yet. To
              install it you need to clone the repository somewhere where
              ASDF will find it, for example, to the ``~/common-lisp/`` directory.
+             You also need to clone `weblocks-ui`_.
+
+.. seealso:: You can also install the `Ultralisp`_ Quicklisp distribution where all Weblocks-related libraries are present and up to date.
 
 
 Load weblocks and create a package for a sandbox:
@@ -339,3 +342,5 @@ As a homework:
    power of Common Lisp.
 
 .. _Webinspector: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
+.. _Weblocks-ui: https://github.com/40ants/weblocks-ui/
+.. _Ultralisp: https://ultralisp.org/
