@@ -91,9 +91,13 @@
    a port a reverse proxy listens on."
   (let ((forwarded-port (get-header "x-forwarded-port" :request request)))
     ;; Lack parses this value itself and should provide integer
-    (check-type forwarded-port (or null integer))
-    
-    (or forwarded-port
+    (check-type forwarded-port (or null string))
+
+    ;; Previously, Woo server parsed the integer value of some headers,
+    ;; but in Septermber 2019 this behaviour was changed:
+    ;; https://github.com/fukamachi/woo/issues/84
+    (or (when forwarded-port
+          (parse-integer forwarded-port))
         (request-server-port request))))
 
 

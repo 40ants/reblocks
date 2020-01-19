@@ -2,6 +2,20 @@
  ChangeLog
 ===========
 
+0.39.1 (2020-01-20)
+===================
+
+Fixed
+-----
+
+* Fixed processing of the value ``x-forwarded-port``. Previously, when Weblocks
+  was used along with lastest (after the 2019-09-07) ``Woo`` server, this header
+  lead to the 500 error. Because behavior of the ``Woo`` was changed:
+
+  https://github.com/fukamachi/woo/issues/84
+
+  Now Woo does not parses numberic headers and Weblocks has to do it itself.
+
 0.39.0 (2019-09-16)
 ===================
 
