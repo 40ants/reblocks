@@ -63,15 +63,15 @@
 
 (defun make-task-list (&rest rest)
   "Create some tasks from titles."
-  (loop for title in rest
-        collect (make-task title)))
+  (let ((tasks (loop for title in rest
+                  collect (make-task title))))
+    (make-instance 'task-list :tasks tasks)))
 
 (defmethod weblocks/session:init ((app tasks))
   (declare (ignorable app))
-  (let ((tasks (make-task-list "Make my first Weblocks app"
-                               "Deploy it somewhere"
-                               "Have a profit")))
-    (make-instance 'task-list :tasks tasks)))
+  (make-task-list "Make my first Weblocks app"
+                  "Deploy it somewhere"
+                  "Have a profit"))
 
 (weblocks/debug:reset-latest-session)
 
