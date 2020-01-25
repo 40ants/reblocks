@@ -338,7 +338,8 @@ As a homework:
    each task.
 2. Add the ability to sort tasks by name or by completion flag.
 3. Save tasks in a database (the `Cookbook <https://lispcookbook.github.io/cl-cookbook/databases.html>`_ might help).
-4. Read the rest of the documentation and make a real application, using the full
+4. Read the `routing tutorial </weblocks/routing.html>`_.
+5. Read the rest of the documentation and make a real application, using the full
    power of Common Lisp.
 
 .. _Webinspector: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/

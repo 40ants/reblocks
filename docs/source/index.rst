@@ -24,6 +24,7 @@ Contents
    introduction
    installation
    quickstart
+   routing
    components
    stores
    widgets
