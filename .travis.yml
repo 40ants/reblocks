@@ -67,7 +67,7 @@ before_script:
   - ros install fukamachi/rove
   - ros install 40ants/cl-info
   
-  - qlot install
+  - qlot install --no-deps
   - qlot exec ros run -e '(progn (ql:quickload :weblocks-test) (uiop:quit 0))'
   - qlot exec cl-info hamcrest rove dissect weblocks
     
