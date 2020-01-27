@@ -44,7 +44,7 @@ Getting started
 
 .. seealso:: You can also install the `Ultralisp`_ Quicklisp distribution where all Weblocks-related libraries are present and up to date.
 
-Load and import the routing library::
+Load and import the routing library:
 
 .. code-block:: common-lisp-repl
 
@@ -65,7 +65,7 @@ The package definition becomes::
            (:import-from #:weblocks/app
                          #:defapp)
            (:import-from #:weblocks-navigation-widget
-                            #:defroutes))
+                         #:defroutes))
 
 
 Extending the example: to each task an id
@@ -92,7 +92,7 @@ We want each task to have an id, so we add a slot to the ``task`` widget:
 
 
 We also need a simple in-memory "database". We'll use a hash-table to
-save the tasks. It associates an id to the task::
+save the tasks. It associates an id to the task:
 
 .. code-block:: common-lisp-repl
 
@@ -119,7 +119,7 @@ could just be an interface to a database.
    TODO> (defun get-task (id)
            (gethash id *store*))
 
-When we render the tasks list, we add an href on the task, so we can go to ``/tasks/<id>``::
+When we render the tasks list, we add an href on the task, so we can go to ``/tasks/<id>``:
 
 .. code-block:: common-lisp-repl
 
@@ -164,7 +164,7 @@ their own page, it is then a widget.
 Defining routes
 ===============
 
-At this point we can think of our routes like this::
+At this point we can think of our routes like this:
 
 .. code-block:: common-lisp
 
@@ -218,7 +218,7 @@ The ``defroutes`` macro creates a new class and its constructor, named
 Final steps
 ===========
 
-Make our router the main app for this session::
+Make our router the main app for this session:
 
 .. code-block:: common-lisp-repl
 
@@ -226,7 +226,7 @@ Make our router the main app for this session::
            (declare (ignorable app))
            (make-tasks-routes))
 
-Reset the session::
+Reset the session:
 
 .. code-block:: common-lisp-repl
 
