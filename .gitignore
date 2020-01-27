@@ -1,4 +1,7 @@
+/.qlot/
 /docs/build/
 /env/
 /quicklisp/
 /libssl.dylib
+
+

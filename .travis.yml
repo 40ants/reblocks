@@ -58,7 +58,7 @@ before_script:
   - ros install asdf/3.3.1.1
   # Version fixed for more build stability
   # TODO: update it from time to time
-  - ros install 40ants/qlot/freeze/f390a18c023267c5b40d5d407fdffa1b2ab7d3b8
+  - ros install 40ants/qlot/freeze/6fdc1ca4778a905870b6c7bbbd598b3966d53453
   - ros config
   
   # Using latest dissect because current Quicklisp fails on SBCL >= 1.4.10

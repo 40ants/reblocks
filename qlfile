@@ -1,4 +1,1 @@
-dist ul http://dist.ultralisp.org
-
-ql :all :latest
-ul :all :latest
+dist ultralisp http://dist.ultralisp.org
