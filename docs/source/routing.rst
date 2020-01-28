@@ -150,10 +150,10 @@ their own page, it is then a widget.
            ((task
              :initarg :task
              :initform nil
-             :accessor task-page-task)))
+             :accessor task)))
 
    TODO> (defmethod render ((task-page task-page))
-           (let ((task (task-page-task task-page)))
+           (let ((task (task task-page)))
              (with-html
                (:div "Task " (id task))
                (:h1 (title task))

@@ -67,12 +67,6 @@
         task
       (format stream "~a \"~a\", done: ~a" id title done))))
 
-(defun make-task-list (&rest rest)
-  "Create some tasks from titles."
-  (let ((tasks (loop for title in rest
-                  collect (make-task title))))
-    (make-instance 'task-list :tasks tasks)))
-
 (defmethod add-task ((task-list task-list) title)
   (push (make-task title)
         (tasks task-list))
@@ -118,6 +112,12 @@
               :placeholder "Task's title")
       (:input :type "submit"
               :value "Add"))))
+
+(defun make-task-list (&rest rest)
+  "Create some tasks from titles."
+  (let ((tasks (loop for title in rest
+                  collect (make-task title))))
+    (make-instance 'task-list :tasks tasks)))
 
 ;; Router
 
