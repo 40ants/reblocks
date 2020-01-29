@@ -26,7 +26,6 @@ Contents
    quickstart
    routing
    components
-   stores
    widgets
    hooks
    forms
@@ -35,10 +34,7 @@ Contents
    continuations
    dependencies
    html
-   adapting
-   internals
    contributing
-   hints
    changelog
 
 

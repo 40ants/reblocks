@@ -14,6 +14,8 @@ Load weblocks and create a package for a sandbox:
 
 .. code-block:: common-lisp-repl
 
+   CL-USER> (ql-dist:install-dist "http://dist.ultralisp.org/"
+                                  :prompt nil)
    CL-USER> (ql:quickload '(:weblocks :weblocks-ui :find-port))
    CL-USER> (defpackage todo
               (:use #:cl

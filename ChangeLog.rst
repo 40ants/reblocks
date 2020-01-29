@@ -130,7 +130,7 @@ prepares data received from the ``Clack`` and calls
 In it's turn, ``weblocks/request-handler:handle-request`` should return
 an object of type ``weblocks/response:response`` containing a content,
 HTTP status code and headers of the response. Any error signal, thrown
-from the ``handle-resquest`` is considered by ``handle-http-request`` as
+from the ``handle-request`` is considered by ``handle-http-request`` as
 an "unhandled error" and returned with 500 HTTP status code.
 
 Here is a list of changes:

@@ -47,9 +47,34 @@ For a basic comfortable SBCL setup, see :ref:`Basic SBCL setup`.
  
 
 Installation
-------------
+============
 
-There is a comprehensive installation guide on the main web site:
+.. note:: The official quicklisp distribution contains an old Weblocks
+          version.
 
-http://weblocks-framework.info/installation
+          This documentation is about newer Weblocks, built from
+          ``reblocks`` branch. It is only available on the
+          Ultralisp.org.
 
+The easiest way to install Weblocks and additional libraries is to use
+https://ultralisp.org distribution. It is Quicklisp compatible. To
+install Weblocks from Ultralisp, do eval these commands in your REPL:
+
+.. code:: common-lisp-repl
+
+   CL-USER> (ql-dist:install-dist "http://dist.ultralisp.org/"
+                                  :prompt nil)
+   CL-USER> (ql:quickload :weblocks)
+
+If you are using `Qlot`_ to pin versions, you can add such lines into your
+``qlfile``::
+
+  dist ultralisp http://dist.ultralisp.org/
+  ql :all :latest
+  ultralisp :all :latest
+
+Run ``qlot update`` after these changes, and new Weblocks will be
+available to install.
+
+
+.. _Qlot: https://github.com/fukamachi/qlot

@@ -2,6 +2,10 @@
  Dependency handling
 =====================
 
+.. warning:: This section is outdated and belongs to the old Weblocks documention.
+
+             SHOULD BE REWRITTEN.
+
 Automatically installing external dependencies
 ==============================================
 

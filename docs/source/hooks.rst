@@ -2,6 +2,10 @@
  Request Hooks
 ===============
 
+.. warning:: This section is outdated and belongs to the old Weblocks documention.
+
+             SHOULD BE REWRITTEN.
+
 TODO: Rewrite this part of documentation, enumerate hooks, available out
 of the box (could be searched by ``defhook`` keyword), add an example of
 a custom hook.
