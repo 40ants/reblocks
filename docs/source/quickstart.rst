@@ -2,12 +2,12 @@
  Quickstart
 ============
 
-.. warning:: This version of Weblocks is available only from
-             Ultralisp.org which is an unofficial Quicklisp
-             distribution.
+.. warning:: This version of Weblocks is not in Quicklisp yet. To
+             install it you need to clone the repository somewhere where
+             ASDF will find it, for example, to the ``~/common-lisp/`` directory.
+             You also need to clone `weblocks-ui`_.
 
-             During this tutorial, you'll learn how to plug
-             third-party distributions into your quicklisp client.
+.. seealso:: You can also install the `Ultralisp`_ Quicklisp distribution where all Weblocks-related libraries are present and up to date.
 
 
 Load weblocks and create a package for a sandbox:
@@ -182,16 +182,15 @@ But we still don't get anything in the browser.
 .. code-block:: common-lisp-repl
 
     TODO> (defun make-task-list (&rest rest)
-                 "Create some tasks from titles."
-                 (loop for title in rest
-                       collect (make-task title)))
+            (let ((tasks (loop for title in rest
+                            collect (make-task title))))
+              (make-instance 'task-list :tasks tasks)))
 
     TODO> (defmethod weblocks/session:init ((app tasks))
              (declare (ignorable app))
-             (let ((tasks (make-task-list "Make my first Weblocks app"
-                                          "Deploy it somewhere"
-                                          "Have a profit")))
-               (make-instance 'task-list :tasks tasks)))
+             (make-task-list "Make my first Weblocks app"
+                             "Deploy it somewhere"
+                             "Have a profit"))
 
 
 This defines a list of tasks (for simplicity, they are defined as a
@@ -340,7 +339,10 @@ As a homework:
    each task.
 2. Add the ability to sort tasks by name or by completion flag.
 3. Save tasks in a database (the `Cookbook <https://lispcookbook.github.io/cl-cookbook/databases.html>`_ might help).
-4. Read the rest of the documentation and make a real application, using the full
+4. Read the `routing tutorial </weblocks/routing.html>`_.
+5. Read the rest of the documentation and make a real application, using the full
    power of Common Lisp.
 
 .. _Webinspector: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
+.. _Weblocks-ui: https://github.com/40ants/weblocks-ui/
+.. _Ultralisp: https://ultralisp.org/

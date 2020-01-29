@@ -14,6 +14,8 @@
   (:import-from #:weblocks/commands
                 #:add-command)
   (:import-from #:quri)
+  (:import-from #:alexandria
+                #:assoc-value)
   (:export #:immediate-response
            #:make-response
            #:add-header
@@ -26,7 +28,9 @@
            #:get-code
            #:get-headers
            #:get-custom-headers
-           #:get-content-type))
+           #:get-content-type
+           #:add-retpath-to
+           #:response))
 (in-package weblocks/response)
 
 
@@ -124,6 +128,32 @@
     (quri:render-uri new-url)))
 
 
+(defun add-retpath-to (uri &key (retpath (weblocks/request:get-uri)))
+  "Adds a \"retpath\" GET parameter to the giving URL.
+
+   Keeps all other parameters and overwrites \"retpath\" parameter if it is
+   already exists in the URL.
+
+   By default, retpath is the current page, rendered by the weblocks.
+   This is very useful to redirect user to login page and return him to the
+   same page where he has been before."
+  (let* ((parsed-base (quri:uri uri))
+         (query (quri:uri-query parsed-base))
+         (parsed-query (when query
+                         (quri:url-decode-params query)))
+         (_ (setf (assoc-value parsed-query
+                                          "retpath"
+                                          :test 'string-equal)
+                  retpath))
+         (new-query (quri:url-encode-params parsed-query))
+         (parsed-new-path (quri:uri (concatenate 'string "?"
+                                                 new-query)))
+         (new-url (quri:merge-uris parsed-new-path
+                                   parsed-base)))
+    (declare (ignorable _))
+    (quri:render-uri new-url)))
+
+
 (defun immediate-response (content &key
                                      (content-type (get-default-content-type-for-response))
                                      (code 200)
@@ -133,17 +163,19 @@
 
 HTTP code and headers are taken from *code* and *content-type*."
 
-  (log:debug "Aborting request processing"
-             code
-             content-type
-             headers)
+  ;; This abort could be a normal, like 302 redirect,
+  ;; that is why we are just informing here
+  (log:info "Aborting request processing"
+            code
+            content-type
+            headers)
 
-  (signal condition-class
-          :response (make-response 
-                     content
-                     :code code
-                     :content-type content-type
-                     :headers headers)))
+  (error condition-class
+         :response (make-response 
+                    content
+                    :code code
+                    :content-type content-type
+                    :headers headers)))
 
 
 (defun send-script (script &optional (place :after-load))

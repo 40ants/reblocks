@@ -24,10 +24,13 @@ Contents
    introduction
    installation
    quickstart
+   routing
    components
    widgets
    hooks
    forms
+   views
+   session
    continuations
    dependencies
    html

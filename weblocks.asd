@@ -38,10 +38,17 @@
 #-asdf3.1
 (error "weblocks requires at least ASDF 3.1")
 
+(defun search-version-in-changelog (lines)
+  (let* ((line (nth 4 lines))
+         (space-pos (position #\Space line)))
+    (when space-pos
+      (subseq line 0 space-pos))))
+
+
 (defsystem weblocks
   :name "weblocks"
   :class :package-inferred-system
-  :version (:read-file-form "version.lisp-expr")
+  :version (:read-file-line "ChangeLog.rst" :at search-version-in-changelog)
   :maintainer "Alexander Artemenko, Olexiy Zamkoviy, Scott L. Burson"
   :author "Slava Akhmechet"
   :licence "LLGPL"
@@ -59,6 +66,7 @@
 
 
 (register-system-packages "lack-request" '(#:lack.request))
-(register-system-packages "lack-middleware-session" '(#:lack.middleware.session))
+(register-system-packages "lack-middleware-session" '(#:lack.middleware.session
+                                                      #:lack.middleware.session.store.memory))
 (register-system-packages "lack-util" '(#:lack.util))
 (register-system-packages "log4cl" '(#:log))
