@@ -2,7 +2,7 @@
  Request Hooks
 ===============
 
-.. warning:: This section is outdated and belong to the old Weblocks documention.
+.. warning:: This section is outdated and belongs to the old Weblocks documention.
 
              SHOULD BE REWRITTEN.
 

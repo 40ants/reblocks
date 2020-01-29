@@ -49,7 +49,7 @@ For a basic comfortable SBCL setup, see :ref:`Basic SBCL setup`.
 Installation
 ============
 
-.. note:: Official quicklisp distribution contains an old Weblocks
+.. note:: The official quicklisp distribution contains an old Weblocks
           version.
 
           This documentation is about newer Weblocks, built from

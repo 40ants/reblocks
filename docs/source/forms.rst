@@ -2,7 +2,7 @@
  Forms
 =======
 
-.. warning:: This section is outdated and belong to the old Weblocks documention.
+.. warning:: This section is outdated and belongs to the old Weblocks documention.
 
              SHOULD BE REWRITTEN. Probably we need only to link to the
              `weblocks-ui <https://github.com/40ants/weblocks-ui>`_ here.

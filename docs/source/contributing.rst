@@ -22,4 +22,4 @@
 7. Make a pull-request and make the world a better place!
 
 
-.. _semver: http????
+.. _semver: https://semver.org/
