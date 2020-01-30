@@ -95,10 +95,7 @@
 (defwidget task-list ()
   ((tasks
     :initarg :tasks
-    :accessor tasks)
-   (custom
-    :initarg :custom
-    :accessor custom)))
+    :accessor tasks)))
 
 (defmethod render ((task-list task-list))
   (with-html
@@ -151,6 +148,7 @@
 ;; The router must return a widget.
 (defroutes tasks-routes
   ("/tasks/\\d+" (make-task-page))
+  ("/tasks/list/?" (weblocks/response:redirect "/tasks/"))
   ("/tasks/" (make-task-list "Make my first Weblocks app"
                              "Deploy it somewhere"
                              "Have a profit")))
