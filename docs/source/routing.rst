@@ -4,7 +4,7 @@
 
 In the quickstart tutorial, we saw how to create and render widgets,
 and how to react to user events. We also saw that the name of the app
-defined its base url: the ``tasks`` app was accessible under
+defined its base URL: the ``tasks`` app was accessible under
 ``localhost:8080/tasks/``.
 
 Here, we will extend the example and make each task accessible under
@@ -15,7 +15,7 @@ Weblocks:
 
 * use ``weblocks-navigation-widget:defroutes``
 
-* ``defroutes`` associates urls (as strings) to a widget::
+* ``defroutes`` associates URLs (as strings) to a widget::
 
 .. code-block:: common-lisp
 
@@ -23,9 +23,10 @@ Weblocks:
      ("/tasks/\\d+" (make-task-page))
      ("/tasks/" (make-task-list)))
 
-* ``weblocks/session:init`` must return an instance of the route widget.
+* ``weblocks/session:init`` must return an instance of the route
+  widget, using the ``make-tasks-routes`` constructor created by ``defroutes``.
 
-* to change the base url (``localhost:8080/tasks/``,
+* to change the base URL (``localhost:8080/tasks/``,
   ``localhost:8080/foo/``), create a new app.
 
 Let's start. Note that you can see the full code `on Github
@@ -172,14 +173,14 @@ At this point we can think of our routes like this:
       ("/tasks/\\d+" <create the task-page widget>)
       ("/tasks/" (make-task-list)))
 
-The regexp ``\\d+`` will capture any url that is formed of digits and
+The regexp ``\\d+`` will capture any URL that is formed of digits and
 contains at least one.
 
 As we see, the ``task-page`` constructor will need to get the id
 matched by the route.
 
 
-Path and url parameters
+Path and URL parameters
 =======================
 
 To get the current path, use ``(weblocks/request:get-path)``. Then,
@@ -204,7 +205,7 @@ Our ``task-page`` constructor becomes:
 And our router is simply::
 
    TODO> (defroutes tasks-routes
-           ("/tasks/task/\\d+" (make-task-page))
+           ("/tasks/\\d+" (make-task-page))
            ("/tasks/" (make-task-list "Make my first Weblocks app"
                                       "Deploy it somewhere"
                                       "Have a profit")))
@@ -214,11 +215,29 @@ The ``defroutes`` macro creates a new class and its constructor, named
 
 .. note:: It is important to use the constructor instead of ``make-instance``, as it defines properties on the fly.
 
+Redirections
+============
+
+To perform redirections, use ``weblocks/response:redirect "/url"``:
+
+.. code-block:: common-lisp-repl
+
+   TODO> (defroutes tasks-routes
+           ("/tasks/\\d+" (make-task-page))
+           ("/tasks/list/?" (weblocks/response:redirect "/tasks/"))  ;; <-- redirection
+           ("/tasks/" (make-task-list "Make my first Weblocks app"
+                                      "Deploy it somewhere"
+                                      "Have a profit")))
+
+Here the trailing ``/?`` allows to catch ``/tasks/list`` and ``/tasks/list/``.
+
+And indeed, contrary to what we stated in the introduction,
+``redirect`` is not a widget.
 
 Final steps
 ===========
 
-Make our router the main app for this session:
+Make our router the main widget for this session:
 
 .. code-block:: common-lisp-repl
 
