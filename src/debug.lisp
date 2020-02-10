@@ -88,6 +88,7 @@ To clear, use function \(reset-last-session\).")
           (getf *config* :invoke-debugger-on-error)
           t))
 
+  (log:config :debug)
 
   (values))
 
@@ -110,6 +111,9 @@ To clear, use function \(reset-last-session\).")
           nil))
   
   (setf *config* nil)
+
+  (log:config :warn)
+
   (values))
 
 

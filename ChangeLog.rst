@@ -2,6 +2,16 @@
  ChangeLog
 ===========
 
+dev
+===
+
+Changes
+-------
+
+* Changed ``(weblocks/debug:on)`` and ``off`` so they set the log
+  level to ``debug`` and ``warn``, respectively.
+
+
 0.39.1 (2020-01-20)
 ===================
 
