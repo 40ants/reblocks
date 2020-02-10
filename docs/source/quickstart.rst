@@ -38,6 +38,21 @@ Now, create an application:
 .. code-block:: common-lisp-repl
 
    TODO> (defapp tasks)
+
+By default, the name of the app defines the url where it is
+accessible. Here, the "tasks" app will be accessible under
+``http://localhost:40000/tasks``. We can change it with the
+``:prefix`` argument:
+
+.. code-block:: common-lisp-repl
+
+   TODO> (defapp tasks
+            :prefix "/")
+
+Now our app runs under the root url.
+
+.. code-block:: common-lisp-repl
+
    TODO> (weblocks/debug:on)
    TODO> (defvar *port* (find-port:find-port))
    TODO> (weblocks/server:start :port *port*)
