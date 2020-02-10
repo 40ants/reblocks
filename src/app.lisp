@@ -292,6 +292,7 @@ called (primarily for backward compatibility"
        (let ((app (apply #'make-instance class initargs)))
          (initialize-webapp app)
          (enable-webapp app)
+         (log:debug "~a started on url ~a" (webapp-name app) (get-prefix app))
          app)))))
 
 
