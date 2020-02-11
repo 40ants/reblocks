@@ -3,9 +3,8 @@
 ============
 
 In the quickstart tutorial, we saw how to create and render widgets,
-and how to react to user events. We also saw that the name of the app
-defined its base URL: the ``tasks`` app was accessible under
-``localhost:8080/tasks/``.
+and how to react to user events. We also learned that by default the
+app name defined its base url, and how to change it.
 
 Here, we will extend the example and make each task accessible under
 ``/tasks/<task id>``.
@@ -25,9 +24,6 @@ Weblocks:
 
 * ``weblocks/session:init`` must return an instance of the route
   widget, using the ``make-tasks-routes`` constructor created by ``defroutes``.
-
-* to change the base URL (``localhost:8080/tasks/``,
-  ``localhost:8080/foo/``), create a new app.
 
 Let's start. Note that you can see the full code `on Github
 <https://github.com/40ants/weblocks/blob/reblocks/docs/source/routing.lisp>`_.
