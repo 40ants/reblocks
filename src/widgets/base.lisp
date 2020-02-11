@@ -177,3 +177,7 @@ propagation code."))
   "If input is already a widget, then it is returned as is."
   object)
 
+(defmethod create-widget-from ((object t))
+  "If this method is called, that means that object is not of a proper type. Say it
+with an explicit error message."
+  (error "We tried to create a widget from ~a but this object type is not recognized. Did you forget to create a widget?~&There is no applicable method for CREATE-WIDGET-FROM." object))

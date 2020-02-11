@@ -10,6 +10,9 @@ Changes
 -------
 
 * Added a welcome screen app on "/" that lists the active apps.
+* ``create-widget-from`` now returns a more user-friendly error
+  message, explaining that the widget is not of a good type, instead
+  of "no applicable generic method".
 
 0.39.1 (2020-01-20)
 ===================
