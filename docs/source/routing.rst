@@ -189,7 +189,7 @@ Our ``task-page`` constructor becomes:
    TODO> (defun make-task-page ()
            (let* ((path (weblocks/request:get-path))
                   (id (first (ppcre:all-matches-as-strings "\\d+" path)))
-                  (task (get-task (parse-integer id)))
+                  (task (get-task (parse-integer id))))
              (if task
                  (make-instance 'task-page :task task)
                  (not-found))))
@@ -250,6 +250,6 @@ Reset the session:
            (weblocks/debug:reset-latest-session))
    TODO> (reset)
 
-And access the app at ``localhost:8080:tasks/``.
+And access the app at ``http://localhost:40000/tasks/``.
 
 .. _Ultralisp: https://ultralisp.org/
