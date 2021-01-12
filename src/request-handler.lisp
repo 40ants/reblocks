@@ -78,7 +78,7 @@
   (:import-from #:weblocks/session)
   (:import-from #:alexandria
                 #:make-keyword)
-  (:import-from #:log4cl-json
+  (:import-from #:log4cl-extras/error
                 #:with-log-unhandled)
 
   (:export
