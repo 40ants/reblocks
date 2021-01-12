@@ -12,6 +12,7 @@ Changes
   that is started.
 * Changed ``(weblocks/debug:on)`` and ``off`` so they set the log
   level to ``debug`` and ``warn``, respectively.
+* Changed a library used to log unhandled errors. Now `log4cl-extras <https://github.com/40ants/log4cl-extras>`_ is used, because it is a successor of `log4cl-json <https://github.com/40ants/log4cl-json>`_.
 
 
 0.39.1 (2020-01-20)

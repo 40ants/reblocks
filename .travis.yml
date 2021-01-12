@@ -55,7 +55,7 @@ cache:
 before_script:
   - env | sort
   - ros --version
-  - ros install asdf/3.3.1.1
+  - ros install asdf
   # Version fixed for more build stability
   # TODO: update it from time to time
   - ros install 40ants/qlot/freeze/6fdc1ca4778a905870b6c7bbbd598b3966d53453
@@ -66,7 +66,8 @@ before_script:
   - ros install Shinmera/dissect
   - ros install fukamachi/rove
   - ros install 40ants/cl-info
-  
+
+  - rm qlfile.lock # to always check weblocks on latest versions of quicklisp and ultralisp
   - qlot install --no-deps
   - qlot exec ros run -e '(progn (ql:quickload :weblocks-test) (uiop:quit 0))'
   - qlot exec cl-info hamcrest rove dissect weblocks
