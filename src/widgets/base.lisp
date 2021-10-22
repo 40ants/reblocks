@@ -56,8 +56,8 @@
 
 (defmacro defwidget (name direct-superclasses &body body)
   "A macro used to define new widget classes. Behaves exactly as
-defclass, except adds 'widget-class' metaclass specification and
-inherits from 'widget' if no direct superclasses are provided."
+defclass, except adds WEBLOCKS/WIDGETS/MOP:WIDGET-CLASS metaclass specification and
+inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
   `(progn
      (defclass ,name ,(remove-duplicates
                        (or direct-superclasses

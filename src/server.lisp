@@ -123,6 +123,13 @@ Make instance, then start it with ``start`` method."
     (function response)))
 
 
+(defmethod handle-http-request :around ((server server) env)
+  (log4cl-extras/error:with-log-unhandled ()
+    (log:error "Before handle http request")
+    (prog1 (call-next-method)
+      (log:error "After handle http request"))))
+
+
 (defmethod handle-http-request ((server server) env)
   "Weblocks HTTP dispatcher.
 This function serves all started applications and their static files."

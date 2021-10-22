@@ -149,31 +149,37 @@ layout and dependencies running on the same server."))
 ;; abstraction macro
 (defmacro defapp (name
                   &rest initargs
-                  &key 
+                  &key
+                    prefix
                     subclasses
                     slots
-                    (autostart t) &allow-other-keys)
+                    description
+                    (autostart t)
+                  &allow-other-keys)
   "This macro defines the key parameters for a stand alone web application.  
 It defines both a class with name 'name' and registers an instance of that class.
 It also instantiates a defvar with an instance of this class.  This is intended
 to be the primary way a web application is defined.
 
-:subclasses - if you want to inherit subclass behavior from other webapps, you
+PREFIX - an URI from where this app should be available on the server. Read more
+about this in the WEBLOCKS/DOC/ROUTING:@ROUTING section.
+
+SUBCLASSES - if you want to inherit subclass behavior from other webapps, you
 can.  It's not likely to be needed much
 
-:slots - webapps are class so slots are a list of definitions just as in defclass,
+SLOTS - webapps are class so slots are a list of definitions just as in defclass,
 but as slots are likely to be rare on webapps, we make this a keyword argument.
 
 All of the following, when present, are passed through as additional
 initargs:
 
-:name - instantiates a username (and the default title for) a webapp.  use this
+NAME - instantiates a username (and the default title for) a webapp.  use this
 name to get and delete this webapp.  Multiple instances of a webapp class can
 co-exist, so long as they have different prefixes
 
-:description - A description of the application for the title page
+DESCRIPTION - A description of the application for the title page
 
-:autostart - Whether this webapp is started automatically when start-weblocks is
+AUTOSTART - Whether this webapp is started automatically when start-weblocks is
 called (primarily for backward compatibility"
   `(progn
      (defclass ,name (,@subclasses app)

@@ -1,0 +1,12 @@
+;;; -*- Mode: common-lisp; -*-
+(:api-version "0.4")
+
+(:source "ultralisp" :url "https://clpi.ultralisp.org/" :type :clpi)
+
+(:source "quicklisp" :url "https://quicklisp.common-lisp-project-index.org/" :type :ql-clpi)
+
+
+;; (:asd "weblocks.asd")
+;; (:asd "weblocks-test.asd")
+
+(:system "ironclad" :source "quicklisp")
