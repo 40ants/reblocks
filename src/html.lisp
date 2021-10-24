@@ -2,13 +2,31 @@
   (:use #:cl)
   (:import-from #:spinneret
                 #:*html*)
-  (:export
-   #:with-html
-   #:*pretty-html*
-   #:*lang*
-   #:with-html-string
-   #:get-rendered-chunk))
+  (:import-from #:40ants-doc
+                #:defsection)
+  (:export #:with-html
+           #:*pretty-html*
+           #:*lang*
+           #:with-html-string
+           #:*stream*))
 (in-package weblocks/html)
+
+
+(defsection @html (:title "HTML Rendering"
+                   :ignore-words ("HTML"
+                                  "DIV"
+                                  "CSS"))
+  "Weblocks provides a thin wrapper for
+
+   Use WEBLOCKS/HTML:WITH-HTML macro to render HTML.
+   You can use any other templating engine, just ensure
+   it writes output to WEBLOCKS/HTML:*STREAM*"
+
+  (with-html macro)
+  (with-html-string macro)
+  (*stream* variable)
+  (*lang* variable)
+  (*pretty-html* variable)) 
 
 
 (defvar *stream*
@@ -30,6 +48,9 @@
   "We want an HTML nice to read by default.")
 
 (defmacro with-html (&body body)
+  "Renders body using [Spinneret](https://github.com/ruricolist/spinneret) HTML generator.
+
+   "
   `(let ((spinneret:*html-lang* *lang*)
          (spinneret:*html* *stream*)
          ;; We want to an HTML which is nice to read, by default

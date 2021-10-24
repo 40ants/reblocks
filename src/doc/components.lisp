@@ -218,7 +218,7 @@ As an example for the oldschool templating you may see
 
 <a name=\"uri-tokens\"></a>
 \\[2\\] Еach path component of an URI is a token; for example
-        in `\"/foo/bar/quux\"` there are three tokens `foo`
+        in `\"/foo/bar/quux\"` there are three tokens `foo`,
         `bar` and `quux`.
 
 <a name=\"function-designators\"></a>

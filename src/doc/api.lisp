@@ -2,6 +2,12 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
+  (:import-from #:weblocks/app)
+  (:import-from #:weblocks/widget)
+  (:import-from #:weblocks/html)
+  (:import-from #:weblocks/actions)
+  (:import-from #:weblocks/response)
+  (:import-from #:weblocks/session)
   (:export
    #:@api))
 (in-package weblocks/doc/api)
@@ -11,12 +17,7 @@
                   :ignore-words ("API"
                                  "URI"))
   (weblocks/app:defapp macro)
-  (weblocks/widget:defwidget macro)
   (weblocks/widgets/mop:widget-class class)
-  (weblocks/widget:widget class)
-  (weblocks/widget:render generic-function)
-  (weblocks/widget:update generic-function)
-  (weblocks/html:with-html macro)
   (weblocks/actions:make-js-action function)
   (weblocks/response:redirect function)
   (weblocks/session:init generic-function))

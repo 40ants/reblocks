@@ -8,6 +8,8 @@ dev
 Changes
 -------
 
+* Package WEBLOCKS/WIDGETS/BASE was removed. All code now is in the WEBLOCKS/WIDGET package,
+  which was a nickname previously.
 * Added a log in ``weblocks/app:start`` to show the prefix of the app
   that is started.
 * Changed ``(weblocks/debug:on)`` and ``off`` so they set the log

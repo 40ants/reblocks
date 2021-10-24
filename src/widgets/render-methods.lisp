@@ -5,7 +5,7 @@
                 #:get-dependencies
                 #:push-dependencies
                 #:render-in-ajax-response)
-  (:import-from #:weblocks/widgets/base
+  (:import-from #:weblocks/widget
                 #:get-css-classes-as-string
                 #:get-html-tag
                 #:render)
@@ -34,7 +34,7 @@
 (defmethod render :around (widget)
   "This function is intended for internal usage only.
    It renders widget with surrounding HTML tag and attributes."
-  (check-type widget weblocks/widgets/base:widget)
+  (check-type widget weblocks/widget:widget)
   (log:debug "Rendering widget" widget "with" (get-collected-dependencies))
   
   (let ((widget-dependencies (get-dependencies widget)))

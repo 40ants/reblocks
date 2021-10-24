@@ -3,6 +3,8 @@
   (:import-from #:40ants-doc
                 #:defsection
                 #:defsection-copy)
+  (:import-from #:weblocks/html
+                #:@html)
   (:import-from #:weblocks/doc/intro
                 #:@intro)
   (:import-from #:weblocks/doc/installation
@@ -15,6 +17,8 @@
                 #:@routing)
   (:import-from #:weblocks/doc/api
                 #:@api)
+  (:import-from #:weblocks/doc/widgets
+                #:@widgets)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -28,6 +32,8 @@
 - @INSTALLATION
 - @QUICKSTART
 - @COMPONENTS
+- @WIDGETS
+- @HTML
 - @ROUTING
 - @API
 "
@@ -55,6 +61,8 @@
                          @installation
                          @quickstart
                          @components
+                         @widgets
+                         @html
                          @routing
                          @api
                          @readme)))
