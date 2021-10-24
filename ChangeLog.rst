@@ -5,6 +5,12 @@
 dev
 ===
 
+Added
+-----
+
+* A new function WEBLOCKS/PREVIEW:PREVIEW was added. Give it a widget and it will setup
+  a server on a random port and show the widget in a browser!
+
 Changes
 -------
 

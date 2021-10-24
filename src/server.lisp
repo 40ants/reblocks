@@ -245,7 +245,8 @@ If server is already started, then logs a warning and does nothing."
 (defun start (&key (debug t)
                 (port 8080)
                 (interface "localhost")
-                (server-type :hunchentoot))
+                (server-type :hunchentoot)
+                apps)
   "Starts weblocks framework hooked into Clack server.
 
 Set DEBUG to true in order for error messages and stack traces to be shown
@@ -257,7 +258,7 @@ the initargs :PORT and :SESSION-COOKIE-NAME default to
 8080 and `weblocks-GENSYM'.
 
 Also opens all stores declared via DEFSTORE and starts webapps
-declared AUTOSTART."
+declared AUTOSTART unless APPS argument is provided."
 
   (weblocks/hooks:with-start-weblocks-hook ()
     (when *server*
@@ -288,7 +289,9 @@ declared AUTOSTART."
      (mapcar (lambda (class)
                (unless (app-active-p class)
                  (weblocks/app:start class :debug debug)))
-             (get-autostarting-apps)))))
+             (uiop:ensure-list
+              (or apps
+                  (get-autostarting-apps)))))))
 
 
 (defun stop ()

@@ -26,6 +26,32 @@
    - WEBLOCKS/WIDGET:GET-CSS-CLASSES - returns a list of CSS classes. By default returns :WIDGET and a widget class's name.
    - WEBLOCKS/WIDGET:CREATE-WIDGET-FROM - return a widget for representing an object. This way widgets can be created out of strings, functions, etc.
 
+   # Example
+
+   To define a widget, use WEBLOCKS/WIDGET:DEFWIDGET macro. It creates a class
+   with a proper meta-class. Old Weblocks version used this metaclass to
+   discover changes slots, and probably this feature will be returned back some day.
+
+   ```
+   CL-USER> (weblocks/widget:defwidget hello ()
+              ((name :initarg :name
+                     :reader get-name)))
+   #<WEBLOCKS/WIDGETS/MOP:WIDGET-CLASS COMMON-LISP-USER::HELLO>
+
+   CL-USER> (defmethod weblocks/widget:render ((widget hello))
+              (weblocks/html:with-html
+                (:span (\"Hello ~A\" (get-name widget)))))
+   #<STANDARD-METHOD WEBLOCKS/WIDGET:RENDER (HELLO) {1004E27BC3}>
+   ```
+
+   Then call this, to run a webserver and preview your widget in the browser:
+
+   ```
+   CL-USER> (weblocks/preview:preview
+             (make-instance 'hello
+                            :name \"Bob\"))
+   ```
+
    # API"
   (weblocks/widget:widget class)
   (weblocks/widget:defwidget macro)
@@ -38,3 +64,7 @@
   "# MOVE THESE TO THEIR OWN SECTIONS"
 
   (weblocks/dependencies:get-dependencies generic-function))
+
+
+;; It will be cool to create an extension to 40ANTS-DOC, to render widget examples in the documentation,
+;; But I was unable to run cl-selenium (https://github.com/TatriX/cl-selenium-webdriver) headless yet.

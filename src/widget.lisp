@@ -177,7 +177,10 @@ propagation code."))
 (defgeneric create-widget-from (object)
   (:documentation "Methods of this generic should return an instance of subclass of weblocks/widget:widget
                    The most obvious cases are transformation of strings and functions into the widget, but
-                   these methods are already supplied by Weblocks."))
+                   these methods are already supplied by Weblocks.
+
+                   If WEBLOCKS/SESSION:INIT returns an object, then CREATE-WIDGET-FROM will be called on it
+                   to create the root widget."))
 
 
 (defmethod create-widget-from ((object widget))
