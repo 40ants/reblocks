@@ -14,6 +14,7 @@
   (:import-from #:alexandria
                 #:hash-table-keys)
   (:import-from #:serapeum)
+  (:import-from #:40ants-doc/commondoc/builder)
   (:export #:defexample
            #:weblocks-example
            #:start-server

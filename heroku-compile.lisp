@@ -20,6 +20,7 @@
 
   (qlot:with-local-quicklisp (qlfile)
     (push "./" asdf:*central-registry*)
+    (ql:quickload "weblocks/doc/index")
     (ql:quickload "weblocks/doc/example")
 
     ;; These modules are required because sources will not be available at runtime
