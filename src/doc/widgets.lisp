@@ -3,7 +3,9 @@
   (:import-from #:40ants-doc
                 #:defsection)
   (:import-from #:weblocks/widget)
-  (:import-from #:weblocks/dependencies))
+  (:import-from #:weblocks/dependencies)
+  (:import-from #:weblocks/doc/example
+                #:defexample))
 (in-package weblocks/doc/widgets)
 
 
@@ -52,7 +54,14 @@
                             :name \"Bob\"))
    ```
 
-   # API"
+   # Result"
+
+  (hello-world weblocks-example)
+  
+  (second-example weblocks-example)
+
+  "# API"
+  
   (weblocks/widget:widget class)
   (weblocks/widget:defwidget macro)
   (weblocks/widget:render generic-function)
@@ -65,6 +74,28 @@
 
   (weblocks/dependencies:get-dependencies generic-function))
 
+
+(defexample hello-world ()
+  (weblocks/widget:defwidget hello ()
+    ((name :initarg :name
+           :reader get-name)))
+
+  (defmethod weblocks/widget:render ((widget hello))
+    (weblocks/html:with-html
+      (:span ("Hello ~A" (get-name widget)))))
+
+  (defun make-example ()
+    (make-instance 'hello :name "Bob")))
+
+
+(defexample second-example ()
+  (weblocks/widget:defwidget hello ()
+    ((name :initarg :name
+           :reader get-name)))
+
+  (defmethod weblocks/widget:render ((widget hello))
+    (weblocks/html:with-html
+      (:span "A Second example"))))
 
 ;; It will be cool to create an extension to 40ANTS-DOC, to render widget examples in the documentation,
 ;; But I was unable to run cl-selenium (https://github.com/TatriX/cl-selenium-webdriver) headless yet.

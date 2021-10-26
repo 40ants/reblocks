@@ -1,4 +1,4 @@
-(defpackage #:weblocks/hooks
+(uiop:define-package #:weblocks/hooks
   (:use #:cl
         #:f-underscore)
   ;; Just dependencies

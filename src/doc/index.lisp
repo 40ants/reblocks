@@ -56,6 +56,11 @@
   (list :theme
         (find-symbol "40ANTS-THEME"
                      (find-package "40ANTS-DOC-THEME-40ANTS"))
+        :dynamic-bindings (list (cons 'weblocks/doc/example:*server-url*
+                                      ;; When local examples server is running,
+                                      ;; we'll be using it instead of production:
+                                      (unless weblocks/doc/example::*port*
+                                        "http://examples.40ants.com/")))
         :root-sections '(@index
                          @intro
                          @installation

@@ -1,4 +1,4 @@
-(defpackage #:weblocks/html
+(uiop:define-package #:weblocks/html
   (:use #:cl)
   (:import-from #:spinneret
                 #:*html*)
