@@ -3,5 +3,6 @@
 /env/
 /quicklisp/
 /libssl.dylib
+/lispapp
 
 

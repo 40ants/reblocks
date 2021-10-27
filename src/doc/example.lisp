@@ -15,6 +15,7 @@
                 #:hash-table-keys)
   (:import-from #:serapeum)
   (:import-from #:40ants-doc/commondoc/builder)
+  (:import-from #:weblocks/server)
   (:export #:defexample
            #:weblocks-example
            #:start-server
@@ -25,6 +26,27 @@
 
 (defvar *server-url* nil
   "This variable can be used to point to a production server for showing documentation examples.")
+
+(defvar *port* nil
+  "A port where examples server is listening.")
+
+
+(defvar *examples* (make-hash-table :test 'equal
+                                    #+sbcl
+                                    :synchronized
+                                    #+sbcl
+                                    t))
+
+
+(defclass weblocks-example ()
+  ((name :initarg :name
+         :type symbol
+         :reader example-name)
+   (package :initarg :package
+            :reader example-package)
+   (body :initarg :body
+         :type cons
+         :reader example-body)))
 
 
 (define-locative-type weblocks-example ()
@@ -55,17 +77,6 @@
      (weblocks/html:with-html-string
        (:iframe :src full-url
                 :style "border: 1px solid gray;")))))
-
-
-(defclass weblocks-example ()
-  ((name :initarg :name
-         :type symbol
-         :reader example-name)
-   (package :initarg :package
-            :reader example-package)
-   (body :initarg :body
-         :type cons
-         :reader example-body)))
 
 
 (defun replace-internal-symbols (body &key from-package to-package)
@@ -102,18 +113,19 @@
   
   (let* ((package-name (format nil "WEBLOCKS/EXAMPLES/~A/~A"
                                (package-name (symbol-package name))
-                               (symbol-name name)))
-         (package (or (find-package package-name)
-                      (make-package package-name
-                                    :use (list "CL"))))
-         (new-body (replace-internal-symbols body
-                                             :from-package *package*
-                                             :to-package package)))
+                               (symbol-name name))))
     `(defparameter ,name
-       (make-instance 'weblocks-example
-                      :name ',name
-                      :package (find-package ,package-name)
-                      :body ',new-body))))
+       (let* ((package (or (find-package ,package-name)
+                           (make-package ,package-name
+                                         :use (list "CL"))))
+              (new-body (replace-internal-symbols ',body
+                                                  :from-package *package*
+                                                  :to-package package)))
+         (make-instance 'weblocks-example
+                        :name ',name
+                        ;; Here we need to ensure package exists
+                        :package package
+                        :body new-body)))))
 
 
 (defun widget-class (example)
@@ -157,17 +169,6 @@
                  :accessor current-path)
    (current-widget :initform nil
                    :accessor current-widget)))
-
-
-(defvar *port* nil
-  "A port where examples server is listening.")
-
-
-(defvar *examples* (make-hash-table :test 'equal
-                                    #+sbcl
-                                    :synchronized
-                                    #+sbcl
-                                    t))
 
 
 (defmethod weblocks/session:init ((app examples-server))
@@ -253,5 +254,6 @@
 (defun cl-user::initialize-application (&key (port 8080) (interface "0.0.0.0"))
   (format t "Starting examples server on ~A:~A~%"
           interface port)
+  (update-examples "weblocks")
   (start-server :port port
                 :interface interface))
