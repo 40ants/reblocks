@@ -1,5 +1,6 @@
 (uiop:define-package #:weblocks/doc/example
   (:use #:cl)
+  (:import-from #:clack-handler-hunchentoot)
   (:import-from #:40ants-doc/locatives/base
                 #:define-locative-type)
   (:import-from #:weblocks/widget
