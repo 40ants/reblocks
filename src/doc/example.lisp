@@ -250,6 +250,8 @@
 
 
 ;; Entry-point for Heroky deployment
-(defun cl-user::initialize-application (&key (port 8080))
+(defun cl-user::initialize-application (&key (port 8080) (interface "0.0.0.0"))
+  (format t "Starting examples server on ~A:~A~%"
+          interface port)
   (start-server :port port
-                :interface "0.0.0.0"))
+                :interface interface))
