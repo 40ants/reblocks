@@ -20,20 +20,20 @@
 
 
 (defvar *js-dependencies*
-    (list (make-dependency "https://code.jquery.com/jquery-1.8.2.js"
-                           ;; :integrity "sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-                           )
-          (make-dependency "src/js/jquery/jquery.js"
-                           :system :weblocks)
+  (list (make-dependency "src/js/jquery/jsquery-1.8.2.js"
+                         ;; "https://code.jquery.com/jquery-1.8.2.js"
+                         :system :weblocks)
+        (make-dependency "src/js/jquery/jquery.js"
+                         :system :weblocks)
 
-          (make-dependency "src/js/jquery/jquery.ba-bbq.js"
-                           :system :weblocks)
+        (make-dependency "src/js/jquery/jquery.ba-bbq.js"
+                         :system :weblocks)
 
-          (make-dependency "src/js/jquery/jquery-seq.js"
-                           :system :weblocks)
+        (make-dependency "src/js/jquery/jquery-seq.js"
+                         :system :weblocks)
 
-          (make-dependency "src/js/jquery/progress.gif"
-                           :system :weblocks)))
+        (make-dependency "src/js/jquery/progress.gif"
+                         :system :weblocks)))
 
 
 (defmethod get-dependencies ((self jquery-backend))

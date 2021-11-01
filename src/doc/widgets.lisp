@@ -54,12 +54,11 @@
                             :name \"Bob\"))
    ```
 
-   # Result"
+   A result will look like this:"
 
   (hello-world weblocks-example)
-  
-  (second-example weblocks-example)
 
+  
   "# API"
   
   (weblocks/widget:widget class)
@@ -82,20 +81,14 @@
 
   (defmethod weblocks/widget:render ((widget hello))
     (weblocks/html:with-html
-      (:span ("Hello ~A" (get-name widget)))))
+      (:h1 ("Hello ~A" (get-name widget)))
+      (:ul (:li "Just a list.")
+           (:li "To demonstrate templating.")
+           (:li "Engine."))))
 
   (defun make-example ()
     (make-instance 'hello :name "Bob")))
 
-
-(defexample second-example ()
-  (weblocks/widget:defwidget hello ()
-    ((name :initarg :name
-           :reader get-name)))
-
-  (defmethod weblocks/widget:render ((widget hello))
-    (weblocks/html:with-html
-      (:span "A Second example"))))
 
 ;; It will be cool to create an extension to 40ANTS-DOC, to render widget examples in the documentation,
 ;; But I was unable to run cl-selenium (https://github.com/TatriX/cl-selenium-webdriver) headless yet.

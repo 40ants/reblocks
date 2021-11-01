@@ -43,6 +43,10 @@
   ((name :initarg :name
          :type symbol
          :reader example-name)
+   (width :initarg :width
+          :reader example-width)
+   (height :initarg :height
+           :reader example-height)
    (package :initarg :package
             :reader example-package)
    (body :initarg :body
@@ -76,8 +80,11 @@
                                (example-path example))))
     (commondoc-markdown/raw-html:make-raw-html-block
      (weblocks/html:with-html-string
-       (:iframe :src full-url
-                :style "border: 1px solid gray;")))))
+       (:div :class "demo"
+             (:iframe :src full-url
+                      :style (format nil "width: ~A; height: ~A"
+                                     (example-width example)
+                                     (example-height example))))))))
 
 
 (defun replace-internal-symbols (body &key from-package to-package)
@@ -100,7 +107,9 @@
                      body))
 
 
-(defmacro defexample (name (&key (show-code-tab t))
+(defmacro defexample (name (&key (width "100%")
+                                 (height "10em")
+                              (show-code-tab t))
                       &body body)
   "Defines Weblocks app example.
 
@@ -124,8 +133,9 @@
                                                   :to-package package)))
          (make-instance 'weblocks-example
                         :name ',name
-                        ;; Here we need to ensure package exists
                         :package package
+                        :width ,width
+                        :height ,height
                         :body new-body)))))
 
 
@@ -206,6 +216,10 @@
                   do (:li (:a :href uri uri))))))))))
 
 
+(defmethod 40ants-doc/object-package::object-package ((object weblocks-example))
+  (example-package object))
+
+
 (defun collect-examples (asdf-system-name)
   "Searches packages belonging to the given asdf-system."
   (check-type asdf-system-name string)
@@ -233,7 +247,13 @@
         (collect-examples asdf-system-name)))
 
 
-(defun start-server (&key port (interface "localhost"))
+(defun start-server (&key
+                       port
+                       (interface "localhost")
+                       for-asdf-system)
+  (when for-asdf-system
+    (update-examples (string-downcase for-asdf-system)))
+  
   (when (null *port*)
     (let ((port (or port
                     (find-port)))
