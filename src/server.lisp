@@ -101,10 +101,12 @@ Make instance, then start it with ``start`` method."
 
 (defun search-app-for-request-handling (path-info hostname)
   (dolist (app (get-active-apps))
-    (let ((app-prefix (get-prefix app)))
+    (let ((app-prefix (get-prefix app))
+          (app-works-for-this-hostname
+            (app-serves-hostname-p app hostname)))
       (log:debug "Searching handler in" app app-prefix)
-      
-      (when (and (app-serves-hostname-p app hostname)
+
+      (when (and app-works-for-this-hostname
                  (starts-with path-info
                               app-prefix))
         (return-from search-app-for-request-handling
@@ -125,9 +127,7 @@ Make instance, then start it with ``start`` method."
 
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
-    (log:error "Before handle http request")
-    (prog1 (call-next-method)
-      (log:error "After handle http request"))))
+    (call-next-method)))
 
 
 (defmethod handle-http-request ((server server) env)

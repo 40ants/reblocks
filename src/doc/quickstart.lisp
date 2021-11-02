@@ -4,6 +4,10 @@
                 #:defsection)
   (:import-from #:weblocks/doc/routing
                 #:@routing)
+  (:import-from #:weblocks/doc/example
+                #:defexample)
+  (:import-from #:weblocks-ui/form)
+  (:import-from #:weblocks/html)
   (:export #:@quickstart))
 (in-package weblocks/doc/quickstart)
 
@@ -238,9 +242,19 @@ TODO> (weblocks/debug:reset-latest-session)
 
 Right now it should look like this:
 
-![Our first list of tasks.](docs/images/quickstart-list.png)
+[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
+[Ultralisp]: https://ultralisp.org/
+[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
+[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
+[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
+[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
+[Spinneret]: https://github.com/ruricolist/spinneret/
 
+"
 
+  (example1 weblocks-example)
+
+  "
 # Adding tasks
 
 Now, we'll add some ability to interact with a list – to add some tasks
@@ -308,6 +322,21 @@ Another block in our new version of RENDER of a TASK-LIST is the form:
 It defines a text field, a submit button and an action to perform on
 form submit.
 
+Go, try it! This demo is interative:
+
+[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
+[Ultralisp]: https://ultralisp.org/
+[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
+[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
+[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
+[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
+[Spinneret]: https://github.com/ruricolist/spinneret/
+"
+
+  (example2 weblocks-example)
+
+  
+  "
 > **This is really amazing!**
 > 
 > With Weblocks, you can handle all the business logic
@@ -350,10 +379,24 @@ modified our task rendering function by adding a code to render a
 checkbox with an anonymous lisp function, attached to its
 ONCLICK attribute.
 
-The WEBLOCKS/ACTIONS:MAKE-JS-ACTION function returns a Javascript code, which calls
-back a lisp lambda function when evaluated in the browser.  And
-because TOGGLE updates a Task widget, Weblocks returns on this
+The WEBLOCKS/ACTIONS:MAKE-JS-ACTION function returns a Javascript code,
+which calls back a lisp lambda function when evaluated in the browser.
+And because TOGGLE updates a Task widget, Weblocks returns on this
 callback a new prerendered HTML for this one task only.
+
+Here is how our app will work now:
+
+[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
+[Ultralisp]: https://ultralisp.org/
+[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
+[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
+[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
+[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
+[Spinneret]: https://github.com/ruricolist/spinneret/
+"
+
+  (example3 weblocks-example)
+  "
 
 
 # What is next?
@@ -369,10 +412,93 @@ As a homework:
    power of Common Lisp.
 
 [Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
-[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
 [Ultralisp]: https://ultralisp.org/
+[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
 [PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
 [CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
 [DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
 [Spinneret]: https://github.com/ruricolist/spinneret/
 ")
+
+
+(defexample example1 ()
+  (weblocks/widget:defwidget task ()
+    ((title
+      :initarg :title
+      :accessor title)
+     (done
+      :initarg :done
+      :initform nil
+      :accessor done)))
+  
+  (weblocks/widget:defwidget task-list ()
+    ((tasks
+      :initarg :tasks
+      :accessor tasks)))
+
+  (defmethod weblocks/widget:render ((task task))
+    "Render a task."
+    (weblocks/html:with-html
+      (:span (if (done task)
+                 (:s (title task))
+                 (title task)))))
+
+  (defmethod weblocks/widget:render ((widget task-list))
+    "Render a list of tasks."
+    (weblocks/html:with-html
+      (:h1 "Tasks")
+      (:ul
+       (loop for task in (tasks widget) do
+         (:li (weblocks/widget:render task))))))
+
+  (defun make-task (title &key done)
+    (make-instance 'task :title title :done done))
+
+  (defun make-example ()
+    (make-instance 'task-list
+                   :tasks (list (make-task "Make my first Weblocks app")
+                                (make-task "Deploy it somewhere")
+                                (make-task "Have a profit")))))
+
+
+(defexample example2 (:inherits example1 :height "15em")
+  (defmethod add-task ((task-list task-list) title)
+    (push (make-task title)
+          (tasks task-list))
+    (weblocks/widget:update task-list))
+  
+  (defmethod weblocks/widget:render ((task-list task-list))
+    (weblocks/html:with-html
+      (:h1 "Tasks")
+      (loop for task in (tasks task-list) do
+        (weblocks/widget:render task))
+      (weblocks-ui/form:with-html-form (:POST (lambda (&key title &allow-other-keys)
+                                                (add-task task-list title)))
+        (:input :type "text"
+                :name "title"
+                :placeholder "Task's title")
+        (:input :type "submit"
+                :value "Add")))))
+
+
+(defexample example3 (:inherits example2 :height "15em")
+
+  (defmethod toggle ((task task))
+    (setf (done task)
+          (if (done task)
+              nil
+              t))
+    (weblocks/widget:update task))
+
+  (defmethod weblocks/widget:render ((task task))
+          (weblocks/html:with-html
+            (:p (:input :type "checkbox"
+                        :checked (done task)
+                        :onclick (weblocks/actions:make-js-action
+                                  (lambda (&key &allow-other-keys)
+                                    (toggle task))))
+                (:span (if (done task)
+                           (weblocks/html:with-html
+                             ;; strike
+                             (:s (title task)))
+                           (title task)))))))

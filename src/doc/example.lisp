@@ -21,7 +21,8 @@
            #:weblocks-example
            #:start-server
            #:update-examples
-           #:*server-url*))
+           #:*server-url*
+           #:start-doc-server))
 (in-package weblocks/doc/example)
 
 
@@ -49,6 +50,11 @@
            :reader example-height)
    (package :initarg :package
             :reader example-package)
+   (original-body :initarg :original-body
+                  :type cons
+                  :reader example-original-body
+                  :documentation "The code before any transformations.
+                                  Used when some example inherits another example.")
    (body :initarg :body
          :type cons
          :reader example-body)))
@@ -108,7 +114,11 @@
 
 
 (defmacro defexample (name (&key (width "100%")
-                                 (height "10em")
+                              (height "10em")
+                              ;; Includes code from listed examples: 
+                              (inherits nil)
+                              ;; ASDF system it depends on:
+                              (depends-on nil)
                               (show-code-tab t))
                       &body body)
   "Defines Weblocks app example.
@@ -123,20 +133,27 @@
   
   (let* ((package-name (format nil "WEBLOCKS/EXAMPLES/~A/~A"
                                (package-name (symbol-package name))
-                               (symbol-name name))))
+                               (symbol-name name)))
+         (full-body (append (loop for another-example in (uiop:ensure-list inherits)
+                                  appending (example-original-body (eval another-example)))
+                            body)))
     `(defparameter ,name
        (let* ((package (or (find-package ,package-name)
                            (make-package ,package-name
                                          :use (list "CL"))))
-              (new-body (replace-internal-symbols ',body
+              (new-body (replace-internal-symbols ',full-body
                                                   :from-package *package*
-                                                  :to-package package)))
-         (make-instance 'weblocks-example
-                        :name ',name
-                        :package package
-                        :width ,width
-                        :height ,height
-                        :body new-body)))))
+                                                  :to-package package))
+              (example (make-instance 'weblocks-example
+                                      :name ',name
+                                      :package package
+                                      :width ,width
+                                      :height ,height
+                                      :original-body ',full-body
+                                      :body new-body)))
+
+         (weblocks/widget:create-widget-from example)
+         (values example)))))
 
 
 (defun widget-class (example)
@@ -170,6 +187,14 @@
        (make-instance (widget-class example))))))
 
 
+(defapp documentation-server
+  :prefix "/docs/"
+  :autostart nil
+  :slots ((asdf-system :initform nil
+                       :initarg :asdf-system
+                       :reader asdf-system)))
+
+
 (defapp examples-server
   :prefix "/examples/"
   :autostart nil)
@@ -186,8 +211,13 @@
   (make-instance 'examples-widget))
 
 
+(defmethod weblocks/session:init ((app documentation-server))
+  (if (asdf-system app)
+      (asdf:system-relative-pathname (asdf-system app) "docs/")
+      (uiop:merge-pathnames* "docs/")))
+
+
 (defmethod weblocks/widget:render ((widget examples-widget))
-  
   (let* ((app-prefix (weblocks/app:get-prefix (weblocks/app:get-current)))
          (full-path (string-downcase (weblocks/request:get-path)))
          (path (subseq full-path (length app-prefix))))
@@ -220,12 +250,11 @@
   (example-package object))
 
 
-(defun collect-examples (asdf-system-name)
+(defun collect-examples (asdf-system-name &key (results (make-hash-table :test 'equal)))
   "Searches packages belonging to the given asdf-system."
   (check-type asdf-system-name string)
   
   (loop with asdf-system-name = (string-downcase asdf-system-name)
-        with results = (make-hash-table :test 'equal)
         with prefix = (concatenate 'string asdf-system-name "/")
         for package in (list-all-packages)
         for name = (string-downcase (package-name package))
@@ -242,9 +271,27 @@
         finally (return results)))
 
 
-(defun update-examples (asdf-system-name)
+(defparameter *known-asdf-systems* nil
+  "When UPDATE-EXAMPLES is called without arguments, it will
+   update examples for all these systems.")
+
+(defun update-examples (&rest asdf-system-names)
+  (setf *known-asdf-systems*
+        (union asdf-system-names
+               *known-asdf-systems*
+               :test #'string-equal))
+  
   (setf *examples*
-        (collect-examples asdf-system-name)))
+        (loop with results = (make-hash-table :test 'equal)
+              for asdf-system-name in *known-asdf-systems*
+              do (collect-examples asdf-system-name
+                                   :results results)
+              finally (return results))))
+
+
+(defun start-doc-server (&key asdf-system)
+  (weblocks/app:start 'documentation-server
+                      :asdf-system asdf-system))
 
 
 (defun start-server (&key
@@ -265,7 +312,10 @@
                              :apps 'examples-server)
       (setf *port* port)))
 
-  (let ((url (format nil "http://localhost:~A/examples/"
+  (weblocks-file-server:make-route :uri "/docs2/" :root (asdf:system-relative-pathname :weblocks "docs/") :dir-listing t)
+  ;; (start-doc-server :asdf-system for-asdf-system)
+
+  (let ((url (format nil "http://localhost:~A/docs/"
                      *port*)))
     (log:info "Started examples server at ~A"
               url)))

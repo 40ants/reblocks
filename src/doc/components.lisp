@@ -12,7 +12,8 @@
                                         "HTML"
                                         "CLOS"
                                         "MAKE-WIDGET")
-                         :external-docs ("https://40ants.com/weblocks-navigation-widget/"))
+                         ;; :external-docs ("https://40ants.com/weblocks-navigation-widget/")
+                         )
   "
 # Widgets
 

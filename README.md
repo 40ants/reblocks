@@ -203,7 +203,12 @@ TODO> (weblocks/debug:reset-latest-session)
 ```
 Right now it should look like this:
 
-![](docs/images/quickstart-list.png)
+
+<div class=demo>
+ <iframe
+         src=http://localhost:40000/examples/weblocks/doc/quickstart/example1
+         style="width: 100%; height: 10em"></iframe>
+</div>
 
 <a id="adding-tasks"></a>
 
@@ -271,6 +276,15 @@ Another block in our new version of `RENDER` of a `TASK-LIST` is the form:
 ```
 It defines a text field, a submit button and an action to perform on
 form submit.
+
+Go, try it! This demo is interative:
+
+
+<div class=demo>
+ <iframe
+         src=http://localhost:40000/examples/weblocks/doc/quickstart/example2
+         style="width: 100%; height: 10em"></iframe>
+</div>
 
 > **This is really amazing!**
 > 

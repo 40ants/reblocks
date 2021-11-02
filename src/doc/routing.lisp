@@ -15,7 +15,8 @@
                                      "TASK-PAGE"
                                      "MAKE"
                                      "CL-PPCRE")
-                      :external-docs ("https://40ants.com/weblocks-navigation-widget/") )
+                      ;; :external-docs ("https://40ants.com/weblocks-navigation-widget/") 
+                      )
   "
 In the quickstart tutorial, we saw how to create and render widgets,
 and how to react to user events. We also learned that by default the

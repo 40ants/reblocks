@@ -44,14 +44,15 @@ KEY is compared using EQUAL."
     (error "Session was not created for this request!"))
   ;; TODO: seems, previously keys were separated for different weblocks apps
   ;;       but I've simplified it for now
-  
+  (log:error "Getting " key "From" *session*)
   (ensure-gethash key *session* default))
 
 
 (defun (setf get-value) (value key)
   "Set a session value for the currently running webapp.
 KEY is compared using EQUAL."
-  
+
+  (log:error "Setting " key value "To" *session*)
   (setf (gethash key *session*)
         value))
 
@@ -94,11 +95,21 @@ used to create IDs for html elements, widgets, etc."
   (values))
 
 
+(defun call-with-session (lack-env func)
+  (let ((*session* (getf lack-env :lack.session))
+        (*env* lack-env))
+    (restart-case (funcall func)
+      (reset-session ()
+        :report "Reset current Weblocks session and return 500."
+        (log:warn "Resetting current session.")
+        (clrhash *session*)
+        (list 500 nil (list "Please, reload page to start a new session."))))))
+
+
 (defmacro with-session ((env) &body body)
   "Sets dynamic binding for *session* and *env*"
-  `(let ((*session* (getf ,env :lack.session))
-         (*env* ,env))
-     ,@body))
+  `(call-with-session ,env
+                      (lambda () ,@body)))
 
 
 (defvar !get-number-of-sessions nil

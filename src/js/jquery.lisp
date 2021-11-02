@@ -20,7 +20,7 @@
 
 
 (defvar *js-dependencies*
-  (list (make-dependency "src/js/jquery/jsquery-1.8.2.js"
+  (list (make-dependency "src/js/jquery/jquery-1.8.2.js"
                          ;; "https://code.jquery.com/jquery-1.8.2.js"
                          :system :weblocks)
         (make-dependency "src/js/jquery/jquery.js"

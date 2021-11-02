@@ -72,7 +72,7 @@
              (restart-case
                  (progn ,@body)
                (abort ()
-                 :report "abort request processing and return 500"
+                 :report "Abort request processing and return 500."
                  (log:error "Aborting request processing")
                  (on-error *current-app*
                            debugger-was-invoked-on-cond)))))))))
