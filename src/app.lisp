@@ -13,7 +13,8 @@
   (:import-from #:weblocks/utils/string
                 #:attributize-name
                 #:remove-spurious-slashes
-                #:strip-trailing-slashes)
+                #:strip-trailing-slashes
+                #:ensure-starts-with-slash)
   (:import-from #:weblocks/utils/list
                 #:remove-keyword-parameters)
   (:import-from #:weblocks/variables
@@ -21,64 +22,19 @@
   ;; Just dependencies
   (:import-from #:log)
   (:shadow #:restart)
-  (:export
-   #:defapp
-   #:app
-   #:get-autostarting-apps
-   #:get-registered-apps
-   #:app-active-p
-   #:start
-   #:stop
-   #:restart
-   #:find-active-app
-   #:get-active-apps
-   #:get-prefix
-   #:app-serves-hostname-p
-   #:get-current
-   #:with-app))
+  (:export #:defapp
+           #:app
+           #:get-autostarting-apps
+           #:get-registered-apps
+           #:start
+           #:stop
+           #:restart
+           #:get-prefix
+           #:app-serves-hostname-p
+           #:get-current
+           #:with-app
+           #:initialize-webapp))
 (in-package weblocks/app)
-;; (in-package weblocks)
-
-;; (export '(defwebapp
-;;           weblocks-webapp
-;;           start-webapp
-;;           stop-webapp
-;;           restart-webapp
-;;           get-webapp
-;;           get-webapps-for-class
-;;           initialize-webapp
-;;           finalize-webapp
-;;           webapp-name in-webapp
-;;           bundle-dependency-types
-;;           version-dependency-types
-;;           webapp-description
-;;           webapp-prefix
-;;           webapp-debug
-;;           running-webapp
-;;           make-webapp-public-file-uri
-;;           reset-webapp-session
-;;           webapp-session-key
-;;           define-permanent-action
-;;           define-permanent-action/cc
-;;           remove-webapp-permanent-action
-;;           *registered-webapps*
-;;           with-webapp
-;;           weblocks-webapp-default-dependencies 
-;;           ;; weblocks-webapp-js-backend
-;;           initialize-js-backend
-;;           ;; get-js-backend-dependencies
-;;           ))
-
-;; TODO: dont understand why this defvar is surrounded by eval-when
-;; MOVED TO weblocks.app-mop
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (defvar *registered-webapps* nil
-;;     "A list of applications that the system knows about"))
-
-
-(defvar *active-apps* nil
-  "A list of running applications.
-   Applications are added to this list after they have been started.")
 
 
 (defclass app ()
@@ -217,29 +173,21 @@ called (primarily for backward compatibility"
       (slot-default session-key class-name)
       (slot-default name (attributize-name class-name))
       (slot-default prefix
-                    (concatenate 'string "/" (attributize-name class-name))))))
+                    (concatenate 'string "/" (attributize-name class-name))))
+
+    (setf (get-prefix self)
+          (ensure-starts-with-slash (get-prefix self)))))
 
 
-(defun find-active-app (name &key (signal-error t))
+(defun find-app-by-name (active-apps name &key (signal-error t))
   "Get a running web application"
   (let ((app (find (if (symbolp name) (attributize-name name) name)
-                   *active-apps*
+                   active-apps
                    :key #'weblocks-webapp-name :test #'equal)))
     (when (and (null app)
                signal-error)
       (error "Argument ~a is not a running weblocks application." name))
     app))
-
-
-(defun app-active-p (name)
-  "Returns t if application of given class is already active."
-  (let ((class (or (and (symbolp name) (find-class name nil))
-                   (find-class (intern (attributize-name name) :keyword) nil))))
-    (when class
-      (loop for app in *active-apps*
-            when (eq (class-of app)
-                     class)
-              do (return-from app-active-p t)))))
 
 
 (defun check-if-valid-class-name (name)
@@ -256,95 +204,16 @@ called (primarily for backward compatibility"
                                                   :key #'weblocks-webapp-hostnames)))
     webapps-sorted-by-hostname-and-prefix))
 
-(defun enable-webapp (app)
-  "Make sure the app with the \"\" prefix is always the last one and that there
-   is only one!"
-  (log:debug "Enabling webapp" app)
-  
-  (let ((webapps (sort-webapps (remove-duplicates (cons app *active-apps*)))))
-    (if (> (count "" (mapcar #'get-prefix *active-apps*) :test #'equal) 1)
-        (error "Cannot have two defaults dispatchers with prefix \"\"")
-        (setf *active-apps* webapps))
-    ;; Also, we should add app's routes to the mapper.
-    ;; we use symbol-call to hack around a circular dependency.
-    (uiop:symbol-call :weblocks/routes
-                      :add-routes
-                      app)))
 
 (defgeneric initialize-webapp (app)
   (:documentation "A protocol for performing any special initialization on the creation of a webapp object.")
   (:method ((app t)) nil))
 
 
-(defun start (class &rest initargs
-              &key (name (attributize-name class)) &allow-other-keys)
-  "Starts the web application if it is not started, shows warning in other case.
-   Returns app.
-
-     :class - is an application name symbol 
-     :initargs - is a list of attributes to pass to application 
-     :name - is an application name - a key for an app to be stored. Application then can be found by this key."
-  (log:debug "Starting webapp" class initargs name)
-  
-  (check-if-valid-class-name class)
-  
-  (let ((app (find-active-app name :signal-error nil)))
-    (cond
-      (app
-       (warn "An instance of ~A with name ~A is already running, ignoring start request"
-             class name)
-       app)
-      (t
-       (let ((app (apply #'make-instance class initargs)))
-         (initialize-webapp app)
-         (enable-webapp app)
-         (log:debug "~a started on url ~a" (webapp-name app) (get-prefix app))
-         app)))))
-
-
-(defmethod initialize-webapp :before ((app app))
-  "Ensure that all registered stores are open"
-
-  ;; to not introduce circular dependency we have these intern calls
-  (unless (intern "*SERVER*" :weblocks/server)
-    (funcall (intern "START-WEBLOCKS" :weblocks/server)))
-
-  ;; TODO: Separate stores into a separate system
-  ;;       with dependency from weblocks and make a hook
-  ;;       to initialize stores (or anything else) without
-  ;;       explicit call in weblocks itself.
-  ;;       Probably, stores should have a class-mixin
-  ;;       which will define it's own initialize-webapp :before method.
-  ;; (open-stores)
-  )
-
-
 (defgeneric finalize-webapp (app)
   (:documentation "Called when the app has been pulled off the running list to perform any 
    webapp specific cleanup")
   (:method ((app t)) nil))
-
-
-(defmethod finalize-webapp :after ((app app))
-  "Shutdown Weblocks when no more apps are running."
-  (unless *active-apps*
-    ;; TODO: break this tie #medium
-    (uiop:symbol-call :weblocks/server :stop)))
-
-(defun stop (name)
-  "Stops the web application"
-  (log:debug "Stopping webapp" name)
-  
-  (let ((app (find-active-app name :signal-error nil)))
-    (when app
-      (setf *active-apps*
-            (remove app *active-apps*))
-      (finalize-webapp app))))
-
-
-(defun restart (name)
-  (stop name)
-  (start name))
 
 
 ;;; Convenience accessors
@@ -410,6 +279,3 @@ this app, with regard to WEBAPP."
 
 (defun get-current ()
   *current-app*)
-
-(defun get-active-apps ()
-  *active-apps*)

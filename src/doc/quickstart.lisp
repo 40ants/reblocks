@@ -27,7 +27,14 @@
                                         "TOGGLE"
                                         "TASK-LIST"
                                         "RENDER"
-                                        "AJAX"))
+                                        "AJAX")
+                         :external-links (("Webinspector" . "https://developers.google.com/web/tools/chrome-devtools/inspect-styles/")
+                                          ("Ultralisp" . "https://ultralisp.org/")
+                                          ("Weblocks-ui" . "https://github.com/40ants/weblocks-ui/")
+                                          ("PCL" . "http://www.gigamonkeys.com/book/object-reorientation-classes.html")
+                                          ("CLOS-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/clos.html")
+                                          ("DB-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/databases.html")
+                                          ("Spinneret" . "https://github.com/ruricolist/spinneret/")))
   "
 > This version of Weblocks is not in Quicklisp yet. To
 > install it you need to clone the repository somewhere where
@@ -240,22 +247,11 @@ Restart the application:
 TODO> (weblocks/debug:reset-latest-session)
 ```
 
-Right now it should look like this:
-
-[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
-[Ultralisp]: https://ultralisp.org/
-[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
-[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
-[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
-[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
-[Spinneret]: https://github.com/ruricolist/spinneret/
-
-"
+Right now it should look like this:"
 
   (example1 weblocks-example)
 
-  "
-# Adding tasks
+  "# Adding tasks
 
 Now, we'll add some ability to interact with a list – to add some tasks
 into it, like so:
@@ -322,16 +318,7 @@ Another block in our new version of RENDER of a TASK-LIST is the form:
 It defines a text field, a submit button and an action to perform on
 form submit.
 
-Go, try it! This demo is interative:
-
-[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
-[Ultralisp]: https://ultralisp.org/
-[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
-[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
-[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
-[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
-[Spinneret]: https://github.com/ruricolist/spinneret/
-"
+Go, try it! This demo is interative:"
 
   (example2 weblocks-example)
 
@@ -384,22 +371,11 @@ which calls back a lisp lambda function when evaluated in the browser.
 And because TOGGLE updates a Task widget, Weblocks returns on this
 callback a new prerendered HTML for this one task only.
 
-Here is how our app will work now:
-
-[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
-[Ultralisp]: https://ultralisp.org/
-[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
-[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
-[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
-[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
-[Spinneret]: https://github.com/ruricolist/spinneret/
-"
+Here is how our app will work now:"
 
   (example3 weblocks-example)
-  "
 
-
-# What is next?
+  "# What is next?
 
 As a homework:
 
@@ -409,16 +385,7 @@ As a homework:
 3. Save tasks in a database (this [Cookbook chapter][DB-Cookbook] might help).
 4. Read the WEBLOCKS/DOC/ROUTING:@ROUTING section.
 5. Read the rest of the documentation and make a real application, using the full
-   power of Common Lisp.
-
-[Webinspector]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
-[Ultralisp]: https://ultralisp.org/
-[Weblocks-ui]: https://github.com/40ants/weblocks-ui/
-[PCL]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
-[CLOS-Cookbook]: https://lispcookbook.github.io/cl-cookbook/clos.html
-[DB-Cookbook]: https://lispcookbook.github.io/cl-cookbook/databases.html
-[Spinneret]: https://github.com/ruricolist/spinneret/
-")
+   power of Common Lisp.")
 
 
 (defexample example1 ()
@@ -482,7 +449,6 @@ As a homework:
 
 
 (defexample example3 (:inherits example2 :height "15em")
-
   (defmethod toggle ((task task))
     (setf (done task)
           (if (done task)
@@ -491,14 +457,16 @@ As a homework:
     (weblocks/widget:update task))
 
   (defmethod weblocks/widget:render ((task task))
-          (weblocks/html:with-html
-            (:p (:input :type "checkbox"
-                        :checked (done task)
-                        :onclick (weblocks/actions:make-js-action
-                                  (lambda (&key &allow-other-keys)
-                                    (toggle task))))
-                (:span (if (done task)
-                           (weblocks/html:with-html
-                             ;; strike
-                             (:s (title task)))
-                           (title task)))))))
+    (weblocks/html:with-html
+      ;; (:a :href "http://localhost:40000/examples/weblocks/doc/quickstart/example3?some=arg"
+      ;;     "Click me to test POST cookies")
+      (:p (:input :type "checkbox"
+                  :checked (done task)
+                  :onclick (weblocks/actions:make-js-action
+                            (lambda (&key &allow-other-keys)
+                              (toggle task))))
+          (:span (if (done task)
+                     (weblocks/html:with-html
+                       ;; strike
+                       (:s (title task)))
+                     (title task)))))))

@@ -6,7 +6,6 @@
   (:export
    #:add-route
    #:route
-   #:reset-routes
    #:serve
    #:get-route
    #:defroute
@@ -24,8 +23,14 @@
   (:documentation "Inherit from this class to add a custom routes."))
 
 
-(defvar *routes* (make-instance 'routes:mapper)
-  "We will store mapping from URL to dependency here.")
+(defvar *routes*)
+(setf (documentation '*routes* 'variable)
+      "This variable will be bound to the server's routes during request processing.
+       Most functions in the WEBLOCKS/ROUTES package will work only when this variable is bound.")
+
+
+(defun make-routes ()
+  (make-instance 'routes:mapper))
 
 
 (defun get-route (path)
@@ -37,25 +42,20 @@
   (routes:match *routes* path))
 
 
-(defun add-route (route)
+(defun add-route (route &key (routes *routes*))
   "Inserts a new route into the routing table."
-  (unless (routes:match *routes* route)
-    (routes:connect *routes* route)))
+  (unless (routes:match routes route)
+    (routes:connect routes route)))
 
 
-(defun add-routes (app)
+(defun add-routes (app &key (routes *routes*))
   "Inserts all routes bound to the app into the routing table."
   (let ((app-class-name (typecase app
                           (symbol app)
                           (t (type-of app)))))
     (dolist (handler (get app-class-name :route-handlers))
-      (add-route (get handler :route)))))
-
-
-(defun reset-routes ()
-  "Resets routes before starting Weblocks server."
-  (setf *routes* (make-instance 'routes:mapper)))
-
+      (add-route (get handler :route)
+                 :routes routes))))
 
 
 (defgeneric serve (route env) 
@@ -104,9 +104,9 @@
          ,@body)
 
        (let ((,route-var (make-instance 'route
-                                   :template (routes:parse-template ,uri)
-                                   :handler ',route
-                                   :content-type ,content-type)))
+                                        :template (routes:parse-template ,uri)
+                                        :handler ',route
+                                        :content-type ,content-type)))
          ;; next, we'll attach a route object to a function name
          (setf (get ',route :route)
                ,route-var)
@@ -120,7 +120,10 @@
          (pushnew ',route
                   (get ',app :route-handlers))
 
+         ;; TODO: load all routes when server gets started
+
          ;; Also, if app is currently active, then we should add this route to
          ;; the active mapping
-         (when (weblocks/app:app-active-p ',app)
-           (add-route ,route-var))))))
+         ;; (when (weblocks/app:app-active-p ',app)
+         ;;   (add-route ,route-var))
+         ))))

@@ -22,10 +22,8 @@
                 #:route
                 #:get-route
                 #:add-route
-                #:reset-routes)
+                #:add-routes)
   (:import-from #:weblocks/app
-                #:app-active-p
-                #:get-active-apps
                 #:get-prefix
                 #:app-serves-hostname-p
                 #:weblocks-webapp-name
@@ -50,6 +48,8 @@
   ;; Just dependencies
   (:import-from #:weblocks/debug)
   (:import-from #:log)
+  (:import-from #:alexandria
+                #:hash-table-values)
   
   (:export ;; #:get-server-type
            ;; #:get-port
@@ -57,13 +57,17 @@
            ;; #:handle-http-request
            #:stop
            #:start
-           #:serve-static-file))
+           #:serve-static-file
+           #:servers
+           #:running-p))
 (in-package weblocks/server)
 
 
-(defvar *server* nil
-  "If the server is started, bound to a server
-  object. Otherwise, nil.")
+(defvar *server*)
+(setf (documentation '*server* 'variable)
+      "Will be bound to a server currently processing the request.")
+
+(defvar *servers* (make-hash-table :test 'equal))
 
 
 (defvar *clack-output* nil
@@ -80,7 +84,11 @@
    (server-type :initarg :server-type
                 :reader get-server-type)
    (handler :initform nil
-            :accessor get-handler)))
+            :accessor get-handler)
+   (routes :initform (weblocks/routes::make-routes)
+           :accessor routes)
+   (apps :initform nil
+         :accessor apps)))
 
 
 (defgeneric handle-http-request (server env)
@@ -100,7 +108,7 @@ Make instance, then start it with ``start`` method."
 
 
 (defun search-app-for-request-handling (path-info hostname)
-  (dolist (app (get-active-apps))
+  (dolist (app (apps *server*))
     (let ((app-prefix (get-prefix app))
           (app-works-for-this-hostname
             (app-serves-hostname-p app hostname)))
@@ -127,7 +135,9 @@ Make instance, then start it with ``start`` method."
 
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
-    (call-next-method)))
+    (let ((*server* server)
+          (weblocks/routes::*routes* (routes server)))
+      (call-next-method))))
 
 
 (defmethod handle-http-request ((server server) env)
@@ -234,12 +244,48 @@ If server is already started, then logs a warning and does nothing."
   server)
 
 
+(defun running-p (server)
+  "Returns T if server is running and NIL otherwise."
+  (when (get-handler server)
+    t))
+
+
 (defmethod print-object ((server server) stream)
-  (format stream "#<SERVER port=~S ~A>"
-          (get-port server)
-          (if (get-handler server)
-              "running"
-              "stopped")))
+  (print-unreadable-object (server stream :type t)
+    (format stream "~A:~A "
+            (get-interface server)
+            (get-port server))
+    (if (apps server)
+        (format stream "(~{~A~^, ~})"
+                (apps server))
+        (format stream "(no apps)"))
+    (format stream "~A"
+            (if (running-p server)
+                " running"
+                " stopped"))))
+
+
+(defun find-server (interface port)
+  (gethash (cons interface port)
+           *servers*))
+
+
+(defun servers (&optional interface port)
+  "Returns a list of Weblocks servers."
+  (check-type interface (or null string))
+  (check-type port (or null integer))
+  
+  (loop for (server-interface . server-port) being the hash-keys of *servers*
+          using (hash-value server)
+        when (cond
+               ((and interface port)
+                (and
+                 (string-equal server-interface interface)
+                 (= server-port port)))
+               (interface
+                (string-equal server-interface interface))
+               (t t))
+          collect server))
 
 
 (defun start (&key (debug t)
@@ -260,52 +306,106 @@ the initargs :PORT and :SESSION-COOKIE-NAME default to
 Also opens all stores declared via DEFSTORE and starts webapps
 declared AUTOSTART unless APPS argument is provided."
 
-  (weblocks/hooks:with-start-weblocks-hook ()
-    (when *server*
-      (restart-case
-          (error "Server already running on port ~A"
-                 (get-port *server*))
-        (continue ()
-          :report "Stop the old server and start a new one."
-          (stop))))
+  (let ((server (find-server interface port)))
+    (weblocks/hooks:with-start-weblocks-hook ()
+      (cond
+        (server
+         (restart-case
+             (error "Server already running on port ~A" port)
+           (continue ()
+             :report "Stop the old server and start a new one."
+             (stop)
+             (setf (routes server)
+                   (weblocks/routes::make-routes)))))
+        (t
+         (setf server
+               (make-server :interface interface
+                            :port port
+                            :server-type server-type))
+         (setf (gethash (cons interface port) *servers*)
+               server)))
+      
+      (log:info "Starting weblocks" port server-type debug)
+
+      ;; TODO: move these settings to the server level
+      (if debug
+          (weblocks/debug:on)
+          (weblocks/debug:off))
+
+      (start-server server
+                    :debug debug)
+
+      ;; We need to set this bindings to allow apps to use
+      ;; WEBLOCKS/ROUTES:ADD-ROUTE without given a current
+      ;; routes mapping.
+      (let ((weblocks/routes::*routes* (routes server)))
+        (loop for app-class in (uiop:ensure-list
+                                (or apps
+                                    (get-autostarting-apps)))
+              do (start-app server app-class)))
+      
+      (values server))))
 
 
-
-    (log:info "Starting weblocks" port server-type debug)
-
-    (reset-routes)
+(defun register-app-routes (server app)
+  "Make sure the app with the \"\" prefix is always the last one and that there
+   is only one!"
+  (log:debug "Registering" app "routes for" server)
   
-    (if debug
-        (weblocks/debug:on)
-        (weblocks/debug:off))
-
-    (setf *server*
-          (make-server :port port
-                       :interface interface
-                       :server-type server-type))
-    (values
-     (start-server *server*
-                   :debug debug)
-     (mapcar (lambda (class)
-               (unless (app-active-p class)
-                 (weblocks/app:start class :debug debug)))
-             (uiop:ensure-list
-              (or apps
-                  (get-autostarting-apps)))))))
+  (loop with seen = (make-hash-table :test 'equal)
+        for app in (cons app (apps server))
+        for prefix = (get-prefix app)
+        when (gethash prefix seen)
+          do (error "Cannot have two defaults dispatchers with prefix \"~A\""
+                    prefix)
+        do (setf (gethash prefix seen)
+                 t))
+  ;; Also, we should add app's routes to the mapper:
+  (weblocks/routes:add-routes app :routes (routes server)))
 
 
-(defun stop ()
-  "Stops weblocks, by deactivating all active applications and stopping Clack server"
+(defun start-app (server app-class &rest app-args)
+  (cond
+    ((member app-class (mapcar #'weblocks/app::webapp-name (apps server)))
+     (log:warn "App ~A already started" app-class))
+    (t
+     (let* ((app (apply #'make-instance app-class app-args))
+            (prefix (get-prefix app)))
+       (cond
+         ((member prefix (mapcar #'get-prefix (apps server))
+                  :test #'string-equal)
+          (loop for other-app in (apps server)
+                for other-prefix = (get-prefix other-app)
+                when (string-equal prefix other-prefix)
+                  do (error "App ~A already uses prefix \"~A\""
+                            other-app other-prefix)))
+         (t
+          (weblocks/app::initialize-webapp app)
+          (register-app-routes server app)
+          (push app (apps server))
+          (log:debug "App \"~A\" started at http://~A:~A~A"
+                     (weblocks/app::webapp-name app)
+                     (get-interface server)
+                     (get-port server)
+                     prefix))))))
+  (values))
 
-  (when *server*
-    (weblocks/hooks:with-stop-weblocks-hook ()
-      (dolist (app (get-active-apps))
-        (weblocks/app:stop (weblocks-webapp-name app)))
 
-      (when *server*
-        (stop-server *server*))
-      (setf *server* nil))))
+(defun stop (&optional interface port)
+  "Stops Weblocks servers matching given INTERFACE and PORT.
 
+   This function deactivates all applications bound to the server and stopps a Clack server.
+
+   Returns stopped server objects."
+
+  (loop for server in (servers interface port)
+        when (running-p server)
+          do (weblocks/hooks:with-stop-weblocks-hook ()
+               (loop for app in (apps server)
+                     do (weblocks/app:stop (weblocks-webapp-name app)))
+               (stop-server server))
+          and
+            collect server))
 
 ;;;; Static files
 

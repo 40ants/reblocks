@@ -41,7 +41,7 @@ TODO> (defapp tasks)
 By default, the name of the app defines the url where it is
 accessible. Here, the "tasks" app will be accessible under
 [http://localhost:40000/tasks][5ff5]. We can change it with the
-`PREFIX` argument of [`weblocks/app:defapp`][e7de]:
+`PREFIX` argument of [`weblocks/app:defapp`][c677]:
 
 ```
 TODO> (defapp tasks
@@ -98,7 +98,7 @@ TODO> (defwidget task ()
           :accessor done)))
 ```
 This code defines a task widget, the building block of our
-application. [`weblocks/widget:defwidget`][0071] is similar to Common Lisp's `DEFCLASS`,
+application. [`weblocks/widget:defwidget`][c8bd] is similar to Common Lisp's `DEFCLASS`,
 in fact it is only a wrapper around it. It takes a name, a list of
 super-classes (here `()`) and a list of slot definitions.
 
@@ -142,7 +142,7 @@ Now let's carry on with our application.
 
 Below we define a more general widget that contains a list of tasks,
 and we tell Weblocks how to display them by *specializing* the
-[`weblocks/widget:render`][f259] generic-function for our newly defined classes:
+[`weblocks/widget:render`][84d3] generic-function for our newly defined classes:
 
 ```
 TODO> (defwidget task-list ()
@@ -166,12 +166,12 @@ TODO> (defmethod render ((widget task-list))
                 (loop for task in (tasks widget) do
                       (:li (render task))))))
 ```
-The [`weblocks/html:with-html`][174e] macro uses
+The [`weblocks/html:with-html`][9b93] macro uses
 [Spinneret][a443] under the hood,
 but you can use anything that outputs html.
 
 We can check how the generated html looks like by calling
-[`weblocks/widget:render`][f259] generic-function in the `REPL`:
+[`weblocks/widget:render`][84d3] generic-function in the `REPL`:
 
 ```
 TODO> (render *task-1*)
@@ -206,7 +206,8 @@ Right now it should look like this:
 
 <div class=demo>
  <iframe
-         src=http://localhost:40000/examples/weblocks/doc/quickstart/example1
+         sandbox="allow-forms allow-same-origin allow-scripts"
+         src=http://localhost:40013/examples/weblocks/doc/quickstart/example1
          style="width: 100%; height: 10em"></iframe>
 </div>
 
@@ -257,7 +258,7 @@ The method `ADD-TASK` does only two simple things:
 
 This second point is really important because it allows Weblocks to render
 necessary parts of the page on the server and to inject it into the `HTML` `DOM`
-in the browser. Here it rerenders the task-list widget, but we can as well [`weblocks/widget:update`][cb7e]
+in the browser. Here it rerenders the task-list widget, but we can as well [`weblocks/widget:update`][d099]
 a specific task widget, as we'll do soon.
 
 We are calling `ADD-TASK` from a lambda function to catch a
@@ -282,8 +283,9 @@ Go, try it! This demo is interative:
 
 <div class=demo>
  <iframe
-         src=http://localhost:40000/examples/weblocks/doc/quickstart/example2
-         style="width: 100%; height: 10em"></iframe>
+         sandbox="allow-forms allow-same-origin allow-scripts"
+         src=http://localhost:40013/examples/weblocks/doc/quickstart/example2
+         style="width: 100%; height: 15em"></iframe>
 </div>
 
 > **This is really amazing!**
@@ -330,10 +332,20 @@ modified our task rendering function by adding a code to render a
 checkbox with an anonymous lisp function, attached to its
 `ONCLICK` attribute.
 
-The [`weblocks/actions:make-js-action`][44e9] function returns a Javascript code, which calls
-back a lisp lambda function when evaluated in the browser.  And
-because `TOGGLE` updates a Task widget, Weblocks returns on this
+The [`weblocks/actions:make-js-action`][5751] function returns a Javascript code,
+which calls back a lisp lambda function when evaluated in the browser.
+And because `TOGGLE` updates a Task widget, Weblocks returns on this
 callback a new prerendered `HTML` for this one task only.
+
+Here is how our app will work now:
+
+
+<div class=demo>
+ <iframe
+         sandbox="allow-forms allow-same-origin allow-scripts"
+         src=http://localhost:40013/examples/weblocks/doc/quickstart/example3
+         style="width: 100%; height: 15em"></iframe>
+</div>
 
 <a id="what-is-next"></a>
 
@@ -348,15 +360,15 @@ As a homework:
 
 3. Save tasks in a database (this [Cookbook chapter][63e3] might help).
 
-4. Read the [`Routing`][507a] section.
+4. Read the [`Routing`][1582] section.
 
 5. Read the rest of the documentation and make a real application, using the full
    power of Common Lisp.
 
 
-[44e9]: api.html#x-28WEBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
-[e7de]: api.html#x-28WEBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[174e]: html.html#x-28WEBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[5751]: api/#x-28WEBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
+[c677]: api/#x-28WEBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[9b93]: html/#x-28WEBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [5ff5]: http://localhost:40000/tasks
 [2e0b]: http://localhost:40000/tasks/
 [9dee]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
@@ -366,10 +378,10 @@ As a homework:
 [7210]: https://lispcookbook.github.io/cl-cookbook/clos.html
 [63e3]: https://lispcookbook.github.io/cl-cookbook/databases.html
 [3e27]: https://ultralisp.org/
-[507a]: routing.html#x-28WEBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
-[0071]: widgets.html#x-28WEBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[f259]: widgets.html#x-28WEBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
-[cb7e]: widgets.html#x-28WEBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
+[1582]: routing/#x-28WEBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+[c8bd]: widgets/#x-28WEBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[84d3]: widgets/#x-28WEBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
+[d099]: widgets/#x-28WEBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 
 * * *
 ###### [generated by [40ANTS-DOC](https://40ants.com/doc/)]

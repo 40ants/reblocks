@@ -2,8 +2,10 @@
   (:use #:cl)
   (:import-from #:alexandria
                 #:ensure-gethash)
+  (:import-from #:log4cl)
   (:import-from #:lack.middleware.session.store.memory
                 #:memory-store-stash)
+  (:import-from #:lack.session.state.cookie)
   (:export
    #:with-session
    #:delete-value
@@ -130,10 +132,19 @@ used to create IDs for html elements, widgets, etc."
   (funcall !get-number-of-anonymous-sessions))
 
 
+;; TODO: remove this after debugging
+(defvar *state* nil)
+
+
 (defun make-session-middleware ()
   ;; We don't want to expose session store as a global variable,
   ;; that is why we use these closures to extract statistics.
-  (let* ((store (lack.session.store.memory:make-memory-store)))
+  (let* ((store (lack.session.store.memory:make-memory-store))
+         (state (lack.session.state.cookie:make-cookie-state)))
+
+    (log:error "Making session middleware" state)
+    (setf *state* state)
+
     (setf !get-number-of-sessions
           (lambda ()
             (let ((hash (memory-store-stash store)))
@@ -148,4 +159,5 @@ used to create IDs for html elements, widgets, etc."
     
     (lambda (app)
       (funcall (lack.util:find-middleware :session) app
-               :store store))))
+               :store store
+               :state state))))

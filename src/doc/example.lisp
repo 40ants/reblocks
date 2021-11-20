@@ -17,6 +17,7 @@
   (:import-from #:serapeum)
   (:import-from #:40ants-doc/commondoc/builder)
   (:import-from #:weblocks/server)
+  (:import-from #:weblocks-file-server)
   (:export #:defexample
            #:weblocks-example
            #:start-server
@@ -88,6 +89,7 @@
      (weblocks/html:with-html-string
        (:div :class "demo"
              (:iframe :src full-url
+                      :sandbox "allow-forms allow-same-origin allow-scripts"
                       :style (format nil "width: ~A; height: ~A"
                                      (example-width example)
                                      (example-height example))))))))
@@ -137,23 +139,24 @@
          (full-body (append (loop for another-example in (uiop:ensure-list inherits)
                                   appending (example-original-body (eval another-example)))
                             body)))
-    `(defparameter ,name
-       (let* ((package (or (find-package ,package-name)
-                           (make-package ,package-name
-                                         :use (list "CL"))))
-              (new-body (replace-internal-symbols ',full-body
-                                                  :from-package *package*
-                                                  :to-package package))
-              (example (make-instance 'weblocks-example
-                                      :name ',name
-                                      :package package
-                                      :width ,width
-                                      :height ,height
-                                      :original-body ',full-body
-                                      :body new-body)))
+    `(eval-when (:compile-toplevel :load-toplevel :execute)
+       (defparameter ,name
+         (let* ((package (or (find-package ,package-name)
+                             (make-package ,package-name
+                                           :use (list "CL"))))
+                (new-body (replace-internal-symbols ',full-body
+                                                    :from-package *package*
+                                                    :to-package package))
+                (example (make-instance 'weblocks-example
+                                        :name ',name
+                                        :package package
+                                        :width ,width
+                                        :height ,height
+                                        :original-body ',full-body
+                                        :body new-body)))
 
-         (weblocks/widget:create-widget-from example)
-         (values example)))))
+           (weblocks/widget:create-widget-from example)
+           (values example))))))
 
 
 (defun widget-class (example)
@@ -187,14 +190,6 @@
        (make-instance (widget-class example))))))
 
 
-(defapp documentation-server
-  :prefix "/docs/"
-  :autostart nil
-  :slots ((asdf-system :initform nil
-                       :initarg :asdf-system
-                       :reader asdf-system)))
-
-
 (defapp examples-server
   :prefix "/examples/"
   :autostart nil)
@@ -207,14 +202,15 @@
                    :accessor current-widget)))
 
 
+(defmethod weblocks/app::initialize-webapp ((app examples-server))
+  (call-next-method)
+  (weblocks-file-server:make-route :uri "/docs/"
+                                   :root (asdf:system-relative-pathname :weblocks "docs/build/")
+                                   :dir-listing t))
+
+
 (defmethod weblocks/session:init ((app examples-server))
   (make-instance 'examples-widget))
-
-
-(defmethod weblocks/session:init ((app documentation-server))
-  (if (asdf-system app)
-      (asdf:system-relative-pathname (asdf-system app) "docs/")
-      (uiop:merge-pathnames* "docs/")))
 
 
 (defmethod weblocks/widget:render ((widget examples-widget))
@@ -289,11 +285,6 @@
               finally (return results))))
 
 
-(defun start-doc-server (&key asdf-system)
-  (weblocks/app:start 'documentation-server
-                      :asdf-system asdf-system))
-
-
 (defun start-server (&key
                        port
                        (interface "localhost")
@@ -311,10 +302,7 @@
                              :interface interface
                              :apps 'examples-server)
       (setf *port* port)))
-
-  (weblocks-file-server:make-route :uri "/docs2/" :root (asdf:system-relative-pathname :weblocks "docs/") :dir-listing t)
-  ;; (start-doc-server :asdf-system for-asdf-system)
-
+  
   (let ((url (format nil "http://localhost:~A/docs/"
                      *port*)))
     (log:info "Started examples server at ~A"
@@ -325,6 +313,6 @@
 (defun cl-user::initialize-application (&key (port 8080) (interface "0.0.0.0"))
   (format t "Starting examples server on ~A:~A~%"
           interface port)
-  (update-examples "weblocks")
   (start-server :port port
-                :interface interface))
+                :interface interface
+                :for-asdf-system "weblocks"))

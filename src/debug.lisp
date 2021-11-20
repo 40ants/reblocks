@@ -4,7 +4,7 @@
                 #:on-application-hook-handle-http-request)
   (:import-from #:weblocks/app
                 #:*current-app*
-                #:find-active-app
+                #:find-app-by-name
                 #:get-registered-apps)
   (:import-from #:weblocks/session
                 #:*session*)
@@ -128,13 +128,14 @@ To clear, use function \(reset-last-session\).")
   (reset-session *latest-session*))
 
 
-(defun in-app (&optional name)
-  "Set the current webapp to NAME, or the last webapp registered if NAME is
-not supplied. Returns the selected webapp. Convenience function for the REPL."
-  (setf *current-app*
-        (find-active-app
-         (or name
-             (first (get-registered-apps))))))
+;; TODO: This function should be rewritten:
+;; (defun in-app (&optional name)
+;;   "Set the current webapp to NAME, or the last webapp registered if NAME is
+;; not supplied. Returns the selected webapp. Convenience function for the REPL."
+;;   (setf *current-app*
+;;         (find-app-by-name
+;;          (or name
+;;              (first (get-registered-apps))))))
 
 
 (defun get-session-value (key)

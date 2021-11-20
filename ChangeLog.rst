@@ -10,6 +10,13 @@ Added
 
 * A new function WEBLOCKS/PREVIEW:PREVIEW was added. Give it a widget and it will setup
   a server on a random port and show the widget in a browser!
+* Ability to run many web servers each on it's own HTTP port. Each server can have
+  it's own set of applications.
+
+New Functions:
+
+* WEBLOCKS/SERVER:SERVERS
+* WEBLOCKS/SERVER:RUNNING-P
 
 Changes
 -------
@@ -21,6 +28,16 @@ Changes
 * Changed ``(weblocks/debug:on)`` and ``off`` so they set the log
   level to ``debug`` and ``warn``, respectively.
 * Changed a library used to log unhandled errors. Now `log4cl-extras <https://github.com/40ants/log4cl-extras>`_ is used, because it is a successor of `log4cl-json <https://github.com/40ants/log4cl-json>`_.
+* Function WEBLOCKS/SERVER:STOP now accepts optional INTERFACE and PORT arguments.
+
+These functions were removed:
+
+* WEBLOCKS/APP:GET-ACTIVE-APPS
+* [WEBLOCKS/APP:FINALIZE-WEBAPP][generic-function]
+* WEBLOCKS/APP:APP-ACTIVE-P
+* WEBLOCKS/APP:START (it was replaced with WEBLOCKS/SERVER:START-APP function)
+* WEBLOCKS/APP:STOP
+* WEBLOCKS/APP:RESTART
 
 
 0.39.1 (2020-01-20)

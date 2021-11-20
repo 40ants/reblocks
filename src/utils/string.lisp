@@ -118,3 +118,15 @@ Returns the number of stripped slashes as second value."
            s
            (concatenate 'string s "/")))))
 
+
+(defun ensure-starts-with-slash (s)
+  (check-type s string)
+  (let ((len (length s)))
+    (cond
+      ((= len 0)
+       "/")
+      ((char= (elt s 0)
+              #\/)
+       s)
+      (t (concatenate 'string "/" s)))))
+
