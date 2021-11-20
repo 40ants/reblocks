@@ -59,7 +59,10 @@ be stored.")
   ((type :type (member :css :js :png :jpg :gif)
          :initarg :type
          :initform (error ":type argument is required.")
-         :reader get-type)))
+         :reader get-type))
+  (:documentation "This class represents a web-dependency. It could be CSS, JS or an image.
+
+                   All dependencies are divided into REMOTE-DEPENDENCY or LOCAL-DEPENDENCY."))
 
 
 (defgeneric get-route (dependency)
@@ -84,7 +87,8 @@ See more information at: https://www.w3.org/TR/SRI/")
    (crossorigin :type (or string null)
                 :initarg :crossorigin
                 :initform "anonymous"
-                :reader get-crossorigin)))
+                :reader get-crossorigin))
+  (:documentation "Remote dependencies refer some URLs. Usually these dependencies are served from a CDN."))
 
 
 (defclass local-dependency (dependency)
@@ -98,7 +102,11 @@ See more information at: https://www.w3.org/TR/SRI/")
    (binary :type (or null t)
            :initarg :binary
            :initform nil
-           :reader is-binary)))
+           :reader is-binary))
+  (:documentation "Local dependencies are served by the same webserver which renders weblocks widgets.
+
+                   Each local dependency should provide a route, which will be added to the server routing
+                   table. Also, it might define a path to the file on the local file-system."))
 
 
 (defclass cached-remote-dependency (remote-dependency local-dependency)

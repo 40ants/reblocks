@@ -19,6 +19,8 @@
                 #:@api)
   (:import-from #:weblocks/doc/widgets
                 #:@widgets)
+  (:import-from #:weblocks/doc/dependencies
+                #:@dependencies)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -35,6 +37,7 @@
 - @WIDGETS
 - @HTML
 - @ROUTING
+- @DEPENDENCIES
 - @API
 "
   ;; (@intro section)
@@ -71,5 +74,6 @@
                            @widgets
                            @html
                            @routing
+                           @dependencies
                            @api
                            @readme))))

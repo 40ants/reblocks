@@ -67,11 +67,7 @@
   (weblocks/widget:update generic-function)
   (weblocks/widget:get-html-tag generic-function)
   (weblocks/widget:get-css-classes generic-function)
-  (weblocks/widget:create-widget-from generic-function)
-
-  "# MOVE THESE TO THEIR OWN SECTIONS"
-
-  (weblocks/dependencies:get-dependencies generic-function))
+  (weblocks/widget:create-widget-from generic-function))
 
 
 (defexample hello-world ()
