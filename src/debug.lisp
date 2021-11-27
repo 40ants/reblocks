@@ -61,7 +61,7 @@ To clear, use function \(reset-last-session\).")
   (when track-latest-session
     ;; This piece will store latest session in a variable
     (on-application-hook-handle-http-request
-        track-latest-session ()
+        track-latest-session (env)
       
       (setf *latest-session*
             *session*))

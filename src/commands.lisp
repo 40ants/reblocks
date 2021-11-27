@@ -48,6 +48,6 @@ After action processing these commands will be sent for execution on the client.
 
 
 (on-application-hook-handle-http-request
-  reset-commands-list ()
+  reset-commands-list (env)
   (let (*commands*)
     (call-next-hook)))

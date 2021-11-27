@@ -153,7 +153,7 @@ This function serves all started applications and their static files."
         ;; some sort of middlewares, which change *request* and *session*
         ;; variables.
         (prepare-hooks
-          (weblocks/hooks:with-handle-http-request-hook ()
+          (weblocks/hooks:with-handle-http-request-hook (env)
 
             (let* ((path-info (getf env :path-info))
                    (hostname (getf env :server-name))
@@ -400,12 +400,12 @@ declared AUTOSTART unless APPS argument is provided."
 
   (loop for server in (servers interface port)
         when (running-p server)
-          do (weblocks/hooks:with-stop-weblocks-hook ()
-               (loop for app in (apps server)
-                     do (weblocks/app:stop (weblocks-webapp-name app)))
-               (stop-server server))
-          and
-            collect server))
+          collect
+          (weblocks/hooks:with-stop-weblocks-hook ()
+            (loop for app in (apps server)
+                  do (weblocks/app:stop (weblocks-webapp-name app)))
+            (stop-server server)
+            (values server))))
 
 ;;;; Static files
 

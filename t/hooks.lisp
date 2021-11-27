@@ -21,15 +21,15 @@
             "If no callbacks were added for the name, then get-callbacks should return an empty list.")))))
 
 
-(weblocks/hooks:defhook test-action
+(weblocks/hooks:defhook test-action ()
   "Just a test hook.")
 
 
 (deftest on-session-hook-test
   (with-session
       (with-request ("/")
-        (weblocks/hooks:on-session-hook-test-action
-         foo ())
+        (weblocks/hooks:on-session-hook-test-action 
+          foo ())
 
         (let ((callbacks (get-callbacks-names
                           *session-hooks*
@@ -39,7 +39,7 @@
           "Macro on-session-hook-test-action should put a callable into the list of callbacks bound to the session."))))
 
 
-(weblocks/hooks:defhook some-hook)
+(weblocks/hooks:defhook some-hook (param))
 
 
 (deftest hooks-evaluation
@@ -90,27 +90,32 @@
   ;; Here we check if hooks are propertly chained
   (with-session
     (with-request ("/")
-      (let (result)
-        
-        (weblocks/hooks:on-session-hook-some-hook 
-         inner-value ()
-         (push :inner-before result)
+      (weblocks/hooks:on-session-hook-some-hook 
+        inner-value (param)
+        (append 
+         (list :inner-before)
          (call-next-hook)
-         (push :inner-after result))
-        
-        (weblocks/hooks:on-session-hook-some-hook
-         outer-value ()
-         (push :outer-before result)
+         (list :inner-after)))
+      
+      (weblocks/hooks:on-session-hook-some-hook
+        outer-value (param)
+        (append
+         (list :outer-before)
          (call-next-hook)
-         (push :outer-after result))
-          
-        (weblocks/hooks:with-some-hook-hook ()
-          ;; Now we surrounded this code with hooks
-          ;; and will insert another value to the list
-          (push :real-value result))
+         (list :outer-after)))
+      
+      (let* ((param 'ignored)
+             (result (weblocks/hooks:with-some-hook-hook (param)
+                       ;; Now we surrounded this code with hooks
+                       ;; and will insert another value to the list
+                       (list :real-value))))
 
         (ok (equal result
-                   '(:outer-after :inner-after :real-value :inner-before :outer-before)))))))
+                   '(:outer-before
+                     :inner-before
+                     :real-value
+                     :inner-after
+                     :outer-after)))))))
 
 
 (deftest rewritting-callback

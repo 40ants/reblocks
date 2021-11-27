@@ -26,6 +26,8 @@
   (:import-from #:hamcrest/rove
                 #:assert-that
                 #:contains)
+  (:import-from #:weblocks/routes
+                #:*routes*)
   
   (:export
    #:with-request
@@ -50,7 +52,8 @@
                                data
                                (method :get)
                                headers  ; it should be an alist
-                               (app 'empty-app)) &body body)
+                               (app 'empty-app))
+                        &body body)
   "Argument 'data' should be an alist with POST parameters if method is :POST."
 
   ;; Lack stores headers in a dict with lowercased keys,
@@ -67,6 +70,7 @@
                                  :headers ',lowercased-headers))
               ;; we need to setup a current webapp, because
               ;; uri tokenizer needs to know app's uri prefix
+              (*routes* (weblocks/routes::make-routes))
               (*current-app* (make-instance ',app)))
          (weblocks/request:with-request ((make-request env))
            ,@body)))))

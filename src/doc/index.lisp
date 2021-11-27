@@ -21,6 +21,8 @@
                 #:@widgets)
   (:import-from #:weblocks/doc/dependencies
                 #:@dependencies)
+  (:import-from #:weblocks/doc/hooks
+                #:@hooks)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -75,5 +77,6 @@
                            @html
                            @routing
                            @dependencies
+                           @hooks
                            @api
                            @readme))))

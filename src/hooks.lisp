@@ -10,9 +10,8 @@
                 #:ensure-symbol
                 #:with-gensyms)
   
-  (:export
-   #:call-next-hook
-   #:defhook))
+  (:export #:call-next-hook
+           #:defhook))
 (in-package weblocks/hooks)
 
 
@@ -74,24 +73,37 @@ bound to this variable by `prepare-hooks' macro.")
               (gethash hook-name hooks-hash)))))
 
 
+(defun call-next-hook ()
+  "This function should be called inside a body, surrounded by `ON-APPLICATION-HOOK-…`, `ON-SESSION-HOOK-…` or a `ON-REQUEST-HOOK-…` type of macro."
+  (error "This function should be called inside a body, surrounded by ON-APPLICATION-HOOK-…, ON-SESSION-HOOK-… or a ON-REQUEST-HOOK-… type of macro."))
+
+
 ;; TODO: Add (declare...) processing for body
 (eval-when  (:compile-toplevel :load-toplevel :execute)
-  (defun add-hook-helper (hook-storage hook-name callback-name args body)
-    `(flet ((,callback-name (next-hooks ,@args)
-              (declare (ignorable next-hooks))
-              (let (next-hook-was-called)
-                (flet ((call-next-hook ()
-                         (eval-next-hooks next-hooks)
-                         ;; Remember that we already called other
-                         ;; callbacks
-                         (setf next-hook-was-called t)))
-                  ,@body
-                  ;; Call next-hooks if it wasn't called during somewhere in the body
-                  (unless next-hook-was-called
-                    (call-next-hook))))))
+  (defun add-hook-helper (hook-storage hook-name callback-name args body error-message-on-empty-storage)
+    (metatilities:with-gensyms (result-name)
+      `(flet ((,callback-name (next-hooks ,@args)
+                (declare (ignorable next-hooks))
+                (let (next-hook-was-called)
+                  (flet ((call-next-hook ()
+                           (prog1 (eval-next-hooks next-hooks ,@args)
+                             ;; Remember that we already called other
+                             ;; callbacks
+                             (setf next-hook-was-called t))))
+                    ;; Call the hook's body
+                    (let ((,result-name (progn ,@body)))
+                      (cond
+                        ;; If (call-next-hook) was called somewhere in the body,
+                        ;; then returns body result, because it is a wrapper:
+                        (next-hook-was-called ,result-name)
+                        ;; otherwise, ,@body works as a :before method and we
+                        ;; should return results of the next hook:
+                        (t (call-next-hook))))))))
 
-       (add-hook ,hook-storage ,hook-name ',callback-name
-                 #',callback-name))))
+         (unless ,hook-storage
+           (error ,error-message-on-empty-storage))
+         (add-hook ,hook-storage ',hook-name ',callback-name
+                   #',callback-name)))))
 
 
 (defmacro add-session-hook (hook-name callback-name (&rest args) &body body)
@@ -105,7 +117,8 @@ bound to this variable by `prepare-hooks' macro.")
                    hook-name
                    callback-name
                    args
-                   body))
+                   body
+                   "Unable to add a session hook because there is user session at the moment."))
 
 
 (defmacro add-application-hook (hook-name callback-name (&rest args) &body body)
@@ -113,7 +126,8 @@ bound to this variable by `prepare-hooks' macro.")
                    hook-name
                    callback-name
                    args
-                   body))
+                   body
+                   "Unable to add an application hook because application hook store is not ready yet."))
 
 
 (defmacro add-request-hook (hook-name callback-name (&rest args) &body body)
@@ -121,7 +135,8 @@ bound to this variable by `prepare-hooks' macro.")
                    hook-name
                    callback-name
                    args
-                   body))
+                   body
+                   "Request hook can be added only during request processing."))
 
 
 (defmacro prepare-hooks (&body body)
@@ -211,22 +226,17 @@ list bound to a current request."
       (log:info \"Before calling\" action-object)
       (process action-object)
       (log:info \"After calling\" action-object))"
-  (metatilities:with-gensyms (null-list ignored-args hooks-chain result)
-    `(let ((,hooks-chain (append (get-callbacks *application-hooks* ,name)
-                                 (get-callbacks *session-hooks* ,name)
-                                 (get-callbacks *request-hooks* ,name)))
-           ,result)
+  (metatilities:with-gensyms (null-list ignored-args hooks-chain)
+    `(let ((,hooks-chain (append (get-callbacks *application-hooks* ',name)
+                                 (get-callbacks *session-hooks* ',name)
+                                 (get-callbacks *request-hooks* ',name))))
        (eval-next-hooks 
         (append ,hooks-chain
                 (list (lambda (,null-list &rest ,ignored-args)
-                        (declare (ignorable ,ignored-args))
+                        (declare (ignore ,ignored-args))
                         (check-type ,null-list null)
-                        (setf ,result
-                              (progn ,@body)))))
-        ,@args)
-
-       ;; Returning result of body's evaluation
-       ,result)))
+                        ,@body)))
+        ,@args))))
 
 
 (defun eval-next-hooks (next-hooks &rest args)
@@ -236,8 +246,16 @@ It whould be called somewhere inside a hook, to evaluate inner
 hooks. But you don't need to call it manually, just use
 one of add-xxxx-hook and a (call-next-hook) inside of it."
   (let ((list (etypecase next-hooks 
-                (symbol (symbol-value var))
+                (symbol (symbol-value next-hooks))
                 (list next-hooks))))
+
+    ;; (loop with result = nil
+    ;;       for hooks on list
+    ;;       for current-hook = (car hooks)
+    ;;       for rest-hooks = (cdr hooks)
+    ;;       do (setf result
+    ;;                (apply current-hook rest-hooks args))
+    ;;       finally (return result))
     (unless (null list)
       (let ((current-hook (first list))
             (next-hooks (rest list)))
@@ -247,10 +265,8 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
 
 
 
-(defmacro defhook (name &optional docstring)
+(defmacro defhook (name (&rest args) &optional docstring)
   "Registers a hook"
-  (declare (ignorable docstring))
-  
   (with-gensyms ()
     (let ((session-macro-name (ensure-symbol (symbolicate "ON-SESSION-HOOK-" name)
                                              :weblocks/hooks))
@@ -265,22 +281,48 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
       ;; Here we need eval-when, because otherwice, exported functions
       ;; will not be available at load time
       `(eval-when (:compile-toplevel :load-toplevel :execute)
-         (defmacro ,session-macro-name (&body body)
-           `(add-session-hook ',',name
-                ,@body))
-         (defmacro ,request-macro-name (&body body)
-           `(add-request-hook ',',name
-                ,@body))
-         (defmacro ,application-macro-name (&body body)
-           `(add-application-hook ',',name
-                ,@body))
+         (setf (get ',name :docstring)
+               ,docstring)
+         (setf (get ',name :args)
+               ',args)
          
-         (defmacro ,with-macro-name ((&rest args) &body body)
-           `(with-hook (',',name ,@args)
-              ,@body))
+         (defmacro ,session-macro-name (callback-name ,args &body body)
+           ,docstring
+           (let ((callback-args (list ,@args))
+                 (hook-name ',name))
+             `(add-session-hook ,hook-name
+                  ,callback-name
+                  ,callback-args
+                ,@body)))
+         (defmacro ,request-macro-name (callback-name ,args &body body)
+           ,docstring
+           (let ((callback-args (list ,@args))
+                 (hook-name ',name))
+             `(add-request-hook ,hook-name
+                  ,callback-name
+                  ,callback-args
+                ,@body)))
+         (defmacro ,application-macro-name (callback-name ,args &body body)
+           ,docstring
+           (let ((callback-args (list ,@args))
+                 (hook-name ',name))
+             `(add-application-hook ,hook-name
+                  ,callback-name
+                  ,callback-args
+                ,@body)))
          
-         (defmacro ,call-macro-name (&rest args)
-           `(with-hook (',',name ,@args)))
+         (defmacro ,with-macro-name ((,@args) &body body)
+           ,docstring
+           (let ((hook-name ',name)
+                 (hook-args (list ,@args)))
+             `(with-hook (,hook-name ,@hook-args)
+                         ,@body)))
+         
+         (defmacro ,call-macro-name (,@args)
+           ,docstring
+           (let ((hook-name ',name)
+                 (hook-args (list ,@args)))
+             `(with-hook (,hook-name ,@hook-args))))
          
          (export (list ',session-macro-name
                        ',request-macro-name
@@ -292,21 +334,37 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
 
 ;; Weblocks core hooks
 
-(defhook handle-http-request
-  "Called around code reponsible for an HTTP request processing even
-   before any application was choosen.")
+(defhook handle-http-request (env)
+  "Called around code reponsible for an HTTP request processing,
+   before any application was choosen.
 
-(defhook start-weblocks
-  "Called around code which starts all applications and a webserver.")
+   Accepts Lack's HTTP request environment.
 
-(defhook stop-weblocks
-  "Called around code which stops all applications and a webserver.")
+   Should return a list of three items:
 
-(defhook action
-  "Called when action is processed")
+   * HTTP status code;
+   * a plist of HTTP headers;
+   * a list of strings corresponding to the page's content.")
 
-(defhook render
-  "Called when around whole page or ajax request processing.")
+(defhook start-weblocks ()
+  "Called around code which starts all applications and a webserver.
 
-(defhook reset-session
+   Returns a weblocks server object.")
+
+(defhook stop-weblocks ()
+  "Called around code which stops all applications and a webserver.
+
+   Returns a weblocks server object.")
+
+(defhook action (app action-name action-arguments)
+  "Called when action is processed.
+
+   Returns a result of WEBLOCKS/ACTIONS:EVAL-ACTION generic-function application
+   to the arguments.")
+
+(defhook render (app)
+  "Called when around whole page or ajax request processing.
+   Should return HTML string.")
+
+(defhook reset-session (session)
   "Called when session is resetted for some reason.")

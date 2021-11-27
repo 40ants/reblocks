@@ -324,7 +324,7 @@ customize behavior."))
           action-arguments)))
 
       (timing "action processing (w/ hooks)"
-        (weblocks/hooks:with-action-hook ()
+        (weblocks/hooks:with-action-hook (app action-name action-arguments)
           (eval-action
            app
            action-name
@@ -399,9 +399,9 @@ customize behavior."))
         (handle-action-if-needed app)
 
         (setf content
-              (with-html-string
-                (timing "rendering (w/ hooks)"
-                  (weblocks/hooks:with-render-hook ()
+              (timing "rendering (w/ hooks)"
+                (weblocks/hooks:with-render-hook (app)
+                  (with-html-string
                     (if (ajax-request-p)
                         (handle-ajax-request app)
                         (handle-normal-request app))

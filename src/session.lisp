@@ -46,7 +46,6 @@ KEY is compared using EQUAL."
     (error "Session was not created for this request!"))
   ;; TODO: seems, previously keys were separated for different weblocks apps
   ;;       but I've simplified it for now
-  (log:error "Getting " key "From" *session*)
   (ensure-gethash key *session* default))
 
 
@@ -54,7 +53,6 @@ KEY is compared using EQUAL."
   "Set a session value for the currently running webapp.
 KEY is compared using EQUAL."
 
-  (log:error "Setting " key value "To" *session*)
   (setf (gethash key *session*)
         value))
 
@@ -142,7 +140,6 @@ used to create IDs for html elements, widgets, etc."
   (let* ((store (lack.session.store.memory:make-memory-store))
          (state (lack.session.state.cookie:make-cookie-state)))
 
-    (log:error "Making session middleware" state)
     (setf *state* state)
 
     (setf !get-number-of-sessions
