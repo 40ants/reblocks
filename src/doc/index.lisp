@@ -25,6 +25,12 @@
                 #:@hooks)
   (:import-from #:weblocks/doc/forms
                 #:@forms)
+  (:import-from #:weblocks/doc/continuations
+                #:@continuations)
+  (:import-from #:weblocks/doc/views
+                #:@views)
+  (:import-from #:weblocks/doc/templates
+                #:@templates)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -43,7 +49,7 @@
 - @ROUTING
 - @DEPENDENCIES
 - @HOOKS
-- @FORMS
+- @REMOVED-FEATURES
 - @API
 "
   ;; (@intro section)
@@ -82,6 +88,17 @@
                            @routing
                            @dependencies
                            @hooks
-                           @forms
+                           @removed-features
                            @api
                            @readme))))
+
+
+(defsection @removed-features (:title "Removed Features")
+  "During refactoring, I've removed some other interesting conceptions from
+   the core of the framework. They could be reborn as a separate libraries
+   as well as navigation widget."
+  
+  (@views section)
+  (@templates section)
+  (@forms section)
+  (@continuations section))

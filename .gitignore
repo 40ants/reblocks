@@ -4,5 +4,6 @@
 /quicklisp/
 /libssl.dylib
 /lispapp
+.DS_Store
 
 

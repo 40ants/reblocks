@@ -13,7 +13,7 @@
 (in-package weblocks/doc/api)
 
 
-(defsection @api (:title "API"
+(defsection @api (:title "Unsorted API"
                   :ignore-words ("API"
                                  "URI"))
   (weblocks/app:defapp macro)
