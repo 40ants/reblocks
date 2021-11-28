@@ -31,6 +31,8 @@
                 #:@views)
   (:import-from #:weblocks/doc/templates
                 #:@templates)
+  (:import-from #:weblocks/doc/contribute
+                #:@contribute)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -51,10 +53,8 @@
 - @HOOKS
 - @REMOVED-FEATURES
 - @API
-"
-  ;; (@intro section)
-  ;; (@installation section)
-  )
+- @CONTRIBUTE
+")
 
 (defsection-copy @readme @quickstart)
 
@@ -90,6 +90,7 @@
                            @hooks
                            @removed-features
                            @api
+                           @contribute
                            @readme))))
 
 
