@@ -4,6 +4,10 @@
                 #:*html*)
   (:import-from #:40ants-doc
                 #:defsection)
+  (:import-from #:named-readtables
+                #:in-readtable)
+  (:import-from #:pythonic-string-reader
+                #:pythonic-string-syntax)
   (:export #:with-html
            #:*pretty-html*
            #:*lang*
@@ -11,16 +15,68 @@
            #:*stream*))
 (in-package weblocks/html)
 
+(in-readtable pythonic-string-syntax)
+
 
 (defsection @html (:title "HTML Rendering"
                    :ignore-words ("HTML"
                                   "DIV"
-                                  "CSS"))
-  "Weblocks provides a thin wrapper for
+                                  "CSS"
+                                  "CL-WHO"
+                                  "UI"
+                                  "WEBLOCKS-UI")
+                   :external-links (("Spinneret" . "https://github.com/ruricolist/spinneret")
+                                    ("CL-WHO" . "https://edicl.github.io/cl-who/")
+                                    ("WEBLOCKS-UI" . "https://github.com/40ants/weblocks-ui")))
+"""
+Out of the box, Reblocks provides a few facilities for HTML generation.
+They are based on [`Spinneret`][Spinneret] templating engine. Old version of Weblocks used
+[CL-WHO][CL-WHO] instead. But Spinneret is more flexible and what is more important,
+it escapes content by default, preventing HTML injection vulnerability.
 
-   Use WEBLOCKS/HTML:WITH-HTML macro to render HTML.
-   You can use any other templating engine, just ensure
-   it writes output to WEBLOCKS/HTML:*STREAM*"
+Most of the time, you only will need a WEBLOCKS/HTML:WITH-HTML macro, which is
+similary to Spinneret's one, but binds a few special variables to a stream
+to write output to and how to write it:
+
+```cl-transcript
+(weblocks/html:with-html
+   (:ul
+    (:li "One")
+    (:li "Two")
+    (:li "Three")))
+;.. <ul>
+;..  <li>One
+;..  <li>Two
+;..  <li>Three
+;.. </ul>
+;=> NIL
+```
+
+Sometimes you might want to get a HTML string instead. In this case you might use
+WEBLOCKS/HTML:WITH-HTML-STRING:
+
+```cl-transcript
+(weblocks/html:with-html-string
+   (:ul
+    (:li "One")
+    (:li "Two")
+    (:li "Three")))
+;..
+;=> "<ul>
+;->  <li>One
+;->  <li>Two
+;->  <li>Three
+;-> </ul>"
+```
+  
+You can use any other templating engine, just ensure
+it writes output to the WEBLOCKS/HTML:*STREAM* variable.
+
+For more advanced UI, look at the [WEBLOCKS-UI][WEBLOCKS-UI] documentation.
+
+## API
+  
+"""
 
   (with-html macro)
   (with-html-string macro)
