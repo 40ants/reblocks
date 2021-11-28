@@ -23,6 +23,8 @@
                 #:@dependencies)
   (:import-from #:weblocks/doc/hooks
                 #:@hooks)
+  (:import-from #:weblocks/doc/forms
+                #:@forms)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -40,6 +42,8 @@
 - @HTML
 - @ROUTING
 - @DEPENDENCIES
+- @HOOKS
+- @FORMS
 - @API
 "
   ;; (@intro section)
@@ -78,5 +82,6 @@
                            @routing
                            @dependencies
                            @hooks
+                           @forms
                            @api
                            @readme))))
