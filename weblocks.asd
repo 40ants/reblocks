@@ -59,6 +59,7 @@
                "weblocks/server"
                "weblocks/debug"
                "weblocks/default-init"
+               "weblocks/commands-hook"
                "weblocks/widgets/string-widget"
                "weblocks/widgets/funcall-widget"
                "weblocks/utils/clos"

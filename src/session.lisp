@@ -75,8 +75,9 @@ used to create IDs for html elements, widgets, etc."
 
 
 (defgeneric init (app)
-  (:documentation "This method should be defined for weblocks application.
-                   it should return a widget which become a root widget."))
+  (:documentation "A method for this generic function should be defined to initialize application for a new user session.
+
+                   It should return a widget which become a root widget."))
 
 (defun get-session-id ()
   "Returns current session id or signals an error if no current session."
@@ -85,7 +86,9 @@ used to create IDs for html elements, widgets, etc."
 
 
 (defun expire ()
-  "Deletes current session."
+  "Deletes current session id for the browser.
+
+   On the next HTTP request a new session will be created."
   (unless (or *session* *env*)
     (error "Expire should be called inside with-session call."))
 
@@ -130,17 +133,11 @@ used to create IDs for html elements, widgets, etc."
   (funcall !get-number-of-anonymous-sessions))
 
 
-;; TODO: remove this after debugging
-(defvar *state* nil)
-
-
 (defun make-session-middleware ()
   ;; We don't want to expose session store as a global variable,
   ;; that is why we use these closures to extract statistics.
   (let* ((store (lack.session.store.memory:make-memory-store))
          (state (lack.session.state.cookie:make-cookie-state)))
-
-    (setf *state* state)
 
     (setf !get-number-of-sessions
           (lambda ()
@@ -158,3 +155,4 @@ used to create IDs for html elements, widgets, etc."
       (funcall (lack.util:find-middleware :session) app
                :store store
                :state state))))
+

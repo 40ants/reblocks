@@ -33,6 +33,8 @@
                 #:@templates)
   (:import-from #:weblocks/doc/contribute
                 #:@contribute)
+  (:import-from #:weblocks/doc/session
+                #:@session)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -51,6 +53,7 @@
 - @ROUTING
 - @DEPENDENCIES
 - @HOOKS
+- @SESSION
 - @REMOVED-FEATURES
 - @API
 - @CONTRIBUTE
@@ -88,6 +91,7 @@
                            @routing
                            @dependencies
                            @hooks
+                           @session
                            @removed-features
                            @api
                            @contribute

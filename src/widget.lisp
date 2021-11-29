@@ -7,8 +7,6 @@
                 #:widget-class)
   (:import-from #:weblocks/commands
                 #:add-command)
-  (:import-from #:weblocks/request
-                #:ajax-request-p)
   (:import-from #:weblocks/widgets/dom
                 #:dom-id
                 #:dom-object-mixin)

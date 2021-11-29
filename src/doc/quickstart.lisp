@@ -445,6 +445,7 @@ As a homework:
                 :name "title"
                 :placeholder "Task's title")
         (:input :type "submit"
+                :class "button"
                 :value "Add")))))
 
 

@@ -207,9 +207,19 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         src=https://com-40ants-weblocks-examples.herokuapp.com/examples/weblocks/doc/quickstart/example1
-         style="width: 100%; height: 10em"></iframe>
+         id=example-22
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example1?iframe-id=example-22"
+         style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
+<script>
+window.addEventListener('message', function(e) {
+  let message = e.data;
+  let iframe_id = message.iframe_id;
+  let iframe = document.querySelector('#' + iframe_id);
+  iframe.style.height = message.height + 'px';
+  iframe.style.width = message.width + 'px';
+} , false);
+</script>
 
 <a id="adding-tasks"></a>
 
@@ -284,9 +294,19 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         src=https://com-40ants-weblocks-examples.herokuapp.com/examples/weblocks/doc/quickstart/example2
-         style="width: 100%; height: 15em"></iframe>
+         id=example-23
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example2?iframe-id=example-23"
+         style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
+<script>
+window.addEventListener('message', function(e) {
+  let message = e.data;
+  let iframe_id = message.iframe_id;
+  let iframe = document.querySelector('#' + iframe_id);
+  iframe.style.height = message.height + 'px';
+  iframe.style.width = message.width + 'px';
+} , false);
+</script>
 
 > **This is really amazing!**
 > 
@@ -343,9 +363,19 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         src=https://com-40ants-weblocks-examples.herokuapp.com/examples/weblocks/doc/quickstart/example3
-         style="width: 100%; height: 15em"></iframe>
+         id=example-24
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example3?iframe-id=example-24"
+         style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
+<script>
+window.addEventListener('message', function(e) {
+  let message = e.data;
+  let iframe_id = message.iframe_id;
+  let iframe = document.querySelector('#' + iframe_id);
+  iframe.style.height = message.height + 'px';
+  iframe.style.width = message.width + 'px';
+} , false);
+</script>
 
 <a id="what-is-next"></a>
 

@@ -1,8 +1,5 @@
 (defpackage #:weblocks/commands
   (:use #:cl)
-  (:import-from #:weblocks/hooks
-                #:on-application-hook-handle-http-request
-                #:call-next-hook)
   (:export #:add-command
            #:get-collected-commands))
 (in-package weblocks/commands)
@@ -46,8 +43,3 @@ After action processing these commands will be sent for execution on the client.
   ;; we need to reverse it now.
   (reverse *commands*))
 
-
-(on-application-hook-handle-http-request
-  reset-commands-list (env)
-  (let (*commands*)
-    (call-next-hook)))

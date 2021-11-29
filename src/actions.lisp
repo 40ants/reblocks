@@ -20,7 +20,8 @@
    #:eval-action
    #:get-session-action
    #:get-request-action
-   #:make-js-action))
+   #:make-js-action
+   #:make-js-form-action))
 (in-package weblocks/actions)
 
 
@@ -145,13 +146,23 @@ Ex:
 ;; TODO add to documentation #easy
 (defun make-js-action (action)
   "Returns a code which can be inserted into onclick attribute and will
-execute given Lisp function on click.
+   execute given Lisp function on click.
 
-It accepts any function as input and produces a string with JavaScript code.
-"
-  
+   It accepts any function as input and produces a string with JavaScript code."
   (let* ((action-code (function-or-action->action action)))
     (format nil "initiateAction(\"~A\"); return false;"
+            action-code)))
+
+
+(defun make-js-form-action (action)
+  "Returns a code which can be inserted into onsubmit form's attribute.
+
+   It accepts any function as input and produces a string with JavaScript code.
+
+   On form submit given action will be executed and all input values
+   will be passed as arguments."
+  (let* ((action-code (function-or-action->action action)))
+    (format nil "initiateFormAction(\"~A\", $(this), \"\"); return false;"
             action-code)))
 
 

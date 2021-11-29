@@ -3,21 +3,18 @@
   (:import-from #:clack-handler-hunchentoot)
   (:import-from #:40ants-doc/locatives/base
                 #:define-locative-type)
-  (:import-from #:weblocks/widget
-                #:create-widget-from
-                #:defwidget)
   (:import-from #:weblocks/app
                 #:defapp)
-  (:import-from #:find-port
-                #:find-port)
   (:import-from #:weblocks/html
                 #:with-html)
   (:import-from #:alexandria
                 #:hash-table-keys)
   (:import-from #:serapeum)
   (:import-from #:40ants-doc/commondoc/builder)
-  (:import-from #:weblocks/server)
-  (:import-from #:weblocks-file-server)
+  (:import-from #:weblocks/hooks
+                #:defhook)
+  (:import-from #:global-vars
+                #:define-global-var)
   (:export #:defexample
            #:weblocks-example
            #:start-server
@@ -32,13 +29,6 @@
 
 (defvar *port* nil
   "A port where examples server is listening.")
-
-
-(defvar *examples* (make-hash-table :test 'equal
-                                    #+sbcl
-                                    :synchronized
-                                    #+sbcl
-                                    t))
 
 
 (defclass weblocks-example ()
@@ -77,22 +67,39 @@
   (symbol-value symbol))
 
 
+(define-global-var *iframe-id* 0)
+
+
 (defmethod 40ants-doc/commondoc/builder:to-commondoc ((example weblocks-example))
-  (let ((full-url (concatenate 'string
-                               (or *server-url*
-                                   (if *port*
-                                       (format nil "http://localhost:~A/examples"
-                                               *port*)
-                                       (error "Please start local documentation server using WEBLOCKS/DOC/EXAMPLE:START-SERVER or bind WEBLOCKS/DOC/EXAMPLE:*SERVER-URL* variable.")))
-                               (example-path example))))
+  (let* ((iframe-id (format nil "example-~A"
+                            (incf *iframe-id*)))
+         (full-url (format nil "~A~A?iframe-id=~A"
+                           (or *server-url*
+                               (if *port*
+                                   (format nil "http://localhost:~A/examples"
+                                           *port*)
+                                   (error "Please start local documentation server using WEBLOCKS/DOC/EXAMPLE:START-SERVER or bind WEBLOCKS/DOC/EXAMPLE:*SERVER-URL* variable.")))
+                           (example-path example)
+                           iframe-id))
+         (js-code "
+window.addEventListener('message', function(e) {
+  let message = e.data;
+  let iframe_id = message.iframe_id;
+  let iframe = document.querySelector('#' + iframe_id);
+  iframe.style.height = message.height + 'px';
+  iframe.style.width = message.width + 'px';
+} , false);
+"))
     (commondoc-markdown/raw-html:make-raw-html-block
      (weblocks/html:with-html-string
        (:div :class "demo"
-             (:iframe :src full-url
+             (:iframe :id iframe-id
+                      :src full-url
                       :sandbox "allow-forms allow-same-origin allow-scripts"
-                      :style (format nil "width: ~A; height: ~A"
+                      :style (format nil "width: ~A; height: ~A; border: 0"
                                      (example-width example)
-                                     (example-height example))))))))
+                                     (example-height example))))
+       (:script js-code)))))
 
 
 (defun replace-internal-symbols (body &key from-package to-package)
@@ -115,12 +122,18 @@
                      body))
 
 
+(defhook register-example (example)
+  "Called when an weblocks documentation example is being defined.")
+
+
+(defun register (example)
+  (weblocks/hooks:call-register-example-hook example))
+
+
 (defmacro defexample (name (&key (width "100%")
                               (height "10em")
                               ;; Includes code from listed examples: 
                               (inherits nil)
-                              ;; ASDF system it depends on:
-                              (depends-on nil)
                               (show-code-tab t))
                       &body body)
   "Defines Weblocks app example.
@@ -154,17 +167,8 @@
                                         :height ,height
                                         :original-body ',full-body
                                         :body new-body)))
-
-           (weblocks/widget:create-widget-from example)
+           (register example)
            (values example))))))
-
-
-(defun widget-class (example)
-  (loop for form in (example-body example)
-        when (eql (first form)
-                  'weblocks/widget:defwidget)
-          do (return (second form))
-        finally (error "No DEFWIDGET form was found in the example's body.")))
 
 
 (defun example-path (example)
@@ -174,145 +178,9 @@
             (string-downcase (symbol-name name)))))
 
 
-(defmethod create-widget-from ((example weblocks-example))
-  ;; First, we need to evaluate example's code
-  (eval (list* 'progn
-               (example-body example)))
-  ;; And now, when we have class created,
-  ;; we can use it for instantiation.
-  ;; Example may define MAKE-EXAMPLE function
-  ;; or we can guess as widget class and create it
-  (let ((make-example (find-symbol "MAKE-EXAMPLE" (example-package example))))
-    (cond
-      (make-example
-       (funcall make-example))
-      (t
-       (make-instance (widget-class example))))))
-
-
-(defapp examples-server
-  :prefix "/examples/"
-  :autostart nil)
-
-
-(defwidget examples-widget ()
-  ((current-path :initform nil
-                 :accessor current-path)
-   (current-widget :initform nil
-                   :accessor current-widget)))
-
-
-(defmethod weblocks/app::initialize-webapp ((app examples-server))
-  (call-next-method)
-  (weblocks-file-server:make-route :uri "/docs/"
-                                   :root (asdf:system-relative-pathname :weblocks "docs/build/")
-                                   :dir-listing t))
-
-
-(defmethod weblocks/session:init ((app examples-server))
-  (make-instance 'examples-widget))
-
-
-(defmethod weblocks/widget:render ((widget examples-widget))
-  (let* ((app-prefix (weblocks/app:get-prefix (weblocks/app:get-current)))
-         (full-path (string-downcase (weblocks/request:get-path)))
-         (path (subseq full-path (length app-prefix))))
-    (unless (string-equal path
-                          (current-path widget))
-      (let ((new-widget (gethash path *examples*)))
-        (setf (current-widget widget)
-              (when new-widget
-                (weblocks/widget:create-widget-from new-widget))
-              (current-path widget)
-              path)))
-    (cond
-      ((current-widget widget)
-       (weblocks/widget:render (current-widget widget)))
-      (t
-       (with-html
-         (:h1 ("No widget with path ~A" path))
-         (cond
-           ((zerop (hash-table-count *examples*))
-            (:p "No examples are registered yet."))
-           (t
-            (:p "Here is list of awailable examples:")
-            (loop for path in (sort (hash-table-keys *examples*)
-                                    #'string>)
-                  for uri = (format nil "/examples~A" path)
-                  do (:li (:a :href uri uri))))))))))
-
 
 (defmethod 40ants-doc/object-package::object-package ((object weblocks-example))
   (example-package object))
 
 
-(defun collect-examples (asdf-system-name &key (results (make-hash-table :test 'equal)))
-  "Searches packages belonging to the given asdf-system."
-  (check-type asdf-system-name string)
-  
-  (loop with asdf-system-name = (string-downcase asdf-system-name)
-        with prefix = (concatenate 'string asdf-system-name "/")
-        for package in (list-all-packages)
-        for name = (string-downcase (package-name package))
-        when (or (string= asdf-system-name name)
-                 (str:starts-with-p prefix
-                                    name))
-          do (loop for symbol being the symbols of package
-                   for var = (and (boundp symbol)
-                                  (symbol-value symbol))
-                   when (and var
-                             (typep var 'weblocks-example))
-                     do (setf (gethash (example-path var) results)
-                              (weblocks/widget:create-widget-from var)))
-        finally (return results)))
 
-
-(defparameter *known-asdf-systems* nil
-  "When UPDATE-EXAMPLES is called without arguments, it will
-   update examples for all these systems.")
-
-(defun update-examples (&rest asdf-system-names)
-  (setf *known-asdf-systems*
-        (union asdf-system-names
-               *known-asdf-systems*
-               :test #'string-equal))
-  
-  (setf *examples*
-        (loop with results = (make-hash-table :test 'equal)
-              for asdf-system-name in *known-asdf-systems*
-              do (collect-examples asdf-system-name
-                                   :results results)
-              finally (return results))))
-
-
-(defun start-server (&key
-                       port
-                       (interface "localhost")
-                       for-asdf-system)
-  (when for-asdf-system
-    (update-examples (string-downcase for-asdf-system)))
-  
-  (when (null *port*)
-    (let ((port (or port
-                    (find-port)))
-          ;; To prevent weblocks from complaining
-          ;; about other running server
-          (weblocks/server::*server* nil))
-      (weblocks/server:start :port port
-                             :interface interface
-                             :apps 'examples-server)
-      (setf *port* port)))
-  
-  (let ((url (format nil "http://localhost:~A/docs/"
-                     *port*)))
-    (log:info "Started examples server at ~A"
-              url)))
-
-
-;; Entry-point for Heroky deployment
-(defun cl-user::initialize-application (&key (port 8080) (interface "0.0.0.0"))
-  (format t "Starting examples server on ~A:~A~%"
-          interface port)
-  (start-server :port port
-                :interface interface
-                :for-asdf-system "weblocks"))

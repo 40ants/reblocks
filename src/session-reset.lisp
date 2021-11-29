@@ -16,5 +16,5 @@
 ;; This function whould be external for weblocks/session package
 ;; to make it easier for end user
 (defun weblocks/session:reset ()
-  "Reset current-session"
+  "Reset current session."
   (reset-session *session*))
