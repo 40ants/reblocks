@@ -424,13 +424,6 @@ function disableIrrelevantButtons(currentButton) {
   $(currentButton).attr('disabled', false);
 }
 
-// Fix IE6 flickering issue
-if(jQuery.browser.msie) {
-  try {
-    document.execCommand("BackgroundImageCache", false, true);
-  } catch(err) {}
-}
-
 // Table hovering for IE (can't use CSS expressions because
 // Event.observe isn't available there and we can't overwrite events
 // using assignment

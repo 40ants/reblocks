@@ -20,17 +20,20 @@
 
 
 (defvar *js-dependencies*
-  (list (make-dependency "src/js/jquery/jquery-1.8.2.js"
-                         ;; "https://code.jquery.com/jquery-1.8.2.js"
+  (list (make-dependency "src/js/jquery/jquery-3.6.0.min.js"
+                         ;; "https://code.jquery.com/jquery-3.6.0.min.js"
                          :system :weblocks)
         (make-dependency "src/js/jquery/jquery.js"
                          :system :weblocks)
 
-        (make-dependency "src/js/jquery/jquery.ba-bbq.js"
-                         :system :weblocks)
-
-        (make-dependency "src/js/jquery/jquery-seq.js"
-                         :system :weblocks)
+        ;; TODO: read code in jquery.js and learn how it uses ba-bbq and seq plugins.
+        ;;       Probably we don't need them anymore. These plugins are not working
+        ;;       with recent jQuery version 3.6.0, but were loaded without errors
+        ;;       on jQuery 1.8.2.
+        ;; (make-dependency "src/js/jquery/jquery.ba-bbq.js"
+        ;;                  :system :weblocks)
+        ;; (make-dependency "src/js/jquery/jquery-seq.js"
+        ;;                  :system :weblocks)
 
         (make-dependency "src/js/jquery/progress.gif"
                          :system :weblocks)))
