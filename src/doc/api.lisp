@@ -17,6 +17,5 @@
                   :ignore-words ("API"
                                  "URI"))
   (weblocks/widgets/mop:widget-class class)
-  (weblocks/actions:make-js-action function)
   (weblocks/response:redirect function)
   (weblocks/session:init generic-function))

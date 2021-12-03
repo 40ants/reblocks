@@ -4,11 +4,11 @@
         #:hamcrest/rove
         #:weblocks-test/utils)
   (:import-from #:weblocks/actions
-                #:function-or-action->action
+                #:make-action
                 #:eval-action
                 #:on-missing-action
                 #:make-action-url
-                #:make-action)
+                #:internal-make-action)
   (:import-from #:weblocks/request
                 #:get-action-name-from-request)
   (:import-from #:weblocks/request-handler
@@ -34,9 +34,9 @@
 (deftest action-evaluation
   (testing "Function eval-action should return action function's result"
     (with-session
-      (let ((action-name (make-action (lambda (&rest keys)
-                                        (declare (ignore keys))
-                                        123))))
+      (let ((action-name (internal-make-action (lambda (&rest keys)
+                                                 (declare (ignore keys))
+                                                 123))))
         (testing "This action just returns 123 when evaluated."
           (ok (eql (eval-action nil action-name nil)
                    123)))))))
@@ -45,9 +45,9 @@
 (deftest eval-action-with-arguments
   (with-session
     (let* (action-result
-           (action-name (make-action (lambda (&rest args)
-                                       (setf action-result
-                                             args)))))
+           (action-name (internal-make-action (lambda (&rest args)
+                                                (setf action-result
+                                                      args)))))
       (with-request ((format nil "/?name=Bob&cancel=Cancel&~A=~A"
                              weblocks/variables:*action-string*
                              action-name)
@@ -77,22 +77,22 @@
               "Result should be changed as a side-effect of method call.")))))
 
 
-(deftest function-or-action->action-signals-when-action-is-not-defined
+(deftest make-action-signals-when-action-is-not-defined
   (with-session
     (with-request ("/")
-      (ok (signals (function-or-action->action "abc123"))
+      (ok (signals (make-action "abc123"))
           "Action with name \"abc123\" wasn't defined and function should raise an exception."))))
 
 
-(deftest function-or-action->action-success
+(deftest make-action-success
   (with-session
-    (make-action #'identity "abc123")
+    (internal-make-action #'identity "abc123")
     
-    (ok (equal (function-or-action->action "abc123")
+    (ok (equal (make-action "abc123")
                "abc123")
-        "When action is defined function-or-action->action should return it's name")
+        "When action is defined make-action should return it's name")
 
-    (ok (equal (function-or-action->action #'identity)
+    (ok (equal (make-action #'identity)
                "abc123")
         "This also should work if a function was given as an argument")))
 

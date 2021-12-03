@@ -207,8 +207,8 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-244
-         src="http://localhost:40014/examples/weblocks/doc/quickstart/example1?iframe-id=example-244"
+         id=example-296
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example1?iframe-id=example-296"
          style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
 <script>
@@ -294,8 +294,8 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-245
-         src="http://localhost:40014/examples/weblocks/doc/quickstart/example2?iframe-id=example-245"
+         id=example-297
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example2?iframe-id=example-297"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -352,7 +352,7 @@ modified our task rendering function by adding a code to render a
 checkbox with an anonymous lisp function, attached to its
 `ONCLICK` attribute.
 
-The [`weblocks/actions:make-js-action`][44e9] function returns a Javascript code,
+The [`weblocks/actions:make-js-action`][b26e] function returns a Javascript code,
 which calls back a lisp lambda function when evaluated in the browser.
 And because `TOGGLE` updates a Task widget, Weblocks returns on this
 callback a new prerendered `HTML` for this one task only.
@@ -363,8 +363,8 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-246
-         src="http://localhost:40014/examples/weblocks/doc/quickstart/example3?iframe-id=example-246"
+         id=example-298
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example3?iframe-id=example-298"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -396,7 +396,7 @@ As a homework:
    power of Common Lisp.
 
 
-[44e9]: api.html#x-28WEBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
+[b26e]: actions.html#x-28WEBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
 [92cd]: apps.html#x-28WEBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [174e]: html.html#x-28WEBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [5ff5]: http://localhost:40000/tasks

@@ -1,4 +1,4 @@
-(defpackage #:weblocks/actions
+(uiop:define-package #:weblocks/actions
   (:use #:cl)
   (:import-from #:log4cl)
   (:import-from #:weblocks/utils/misc
@@ -15,13 +15,11 @@
   (:import-from #:quri
                 #:url-encode)
   
-  (:export
-   #:on-missing-action
-   #:eval-action
-   #:get-session-action
-   #:get-request-action
-   #:make-js-action
-   #:make-js-form-action))
+  (:export #:eval-action
+           #:on-missing-action
+           #:make-action
+           #:make-js-action
+           #:make-js-form-action))
 (in-package weblocks/actions)
 
 
@@ -33,11 +31,16 @@ situation (e.g. redirect, signal an error, etc.)."))
 
 
 (defgeneric eval-action (app action-name arguments)
-  (:documentation "Evaluates the action that came with the request."))
+  (:documentation   "
+   Evaluates the action that came with the request.
+
+   First it resolves action by trying to find ACTION-NAME inside session
+   or current app's actions.
+   If actions wasn't found, then EVAL-ACTION calls ON-MISSING-ACTION generic-function.
+   Otherwise it applies arguments to the action callback."))
 
 
 (defmethod eval-action (app action-name arguments)
-  "Evaluates the action that came with the request."
   (let ((action (get-request-action action-name)))
 
     (unless action
@@ -55,25 +58,25 @@ situation (e.g. redirect, signal an error, etc.)."))
             (lack.util:generate-random-id))))
 
 
-(defun make-action (action-fn &optional (action-code (generate-action-code)))
+(defun internal-make-action (action-fn &optional (action-code (generate-action-code)))
   "Converts a function into an action that can be rendered into HTML. A
-unique, hard to guess string is generated for the function, and a
-function is added to the session hashtable under this string. The
-string is then returned. When later requests come in,
-'get-request-action' machinery determines if the action string that
-came with the request is stored in the hashtable, and if so, invokes
-the stored function.
+   unique, hard to guess string is generated for the function, and a
+   function is added to the session hashtable under this string. The
+   string is then returned. When later requests come in,
+   'get-request-action' machinery determines if the action string that
+   came with the request is stored in the hashtable, and if so, invokes
+   the stored function.
 
-'action-fn' - A function that will be called if the user initiates
-appropriate control (link, form, etc.) GET and POST parameters will be
-passed to this function as keyword arguments by the framework.
+   ACTION-FN - A function that will be called if the user initiates
+   appropriate control (link, form, etc.) GET and POST parameters will be
+   passed to this function as keyword arguments by the framework.
 
-'action-code' - The code to use for an action (if not specified
-make-action generates a unique value for each action). Note, if you
-don't provide a hard to guess code ('generate-action-code' is used by
-default), the user will be vulnerable to an attack where a malicious
-attacker can attempt to guess a dangerour action id and send the user
-a link to it. Only use guessable action codes for GET actions."
+   ACTION-CODE - The code to use for an action (if not specified
+   INTERNAL-MAKE-ACTION generates a unique value for each action). Note, if you
+   don't provide a hard to guess code ('generate-action-code' is used by
+   default), the user will be vulnerable to an attack where a malicious
+   attacker can attempt to guess a dangerour action id and send the user
+   a link to it. Only use guessable action codes for GET actions."
 
   ;; Here we put into the session two maps:
   ;; code->action which maps from string code to a function
@@ -95,8 +98,7 @@ a link to it. Only use guessable action codes for GET actions."
   action-code)
 
 
-;; TODO: make this public and may be to rename it to just make-action
-(defun function-or-action->action (function-or-action)
+(defun make-action (function-or-action)
   "Accepts a function or an existing action. If the value is a
 function, calls 'make-action' and returns its result. Otherwise,
 checks if the action already exists. If it does, returns the value. If
@@ -110,7 +112,7 @@ it does not, signals an error."
                                                (make-hash-table)))
         (if code-p
             code
-            (make-action function-or-action)))
+            (internal-make-action function-or-action)))
       
       ;; if it is an action code
       (multiple-value-bind (res presentp)
@@ -143,43 +145,42 @@ Ex:
                (url-encode (princ-to-string action-code))))
 
 
-;; TODO add to documentation #easy
 (defun make-js-action (action)
-  "Returns a code which can be inserted into onclick attribute and will
+  "Returns JS code which can be inserted into `onclick` attribute and will
    execute given Lisp function on click.
 
    It accepts any function as input and produces a string with JavaScript code."
-  (let* ((action-code (function-or-action->action action)))
+  (let* ((action-code (make-action action)))
     (format nil "initiateAction(\"~A\"); return false;"
             action-code)))
 
 
 (defun make-js-form-action (action)
-  "Returns a code which can be inserted into onsubmit form's attribute.
+  "Returns JS code which can be inserted into `onsubmit` form's attribute.
 
    It accepts any function as input and produces a string with JavaScript code.
 
    On form submit given action will be executed and all input values
    will be passed as arguments."
-  (let* ((action-code (function-or-action->action action)))
+  (let* ((action-code (make-action action)))
     (format nil "initiateFormAction(\"~A\", $(this), \"\"); return false;"
             action-code)))
 
 
-(defun get-session-action (name)
+(defun get-session-action (action-name)
   "Returns an action bound to the current session."
   (let ((code->action 
-          (weblocks/session:get-value 'code->action
-                              (make-hash-table :test #'equal))))
-    (gethash name code->action)))
+          (weblocks/session:get-value 'code->action)))
+    (when code->action
+      (gethash action-name code->action))))
 
 
 (defun get-request-action (action-name)
   "Gets an action from the request. If the request contains
-*action-string* parameter, the action is looked up in the session and
-appropriate function is returned. If no action is in the parameter,
-returns nil. If the action isn't in the session (somehow invalid),
-raises an assertion."
+   a parameter with name equal to *ACTION-STRING* variable, the action
+   is looked up in the session and appropriate function is returned.
+   If no action is in the parameter, returns NIL. If the action
+   isn't in the session (somehow invalid), raises an assertion."
   (when action-name
     (let* ((app-wide-action (weblocks/app-actions:get-action action-name))
            (session-action (get-session-action action-name))

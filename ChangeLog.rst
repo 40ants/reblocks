@@ -29,6 +29,8 @@ Changes
   level to ``debug`` and ``warn``, respectively.
 * Changed a library used to log unhandled errors. Now `log4cl-extras <https://github.com/40ants/log4cl-extras>`_ is used, because it is a successor of `log4cl-json <https://github.com/40ants/log4cl-json>`_.
 * Function WEBLOCKS/SERVER:STOP now accepts optional INTERFACE and PORT arguments.
+* Function WEBLOCKS/ACTION::FUNCTION-OR-ACTION->ACTION was renamed to WEBLOCKS/ACTION:MAKE-ACTION and made public.
+  Old WEBLOCKS/ACTION:MAKE-ACTION was renamed to WEBLOCKS/ACTION::INTERNAL-MAKE-ACTION.
 
 These functions were removed:
 

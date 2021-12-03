@@ -1,14 +1,21 @@
 (uiop:define-package #:weblocks/doc/actions
   (:use #:cl)
   (:import-from #:weblocks/actions
-                #:eval-action)
+                #:eval-action
+                #:make-action
+                #:make-js-action
+                #:make-js-form-action
+                #:on-missing-action)
   (:import-from #:40ants-doc
-                #:defsection))
+                #:defsection)
+  (:import-from #:weblocks/variables
+                #:*action-string*))
 (in-package weblocks/doc/actions)
 
 
 (defsection @actions (:title "Actions"
                       :ignore-words ("AJAX"
+                                     "JS"
                                      "POST"
                                      "GET"))
   "Actions is the core component allowing interactivity in Weblocks applications.
@@ -18,4 +25,9 @@
 
    ## API"
 
-  (eval-action generic-function))
+  (eval-action generic-function)
+  (on-missing-action generic-function)
+  (make-action function)
+  (make-js-action function)
+  (make-js-form-action function)
+  (*action-string* variable))
