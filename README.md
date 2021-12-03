@@ -41,7 +41,7 @@ TODO> (defapp tasks)
 By default, the name of the app defines the url where it is
 accessible. Here, the "tasks" app will be accessible under
 [http://localhost:40000/tasks][5ff5]. We can change it with the
-`PREFIX` argument of [`weblocks/app:defapp`][e7de]:
+`PREFIX` argument of [`weblocks/app:defapp`][92cd]:
 
 ```
 TODO> (defapp tasks
@@ -207,8 +207,8 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-22
-         src="http://localhost:40014/examples/weblocks/doc/quickstart/example1?iframe-id=example-22"
+         id=example-244
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example1?iframe-id=example-244"
          style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
 <script>
@@ -294,8 +294,8 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-23
-         src="http://localhost:40014/examples/weblocks/doc/quickstart/example2?iframe-id=example-23"
+         id=example-245
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example2?iframe-id=example-245"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -363,8 +363,8 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-24
-         src="http://localhost:40014/examples/weblocks/doc/quickstart/example3?iframe-id=example-24"
+         id=example-246
+         src="http://localhost:40014/examples/weblocks/doc/quickstart/example3?iframe-id=example-246"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -397,7 +397,7 @@ As a homework:
 
 
 [44e9]: api.html#x-28WEBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
-[e7de]: api.html#x-28WEBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[92cd]: apps.html#x-28WEBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [174e]: html.html#x-28WEBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [5ff5]: http://localhost:40000/tasks
 [2e0b]: http://localhost:40000/tasks/

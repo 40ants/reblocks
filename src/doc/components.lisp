@@ -11,7 +11,10 @@
                                         "URI"
                                         "HTML"
                                         "CLOS"
-                                        "MAKE-WIDGET")
+                                        "MAKE-WIDGET"
+                                        ;; TODO: make an external-link
+                                        "WEBLOCKS-NAVIGATION-WIDGET"
+                                        )
                          ;; :external-docs ("https://40ants.com/weblocks-navigation-widget/")
                          )
   "

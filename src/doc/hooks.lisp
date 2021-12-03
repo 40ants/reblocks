@@ -11,7 +11,10 @@
                 #:reset-session
                 #:call-next-hook
                 #:on-application-hook-render
-                #:defhook))
+                #:defhook)
+  (:import-from #:alexandria
+                #:ensure-symbol
+                #:symbolicate))
 (in-package weblocks/doc/hooks)
 
 
@@ -26,10 +29,18 @@
                                        (cons locative-type locative-args)))
 
 
+(defmethod 40ants-doc/locatives/base:locate-and-find-source (symbol (locative-type (eql '40ants-doc/locatives::hook))
+                                                             locative-args)
+  (declare (ignore locative-args))
+  (40ants-doc/source-api:find-source
+   (macro-function (ensure-symbol (symbolicate "WITH-" symbol "-HOOK")
+                                  :weblocks/hooks))))
+
+
 (defmethod 40ants-doc/commondoc/builder:reference-to-commondoc
-            ((symbol symbol)
-             (locative-type (eql '40ants-doc/locatives::hook))
-             locative-args)
+    ((symbol symbol)
+     (locative-type (eql '40ants-doc/locatives::hook))
+     locative-args)
   (let* ((reference
            (40ants-doc/reference:make-reference symbol
                                                 (cons locative-type locative-args)))

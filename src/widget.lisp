@@ -24,7 +24,6 @@
            #:render
            #:get-css-classes
            #:get-html-tag
-           #:mark-dirty
            #:update
            #:widget
            #:create-widget-from))
@@ -143,7 +142,7 @@ inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
 
 Usually this required as a result of an action execution.
 
-In the old weblocks there was a mark-dirty method. This one replaces it.
+In the classic Weblocks there was a mark-dirty method. This one replaces it.
 To make everything easier, the new protocol excludes \"propagation\". If you
 need to update other widgets, please define an \"update\" method for your widget.
 You can use :before or :after modifiers, to keep the current behavior and to add

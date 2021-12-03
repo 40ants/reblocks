@@ -35,6 +35,10 @@
                 #:@contribute)
   (:import-from #:weblocks/doc/session
                 #:@session)
+  (:import-from #:weblocks/doc/actions
+                #:@actions)
+  (:import-from #:weblocks/doc/app
+                #:@apps)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -48,8 +52,10 @@
 - @INSTALLATION
 - @QUICKSTART
 - @COMPONENTS
+- @APPS
 - @WIDGETS
 - @HTML
+- @ACTIONS
 - @ROUTING
 - @DEPENDENCIES
 - @HOOKS
@@ -86,8 +92,10 @@
                            @installation
                            @quickstart
                            @components
+                           @apps
                            @widgets
                            @html
+                           @actions
                            @routing
                            @dependencies
                            @hooks

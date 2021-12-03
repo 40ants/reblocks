@@ -11,7 +11,11 @@
                                           "HTML"
                                           "CDN"
                                           "LASS"
-                                          "ASDF"))
+                                          "ASDF"
+                                          ;; TODO: Make an external link
+                                          ;; after documenting weblocks-lass using 40ants-doc
+                                          "WEBLOCKS-LASS:MAKE-DEPENDENCY"
+                                          "WEBLOCKS-LASS"))
   "When Weblocks renders page, it collects CSS and JS dependencies from all widgets
    by calling generic-function WEBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
    is called on the current app to get such common dependencies as jQuery and CSS framework.

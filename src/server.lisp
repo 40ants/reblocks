@@ -380,7 +380,7 @@ declared AUTOSTART unless APPS argument is provided."
                   do (error "App ~A already uses prefix \"~A\""
                             other-app other-prefix)))
          (t
-          (weblocks/app::initialize-webapp app)
+          (weblocks/app:initialize-webapp app)
           (register-app-routes server app)
           (push app (apps server))
           (log:debug "App \"~A\" started at http://~A:~A~A"
@@ -402,8 +402,9 @@ declared AUTOSTART unless APPS argument is provided."
         when (running-p server)
           collect
           (weblocks/hooks:with-stop-weblocks-hook ()
-            (loop for app in (apps server)
-                  do (weblocks/app:stop (weblocks-webapp-name app)))
+            ;; TODO: maybe implement stop app generic function again?
+            ;; (loop for app in (apps server)
+            ;;       do (weblocks/app:stop (weblocks-webapp-name app)))
             (stop-server server)
             (values server))))
 

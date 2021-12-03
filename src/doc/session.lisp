@@ -25,6 +25,7 @@
                       :ignore-words ("WEBLOCKS"
                                      "SESSION"
                                      "HTML"
+                                     "HTTP"
                                      "ID"))
 
   "

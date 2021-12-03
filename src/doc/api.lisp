@@ -16,7 +16,6 @@
 (defsection @api (:title "Unsorted API"
                   :ignore-words ("API"
                                  "URI"))
-  (weblocks/app:defapp macro)
   (weblocks/widgets/mop:widget-class class)
   (weblocks/actions:make-js-action function)
   (weblocks/response:redirect function)

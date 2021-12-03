@@ -14,7 +14,10 @@
                                      "HTML"
                                      "TASK-PAGE"
                                      "MAKE"
-                                     "CL-PPCRE")
+                                     "CL-PPCRE"
+                                     ;; TODO: make an external-link
+                                     "WEBLOCKS-NAVIGATION-WIDGET"
+                                     "WEBLOCKS-NAVIGATION-WIDGET:DEFROUTES")
                       ;; :external-docs ("https://40ants.com/weblocks-navigation-widget/") 
                       )
   "

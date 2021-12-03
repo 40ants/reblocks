@@ -9,6 +9,8 @@
                 #:symbolicate
                 #:ensure-symbol
                 #:with-gensyms)
+  (:import-from #:40ants-doc/ignored-words
+                #:ignore-words-in-package)
   
   (:export #:call-next-hook
            #:defhook))
@@ -285,6 +287,13 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
                ,docstring)
          (setf (get ',name :args)
                ',args)
+
+         (ignore-words-in-package ',name
+                                  ',session-macro-name
+                                  ',request-macro-name
+                                  ',application-macro-name
+                                  ',with-macro-name
+                                  ',call-macro-name)
          
          (defmacro ,session-macro-name (callback-name ,args &body body)
            ,docstring

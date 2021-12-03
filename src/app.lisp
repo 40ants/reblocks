@@ -1,4 +1,4 @@
-(defpackage #:weblocks/app
+(uiop:define-package #:weblocks/app
   (:use #:cl
         #:f-underscore)
   (:import-from #:metatilities
@@ -21,16 +21,11 @@
                 #:*current-app*)
   ;; Just dependencies
   (:import-from #:log)
-  (:shadow #:restart)
   (:export #:defapp
            #:app
            #:get-autostarting-apps
            #:get-registered-apps
-           #:start
-           #:stop
-           #:restart
            #:get-prefix
-           #:app-serves-hostname-p
            #:get-current
            #:with-app
            #:initialize-webapp))
@@ -218,14 +213,6 @@ called (primarily for backward compatibility"
 
 ;;; Convenience accessors
 ;;; These procedures are relative to the current request's selected webapp
-
-(defun package-webapp-classes (&optional (package *package*))
-  "Answer a list of webapp classes that were defined (e.g. by
-`defwebapp') in PACKAGE, by default the current package."
-  (loop for app-class-name in (get-registered-apps)
-        for class = (find-class app-class-name)
-        when (eql package (webapp-class-home-package class))
-          collect class))
 
 
 (defun call-in-webapp (app proc)

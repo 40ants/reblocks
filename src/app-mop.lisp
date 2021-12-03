@@ -1,4 +1,4 @@
-(defpackage #:weblocks/app-mop
+(uiop:define-package #:weblocks/app-mop
   (:use #:cl)
   (:shadowing-import-from #:closer-mop
                           #:standard-class
@@ -13,10 +13,8 @@
                           ;; #:subtypep
                           ;; #:standard-method
                           )
-  (:export
-   #:app-class
-   #:get-registered-apps
-   #:get-autostarting-apps))
+  (:export #:get-registered-apps
+           #:get-autostarting-apps))
 (in-package weblocks/app-mop)
 
 
