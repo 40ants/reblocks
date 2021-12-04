@@ -207,8 +207,8 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-126
-         src="http://localhost:40000/examples/weblocks/doc/quickstart/example1?iframe-id=example-126"
+         id=example-230
+         src="http://localhost:40000/examples/weblocks/doc/quickstart/example1?iframe-id=example-230"
          style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
 <script>
@@ -294,8 +294,8 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-127
-         src="http://localhost:40000/examples/weblocks/doc/quickstart/example2?iframe-id=example-127"
+         id=example-231
+         src="http://localhost:40000/examples/weblocks/doc/quickstart/example2?iframe-id=example-231"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -363,8 +363,8 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-128
-         src="http://localhost:40000/examples/weblocks/doc/quickstart/example3?iframe-id=example-128"
+         id=example-232
+         src="http://localhost:40000/examples/weblocks/doc/quickstart/example3?iframe-id=example-232"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>

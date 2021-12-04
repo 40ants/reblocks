@@ -27,21 +27,20 @@
   (:import-from #:weblocks/session)
   (:import-from #:quri)
   
-  (:export
-   #:get-parameters
-   #:get-parameter
-   #:get-header
-   #:get-scheme
-   #:ajax-request-p
-   #:get-host
-   #:get-port
-   #:get-method
-   #:refresh-request-p
-   #:remove-header
-   #:get-uri
-   #:get-path
-   #:with-request
-   #:pure-request-p))
+  (:export #:get-parameters
+           #:get-parameter
+           #:get-header
+           #:get-scheme
+           #:ajax-request-p
+           #:get-host
+           #:get-port
+           #:get-method
+           #:refresh-request-p
+           #:remove-header
+           #:get-uri
+           #:get-path
+           #:with-request
+           #:pure-request-p))
 (in-package weblocks/request)
 
 

@@ -1,4 +1,4 @@
-(defpackage #:weblocks/variables
+(uiop:define-package #:weblocks/variables
   (:use #:cl)
   (:import-from #:serapeum
                 #:defvar-unbound)
@@ -10,8 +10,6 @@
            #:*ignore-missing-actions*
            #:*invoke-debugger-on-error*
            #:*backtrace-on-session-init-error*
-           #:*before-ajax-complete-scripts*
-           #:*on-ajax-complete-scripts*
            #:*action-string*
            #:*approved-return-codes*
            #:*style-warn-on-circular-dirtying*
@@ -45,15 +43,6 @@
   "If this variable is t, then weblocks will start lisp's debugger on unhandled conditions.")
 
 (defvar *backtrace-on-session-init-error* t)
-
-
-(defvar-unbound *before-ajax-complete-scripts*
-  "A list of client-side scripts to be sent over to the browser at
-   the end of ajax request execution.  TODO when executed?")
-
-(defvar-unbound *on-ajax-complete-scripts*
-  "A list of client-side scripts to be sent over to the browser at
-   the end of ajax request execution.")
 
 
 (defvar *action-string* "action"

@@ -1,4 +1,4 @@
-(defpackage #:weblocks/response
+(uiop:define-package #:weblocks/response
   (:use #:cl)
   (:import-from #:weblocks/request
                 #:get-uri
@@ -22,7 +22,6 @@
            #:send-script
            #:make-uri
            #:redirect
-           #:catch-possible-abort
            #:get-response
            #:get-content
            #:get-code
@@ -79,6 +78,10 @@
   (check-type response response)
   (append (list :content-type (get-content-type response))
           (get-custom-headers response)))
+
+
+(defgeneric get-response (obj)
+  (:documentation "Extracts response from the object. Usually, obj will be an [IMMEDIATE-RESPONSE][condition] condition."))
 
 
 (define-condition immediate-response ()
@@ -159,9 +162,10 @@
                                      (code 200)
                                      (headers *custom-headers*)
                                      (condition-class 'immediate-response))
-  "Aborts request processing and return given value as response.
+  "Aborts request processing by signaling an [IMMEDIATE-RESPONSE][condition]
+   and returns a given value as response.
 
-HTTP code and headers are taken from *code* and *content-type*."
+   HTTP code and headers are taken from CODE and CONTENT-TYPE."
 
   ;; This abort could be a normal, like 302 redirect,
   ;; that is why we are just informing here
@@ -183,9 +187,7 @@ HTTP code and headers are taken from *code* and *content-type*."
   on whether the current request is via AJAX or not.
 
   Script may be either a string or a list; if it is a list
-  it will be compiled through Parenscript first.
-  
-  FIXME: is using PUSH or PUSHLAST correct?"
+  it will be compiled through Parenscript first."
   (declare (ignorable place))
   (let ((script (etypecase script
                   (string script)
@@ -196,12 +198,7 @@ HTTP code and headers are taken from *code* and *content-type*."
                         script
                         (with-javascript-to-string script))))
           (add-command :execute-code
-                       :code code)
-          ;; TODO remove before-ajax-complete-scripts and on-ajax-complete-scripts completely
-          ;; (ecase place
-          ;;   (:before-load (push code weblocks.variables:*before-ajax-complete-scripts*))
-          ;;   (:after-load (push code weblocks.variables:*on-ajax-complete-scripts*)))
-          )
+                       :code code))
         (with-javascript
           script))))
 

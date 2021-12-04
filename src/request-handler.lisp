@@ -46,8 +46,6 @@
                 #:*action-string*
                 ;; #:*style-warn-on-circular-dirtying*
                 ;; #:*style-warn-on-late-propagation*
-                ;; #:*before-ajax-complete-scripts*
-                ;; #:*on-ajax-complete-scripts*
                 #:*invoke-debugger-on-error*)
   (:import-from #:weblocks/utils/timing
                 #:*timing-level*
@@ -190,79 +188,12 @@ customize behavior."))
                         :code 404)))
 
 
-;; Removed because we use `update' method now and it adds a command
-;; (defun render-dirty-widgets ()
-;;   "Renders widgets that have been marked as dirty into a JSON
-;; association list. This function is normally called by
-;; 'handle-request' to service AJAX requests."
-
-;;   (log:debug "Rendering dirty widgets")
-
-;;   (setf *content-type*
-;;         "application/json; charset=utf-8")
-  
-;;   (let ((render-state (make-hash-table :test 'eq)))
-;;     (labels ((circularity-warn (w)
-;;                (when *style-warn-on-circular-dirtying*
-;;                  (style-warn 'non-idempotent-rendering
-;;                              :change-made
-;;                              (format nil "~A was marked dirty and skipped after ~
-;;                                already being rendered" w))))
-;;              (render-enqueued (dirty)
-;;                "Returns a plist of dirty widgets where keys are their
-;;                 dom ids."
-;;                (loop with widget-html = nil
-;;                      for w in dirty
-;;                      if (gethash w render-state)
-;;                        do (circularity-warn w)
-;;                      else
-;;                        do (setf widget-html
-;;                                 (with-html-string
-;;                                   (render-widget w)))
-;;                           (setf (gethash w render-state) t)
-;;                        and appending (list (alexandria:make-keyword (dom-id w))
-;;                                            widget-html)))
-;;              (late-propagation-warn (ws)
-;;                (when *style-warn-on-late-propagation*
-;;                  (style-warn 'non-idempotent-rendering
-;;                              :change-made
-;;                              (format nil "~A widgets were marked dirty: ~S" (length ws) ws))))
-;;              (absorb-dirty-widgets ()
-;;                (loop for dirty = weblocks::*dirty-widgets*
-;;                      while dirty
-;;                      count t into runs
-;;                      when (= 2 runs)
-;;                        do (late-propagation-warn dirty)
-;;                      do (setf weblocks::*dirty-widgets* '())
-;;                      nconc (render-enqueued dirty))))
-;;       (let ((rendered-widgets (absorb-dirty-widgets)))
-;;         (write 
-;;          (jonathan:to-json
-;;           ;; For now, we are mixing old-style payload and newstyle
-;;           (list :|widgets| rendered-widgets
-;;                 :|before-load| *before-ajax-complete-scripts*
-;;                 :|on-load| *on-ajax-complete-scripts*
-;;                 :|commands| (get-collected-commands)))
-;;          ;; Seems like a hack, because we have to know implementation
-;;          ;; details of weblocks/html here.
-;;          ;; TODO: hide implementation details.
-;;          :stream *stream*
-;;          :escape nil)))))
-
-
-
 (defmethod handle-ajax-request ((app app))
   (log:debug "Handling AJAX request")
   
-  ;; (timing "handle-ajax-request"
-  ;;   (render-dirty-widgets))
-
   (write
    (to-json
-    (list ;; :|widgets| rendered-widgets
-          ;; :|before-load| *before-ajax-complete-scripts*
-          ;; :|on-load| *on-ajax-complete-scripts*
-          :|commands| (get-collected-commands)))
+    (list :|commands| (get-collected-commands)))
    ;; Seems like a hack, because we have to know implementation details of weblocks/html here.
    ;; TODO: hide implementation details.
    :stream *stream*
@@ -277,16 +208,6 @@ customize behavior."))
 
   ;; TODO: make a macro weblocks/session-lock:with-lock
   (with-lock-held ((get-lock))
-    ;; TODO: Probably it is good idea to remove this widget tree protocol
-    ;;       from Weblocks and leave only rendering. Because update-widget-tree
-    ;;       only collects page's title, description and keywords.
-    ;;       And they can be set during root widget rendering phase
-    ;; (handler-case (timing "tree shakedown"
-    ;;                 (update-widget-tree))
-    ;;   (weblocks::http-not-found ()
-    ;;     (return-from handle-normal-request
-    ;;       (page-not-found-handler app))))
-
     (timing "widget tree rendering"
       (render (weblocks/widgets/root:get))))
 
@@ -384,8 +305,6 @@ customize behavior."))
             ;; (weblocks::*uri-tokens*
             ;;   (make-instance 'weblocks::uri-tokens
             ;;                  :tokens (weblocks::tokenize-uri (get-path))))
-            ;; weblocks.variables:*before-ajax-complete-scripts*
-            ;; weblocks.variables:*on-ajax-complete-scripts*
             ;; weblocks::*current-page-title*
             ;; weblocks::*current-page-description*
             ;; weblocks::*current-page-keywords*

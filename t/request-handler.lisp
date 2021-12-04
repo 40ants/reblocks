@@ -12,7 +12,6 @@
   (:import-from #:weblocks/request-handler
                 #:handle-request)
   (:import-from #:weblocks/response
-                #:catch-possible-abort
                 #:get-code
                 #:get-content
                 #:get-custom-headers)
