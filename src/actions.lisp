@@ -5,7 +5,8 @@
                 #:safe-apply)
   (:import-from #:weblocks/variables
                 #:*action-string*
-                #:*ignore-missing-actions*)
+                #:*ignore-missing-actions*
+                #:*current-app*)
   (:import-from #:lack.util
                 #:generate-random-id)
   ;; Just dependencies
@@ -41,7 +42,7 @@ situation (e.g. redirect, signal an error, etc.)."))
 
 
 (defmethod eval-action (app action-name arguments)
-  (let ((action (get-request-action action-name)))
+  (let ((action (get-request-action app action-name)))
 
     (unless action
       (on-missing-action app action-name))
@@ -116,7 +117,7 @@ it does not, signals an error."
       
       ;; if it is an action code
       (multiple-value-bind (res presentp)
-          (weblocks/app-actions:get-action function-or-action)
+          (weblocks/app-actions:get-action *current-app* function-or-action)
         (declare (ignore res))
         (if presentp
             function-or-action
@@ -151,7 +152,7 @@ Ex:
 
    It accepts any function as input and produces a string with JavaScript code."
   (let* ((action-code (make-action action)))
-    (format nil "initiateAction(\"~A\"); return false;"
+    (format nil "initiateActionWithArgs(\"~A\"); return false;"
             action-code)))
 
 
@@ -163,7 +164,7 @@ Ex:
    On form submit given action will be executed and all input values
    will be passed as arguments."
   (let* ((action-code (make-action action)))
-    (format nil "initiateFormAction(\"~A\", $(this), \"\"); return false;"
+    (format nil "initiateFormAction(\"~A\", $(this)); return false;"
             action-code)))
 
 
@@ -175,15 +176,16 @@ Ex:
       (gethash action-name code->action))))
 
 
-(defun get-request-action (action-name)
+(defun get-request-action (app action-name)
   "Gets an action from the request. If the request contains
    a parameter with name equal to *ACTION-STRING* variable, the action
    is looked up in the session and appropriate function is returned.
    If no action is in the parameter, returns NIL. If the action
    isn't in the session (somehow invalid), raises an assertion."
   (when action-name
-    (let* ((app-wide-action (weblocks/app-actions:get-action action-name))
-           (session-action (get-session-action action-name))
+    (let* ((app-wide-action (weblocks/app-actions:get-action app action-name))
+           (session-action (unless app-wide-action
+                             (get-session-action action-name)))
            (request-action (or app-wide-action session-action)))
       ;; TODO: rethink this form. May be throw a special condition instead of string
       (unless *ignore-missing-actions*

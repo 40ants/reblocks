@@ -1,14 +1,11 @@
 (defpackage #:weblocks/app-actions
   (:use #:cl)
-  (:import-from #:weblocks/variables
-                #:*current-app*)
   (:export
    #:get-app-actions
    #:get-action
    #:add-action
    #:remove-action
-   #:define-action
-   #:define-action/cc))
+   #:define-action))
 (in-package weblocks/app-actions)
 
 ;;
@@ -26,15 +23,18 @@
                (type-of app))
            *apps-actions*))
 
-(defun get-action (action)
+(defun normalize (action-name)
+  (string-downcase
+   (if (symbolp action-name)
+       (symbol-name action-name)
+       action-name)))
+
+(defun get-action (app action-name)
   "Returns the action function associated with this symbol in the current app"
-  (when (boundp '*current-app*)
-    (let ((action-table (get-app-actions *current-app*)))
-      (when action-table
-        (gethash (if (symbolp action)
-                     (symbol-name action)
-                     action)
-                 action-table)))))
+  (let ((action-table (get-app-actions app)))
+    (when action-table
+      (gethash (normalize action-name)
+               action-table))))
 
 (defun add-action (app-class action-name function-or-name)
   "Remove an action from a webapp.  action-name should be a string, or it
@@ -47,10 +47,7 @@
     (unless (action-table app-class)
       (setf (action-table app-class)
             (make-hash-table :test 'equal)))
-    (setf (gethash (string-downcase
-                    (if (symbolp action-name)
-                        (symbol-name action-name)
-                        action-name))
+    (setf (gethash (normalize action-name)
                    (action-table app-class)) 
           function-or-name)))
       
@@ -67,14 +64,8 @@
 (defmacro define-action (name app-class action-params &body body)
   "Adds a permanent action to the class's set of permanent actions"
   (assert (find-class app-class))
-  `(add-action ',app-class ',name
-               (lambda ,action-params
-                 ,@body)))
-
-(defmacro define-action/cc (name app-class action-params &body body)
-  "Adds a permanent action to the class's set of permanent actions"
-  (assert (find-class app-class))
-  `(add-action ',app-class ',name
-               (lambda/cc ,action-params
-                 ,@body)))
+  `(flet ((,name ,action-params
+            ,@body))
+     (add-action ',app-class ',name
+                 #',name)))
 

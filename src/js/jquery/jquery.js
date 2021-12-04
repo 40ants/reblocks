@@ -302,16 +302,15 @@ function onActionFailure(response) {
   }
 }
 
-function getActionUrl(actionCode, sessionString, isPure) {
+function getActionUrl(actionCode, isPure) {
   actionCode = unescape(actionCode);
-  if (!sessionString) sessionString = "";
   var scriptName = location.protocol + "//"
     + location.hostname
     + (location.port ? ":" + location.port : "")
     + location.pathname;
   var query = location.search;
   var url = scriptName + query + (query ? "&" : "?")
-    + sessionString + (sessionString ? "&" : "") + "action=" + actionCode;
+    + "action=" + actionCode;
 
   if(isPure)
     url += '&pure=true';
@@ -319,104 +318,45 @@ function getActionUrl(actionCode, sessionString, isPure) {
   return url;
 }
 
-function initiateActionWithArgs(actionCode, sessionString, args, method, url) {
+function initiateAction(actionCode, options) {
     startProgress();
 
-    if (!method) {
-        method = 'get';
-    }
-    if (!url) {
-        url = getActionUrl(actionCode, sessionString);
-    }
+    var method = (options.method || 'POST').toUpperCase();
+    var args = options.args || {};
+    var url = options.url || getActionUrl(actionCode);
+    var on_success = options.on_success;
+    var on_failure = options.on_failure || onActionFailure;
     
-    log('Fireing action', actionCode);
-    jQuery.ajax(
-        url,
-        {
-            type: method,
-            success: onActionSuccess,
-            error: onActionFailure,
-            data: args
-        }
-    );
-}
-
-function initiateActionWithArgsAndCallback(actionCode, sessionString, args){
-    startProgress();
-
-    var method = args.method || 'get';
-    var complete = args.complete;
-    var url = args.url || getActionUrl(actionCode, sessionString);
-    delete args['method'];
-    delete args['complete'];
-    delete args['url'];
     args.action = actionCode;
 
     log('Fireing action', actionCode);
-    options = {
+    
+    var ajax_options = {
         type: method,
         success: function(first, second, third) {
             log('Action was successful', actionCode);
             onActionSuccess(first, second, third);
-            complete && complete();
+            on_success && on_success();
         },
-        error: onActionFailure,
+        error: on_failure,
         data: args,
     }
-    if (method == 'post') {
-        options.contentType = 'application/json';
-        options.data = JSON.stringify(args)
+    if (method == 'POST') {
+        ajax_options.contentType = 'application/json';
+        ajax_options.data = JSON.stringify(args)
     }
-    jQuery.ajax(args.url, options);
+    jQuery.ajax(url, ajax_options);
 }
 
-var answerDeferred = jQuery.Deferred();
-var answer = null;
+function initiateFormAction(actionCode, form, options) {
+    // Hidden "action" field should not be serialized on AJAX
+    var options = options || {};
+    var action_arguments = form.serializeObjectWithSubmit();
+    delete(action_arguments['action']);
 
-function doActionAnswer(newAnswer){
-  answer = newAnswer;
-  answerDeferred.resolve();
-}
-
-// TODO: remove sessionString argument from all action related code,
-//       because it was removed in Weblocks lisp code after moving to Clack
-function initiateActionWithArgsAndDeferredCallback(actionCode, sessionString, args){
-  startProgress();
-
-  var deferredComplete = args['deferred-complete'];
-  delete args['deferred-complete'];
-
-  jQuery.when(answerDeferred).always(function(){
-    deferredComplete(answer);
-    answerDeferred = jQuery.Deferred();
-    answer = null;
-  });
-  return initiateActionWithArgsAndCallback(actionCode, sessionString, args);
-}
-
-/* convenience/compatibility function */
-function initiateAction(actionCode, sessionString) {
-  initiateActionWithArgs(actionCode, sessionString);
-}
-
-function initiateFormAction(actionCode, form, sessionString) {
-  // Hidden "action" field should not be serialized on AJAX
-  var serializedForm = form.serializeObjectWithSubmit();
-  delete(serializedForm['action']);
-
-  serializedForm['form-id'] = form.parents('.widget').attr('id');
-  initiateActionWithArgs(actionCode, sessionString, serializedForm, form.attr('method'));
-}
-
-function initiateFormActionWithCallback(actionCode, form, sessionString, callback) {
-  // Hidden "action" field should not be serialized on AJAX
-  var serializedForm = form.serializeObjectWithSubmit();
-  delete(serializedForm['action']);
-
-  serializedForm.method = form.attr('method');
-  serializedForm.complete = callback;
-
-  initiateActionWithArgsAndCallback(actionCode, sessionString, serializedForm);
+    options['args'] = action_arguments;
+    options['method'] = options['method'] || form.attr('method');
+    initiateAction(actionCode, options);
 }
 
 function disableIrrelevantButtons(currentButton) {
