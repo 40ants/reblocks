@@ -68,7 +68,7 @@
 (defsection-copy @readme @quickstart)
 
 
-(defmethod docs-config ((system (eql (asdf:find-system "weblocks"))))
+(defmethod docs-config ((system (eql (asdf:find-system "weblocks-docs"))))
   ;; 40ANTS-DOC-THEME-40ANTS system will bring
   ;; as dependency a full 40ANTS-DOC but we don't want
   ;; unnecessary dependencies here:

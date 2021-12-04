@@ -5,6 +5,7 @@
                 #:make-action
                 #:make-js-action
                 #:make-js-form-action
+                #:make-action-url
                 #:on-missing-action)
   (:import-from #:40ants-doc
                 #:defsection)
@@ -23,6 +24,7 @@
 (defsection @actions (:title "Actions"
                       :ignore-words ("AJAX"
                                      "JS"
+                                     "URL"
                                      "POST"
                                      "GET"
                                      "HTML"
@@ -161,4 +163,5 @@ but `args` attrbute is formed from the serialized form fields and default
   (make-action function)
   (make-js-action function)
   (make-js-form-action function)
+  (make-action-url function)
   (*action-string* variable))

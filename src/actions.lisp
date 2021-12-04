@@ -15,13 +15,20 @@
                 #:get-path)
   (:import-from #:quri
                 #:url-encode)
+  (:import-from #:named-readtables
+                #:in-readtable)
+  (:import-from #:pythonic-string-reader
+                #:pythonic-string-syntax)
   
   (:export #:eval-action
            #:on-missing-action
            #:make-action
            #:make-js-action
-           #:make-js-form-action))
+           #:make-js-form-action
+           #:make-action-url))
 (in-package weblocks/actions)
+
+(in-readtable pythonic-string-syntax)
 
 
 (defgeneric on-missing-action (app action-name)
@@ -101,9 +108,9 @@ situation (e.g. redirect, signal an error, etc.)."))
 
 (defun make-action (function-or-action)
   "Accepts a function or an existing action. If the value is a
-function, calls 'make-action' and returns its result. Otherwise,
-checks if the action already exists. If it does, returns the value. If
-it does not, signals an error."
+   function, adds it to the session actions and returns its unique code as a string.
+   Otherwise, checks if the action already exists. If it does, returns the argument as is.
+   If it does not, signals an error."
   (cond ((functionp function-or-action)
          ;; If it is a function, first we'll try to find
          ;; a code for it in the session.
@@ -132,16 +139,22 @@ it does not, signals an error."
                      (error "The value '~A' is not an existing action." function-or-action))))))))
 
 
-(defun make-action-url (action-code &optional (include-question-mark-p t))
-  "Accepts action code and returns a URL that can be used to render
-the action.
+(defun make-action-url (action-code)
+  """Accepts action code and returns a URL that can be used as `href` attribute of HTML link.
 
-Ex:
+   For example:
 
-\(make-action-url \"test-action\") => \"?action=test-action\""
+   ```cl-transcript
+   (let ((weblocks/request::*request*
+           (lack.request:make-request
+            '(:path-info "/blah/minor"))))
+     (weblocks/actions:make-action-url "test-action"))
+   => "/blah/minor?action=test-action"
+   ```
+  """
   (concatenate 'string
-               (get-path) ;; we need this for w3m
-               (if include-question-mark-p "?" "")
+               (get-path) ;; Current URL path
+               "?"
                *action-string*
                "="
                (url-encode (princ-to-string action-code))))

@@ -32,6 +32,7 @@ Changes
 * Function WEBLOCKS/ACTION::FUNCTION-OR-ACTION->ACTION was renamed to WEBLOCKS/ACTION:MAKE-ACTION and made public.
   Old WEBLOCKS/ACTION:MAKE-ACTION was renamed to WEBLOCKS/ACTION::INTERNAL-MAKE-ACTION.
 * JS function initiateActionWithArgs now uses POST method by default.
+* Function WEBLOCKS/ACTION:MAKE-ACTION-URL is exported now.
 
 These functions were removed:
 
