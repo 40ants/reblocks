@@ -1,4 +1,4 @@
-(defpackage #:weblocks/dependencies
+(uiop:define-package #:weblocks/dependencies
   (:use #:cl)
   (:import-from #:serapeum
                 #:defvar-unbound)
@@ -33,10 +33,8 @@
    #:make-dependency
    #:get-type
    #:render-in-ajax-response
-   #:register-dependencies
    #:with-collected-dependencies
    #:push-dependency
-   #:get-collected-dependencies
    #:push-dependencies))
 (in-package weblocks/dependencies)
 
@@ -73,6 +71,12 @@ if dependency should ber served from local server.")
     (declare (ignore dependency))))
 
 
+(defgeneric get-path (dependency)
+  (:documentation "Returns a path on local disk to serve dependency from.
+
+                   This could be a real source file or a cached version of remote dependency."))
+
+
 (defclass remote-dependency (dependency)
   ((remote-url :type string
                :initarg :remote-url
@@ -83,7 +87,7 @@ if dependency should ber served from local server.")
               :reader get-integrity
               :documentation "A hash, used by modern browsers for subresource integrity checking.
 
-See more information at: https://www.w3.org/TR/SRI/")
+See more information at: <https://www.w3.org/TR/SRI/>")
    (crossorigin :type (or string null)
                 :initarg :crossorigin
                 :initform "anonymous"

@@ -288,12 +288,13 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
          (setf (get ',name :args)
                ',args)
 
-         (ignore-words-in-package ',name
-                                  ',session-macro-name
-                                  ',request-macro-name
-                                  ',application-macro-name
-                                  ',with-macro-name
-                                  ',call-macro-name)
+         (let ((*package* (find-package "WEBLOCKS/HOOKS")))
+           (ignore-words-in-package ',name
+                                    ',session-macro-name
+                                    ',request-macro-name
+                                    ',application-macro-name
+                                    ',with-macro-name
+                                    ',call-macro-name))
          
          (defmacro ,session-macro-name (callback-name ,args &body body)
            ,docstring

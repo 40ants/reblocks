@@ -1,14 +1,21 @@
 (uiop:define-package #:weblocks/doc/dependencies
   (:use #:cl)
   (:import-from #:40ants-doc
-                #:defsection))
+                #:defsection)
+  (:import-from #:weblocks/dependencies
+                #:remote-dependency
+                #:dependency
+                #:local-dependency))
 (in-package weblocks/doc/dependencies)
 
 
 (defsection @dependencies (:title "Dependencies"
                            :ignore-words ("CSS"
                                           "JS"
+                                          "MIME"
+                                          "HTTP"
                                           "HTML"
+                                          "AJAX"
                                           "CDN"
                                           "LASS"
                                           "ASDF"
@@ -48,10 +55,28 @@
 
    Pay attention, this code uses WEBLOCKS-LASS:MAKE-DEPENDENCY function which is available from
    the separate asdf system WEBLOCKS-LASS.
+
+   ## API
 "
-  (weblocks/dependencies:dependency class)
-  (weblocks/dependencies:remote-dependency class)
-  (weblocks/dependencies:local-dependency class)
+  (dependency class)
+  (remote-dependency class)
+  (local-dependency class)
+
+  (weblocks/dependencies:*cache-remote-dependencies-in* variable)
+  (weblocks/dependencies:get-content-type function)
+  (weblocks/dependencies:get-crossorigin (reader remote-dependency))
+  (weblocks/dependencies:get-integrity (reader remote-dependency))
+  (weblocks/dependencies:get-path generic-function)
+  (weblocks/dependencies:get-route generic-function)
+  (weblocks/dependencies:get-type (reader dependency))
+  (weblocks/dependencies:get-url generic-function)
+  (weblocks/dependencies:infer-type-from generic-function)
+  (weblocks/dependencies:push-dependency function)
+  (weblocks/dependencies:push-dependencies function)
+  (weblocks/dependencies:render-in-ajax-response generic-function)
+  (weblocks/dependencies:render-in-head generic-function)
+  (weblocks/dependencies:serve generic-function)
+  (weblocks/dependencies:with-collected-dependencies macro)
   
   (weblocks/dependencies:make-dependency function)
   (weblocks/dependencies:get-dependencies generic-function))
