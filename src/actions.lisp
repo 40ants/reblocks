@@ -104,31 +104,32 @@ situation (e.g. redirect, signal an error, etc.)."))
 function, calls 'make-action' and returns its result. Otherwise,
 checks if the action already exists. If it does, returns the value. If
 it does not, signals an error."
-  (if (functionp function-or-action)
-      ;; If it is a function, first we'll try to find
-      ;; a code for it in the session.
-      (multiple-value-bind (code code-p)
-          (gethash function-or-action
-                   (weblocks/session:get-value 'action->code
-                                               (make-hash-table)))
-        (if code-p
-            code
-            (internal-make-action function-or-action)))
-      
-      ;; if it is an action code
-      (multiple-value-bind (res presentp)
-          (weblocks/app-actions:get-action *current-app* function-or-action)
-        (declare (ignore res))
-        (if presentp
-            function-or-action
-            (multiple-value-bind (res presentp)
-                (gethash function-or-action
-                         (weblocks/session:get-value 'code->action
-                                                     (make-hash-table)))
-              (declare (ignore res))
-              (if presentp
-                  function-or-action
-                  (error "The value '~A' is not an existing action." function-or-action)))))))
+  (cond ((functionp function-or-action)
+         ;; If it is a function, first we'll try to find
+         ;; a code for it in the session.
+         (multiple-value-bind (code code-p)
+             (gethash function-or-action
+                      (weblocks/session:get-value 'action->code
+                                                  (make-hash-table)))
+           (if code-p
+               code
+               (internal-make-action function-or-action))))
+
+        ;; if it is an action code
+        (t
+         (multiple-value-bind (res presentp)
+             (weblocks/app-actions:get-action *current-app* function-or-action)
+           (declare (ignore res))
+           (if presentp
+               function-or-action
+               (multiple-value-bind (res presentp)
+                   (gethash function-or-action
+                            (weblocks/session:get-value 'code->action
+                                                        (make-hash-table)))
+                 (declare (ignore res))
+                 (if presentp
+                     function-or-action
+                     (error "The value '~A' is not an existing action." function-or-action))))))))
 
 
 (defun make-action-url (action-code &optional (include-question-mark-p t))

@@ -16,6 +16,10 @@
 (in-package weblocks-test/actions)
 
 
+(weblocks/app:defapp test-app
+  :autostart nil)
+
+
 (deftest get-action-name-from-request-test
   (testing "Checking if get-action-name-from-request works with GET and POST"
     (with-session
@@ -85,16 +89,17 @@
 
 
 (deftest make-action-success
-  (with-session
-    (internal-make-action #'identity "abc123")
-    
-    (ok (equal (make-action "abc123")
-               "abc123")
-        "When action is defined make-action should return it's name")
+  (weblocks/app:with-app (make-instance 'test-app)
+    (with-session
+      (internal-make-action #'identity "abc123")
+     
+      (ok (equal (make-action "abc123")
+                 "abc123")
+          "When action is defined make-action should return it's name")
 
-    (ok (equal (make-action #'identity)
-               "abc123")
-        "This also should work if a function was given as an argument")))
+      (ok (equal (make-action #'identity)
+                 "abc123")
+          "This also should work if a function was given as an argument"))))
 
 
 (deftest make-action-url-test
