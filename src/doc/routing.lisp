@@ -41,7 +41,7 @@ Weblocks:
   (\"/tasks/\" (make-task-list)))
 ```
 
-* WEBLOCKS/SESSION:INIT must return an instance of the route
+* REBLOCKS/SESSION:INIT must return an instance of the route
   widget, using the MAKE-TASKS-ROUTES constructor created by DEFROUTES macro.
 
 Let's start. Note that you can see the full code
@@ -248,7 +248,7 @@ TODO> (defroutes tasks-routes
 Here the trailing `/?` allows to catch `/tasks/list` and `/tasks/list/`.
 
 And indeed, contrary to what we stated in the introduction,
-WEBLOCKS/RESPONSE:REDIRECT does not return a widget but signals a specital condition.
+REBLOCKS/RESPONSE:REDIRECT does not return a widget but signals a specital condition.
 
 
 # Final steps

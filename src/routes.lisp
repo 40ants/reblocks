@@ -26,7 +26,7 @@
 (defvar *routes*)
 (setf (documentation '*routes* 'variable)
       "This variable will be bound to the server's routes during request processing.
-       Most functions in the WEBLOCKS/ROUTES package will work only when this variable is bound.")
+       Most functions in the REBLOCKS/ROUTES package will work only when this variable is bound.")
 
 
 (defun make-routes ()

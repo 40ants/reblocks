@@ -27,7 +27,7 @@ requests. When a client sends its first request to a Weblocks application then
 a new session is started for it and a widget tree is associated with this session.
 
 This initial widget tree <sup>[1](#tree)</sup> is computed as defined by the application developer.
-A generic-function WEBLOCKS/SESSION:INIT is called by Weblocks
+A generic-function REBLOCKS/SESSION:INIT is called by Weblocks
 to initialize a new session. This function should return a single widget which become
 a root of a tree:
 

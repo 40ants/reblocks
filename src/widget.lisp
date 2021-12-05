@@ -53,8 +53,8 @@
 
 (defmacro defwidget (name direct-superclasses &body body)
   "A macro used to define new widget classes. Behaves exactly as
-defclass, except adds WEBLOCKS/WIDGETS/MOP:WIDGET-CLASS metaclass specification and
-inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
+defclass, except adds REBLOCKS/WIDGETS/MOP:WIDGET-CLASS metaclass specification and
+inherits from REBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
   `(progn
      (defclass ,name ,(remove-duplicates
                        (or direct-superclasses
@@ -66,9 +66,9 @@ inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
 (defgeneric render (widget)
   (:documentation "Define this method to render widget's content.
 
-                   Use WEBLOCKS/HTML:WITH-HTML macro to render HTML.
+                   Use REBLOCKS/HTML:WITH-HTML macro to render HTML.
                    You can use any other templating engine, just ensure
-                   it writes output to WEBLOCKS/HTML:*STREAM*
+                   it writes output to REBLOCKS/HTML:*STREAM*
 
                    Outer DIV wrapper will be added automaticall. It will
                    have CSS tags returned by GET-CSS-CLASSES."))
@@ -176,7 +176,7 @@ propagation code."))
                    The most obvious cases are transformation of strings and functions into the widget, but
                    these methods are already supplied by Weblocks.
 
-                   If WEBLOCKS/SESSION:INIT returns an object, then CREATE-WIDGET-FROM will be called on it
+                   If REBLOCKS/SESSION:INIT returns an object, then CREATE-WIDGET-FROM will be called on it
                    to create the root widget."))
 
 

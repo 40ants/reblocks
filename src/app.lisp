@@ -113,7 +113,7 @@ It also instantiates a defvar with an instance of this class.  This is intended
 to be the primary way a web application is defined.
 
 PREFIX - an URI from where this app should be available on the server. Read more
-about this in the WEBLOCKS/DOC/ROUTING:@ROUTING section.
+about this in the REBLOCKS/DOC/ROUTING:@ROUTING section.
 
 SUBCLASSES - if you want to inherit subclass behavior from other webapps, you
 can.  It's not likely to be needed much

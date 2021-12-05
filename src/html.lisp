@@ -34,7 +34,7 @@ They are based on [`Spinneret`][Spinneret] templating engine. Old version of Web
 [CL-WHO][CL-WHO] instead. But Spinneret is more flexible and what is more important,
 it escapes content by default, preventing HTML injection vulnerability.
 
-Most of the time, you only will need a WEBLOCKS/HTML:WITH-HTML macro, which is
+Most of the time, you only will need a REBLOCKS/HTML:WITH-HTML macro, which is
 similary to Spinneret's one, but binds a few special variables to a stream
 to write output to and how to write it:
 
@@ -53,7 +53,7 @@ to write output to and how to write it:
 ```
 
 Sometimes you might want to get a HTML string instead. In this case you might use
-WEBLOCKS/HTML:WITH-HTML-STRING:
+REBLOCKS/HTML:WITH-HTML-STRING:
 
 ```cl-transcript
 (reblocks/html:with-html-string
@@ -70,7 +70,7 @@ WEBLOCKS/HTML:WITH-HTML-STRING:
 ```
   
 You can use any other templating engine, just ensure
-it writes output to the WEBLOCKS/HTML:*STREAM* variable.
+it writes output to the REBLOCKS/HTML:*STREAM* variable.
 
 For more advanced UI, look at the [WEBLOCKS-UI][WEBLOCKS-UI] documentation.
 

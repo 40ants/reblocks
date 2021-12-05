@@ -288,7 +288,7 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
          (setf (get ',name :args)
                ',args)
 
-         (let ((*package* (find-package "WEBLOCKS/HOOKS")))
+         (let ((*package* (find-package "REBLOCKS/HOOKS")))
            (ignore-words-in-package ',name
                                     ',session-macro-name
                                     ',request-macro-name
@@ -369,7 +369,7 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
 (defhook action (app action-name action-arguments)
   "Called when action is processed.
 
-   Returns a result of WEBLOCKS/ACTIONS:EVAL-ACTION generic-function application
+   Returns a result of REBLOCKS/ACTIONS:EVAL-ACTION generic-function application
    to the arguments.")
 
 (defhook render (app)

@@ -78,7 +78,7 @@
                                (if *port*
                                    (format nil "http://localhost:~A/examples"
                                            *port*)
-                                   (error "Please start local documentation server using WEBLOCKS/DOC/EXAMPLE:START-SERVER or bind WEBLOCKS/DOC/EXAMPLE:*SERVER-URL* variable.")))
+                                   (error "Please start local documentation server using REBLOCKS/DOC/EXAMPLE:START-SERVER or bind REBLOCKS/DOC/EXAMPLE:*SERVER-URL* variable.")))
                            (example-path example)
                            iframe-id))
          (js-code "
@@ -146,7 +146,7 @@ window.addEventListener('message', function(e) {
    evaluated as part of the new anonymous package."
   (declare (ignore show-code-tab))
   
-  (let* ((package-name (format nil "WEBLOCKS/EXAMPLES/~A/~A"
+  (let* ((package-name (format nil "REBLOCKS/EXAMPLES/~A/~A"
                                (package-name (symbol-package name))
                                (symbol-name name)))
          (full-body (append (loop for another-example in (uiop:ensure-list inherits)

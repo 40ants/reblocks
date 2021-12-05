@@ -336,7 +336,7 @@ declared AUTOSTART unless APPS argument is provided."
                     :debug debug)
 
       ;; We need to set this bindings to allow apps to use
-      ;; WEBLOCKS/ROUTES:ADD-ROUTE without given a current
+      ;; REBLOCKS/ROUTES:ADD-ROUTE without given a current
       ;; routes mapping.
       (let ((reblocks/routes::*routes* (routes server)))
         (loop for app-class in (uiop:ensure-list

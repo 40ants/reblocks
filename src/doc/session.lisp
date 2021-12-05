@@ -30,7 +30,7 @@
 
   "
 The functions and macros to manipulate the session are defined in the
-WEBLOCKS/SESSION package.
+REBLOCKS/SESSION package.
 
 # Session initialization
 
@@ -47,9 +47,9 @@ When a new user opens the site in the browser, Reblocks does these steps:
 
 The method you define for INIT generic-function should return a root widget.
 This widget may include children and render them in it's
-WEBLOCKS/WIDGET:RENDER generic-function implementation.
+REBLOCKS/WIDGET:RENDER generic-function implementation.
 
-You will find an example of [INIT][generic-function] in the WEBLOCKS/DOC/QUICKSTART::@QUICKSTART section.
+You will find an example of [INIT][generic-function] in the REBLOCKS/DOC/QUICKSTART::@QUICKSTART section.
 
 # Storing data
 

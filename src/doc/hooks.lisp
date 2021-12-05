@@ -155,7 +155,7 @@
        \"Called around the code which creates a new user. Returns a user object.\")
    ```
 
-   This macro will define more macros inside WEBLOCKS/HOOKS package:
+   This macro will define more macros inside REBLOCKS/HOOKS package:
 
    * ON-SESSION-HOOK-CREATE-USER
    * ON-REQUEST-HOOK-CREATE-USER
@@ -184,7 +184,7 @@
    When we call this function, it will return our plist:
 
    ```
-   WEBLOCKS/DOC/HOOKS> (process-new-user-form 42 \"Sasha\" \"sasha@40ants.com\")
+   REBLOCKS/DOC/HOOKS> (process-new-user-form 42 \"Sasha\" \"sasha@40ants.com\")
    (:AGE 42 :NAME \"Sasha\" :EMAIL \"sasha@40ants.com\")
    ```
 
@@ -199,7 +199,7 @@
    and create a new user
 
    ```
-   WEBLOCKS/DOC/HOOKS> (process-new-user-form 9 \"Ilia\" \"ilia@40ants.com\")
+   REBLOCKS/DOC/HOOKS> (process-new-user-form 9 \"Ilia\" \"ilia@40ants.com\")
    Checking age of a new user
    (:AGE 9 :NAME \"Ilia\" :EMAIL \"ilia@40ants.com\")
    ```

@@ -24,14 +24,14 @@
                                           "WEBLOCKS-LASS:MAKE-DEPENDENCY"
                                           "WEBLOCKS-LASS"))
   "When Weblocks renders page, it collects CSS and JS dependencies from all widgets
-   by calling generic-function WEBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
+   by calling generic-function REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
    is called on the current app to get such common dependencies as jQuery and CSS framework.
 
-   If you are defining your own method for WEBLOCKS/DEPENDENCIES:GET-DEPENDENCIES generic-function,
-   make sure it returns a list of WEBLOCKS/DEPENDENCIES:DEPENDENCY objects.
+   If you are defining your own method for REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES generic-function,
+   make sure it returns a list of REBLOCKS/DEPENDENCIES:DEPENDENCY objects.
 
    Typically, you already have JS or CSS file somewhere near your ASDF system. In this case,
-   you can use WEBLOCKS/DEPENDENCIES:MAKE-DEPENDENCY function like this:
+   you can use REBLOCKS/DEPENDENCIES:MAKE-DEPENDENCY function like this:
 
    ```
    (defmethod reblocks/dependencies:get-dependencies ((app my-app))

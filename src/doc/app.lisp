@@ -32,7 +32,7 @@ The simplest way to define a new app is to use DEFAPP macro like this:
   :prefix \"/blog/\")
 ```
 
-And then to define a method for WEBLOCKS/SESSION:INIT generic-function. It will be called if
+And then to define a method for REBLOCKS/SESSION:INIT generic-function. It will be called if
 user will open https://yoursite.com/blog/ in his browser.
 
 ## API"

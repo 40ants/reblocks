@@ -108,11 +108,11 @@
                                       action-id
                                       (list "bob@40ants.com")))))
   .. <DEBUG> [12:11:44] reblocks/actions actions.lisp (eval-action) -
-  ..   Calling WEBLOCKS/ACTIONS::ACTION: #<FUNCTION (LAMBDA
+  ..   Calling REBLOCKS/ACTIONS::ACTION: #<FUNCTION (LAMBDA
   ..                                                    (
   ..                                                     EMAIL)) {7009B6328B}>
-  ..   with WEBLOCKS/ACTIONS::ARGUMENTS: ("bob@40ants.com")
-  ..   and WEBLOCKS/ACTIONS::ACTION-NAME: "11626:ca7db51f4b0ffb082dcc560eed1b6121707d9677"
+  ..   with REBLOCKS/ACTIONS::ARGUMENTS: ("bob@40ants.com")
+  ..   and REBLOCKS/ACTIONS::ACTION-NAME: "11626:ca7db51f4b0ffb082dcc560eed1b6121707d9677"
   ..   
   .. Changing email for user Bob to bob@40ants.com
   => NIL

@@ -76,7 +76,7 @@ TODO> (defapp tasks)
 By default, the name of the app defines the url where it is
 accessible. Here, the \"tasks\" app will be accessible under
 <http://localhost:40000/tasks>. We can change it with the
-PREFIX argument of WEBLOCKS/APP:DEFAPP:
+PREFIX argument of REBLOCKS/APP:DEFAPP:
 
 ```
 TODO> (defapp tasks
@@ -90,11 +90,11 @@ TODO> (reblocks/debug:on)
 TODO> (defvar *port* (find-port:find-port))
 TODO> (reblocks/server:start :port *port*)
  <INFO> [19:41:00] reblocks/server server.lisp (start) -
-  Starting weblocks WEBLOCKS/SERVER::PORT: 40000
-  WEBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
+  Starting weblocks REBLOCKS/SERVER::PORT: 40000
+  REBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
  <INFO> [19:41:00] reblocks/server server.lisp (start-server) -
-  Starting webserver on WEBLOCKS/SERVER::INTERFACE: \"localhost\"
-  WEBLOCKS/SERVER::PORT: 40000 DEBUG: T
+  Starting webserver on REBLOCKS/SERVER::INTERFACE: \"localhost\"
+  REBLOCKS/SERVER::PORT: 40000 DEBUG: T
  #<SERVER port=40000 running>
  (NIL)
 ```
@@ -135,7 +135,7 @@ TODO> (defwidget task ()
 ```
 
 This code defines a task widget, the building block of our
-application. WEBLOCKS/WIDGET:DEFWIDGET is similar to Common Lisp's DEFCLASS,
+application. REBLOCKS/WIDGET:DEFWIDGET is similar to Common Lisp's DEFCLASS,
 in fact it is only a wrapper around it. It takes a name, a list of
 super-classes (here `()`) and a list of slot definitions.
 
@@ -182,7 +182,7 @@ Now let's carry on with our application.
 
 Below we define a more general widget that contains a list of tasks,
 and we tell Weblocks how to display them by *specializing* the
-WEBLOCKS/WIDGET:RENDER generic-function for our newly defined classes:
+REBLOCKS/WIDGET:RENDER generic-function for our newly defined classes:
 
 ```
 TODO> (defwidget task-list ()
@@ -207,12 +207,12 @@ TODO> (defmethod render ((widget task-list))
                       (:li (render task))))))
 ```
 
-The WEBLOCKS/HTML:WITH-HTML macro uses
+The REBLOCKS/HTML:WITH-HTML macro uses
 [Spinneret][Spinneret] under the hood,
 but you can use anything that outputs html.
 
 We can check how the generated html looks like by calling
-WEBLOCKS/WIDGET:RENDER generic-function in the REPL:
+REBLOCKS/WIDGET:RENDER generic-function in the REPL:
 
 
 ```
@@ -297,7 +297,7 @@ The method ADD-TASK does only two simple things:
 
 This second point is really important because it allows Weblocks to render
 necessary parts of the page on the server and to inject it into the HTML DOM
-in the browser. Here it rerenders the task-list widget, but we can as well [WEBLOCKS/WIDGET:UPDATE][generic-function]
+in the browser. Here it rerenders the task-list widget, but we can as well [REBLOCKS/WIDGET:UPDATE][generic-function]
 a specific task widget, as we'll do soon.
 
 We are calling ADD-TASK from a lambda function to catch a
@@ -366,7 +366,7 @@ modified our task rendering function by adding a code to render a
 checkbox with an anonymous lisp function, attached to its
 ONCLICK attribute.
 
-The WEBLOCKS/ACTIONS:MAKE-JS-ACTION function returns a Javascript code,
+The REBLOCKS/ACTIONS:MAKE-JS-ACTION function returns a Javascript code,
 which calls back a lisp lambda function when evaluated in the browser.
 And because TOGGLE updates a Task widget, Weblocks returns on this
 callback a new prerendered HTML for this one task only.
@@ -383,7 +383,7 @@ As a homework:
    each task.
 2. Add the ability to sort tasks by name or by completion flag.
 3. Save tasks in a database (this [Cookbook chapter][DB-Cookbook] might help).
-4. Read the WEBLOCKS/DOC/ROUTING:@ROUTING section.
+4. Read the REBLOCKS/DOC/ROUTING:@ROUTING section.
 5. Read the rest of the documentation and make a real application, using the full
    power of Common Lisp.")
 
