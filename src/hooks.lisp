@@ -24,7 +24,7 @@
   callback functions used to hook into request evaluation."))
 
 
-(defparameter *application-hooks* (make-instance 'hooks)
+(defvar *application-hooks* (make-instance 'hooks)
   "A request hook object used in the application scope.")
 
 

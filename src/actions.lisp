@@ -13,8 +13,7 @@
   (:import-from #:weblocks/session)
   (:import-from #:weblocks/request
                 #:get-path)
-  (:import-from #:quri
-                #:url-encode)
+  (:import-from #:quri)
   (:import-from #:named-readtables
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
@@ -139,25 +138,32 @@ situation (e.g. redirect, signal an error, etc.)."))
                      (error "The value '~A' is not an existing action." function-or-action))))))))
 
 
-(defun make-action-url (action-code)
+(defun make-action-url (function-or-action-code &key (keep-query-params t))
   """Accepts action code and returns a URL that can be used as `href` attribute of HTML link.
 
-   For example:
+  For example:
 
-   ```cl-transcript
-   (let ((weblocks/request::*request*
-           (lack.request:make-request
-            '(:path-info "/blah/minor"))))
-     (weblocks/actions:make-action-url "test-action"))
-   => "/blah/minor?action=test-action"
-   ```
+  ```cl-transcript
+  (let ((weblocks/request::*request*
+          (lack.request:make-request
+           '(:path-info "/blah/minor"))))
+    (weblocks/actions:make-action-url "test-action"))
+  => "/blah/minor?action=test-action"
+  ```
+
+  If KEEP-QUERY-PARAMS is true (default), then all query arguments are preserved
+  and will be passed as arguments to the action.
   """
-  (concatenate 'string
-               (get-path) ;; Current URL path
-               "?"
-               *action-string*
-               "="
-               (url-encode (princ-to-string action-code))))
+  (let* ((action-code (make-action function-or-action-code))
+         (old-params (when keep-query-params
+                       (weblocks/request:get-parameters)))
+         (params (list* (cons *action-string*
+                              action-code)
+                        old-params)))
+    (concatenate 'string
+                 (get-path) ;; Current URL path
+                 "?"
+                 (quri:url-encode-params params))))
 
 
 (defun make-js-action (action)
