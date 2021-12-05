@@ -5,6 +5,14 @@
 dev
 ===
 
+* Added a welcome screen app on "/" that lists the active apps.
+* ``create-widget-from`` now returns a more user-friendly error
+  message, explaining that the widget is not of a good type, instead
+  of "no applicable generic method".
+
+0.39.2 (2020-02-11)
+===================
+
 Changes
 -------
 
@@ -13,7 +21,6 @@ Changes
 * Changed ``(weblocks/debug:on)`` and ``off`` so they set the log
   level to ``debug`` and ``warn``, respectively.
 * Changed a library used to log unhandled errors. Now `log4cl-extras <https://github.com/40ants/log4cl-extras>`_ is used, because it is a successor of `log4cl-json <https://github.com/40ants/log4cl-json>`_.
-
 
 0.39.1 (2020-01-20)
 ===================
@@ -27,7 +34,7 @@ Fixed
 
   https://github.com/fukamachi/woo/issues/84
 
-  Now Woo does not parses numberic headers and Weblocks has to do it itself.
+  Now Woo does not parses numeric headers and Weblocks has to do it itself.
 
 0.39.0 (2019-09-16)
 ===================
