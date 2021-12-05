@@ -14,7 +14,8 @@
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
   (:import-from #:weblocks/variables
-                #:*action-string*))
+                #:*action-string*
+                #:*ignore-missing-actions*))
 (in-package weblocks/doc/actions)
 
 
@@ -164,4 +165,5 @@ but `args` attrbute is formed from the serialized form fields and default
   (make-js-action function)
   (make-js-form-action function)
   (make-action-url function)
-  (*action-string* variable))
+  (*action-string* variable)
+  (*ignore-missing-actions* variable))

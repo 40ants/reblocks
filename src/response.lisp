@@ -108,7 +108,9 @@
 (defun add-header (name value)
   "Use this function to add a HTTP header:
 
-\(add-header :x-request-id 100500\)"
+   ```lisp
+   (add-header :x-request-id 100500)
+   ```"
 
   (declare (type symbol name)
            (type string value))

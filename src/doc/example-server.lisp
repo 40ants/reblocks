@@ -28,7 +28,8 @@
   (:import-from #:weblocks/server)
   (:import-from #:weblocks-file-server)
   (:import-from #:weblocks/hooks)
-  (:export #:start-server))
+  (:export #:start-server
+           #:update-examples))
 (in-package weblocks/doc/example-server)
 
 

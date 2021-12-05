@@ -71,18 +71,7 @@
              :content (get-description)))
     (when (get-keywords)
       (:meta :name "keywords"
-             :content (format nil "~{~A~^,~}" (get-keywords))))
-
-    ;; Headers aren't tags but any code snippets or functions
-    ;; returning strings.
-    ;; (dolist (header *current-page-headers*)
-    ;;   (etypecase header
-    ;;     (string (htm (str header)))
-    ;;     ;; TODO: Right now (old code) expects that function will write
-    ;;     ;; to special stream, but we need to make it return a value
-    ;;     ;; to be consistent with string headers.
-    ;;     ((or function symbol) (funcall header))))
-    ))
+             :content (format nil "~{~A~^,~}" (get-keywords))))))
 
 
 (defmethod render-body ((app app) body-string)

@@ -8,6 +8,7 @@
   (:import-from #:weblocks/actions)
   (:import-from #:weblocks/response)
   (:import-from #:weblocks/session)
+  (:import-from #:weblocks/variables)
   (:export
    #:@api))
 (in-package weblocks/doc/api)
@@ -18,4 +19,11 @@
                                  "URI"))
   (weblocks/widgets/mop:widget-class class)
   (weblocks/response:redirect function)
-  (weblocks/session:init generic-function))
+  (weblocks/session:init generic-function)
+
+  "## Variables"
+
+  (weblocks/variables:*current-app* variable)
+  (weblocks/variables:*default-content-type* variable)
+  (weblocks/variables:*invoke-debugger-on-error* variable)
+  (weblocks/variables:*backtrace-on-session-init-error* variable))

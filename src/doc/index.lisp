@@ -41,6 +41,8 @@
                 #:@apps)
   (:import-from #:weblocks/doc/response
                 #:@response)
+  (:import-from #:weblocks/doc/request
+                #:@request)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -60,6 +62,7 @@
 - @ACTIONS
 - @ROUTING
 - @DEPENDENCIES
+- @REQUEST
 - @RESPONSE
 - @HOOKS
 - @SESSION
@@ -101,6 +104,7 @@
                            @actions
                            @routing
                            @dependencies
+                           @request
                            @response
                            @hooks
                            @session

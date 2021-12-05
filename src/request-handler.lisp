@@ -43,10 +43,7 @@
                 #:on-error)
   (:import-from #:weblocks/variables
                 #:*backtrace-on-session-init-error*
-                #:*action-string*
-                ;; #:*style-warn-on-circular-dirtying*
-                ;; #:*style-warn-on-late-propagation*
-                #:*invoke-debugger-on-error*)
+                #:*action-string*)
   (:import-from #:weblocks/utils/timing
                 #:*timing-level*
                 #:*timing-report-fn*
@@ -264,20 +261,6 @@ customize behavior."))
 
 
 (defmethod handle-request ((app app))
-  ;; save it for splitting this up
-  ;; TODO: replace with lack.session
-  ;; (when (null weblocks::*session*)
-  ;;   (when (get-action-name-from-request)
-  ;;     (weblocks::expired-action-handler app))
-  ;;   (weblocks::start-session)
-  ;;   (when weblocks::*rewrite-for-session-urls*
-  ;;     (weblocks::redirect (weblocks::request-uri*))))
-  ;;
-  ;; (when weblocks::*maintain-last-session*
-  ;;   (bordeaux-threads:with-lock-held (weblocks::*maintain-last-session*)
-  ;;     (setf weblocks::*last-session*
-  ;;           weblocks::*session*)))
-
   (let ((path (get-path)))
     (log:debug "Handling client request" path)
 
@@ -300,16 +283,8 @@ customize behavior."))
     ;;   (weblocks::update-dialog-on-request)))
 
     (with-collected-dependencies
-      (let ((content nil) ;; this variable will be set to HTML string after rendering
-            ;; TODO: may be remove uri-tokens
-            ;; (weblocks::*uri-tokens*
-            ;;   (make-instance 'weblocks::uri-tokens
-            ;;                  :tokens (weblocks::tokenize-uri (get-path))))
-            ;; weblocks::*current-page-title*
-            ;; weblocks::*current-page-description*
-            ;; weblocks::*current-page-keywords*
-            ;; weblocks::*current-page-headers*
-            )
+      ;; This variable will be set to HTML string after rendering
+      (let ((content nil))
 
         
         (push-dependencies

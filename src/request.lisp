@@ -18,8 +18,7 @@
                 #:with-gensyms
                 #:assoc-value)
   (:import-from #:weblocks/variables
-                #:*action-string*
-                #:*ignore-missing-actions*)
+                #:*action-string*)
   (:import-from #:weblocks/utils/uri
                 #:query-string->alist)
 
@@ -148,8 +147,9 @@ without given header."
 
 (defun ajax-request-p (&key (request *request*))
   "Detects if the current request was initiated via AJAX by looking
-for 'X-Requested-With' http header. This function expects to be called
-in a dynamic hunchentoot environment."
+   for `X-Requested-With` http header. This function expects to be called
+   in a dynamic hunchentoot environment."
+  
   ;; Sometimes this function may be called not in the context of request,
   ;; to update an instance of the widgets in asyncrounous code and to send
   ;; it via websocket.
@@ -176,14 +176,16 @@ if there is an action involved (even if the user hits refresh)."
 
 (defun pure-request-p ()
   "Detects if the current request is declared as 'pure', i.e. affects
-no widgets or internal application state, but merely is a request for
-information. Such requests simply return the result of the function
-that represents the action and are used by some AJAX operations to
-retreive information (suggest block, etc). When such requests are
-satisfied, the actions have access to the session, the widgets, and
-all other parameters. However, none of the callbacks (see
-*on-pre-request*) are executed, no widgets are sent to the client,
-etc."
+   no widgets or internal application state, but merely is a request for
+   information.
+
+   Such requests simply return the result of the function
+   that represents the action and are used by some AJAX operations to
+   retreive information (suggest block, etc).
+
+   When such requests are satisfied, the actions have access to the session,
+   the widgets, and all other parameters. However, none of the callbacks
+   are executed, no widgets are sent to the client, etc."
   (string-equal (get-parameter "pure") "true"))
 
 
