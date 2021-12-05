@@ -321,6 +321,7 @@ function getActionUrl(actionCode, isPure) {
 function initiateAction(actionCode, options) {
     startProgress();
 
+    var options = options || {};
     var method = (options.method || 'POST').toUpperCase();
     var args = options.args || {};
     var url = options.url || getActionUrl(actionCode);

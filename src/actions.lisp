@@ -166,7 +166,7 @@ situation (e.g. redirect, signal an error, etc.)."))
 
    It accepts any function as input and produces a string with JavaScript code."
   (let* ((action-code (make-action action)))
-    (format nil "initiateActionWithArgs(\"~A\"); return false;"
+    (format nil "initiateAction(\"~A\"); return false;"
             action-code)))
 
 
