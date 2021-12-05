@@ -2,6 +2,13 @@
  ChangeLog
 ===========
 
+dev
+===
+
+* Added a welcome screen app on "/" that lists the active apps.
+* ``create-widget-from`` now returns a more user-friendly error
+  message, explaining that the widget is not of a good type, instead
+  of "no applicable generic method".
 
 0.39.2 (2020-02-11)
 ===================
@@ -9,10 +16,11 @@
 Changes
 -------
 
-* Added a welcome screen app on "/" that lists the active apps.
-* ``create-widget-from`` now returns a more user-friendly error
-  message, explaining that the widget is not of a good type, instead
-  of "no applicable generic method".
+* Added a log in ``weblocks/app:start`` to show the prefix of the app
+  that is started.
+* Changed ``(weblocks/debug:on)`` and ``off`` so they set the log
+  level to ``debug`` and ``warn``, respectively.
+* Changed a library used to log unhandled errors. Now `log4cl-extras <https://github.com/40ants/log4cl-extras>`_ is used, because it is a successor of `log4cl-json <https://github.com/40ants/log4cl-json>`_.
 
 0.39.1 (2020-01-20)
 ===================
