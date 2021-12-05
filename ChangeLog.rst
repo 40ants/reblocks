@@ -8,6 +8,10 @@ dev
 Added
 -----
 
+* Added a welcome screen app on "/" that lists the active apps.
+* ``create-widget-from`` now returns a more user-friendly error
+  message, explaining that the widget is not of a good type, instead
+  of "no applicable generic method".
 * A new function WEBLOCKS/PREVIEW:PREVIEW was added. Give it a widget and it will setup
   a server on a random port and show the widget in a browser!
 * Ability to run many web servers each on it's own HTTP port. Each server can have
@@ -18,8 +22,6 @@ New Functions:
 * WEBLOCKS/SERVER:SERVERS
 * WEBLOCKS/SERVER:RUNNING-P
 
-Changes
--------
 
 * Package WEBLOCKS/WIDGETS/BASE was removed. All code now is in the WEBLOCKS/WIDGET package,
   which was a nickname previously.
@@ -67,7 +69,6 @@ specification.
 jQuery was upgraded from 1.8.2 to 3.6.0. It's plugins jquery.ba-bbq.js and jquery-seq.js were
 turned off.
 
-
 0.39.1 (2020-01-20)
 ===================
 
@@ -80,7 +81,7 @@ Fixed
 
   https://github.com/fukamachi/woo/issues/84
 
-  Now Woo does not parses numberic headers and Weblocks has to do it itself.
+  Now Woo does not parses numeric headers and Weblocks has to do it itself.
 
 0.39.0 (2019-09-16)
 ===================

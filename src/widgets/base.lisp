@@ -1,4 +1,4 @@
-(uiop:define-package #:weblocks/widget
+(defpackage #:weblocks/widgets/base
   (:use #:cl)
   (:import-from #:weblocks/html
                 #:with-html
@@ -7,6 +7,8 @@
                 #:widget-class)
   (:import-from #:weblocks/commands
                 #:add-command)
+  (:import-from #:weblocks/request
+                #:ajax-request-p)
   (:import-from #:weblocks/widgets/dom
                 #:dom-id
                 #:dom-object-mixin)
@@ -24,10 +26,11 @@
            #:render
            #:get-css-classes
            #:get-html-tag
+           #:mark-dirty
            #:update
            #:widget
            #:create-widget-from))
-(in-package weblocks/widget)
+(in-package weblocks/widgets/base)
 
 
 (defclass widget (dom-object-mixin)
@@ -53,8 +56,8 @@
 
 (defmacro defwidget (name direct-superclasses &body body)
   "A macro used to define new widget classes. Behaves exactly as
-defclass, except adds WEBLOCKS/WIDGETS/MOP:WIDGET-CLASS metaclass specification and
-inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
+defclass, except adds 'widget-class' metaclass specification and
+inherits from 'widget' if no direct superclasses are provided."
   `(progn
      (defclass ,name ,(remove-duplicates
                        (or direct-superclasses
@@ -64,14 +67,7 @@ inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
 
 
 (defgeneric render (widget)
-  (:documentation "Define this method to render widget's content.
-
-                   Use WEBLOCKS/HTML:WITH-HTML macro to render HTML.
-                   You can use any other templating engine, just ensure
-                   it writes output to WEBLOCKS/HTML:*STREAM*
-
-                   Outer DIV wrapper will be added automaticall. It will
-                   have CSS tags returned by GET-CSS-CLASSES."))
+  (:documentation "Define this method to render widget's content."))
 
 
 (defgeneric get-html-tag (widget)
@@ -142,7 +138,7 @@ inherits from WEBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
 
 Usually this required as a result of an action execution.
 
-In the classic Weblocks there was a mark-dirty method. This one replaces it.
+In the old weblocks there was a mark-dirty method. This one replaces it.
 To make everything easier, the new protocol excludes \"propagation\". If you
 need to update other widgets, please define an \"update\" method for your widget.
 You can use :before or :after modifiers, to keep the current behavior and to add
@@ -174,22 +170,14 @@ propagation code."))
 (defgeneric create-widget-from (object)
   (:documentation "Methods of this generic should return an instance of subclass of weblocks/widget:widget
                    The most obvious cases are transformation of strings and functions into the widget, but
-                   these methods are already supplied by Weblocks.
+                   these methods are already supplied by Weblocks."))
 
-                   If WEBLOCKS/SESSION:INIT returns an object, then CREATE-WIDGET-FROM will be called on it
-                   to create the root widget."))
-
-
-(defmethod create-widget-from ((object t))
-  "If this method is called, that means that object is not of a proper type. Say it
-with an explicit error message."
-  (error "We tried to create a widget from ~A but this object type is not recognized. Did you forget to create a widget?~&There is no applicable method for REBLOCKS/WIDGET:CREATE-WIDGET-FROM."
-         object))
 
 (defmethod create-widget-from ((object widget))
   "If input is already a widget, then it is returned as is."
   object)
 
-
-
-
+(defmethod create-widget-from ((object t))
+  "If this method is called, that means that object is not of a proper type. Say it
+with an explicit error message."
+  (error "We tried to create a widget from ~a but this object type is not recognized. Did you forget to create a widget?~&There is no applicable method for CREATE-WIDGET-FROM." object))
