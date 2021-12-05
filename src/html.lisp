@@ -1,4 +1,4 @@
-(uiop:define-package #:weblocks/html
+(uiop:define-package #:reblocks/html
   (:use #:cl)
   (:import-from #:spinneret
                 #:*html*)
@@ -13,7 +13,7 @@
            #:*lang*
            #:with-html-string
            #:*stream*))
-(in-package weblocks/html)
+(in-package reblocks/html)
 
 (in-readtable pythonic-string-syntax)
 
@@ -39,7 +39,7 @@ similary to Spinneret's one, but binds a few special variables to a stream
 to write output to and how to write it:
 
 ```cl-transcript
-(weblocks/html:with-html
+(reblocks/html:with-html
    (:ul
     (:li "One")
     (:li "Two")
@@ -56,7 +56,7 @@ Sometimes you might want to get a HTML string instead. In this case you might us
 WEBLOCKS/HTML:WITH-HTML-STRING:
 
 ```cl-transcript
-(weblocks/html:with-html-string
+(reblocks/html:with-html-string
    (:ul
     (:li "One")
     (:li "Two")

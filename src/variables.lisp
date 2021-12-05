@@ -1,4 +1,4 @@
-(uiop:define-package #:weblocks/variables
+(uiop:define-package #:reblocks/variables
   (:use #:cl)
   (:import-from #:serapeum
                 #:defvar-unbound)
@@ -9,7 +9,7 @@
            #:*action-string*
            #:*current-app*))
 
-(in-package weblocks/variables)
+(in-package reblocks/variables)
 
 (defvar-unbound *current-app*
   "A currently active web application.")
@@ -26,4 +26,4 @@
 
 (defvar *action-string* "action"
   "A string used to pass actions from a client to the server. See
-  'weblocks/request:get-request-action'.")
+  'reblocks/request:get-request-action'.")

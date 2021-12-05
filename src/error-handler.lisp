@@ -1,30 +1,30 @@
-(defpackage #:weblocks/error-handler
+(defpackage #:reblocks/error-handler
   (:use #:cl)
-  (:import-from #:weblocks/debug)
+  (:import-from #:reblocks/debug)
   (:import-from #:trivial-backtrace
                 #:print-backtrace)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:get-response
                 #:immediate-response)
   (:import-from #:log4cl)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*current-app*
                 #:*invoke-debugger-on-error*)
   (:import-from #:alexandria
                 #:with-gensyms)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html-string)
   
   (:export #:on-error
            #:with-handled-errors))
-(in-package weblocks/error-handler)
+(in-package reblocks/error-handler)
 
 
 (defgeneric on-error (app condition)
   (:documentation "This method is called when some unhandled error was raised by application.
-                   It should call weblocks/response:immediate-response like this:
+                   It should call reblocks/response:immediate-response like this:
 
-                       \(weblocks/response:immediate-response
+                       \(reblocks/response:immediate-response
                            \"Unhandled condition\"
                            :code 500)
 
@@ -44,7 +44,7 @@
     (let ((page (with-html-string
                   (:h1 "Unhandled exception")
                   (:h2 ("~A" condition))
-                  (when (and (weblocks/debug:status)
+                  (when (and (reblocks/debug:status)
                              traceback)
                     (:pre traceback)))))
       (immediate-response page

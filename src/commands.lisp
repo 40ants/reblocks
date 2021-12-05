@@ -1,8 +1,8 @@
-(defpackage #:weblocks/commands
+(defpackage #:reblocks/commands
   (:use #:cl)
   (:export #:add-command
            #:get-collected-commands))
-(in-package weblocks/commands)
+(in-package reblocks/commands)
 
 
 (defvar *commands* nil

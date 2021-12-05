@@ -1,10 +1,10 @@
-(uiop:define-package #:weblocks/doc/session
+(uiop:define-package #:reblocks/doc/session
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/doc/example
+  (:import-from #:reblocks/doc/example
                 #:defexample)
-  (:import-from #:weblocks/session
+  (:import-from #:reblocks/session
                 #:with-session
                 #:get-value
                 #:delete-value
@@ -18,7 +18,7 @@
                 #:make-session-middleware
                                          
                 #:get-number-of-anonymous-sessions))
-(in-package weblocks/doc/session)
+(in-package reblocks/doc/session)
 
 
 (defsection @session (:title "Using the Session"
@@ -78,21 +78,21 @@ For example, you might want to store information about the current user if he lo
 
 
 (defexample login-example ()
-  (weblocks/widget:defwidget login-example ()
+  (reblocks/widget:defwidget login-example ()
     ())
 
-  (defmethod weblocks/widget:render ((widget login-example))
-    (weblocks/html:with-html
+  (defmethod reblocks/widget:render ((widget login-example))
+    (reblocks/html:with-html
       (flet ((login-callback (&key login &allow-other-keys)
-               (setf (weblocks/session:get-value :user) login)
-               (weblocks/widget:update widget))
+               (setf (reblocks/session:get-value :user) login)
+               (reblocks/widget:update widget))
              (reset-callback (&rest args)
                (declare (ignore args))
-               (weblocks/session:reset)
-               (weblocks/widget:update widget)))
-        (let* ((login-code (weblocks/actions:make-js-form-action #'login-callback))
-               (reset-code (weblocks/actions:make-js-form-action #'reset-callback))
-               (user (weblocks/session:get-value :user)))
+               (reblocks/session:reset)
+               (reblocks/widget:update widget)))
+        (let* ((login-code (reblocks/actions:make-js-form-action #'login-callback))
+               (reset-code (reblocks/actions:make-js-form-action #'reset-callback))
+               (user (reblocks/session:get-value :user)))
 
           (:h3 "Session management example")
           

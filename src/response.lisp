@@ -1,17 +1,17 @@
-(uiop:define-package #:weblocks/response
+(uiop:define-package #:reblocks/response
   (:use #:cl)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:get-uri
                 #:ajax-request-p
                 #:get-header)
-  (:import-from #:weblocks/js/base
+  (:import-from #:reblocks/js/base
                 #:with-javascript-to-string
                 #:with-javascript)
-  (:import-from #:weblocks/actions
+  (:import-from #:reblocks/actions
                 #:on-missing-action)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:get-prefix)
-  (:import-from #:weblocks/commands
+  (:import-from #:reblocks/commands
                 #:add-command)
   (:import-from #:quri)
   (:import-from #:alexandria
@@ -30,7 +30,7 @@
            #:get-content-type
            #:add-retpath-to
            #:response))
-(in-package weblocks/response)
+(in-package reblocks/response)
 
 
 (defvar *custom-headers* nil
@@ -133,7 +133,7 @@
     (quri:render-uri new-url)))
 
 
-(defun add-retpath-to (uri &key (retpath (weblocks/request:get-uri)))
+(defun add-retpath-to (uri &key (retpath (reblocks/request:get-uri)))
   "Adds a \"retpath\" GET parameter to the giving URL.
 
    Keeps all other parameters and overwrites \"retpath\" parameter if it is

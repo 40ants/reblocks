@@ -1,17 +1,17 @@
-(uiop:define-package #:weblocks/doc/example
+(uiop:define-package #:reblocks/doc/example
   (:use #:cl)
   (:import-from #:clack-handler-hunchentoot)
   (:import-from #:40ants-doc/locatives/base
                 #:define-locative-type)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:defapp)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:alexandria
                 #:hash-table-keys)
   (:import-from #:serapeum)
   (:import-from #:40ants-doc/commondoc/builder)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:defhook)
   (:import-from #:global-vars
                 #:define-global-var)
@@ -21,7 +21,7 @@
            #:update-examples
            #:*server-url*
            #:start-doc-server))
-(in-package weblocks/doc/example)
+(in-package reblocks/doc/example)
 
 
 (defvar *server-url* nil
@@ -91,7 +91,7 @@ window.addEventListener('message', function(e) {
 } , false);
 "))
     (commondoc-markdown/raw-html:make-raw-html-block
-     (weblocks/html:with-html-string
+     (reblocks/html:with-html-string
        (:div :class "demo"
              (:iframe :id iframe-id
                       :src full-url
@@ -127,7 +127,7 @@ window.addEventListener('message', function(e) {
 
 
 (defun register (example)
-  (weblocks/hooks:call-register-example-hook example))
+  (reblocks/hooks:call-register-example-hook example))
 
 
 (defmacro defexample (name (&key (width "100%")

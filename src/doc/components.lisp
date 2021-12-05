@@ -1,9 +1,9 @@
-(defpackage #:weblocks/doc/components
+(defpackage #:reblocks/doc/components
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
   (:export #:@components))
-(in-package weblocks/doc/components)
+(in-package reblocks/doc/components)
 
 
 (defsection @components (:title "Components"
@@ -32,7 +32,7 @@ to initialize a new session. This function should return a single widget which b
 a root of a tree:
 
 ```
-TODO> (defmethod weblocks/session:init ((app tasks))
+TODO> (defmethod reblocks/session:init ((app tasks))
          (declare (ignorable app))
          (make-task-list \"Make my first Weblocks app\"
                          \"Deploy it somewhere\"
@@ -67,13 +67,13 @@ It is often useful to set up closures as actions.
 Example of typical action usage:
 
 ```
-(weblocks/widget:defwidget counter ()
+(reblocks/widget:defwidget counter ()
   ((count :accessor count-of :initform 0)))
 
-(defmethod weblocks/widget:render ((widget counter))
+(defmethod reblocks/widget:render ((widget counter))
   (with-html
     (:p (format nil \"The counter is at ~D.\" (count-of widget)))
-    (:p (:button :onclick (weblocks/actions:make-js-action
+    (:p (:button :onclick (reblocks/actions:make-js-action
                             (lambda (&rest args)
                               ;; closes over WIDGET.
                               (incf (count-of widget))))

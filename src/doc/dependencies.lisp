@@ -1,12 +1,12 @@
-(uiop:define-package #:weblocks/doc/dependencies
+(uiop:define-package #:reblocks/doc/dependencies
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:remote-dependency
                 #:dependency
                 #:local-dependency))
-(in-package weblocks/doc/dependencies)
+(in-package reblocks/doc/dependencies)
 
 
 (defsection @dependencies (:title "Dependencies"
@@ -34,8 +34,8 @@
    you can use WEBLOCKS/DEPENDENCIES:MAKE-DEPENDENCY function like this:
 
    ```
-   (defmethod weblocks/dependencies:get-dependencies ((app my-app))
-     (list* (weblocks/dependencies:make-dependency \"js/my-app.js\"
+   (defmethod reblocks/dependencies:get-dependencies ((app my-app))
+     (list* (reblocks/dependencies:make-dependency \"js/my-app.js\"
                                                    :system :some-asdf-system)
             (call-next-method)))
    ```
@@ -44,7 +44,7 @@
    the method. Here we define CSS code for the widget:
 
    ```
-   (defmethod weblocks/dependencies:get-dependencies ((widget my-custom-widget))
+   (defmethod reblocks/dependencies:get-dependencies ((widget my-custom-widget))
      (list*
       (weblocks-lass:make-dependency
        `(.my-custom-widget
@@ -62,23 +62,23 @@
   (remote-dependency class)
   (local-dependency class)
 
-  (weblocks/dependencies:*cache-remote-dependencies-in* variable)
-  (weblocks/dependencies:get-content-type function)
-  (weblocks/dependencies:get-crossorigin (reader remote-dependency))
-  (weblocks/dependencies:get-integrity (reader remote-dependency))
-  (weblocks/dependencies:get-path generic-function)
-  (weblocks/dependencies:get-route generic-function)
-  (weblocks/dependencies:get-type (reader dependency))
-  (weblocks/dependencies:get-url generic-function)
-  (weblocks/dependencies:infer-type-from generic-function)
-  (weblocks/dependencies:push-dependency function)
-  (weblocks/dependencies:push-dependencies function)
-  (weblocks/dependencies:render-in-ajax-response generic-function)
-  (weblocks/dependencies:render-in-head generic-function)
-  (weblocks/dependencies:serve generic-function)
-  (weblocks/dependencies:with-collected-dependencies macro)
+  (reblocks/dependencies:*cache-remote-dependencies-in* variable)
+  (reblocks/dependencies:get-content-type function)
+  (reblocks/dependencies:get-crossorigin (reader remote-dependency))
+  (reblocks/dependencies:get-integrity (reader remote-dependency))
+  (reblocks/dependencies:get-path generic-function)
+  (reblocks/dependencies:get-route generic-function)
+  (reblocks/dependencies:get-type (reader dependency))
+  (reblocks/dependencies:get-url generic-function)
+  (reblocks/dependencies:infer-type-from generic-function)
+  (reblocks/dependencies:push-dependency function)
+  (reblocks/dependencies:push-dependencies function)
+  (reblocks/dependencies:render-in-ajax-response generic-function)
+  (reblocks/dependencies:render-in-head generic-function)
+  (reblocks/dependencies:serve generic-function)
+  (reblocks/dependencies:with-collected-dependencies macro)
   
-  (weblocks/dependencies:make-dependency function)
-  (weblocks/dependencies:get-dependencies generic-function))
+  (reblocks/dependencies:make-dependency function)
+  (reblocks/dependencies:get-dependencies generic-function))
 
 

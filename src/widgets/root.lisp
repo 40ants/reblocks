@@ -1,17 +1,17 @@
-(defpackage #:weblocks/widgets/root
+(defpackage #:reblocks/widgets/root
   (:use #:cl)
   (:shadow #:get)
   ;; Just dependencies
-  (:import-from #:weblocks/session)
+  (:import-from #:reblocks/session)
   
   (:export #:get))
-(in-package weblocks/widgets/root)
+(in-package reblocks/widgets/root)
 
 
 (defun get ()
-  (weblocks/session:get-value 'root-widget))
+  (reblocks/session:get-value 'root-widget))
 
 
 (defun (setf get) (value)
-    (setf (weblocks/session:get-value 'root-widget)
+    (setf (reblocks/session:get-value 'root-widget)
      value))

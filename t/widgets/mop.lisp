@@ -1,12 +1,12 @@
 (defpackage #:weblocks-test/widgets/mop
   (:use #:cl
         #:rove)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:widget)
   (:import-from #:closer-mop
                 #:effective-slot-definition-class
                 #:direct-slot-definition-class)
-  (:import-from #:weblocks/widgets/mop
+  (:import-from #:reblocks/widgets/mop
                 #:widget-effective-slot-definition
                 #:widget-direct-slot-definition))
 (in-package weblocks-test/widgets/mop)

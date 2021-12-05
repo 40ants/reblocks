@@ -1,11 +1,11 @@
-(defpackage #:weblocks/commands-hook
+(defpackage #:reblocks/commands-hook
   (:use #:cl)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:on-application-hook-handle-http-request
                 #:call-next-hook)
-  (:import-from #:weblocks/commands
+  (:import-from #:reblocks/commands
                 #:*commands*))
-(in-package weblocks/commands-hook)
+(in-package reblocks/commands-hook)
 
 
 (on-application-hook-handle-http-request

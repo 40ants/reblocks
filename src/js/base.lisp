@@ -1,6 +1,6 @@
-(defpackage #:weblocks/js/base
+(defpackage #:reblocks/js/base
   (:use #:cl)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html
                 #:with-html-string)
   (:import-from #:cl-ppcre
@@ -11,7 +11,7 @@
    #:make-js-backend
    #:with-javascript-to-string
    #:with-javascript))
-(in-package weblocks/js/base)
+(in-package reblocks/js/base)
 
 
 (defclass js-backend ()

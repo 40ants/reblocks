@@ -1,6 +1,6 @@
-(defpackage #:weblocks/request
+(defpackage #:reblocks/request
   (:use #:cl)
-  (:import-from #:weblocks/app-actions)
+  (:import-from #:reblocks/app-actions)
   
   (:import-from #:metacopy
                 #:copy-thing)
@@ -17,13 +17,13 @@
   (:import-from #:alexandria
                 #:with-gensyms
                 #:assoc-value)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*action-string*)
-  (:import-from #:weblocks/utils/uri
+  (:import-from #:reblocks/utils/uri
                 #:query-string->alist)
 
   ;; Just to add dependency
-  (:import-from #:weblocks/session)
+  (:import-from #:reblocks/session)
   (:import-from #:quri)
   
   (:export #:get-parameters
@@ -40,7 +40,7 @@
            #:get-path
            #:with-request
            #:pure-request-p))
-(in-package weblocks/request)
+(in-package reblocks/request)
 
 
 (defvar *request* nil
@@ -171,7 +171,7 @@ if there is an action involved (even if the user hits refresh)."
     (and
      (null action-name)
      (equalp (get-path)
-             (weblocks/session:get-value 'last-request-path)))))
+             (reblocks/session:get-value 'last-request-path)))))
 
 
 (defun pure-request-p ()
@@ -216,7 +216,7 @@ if there is an action involved (even if the user hits refresh)."
                       ,@body)))
      
        (unless (ajax-request-p)
-         (setf (weblocks/session:get-value 'last-request-path)
+         (setf (reblocks/session:get-value 'last-request-path)
                (get-path)))
 
        ,result)))

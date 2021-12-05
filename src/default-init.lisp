@@ -1,41 +1,41 @@
-(defpackage #:weblocks/default-init
+(defpackage #:reblocks/default-init
   (:use #:cl)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:app-active-p
                 #:get-active-apps
                 #:get-prefix
                 #:webapp-name
                 #:defapp)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:render
                 #:defwidget)
-  (:import-from #:weblocks/session
+  (:import-from #:reblocks/session
                 #:init)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:widget)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html-string)
-  (:import-from #:weblocks/widgets/string-widget
+  (:import-from #:reblocks/widgets/string-widget
                 #:make-string-widget)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:*current-app*)
   (:export #:welcome-screen-app))
-(in-package weblocks/default-init)
+(in-package reblocks/default-init)
 
 
 (defmethod init ((app t))
-  (let ((quickstart-url "http://40ants.com/weblocks/quickstart.html"))
+  (let ((quickstart-url "http://40ants.com/reblocks/quickstart.html"))
     (make-string-widget
      (with-html-string
-       (:h1 "No weblocks/session:init method defined.")
+       (:h1 "No reblocks/session:init method defined.")
        (:p "Please define a method weblocks.session:init to initialize a session.")
        (:p "It could be something simple, like this one:")
        (:pre
         (:code
-         ("(defmethod weblocks/session:init ((app ~A))  
+         ("(defmethod reblocks/session:init ((app ~A))  
             \"Hello world!\")" (string-downcase
                                 (type-of *current-app*)))))
 
@@ -61,13 +61,13 @@
   ())
 
 (defmethod render ((widget welcome-screen-widget))
-  (let ((apps (weblocks/app:get-active-apps)))
+  (let ((apps (reblocks/app:get-active-apps)))
     (with-html
       (:h1 "Welcome to Weblocks!")
       (:div "To learn more about Weblocks, head over its "
-            (:a :href "http://40ants.com/weblocks/" "documentation.")
+            (:a :href "http://40ants.com/reblocks/" "documentation.")
             " To learn how to create apps and widgets, see the "
-            (:a :href "http://40ants.com/weblocks/quickstart.html" "quickstart guide")
+            (:a :href "http://40ants.com/reblocks/quickstart.html" "quickstart guide")
             ".")
       (:h3)
       (when apps
@@ -77,22 +77,22 @@
              (let ((prefix (get-prefix app)))
                (:ul
                 (:li
-                 (:a :href prefix (format nil "~a" (weblocks/app::webapp-name app)))
+                 (:a :href prefix (format nil "~a" (reblocks/app::webapp-name app)))
                  (:span (format nil " on \"~a\"" prefix))))))
 
         (:h3)
         (when (app-active-p 'welcome-screen-app)
           (:div "This is the welcome screen, a Weblocks app itself.")
           (:div "If you want to stop it, do:")
-          (:code "(weblocks/app:stop 'weblocks/default-init:welcome-screen-app)")
+          (:code "(reblocks/app:stop 'reblocks/default-init:welcome-screen-app)")
           (:div "And in case you want to disable it before the server starts, do:")
-          (:code "(setf weblocks/default-init::*welcome-screen-enabled* nil)")
+          (:code "(setf reblocks/default-init::*welcome-screen-enabled* nil)")
           (:h3)
           (:div "If you want to bind your app to \"/\", use the prefix argument of defapp:")
           (:code "(defapp myapp :prefix \"/\")"))))))
 
-(defmethod weblocks/session:init ((app welcome-screen-app))
+(defmethod reblocks/session:init ((app welcome-screen-app))
   (make-instance 'welcome-screen-widget))
 
 (when *welcome-screen-enabled*
-  (weblocks/app:start 'welcome-screen-app))
+  (reblocks/app:start 'welcome-screen-app))

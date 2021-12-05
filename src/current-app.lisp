@@ -1,12 +1,12 @@
-(defpackage #:weblocks/current-app
+(defpackage #:reblocks/current-app
   (:use #:cl)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:*current-app*
                 #:get-prefix)
   (:export
    #:make-uri
    #:get-prefix))
-(in-package weblocks/current-app)
+(in-package reblocks/current-app)
 
 
 (defun get-prefix ()

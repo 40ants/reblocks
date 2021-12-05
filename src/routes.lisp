@@ -1,7 +1,7 @@
-(defpackage #:weblocks/routes
+(defpackage #:reblocks/routes
   (:use #:cl)
   (:import-from #:routes)
-  (:import-from #:weblocks/error-handler
+  (:import-from #:reblocks/error-handler
                 #:with-handled-errors)
   (:export
    #:add-route
@@ -10,7 +10,7 @@
    #:get-route
    #:defroute
    #:add-routes))
-(in-package weblocks/routes)
+(in-package reblocks/routes)
 
 
 (defclass route (routes:route)
@@ -124,6 +124,6 @@
 
          ;; Also, if app is currently active, then we should add this route to
          ;; the active mapping
-         ;; (when (weblocks/app:app-active-p ',app)
+         ;; (when (reblocks/app:app-active-p ',app)
          ;;   (add-route ,route-var))
          ))))

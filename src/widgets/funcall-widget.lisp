@@ -1,13 +1,13 @@
-(defpackage #:weblocks/widgets/funcall-widget
+(defpackage #:reblocks/widgets/funcall-widget
   (:use #:cl)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:widget-continuation
                 #:render
                 #:defwidget)
   (:export
    #:make-funcall-widget))
-(in-package weblocks/widgets/funcall-widget)
+(in-package reblocks/widgets/funcall-widget)
 
 
 (defwidget funcall-widget ()

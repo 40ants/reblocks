@@ -1,29 +1,29 @@
-(defpackage #:weblocks/doc/api
+(defpackage #:reblocks/doc/api
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/app)
-  (:import-from #:weblocks/widget)
-  (:import-from #:weblocks/html)
-  (:import-from #:weblocks/actions)
-  (:import-from #:weblocks/response)
-  (:import-from #:weblocks/session)
-  (:import-from #:weblocks/variables)
+  (:import-from #:reblocks/app)
+  (:import-from #:reblocks/widget)
+  (:import-from #:reblocks/html)
+  (:import-from #:reblocks/actions)
+  (:import-from #:reblocks/response)
+  (:import-from #:reblocks/session)
+  (:import-from #:reblocks/variables)
   (:export
    #:@api))
-(in-package weblocks/doc/api)
+(in-package reblocks/doc/api)
 
 
 (defsection @api (:title "Unsorted API"
                   :ignore-words ("API"
                                  "URI"))
-  (weblocks/widgets/mop:widget-class class)
-  (weblocks/response:redirect function)
-  (weblocks/session:init generic-function)
+  (reblocks/widgets/mop:widget-class class)
+  (reblocks/response:redirect function)
+  (reblocks/session:init generic-function)
 
   "## Variables"
 
-  (weblocks/variables:*current-app* variable)
-  (weblocks/variables:*default-content-type* variable)
-  (weblocks/variables:*invoke-debugger-on-error* variable)
-  (weblocks/variables:*backtrace-on-session-init-error* variable))
+  (reblocks/variables:*current-app* variable)
+  (reblocks/variables:*default-content-type* variable)
+  (reblocks/variables:*invoke-debugger-on-error* variable)
+  (reblocks/variables:*backtrace-on-session-init-error* variable))

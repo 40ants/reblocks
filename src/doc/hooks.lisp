@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/hooks
+(uiop:define-package #:reblocks/doc/hooks
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:handle-http-request
                 #:start-weblocks
                 #:stop-weblocks
@@ -15,7 +15,7 @@
   (:import-from #:alexandria
                 #:ensure-symbol
                 #:symbolicate))
-(in-package weblocks/doc/hooks)
+(in-package reblocks/doc/hooks)
 
 
 (40ants-doc/locatives/base:define-locative-type hook ()
@@ -34,7 +34,7 @@
   (declare (ignore locative-args))
   (40ants-doc/source-api:find-source
    (macro-function (ensure-symbol (symbolicate "WITH-" symbol "-HOOK")
-                                  :weblocks/hooks))))
+                                  :reblocks/hooks))))
 
 
 (defmethod 40ants-doc/commondoc/builder:reference-to-commondoc
@@ -119,11 +119,11 @@
                       </html>\"
                         html))
 
-   (weblocks/hooks:on-application-hook-render
+   (reblocks/hooks:on-application-hook-render
      collect-sql-queries-on-render (app)
      
      (let* ((*collect-sql* t)
-            (resulting-html (weblocks/hooks:call-next-hook)))
+            (resulting-html (reblocks/hooks:call-next-hook)))
        (inject-debug-panel resulting-html)))
    ```
 
@@ -151,7 +151,7 @@
 
 
    ```
-   (weblocks/hooks:defhook create-user (age name email)
+   (reblocks/hooks:defhook create-user (age name email)
        \"Called around the code which creates a new user. Returns a user object.\")
    ```
 
@@ -172,7 +172,7 @@
 
    ```
    (defun process-new-user-form (age name email)
-     (weblocks/hooks:with-create-user-hook (age name email)
+     (reblocks/hooks:with-create-user-hook (age name email)
        ;; For simplicity, we using a plist here.
        ;; A real application should store the record
        ;; in a database and return class instance.
@@ -191,7 +191,7 @@
    Now let's add a hook:
 
    ```
-   (weblocks/hooks:on-application-hook-create-user
+   (reblocks/hooks:on-application-hook-create-user
        check-age (age name email)
     (format t \"Checking age of a new user\"))
    ```

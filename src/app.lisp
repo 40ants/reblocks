@@ -1,23 +1,23 @@
-(uiop:define-package #:weblocks/app
+(uiop:define-package #:reblocks/app
   (:use #:cl
         #:f-underscore)
   (:import-from #:metatilities
                 #:form-symbol)
-  (:import-from #:weblocks/app-mop
+  (:import-from #:reblocks/app-mop
                 #:get-autostarting-apps
                 #:get-registered-apps
                 #:app-class
                 #:webapp-class-home-package)
-  (:import-from #:weblocks/js/base
+  (:import-from #:reblocks/js/base
                 #:make-js-backend)
-  (:import-from #:weblocks/utils/string
+  (:import-from #:reblocks/utils/string
                 #:attributize-name
                 #:remove-spurious-slashes
                 #:strip-trailing-slashes
                 #:ensure-starts-with-slash)
-  (:import-from #:weblocks/utils/list
+  (:import-from #:reblocks/utils/list
                 #:remove-keyword-parameters)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*current-app*)
   ;; Just dependencies
   (:import-from #:log)
@@ -29,7 +29,7 @@
            #:get-current
            #:with-app
            #:initialize-webapp))
-(in-package weblocks/app)
+(in-package reblocks/app)
 
 
 (defclass app ()

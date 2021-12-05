@@ -1,4 +1,4 @@
-(defpackage #:weblocks/widgets/mop
+(defpackage #:reblocks/widgets/mop
   (:use #:cl)
   (:import-from #:anaphora
                 #:awhen
@@ -13,7 +13,7 @@
                           #:standard-effective-slot-definition)
   
   (:export #:widget-class))
-(in-package weblocks/widgets/mop)
+(in-package reblocks/widgets/mop)
 
 
 (defclass widget-class (standard-class)

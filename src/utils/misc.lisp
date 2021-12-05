@@ -1,4 +1,4 @@
-(defpackage #:weblocks/utils/misc
+(defpackage #:reblocks/utils/misc
   (:use #:cl)
   (:import-from #:salza2
                 #:gzip-stream)
@@ -30,7 +30,7 @@
            #:gzip-file
            #:md5
            #:concatenate-keywords))
-(in-package :weblocks/utils/misc)
+(in-package :reblocks/utils/misc)
 
 
 (defun safe-apply (fn &rest args)

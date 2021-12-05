@@ -2,9 +2,9 @@
   (:use #:cl
         #:rove
         #:weblocks-test/utils)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html-string)
-  (:import-from #:weblocks/js
+  (:import-from #:reblocks/js
                 #:with-javascript
                 #:with-javascript-to-string))
 (in-package weblocks-test/weblocks)

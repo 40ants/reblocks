@@ -1,11 +1,11 @@
-(defpackage #:weblocks/app-dependencies
+(defpackage #:reblocks/app-dependencies
   (:use #:cl)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:get-dependencies)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:get-js-backend
                 #:app))
-(in-package weblocks/app-dependencies)
+(in-package reblocks/app-dependencies)
 
 
 (defmethod get-dependencies ((self app))

@@ -2,7 +2,7 @@
   (:use #:cl
         #:hamcrest/rove
         #:rove)
-  (:import-from #:weblocks/commands
+  (:import-from #:reblocks/commands
                 #:create-command))
 (in-package weblocks-test/commands)
 

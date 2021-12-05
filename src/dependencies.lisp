@@ -1,14 +1,14 @@
-(uiop:define-package #:weblocks/dependencies
+(uiop:define-package #:reblocks/dependencies
   (:use #:cl)
   (:import-from #:serapeum
                 #:defvar-unbound)
-  (:import-from #:weblocks/utils/misc
+  (:import-from #:reblocks/utils/misc
                 #:md5)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
-  (:import-from #:weblocks/routes
+  (:import-from #:reblocks/routes
                 #:add-route)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:send-script)
   ;; Just a dependency
   (:import-from #:dexador)
@@ -36,7 +36,7 @@
    #:with-collected-dependencies
    #:push-dependency
    #:push-dependencies))
-(in-package weblocks/dependencies)
+(in-package reblocks/dependencies)
 
 
 (defvar-unbound *page-dependencies*
@@ -465,7 +465,7 @@ Automatically adds a prefix depending on current webapp and widget."
 
 
 
-(defmethod weblocks/routes:serve ((route dependency-route) env)
+(defmethod reblocks/routes:serve ((route dependency-route) env)
   (declare (ignorable env))
   
   (let ((dependency (get-dependency route)))

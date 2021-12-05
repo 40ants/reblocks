@@ -1,10 +1,10 @@
-(defpackage #:weblocks/doc/intro
+(defpackage #:reblocks/doc/intro
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
   (:export
    #:@intro))
-(in-package weblocks/doc/intro)
+(in-package reblocks/doc/intro)
 
 
 (defsection @intro (:title "Introduction")

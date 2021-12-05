@@ -5,25 +5,25 @@
 (defpackage todo
   (:use #:cl
         #:weblocks-ui/form
-        #:weblocks/html)
-  (:import-from #:weblocks/widget
+        #:reblocks/html)
+  (:import-from #:reblocks/widget
                 #:render
                 #:update
                 #:defwidget)
-  (:import-from #:weblocks/actions
+  (:import-from #:reblocks/actions
                 #:make-js-action)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:defapp))
 (in-package todo)
 
 
 (defapp tasks)
 
-(weblocks/debug:on)
+(reblocks/debug:on)
 
 (defvar *port* (find-port:find-port))
 
-(weblocks/server:start :port *port*)
+(reblocks/server:start :port *port*)
 
 ;; Part 2: defining tasks
 
@@ -67,13 +67,13 @@
                   collect (make-task title))))
     (make-instance 'task-list :tasks tasks)))
 
-(defmethod weblocks/session:init ((app tasks))
+(defmethod reblocks/session:init ((app tasks))
   (declare (ignorable app))
   (make-task-list "Make my first Weblocks app"
                   "Deploy it somewhere"
                   "Have a profit"))
 
-(weblocks/debug:reset-latest-session)
+(reblocks/debug:reset-latest-session)
 
 
 ;; Part 3: add-task
@@ -97,7 +97,7 @@
       (:input :type "submit"
               :value "Add"))))
 
-(weblocks/debug:reset-latest-session)
+(reblocks/debug:reset-latest-session)
 
 
 ;; Part 4: toggle
@@ -123,4 +123,4 @@
                    (title task))))))
 
 
-(weblocks/debug:reset-latest-session)
+(reblocks/debug:reset-latest-session)

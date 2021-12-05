@@ -3,20 +3,20 @@
         #:rove
         #:hamcrest/rove
         #:weblocks-test/utils)
-  (:import-from #:weblocks/actions
+  (:import-from #:reblocks/actions
                 #:make-action
                 #:eval-action
                 #:on-missing-action
                 #:make-action-url
                 #:internal-make-action)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:get-action-name-from-request)
-  (:import-from #:weblocks/request-handler
+  (:import-from #:reblocks/request-handler
                 #:handle-action-if-needed))
 (in-package weblocks-test/actions)
 
 
-(weblocks/app:defapp test-app
+(reblocks/app:defapp test-app
   :autostart nil)
 
 
@@ -53,7 +53,7 @@
                                                 (setf action-result
                                                       args)))))
       (with-request ((format nil "/?name=Bob&cancel=Cancel&~A=~A"
-                             weblocks/variables:*action-string*
+                             reblocks/variables:*action-string*
                              action-name)
                      :method :get
                      :headers (("X-Requested-With" . "XMLHttpRequest")))
@@ -66,7 +66,7 @@
 
 
 (deftest missing-action
-    (testing "eval-action should call weblocks/actions:on-missing-action if action is not found"
+    (testing "eval-action should call reblocks/actions:on-missing-action if action is not found"
       (with-session
         (defclass someapp ()
           ())
@@ -89,7 +89,7 @@
 
 
 (deftest make-action-success
-  (weblocks/app:with-app (make-instance 'test-app)
+  (reblocks/app:with-app (make-instance 'test-app)
     (with-session
       (internal-make-action #'identity "abc123")
      

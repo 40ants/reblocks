@@ -12,21 +12,21 @@
                 #:all-matches)
   (:import-from #:rove
                 #:ok)
-  (:import-from #:weblocks/session
+  (:import-from #:reblocks/session
                 #:*session*)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:*current-app*
                 #:defapp)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html-string)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:prepare-hooks)
   ;; Just to point to dependencies
-  (:import-from #:weblocks/request)
+  (:import-from #:reblocks/request)
   (:import-from #:hamcrest/rove
                 #:assert-that
                 #:contains)
-  (:import-from #:weblocks/routes
+  (:import-from #:reblocks/routes
                 #:*routes*)
   
   (:export
@@ -70,14 +70,14 @@
                                  :headers ',lowercased-headers))
               ;; we need to setup a current webapp, because
               ;; uri tokenizer needs to know app's uri prefix
-              (*routes* (weblocks/routes::make-routes))
+              (*routes* (reblocks/routes::make-routes))
               (*current-app* (make-instance ',app)))
-         (weblocks/request:with-request ((make-request env))
+         (reblocks/request:with-request ((make-request env))
            ,@body)))))
 
 
 (defmacro is-html (form expected &optional message)
-  `(let* ((weblocks/html:*pretty-html* nil)
+  `(let* ((reblocks/html:*pretty-html* nil)
           (result (with-html-string
                     ,form)))
      (ok (all-matches ,expected result)
@@ -100,7 +100,7 @@ Call assert-hooks-contains inside the body, to check if proper hooks were called
     (let ((hook-handlers
             (loop for hook-name in hook-names
                   collect `(,(ensure-symbol (symbolicate 'on-session-hook- hook-name)
-                                            :weblocks/hooks)
+                                            :reblocks/hooks)
                             ,(symbolicate 'handle- hook-name)
                                (&rest args)
                              (push (cons ,hook-name args)

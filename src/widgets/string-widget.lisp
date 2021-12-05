@@ -1,17 +1,17 @@
-(defpackage #:weblocks/widgets/string-widget
+(defpackage #:reblocks/widgets/string-widget
   (:use #:cl)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:defwidget
                 #:render)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
   (:export
    #:make-string-widget
    #:string-widget
    #:get-content
    #:escape-p))
-(in-package weblocks/widgets/string-widget)
+(in-package reblocks/widgets/string-widget)
 
 
 (defwidget string-widget ()

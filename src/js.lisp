@@ -1,4 +1,4 @@
-(uiop:define-package #:weblocks/js
+(uiop:define-package #:reblocks/js
     (:use #:cl)
-  (:use-reexport #:weblocks/js/base))
-(in-package weblocks/js)
+  (:use-reexport #:reblocks/js/base))
+(in-package reblocks/js)

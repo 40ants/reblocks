@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/views
+(uiop:define-package #:reblocks/doc/views
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package weblocks/doc/views)
+(in-package reblocks/doc/views)
 
 
 (defsection @views (:title "Views"

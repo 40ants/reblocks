@@ -1,17 +1,17 @@
-(uiop:define-package #:weblocks/preview
+(uiop:define-package #:reblocks/preview
   (:use #:cl)
   (:import-from #:find-port
                 #:find-port)
   (:import-from #:log4cl)
   (:import-from #:trivial-open-browser
                 #:open-browser)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:defwidget)
   (:export #:preview))
-(in-package weblocks/preview)
+(in-package reblocks/preview)
 
 
-(weblocks/app:defapp preview
+(reblocks/app:defapp preview
   :prefix "/"
   :autostart nil)
 
@@ -27,12 +27,12 @@
   ())
 
 
-(defmethod weblocks/session:init ((app preview))
+(defmethod reblocks/session:init ((app preview))
   (make-instance 'preview-widget))
 
 
-(defmethod weblocks/widget:render ((widget preview-widget))
-  (weblocks/widget:render *widget*))
+(defmethod reblocks/widget:render ((widget preview-widget))
+  (reblocks/widget:render *widget*))
 
 
 (defun preview (widget)
@@ -40,8 +40,8 @@
     (let ((random-port (find-port))
           ;; To prevent weblocks from complaining
           ;; about other running server
-          (weblocks/server::*server* nil))
-      (weblocks/server:start :port random-port
+          (reblocks/server::*server* nil))
+      (reblocks/server:start :port random-port
                              :apps 'preview)
       (setf *port* random-port)))
 

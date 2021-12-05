@@ -1,53 +1,53 @@
-(defpackage #:weblocks/doc/index
+(defpackage #:reblocks/doc/index
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection
                 #:defsection-copy)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:@html)
-  (:import-from #:weblocks/doc/intro
+  (:import-from #:reblocks/doc/intro
                 #:@intro)
-  (:import-from #:weblocks/doc/installation
+  (:import-from #:reblocks/doc/installation
                 #:@installation)
-  (:import-from #:weblocks/doc/components
+  (:import-from #:reblocks/doc/components
                 #:@components)
-  (:import-from #:weblocks/doc/quickstart
+  (:import-from #:reblocks/doc/quickstart
                 #:@quickstart)
-  (:import-from #:weblocks/doc/routing
+  (:import-from #:reblocks/doc/routing
                 #:@routing)
-  (:import-from #:weblocks/doc/api
+  (:import-from #:reblocks/doc/api
                 #:@api)
-  (:import-from #:weblocks/doc/widgets
+  (:import-from #:reblocks/doc/widgets
                 #:@widgets)
-  (:import-from #:weblocks/doc/dependencies
+  (:import-from #:reblocks/doc/dependencies
                 #:@dependencies)
-  (:import-from #:weblocks/doc/hooks
+  (:import-from #:reblocks/doc/hooks
                 #:@hooks)
-  (:import-from #:weblocks/doc/forms
+  (:import-from #:reblocks/doc/forms
                 #:@forms)
-  (:import-from #:weblocks/doc/continuations
+  (:import-from #:reblocks/doc/continuations
                 #:@continuations)
-  (:import-from #:weblocks/doc/views
+  (:import-from #:reblocks/doc/views
                 #:@views)
-  (:import-from #:weblocks/doc/templates
+  (:import-from #:reblocks/doc/templates
                 #:@templates)
-  (:import-from #:weblocks/doc/contribute
+  (:import-from #:reblocks/doc/contribute
                 #:@contribute)
-  (:import-from #:weblocks/doc/session
+  (:import-from #:reblocks/doc/session
                 #:@session)
-  (:import-from #:weblocks/doc/actions
+  (:import-from #:reblocks/doc/actions
                 #:@actions)
-  (:import-from #:weblocks/doc/app
+  (:import-from #:reblocks/doc/app
                 #:@apps)
-  (:import-from #:weblocks/doc/response
+  (:import-from #:reblocks/doc/response
                 #:@response)
-  (:import-from #:weblocks/doc/request
+  (:import-from #:reblocks/doc/request
                 #:@request)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
            #:@readme))
-(in-package weblocks/doc/index)
+(in-package reblocks/doc/index)
 
 
 (defsection @index (:title "Contents")
@@ -86,12 +86,12 @@
   (let ((server-url
           ;; When local examples server is running,
           ;; we'll be using it instead of production:
-          (unless weblocks/doc/example::*port*
+          (unless reblocks/doc/example::*port*
             "https://com-40ants-weblocks-examples.herokuapp.com/examples")))
     (list :theme
           (find-symbol "40ANTS-THEME"
                        (find-package "40ANTS-DOC-THEME-40ANTS"))
-          :dynamic-bindings (list (cons 'weblocks/doc/example:*server-url*
+          :dynamic-bindings (list (cons 'reblocks/doc/example:*server-url*
                                         server-url))
           :root-sections '(@index
                            @intro

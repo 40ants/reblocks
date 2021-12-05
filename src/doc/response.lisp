@@ -1,14 +1,14 @@
-(uiop:define-package #:weblocks/doc/response
+(uiop:define-package #:reblocks/doc/response
   (:use #:cl)
   (:import-from #:named-readtables
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:response)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package weblocks/doc/response)
+(in-package reblocks/doc/response)
 
 
 (in-readtable pythonic-string-syntax)
@@ -24,18 +24,18 @@
   ## API
   """
 
-  (weblocks/response:add-header function)
-  (weblocks/response:add-retpath-to function)
+  (reblocks/response:add-header function)
+  (reblocks/response:add-retpath-to function)
   (response class)
-  (weblocks/response:get-code (reader response))
-  (weblocks/response:get-content (reader response))
-  (weblocks/response:get-content-type (reader response))
-  (weblocks/response:get-custom-headers (reader response))
-  (weblocks/response:get-headers function)
-  ;; (weblocks/response:get-response generic-function)
-  (weblocks/response:get-response (reader weblocks/response:immediate-response))
-  (weblocks/response:immediate-response function)
-  (weblocks/response:immediate-response condition)
-  (weblocks/response:make-response function)
-  (weblocks/response:make-uri function)
-  (weblocks/response:send-script function))
+  (reblocks/response:get-code (reader response))
+  (reblocks/response:get-content (reader response))
+  (reblocks/response:get-content-type (reader response))
+  (reblocks/response:get-custom-headers (reader response))
+  (reblocks/response:get-headers function)
+  ;; (reblocks/response:get-response generic-function)
+  (reblocks/response:get-response (reader reblocks/response:immediate-response))
+  (reblocks/response:immediate-response function)
+  (reblocks/response:immediate-response condition)
+  (reblocks/response:make-response function)
+  (reblocks/response:make-uri function)
+  (reblocks/response:send-script function))

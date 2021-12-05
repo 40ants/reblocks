@@ -1,4 +1,4 @@
-(defpackage #:weblocks/utils/uri
+(defpackage #:reblocks/utils/uri
   (:use #:cl
         #:f-underscore)
   (:import-from #:puri
@@ -12,7 +12,7 @@
   (:export #:request-uri-path
            #:add-get-param-to-url
            #:remove-parameter-from-uri))
-(in-package weblocks/utils/uri)
+(in-package reblocks/utils/uri)
 
 
 ;;; URI from pathname

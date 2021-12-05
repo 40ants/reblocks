@@ -1,11 +1,11 @@
 (defpackage #:weblocks-test/widgets/render-methods
   (:use #:cl
         #:rove)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:get-html-tag
                 #:render
                 #:defwidget)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:weblocks-test/utils
                 #:is-html))

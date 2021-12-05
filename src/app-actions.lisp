@@ -1,4 +1,4 @@
-(defpackage #:weblocks/app-actions
+(defpackage #:reblocks/app-actions
   (:use #:cl)
   (:export
    #:get-app-actions
@@ -6,7 +6,7 @@
    #:add-action
    #:remove-action
    #:define-action))
-(in-package weblocks/app-actions)
+(in-package reblocks/app-actions)
 
 ;;
 ;; Permanent actions

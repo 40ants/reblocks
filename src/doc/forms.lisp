@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/forms
+(uiop:define-package #:reblocks/doc/forms
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package weblocks/doc/forms)
+(in-package reblocks/doc/forms)
 
 
 (defsection @forms (:title "Forms"

@@ -1,10 +1,10 @@
-(defpackage #:weblocks/doc/installation
+(defpackage #:reblocks/doc/installation
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
   (:export
    #:@installation))
-(in-package weblocks/doc/installation)
+(in-package reblocks/doc/installation)
 
 
 (defsection @installation (:title "Installation"

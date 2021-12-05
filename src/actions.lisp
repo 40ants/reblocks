@@ -1,17 +1,17 @@
-(uiop:define-package #:weblocks/actions
+(uiop:define-package #:reblocks/actions
   (:use #:cl)
   (:import-from #:log4cl)
-  (:import-from #:weblocks/utils/misc
+  (:import-from #:reblocks/utils/misc
                 #:safe-apply)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*action-string*
                 #:*ignore-missing-actions*
                 #:*current-app*)
   (:import-from #:lack.util
                 #:generate-random-id)
   ;; Just dependencies
-  (:import-from #:weblocks/session)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/session)
+  (:import-from #:reblocks/request
                 #:get-path)
   (:import-from #:quri)
   (:import-from #:named-readtables
@@ -25,7 +25,7 @@
            #:make-js-action
            #:make-js-form-action
            #:make-action-url))
-(in-package weblocks/actions)
+(in-package reblocks/actions)
 
 (in-readtable pythonic-string-syntax)
 
@@ -90,14 +90,14 @@ situation (e.g. redirect, signal an error, etc.)."))
   ;; and
   ;; action->code which maps backward from a function to a code.
   (let ((code->action 
-          (weblocks/session:get-value 'code->action
+          (reblocks/session:get-value 'code->action
                                       (make-hash-table :test #'equal))))
 
     (setf (gethash action-code code->action) action-fn))
 
   ;; Now, get or create a table for function->code mapping
   (let ((action->code
-          (weblocks/session:get-value 'action->code
+          (reblocks/session:get-value 'action->code
                                       (make-hash-table))))
 
     (setf (gethash action-fn action->code) action-code))
@@ -115,7 +115,7 @@ situation (e.g. redirect, signal an error, etc.)."))
          ;; a code for it in the session.
          (multiple-value-bind (code code-p)
              (gethash function-or-action
-                      (weblocks/session:get-value 'action->code
+                      (reblocks/session:get-value 'action->code
                                                   (make-hash-table)))
            (if code-p
                code
@@ -124,13 +124,13 @@ situation (e.g. redirect, signal an error, etc.)."))
         ;; if it is an action code
         (t
          (multiple-value-bind (res presentp)
-             (weblocks/app-actions:get-action *current-app* function-or-action)
+             (reblocks/app-actions:get-action *current-app* function-or-action)
            (declare (ignore res))
            (if presentp
                function-or-action
                (multiple-value-bind (res presentp)
                    (gethash function-or-action
-                            (weblocks/session:get-value 'code->action
+                            (reblocks/session:get-value 'code->action
                                                         (make-hash-table)))
                  (declare (ignore res))
                  (if presentp
@@ -144,10 +144,10 @@ situation (e.g. redirect, signal an error, etc.)."))
   For example:
 
   ```cl-transcript
-  (let ((weblocks/request::*request*
+  (let ((reblocks/request::*request*
           (lack.request:make-request
            '(:path-info "/blah/minor"))))
-    (weblocks/actions:make-action-url "test-action"))
+    (reblocks/actions:make-action-url "test-action"))
   => "/blah/minor?action=test-action"
   ```
 
@@ -156,7 +156,7 @@ situation (e.g. redirect, signal an error, etc.)."))
   """
   (let* ((action-code (make-action function-or-action-code))
          (old-params (when keep-query-params
-                       (weblocks/request:get-parameters)))
+                       (reblocks/request:get-parameters)))
          (params (list* (cons *action-string*
                               action-code)
                         old-params)))
@@ -191,7 +191,7 @@ situation (e.g. redirect, signal an error, etc.)."))
 (defun get-session-action (action-name)
   "Returns an action bound to the current session."
   (let ((code->action 
-          (weblocks/session:get-value 'code->action)))
+          (reblocks/session:get-value 'code->action)))
     (when code->action
       (gethash action-name code->action))))
 
@@ -203,7 +203,7 @@ situation (e.g. redirect, signal an error, etc.)."))
    If no action is in the parameter, returns NIL. If the action
    isn't in the session (somehow invalid), raises an assertion."
   (when action-name
-    (let* ((app-wide-action (weblocks/app-actions:get-action app action-name))
+    (let* ((app-wide-action (reblocks/app-actions:get-action app action-name))
            (session-action (unless app-wide-action
                              (get-session-action action-name)))
            (request-action (or app-wide-action session-action)))

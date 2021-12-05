@@ -1,15 +1,15 @@
-(defpackage #:weblocks/doc/quickstart
+(defpackage #:reblocks/doc/quickstart
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/doc/routing
+  (:import-from #:reblocks/doc/routing
                 #:@routing)
-  (:import-from #:weblocks/doc/example
+  (:import-from #:reblocks/doc/example
                 #:defexample)
   (:import-from #:weblocks-ui/form)
-  (:import-from #:weblocks/html)
+  (:import-from #:reblocks/html)
   (:export #:@quickstart))
-(in-package weblocks/doc/quickstart)
+(in-package reblocks/doc/quickstart)
 
 
 (defsection @quickstart (:title "Quickstart"
@@ -53,14 +53,14 @@ CL-USER> (ql:quickload '(:weblocks :weblocks-ui :find-port))
 CL-USER> (defpackage todo
            (:use #:cl
                  #:weblocks-ui/form
-                 #:weblocks/html)
-           (:import-from #:weblocks/widget
+                 #:reblocks/html)
+           (:import-from #:reblocks/widget
                     #:render
                     #:update
                     #:defwidget)
-           (:import-from #:weblocks/actions
+           (:import-from #:reblocks/actions
                     #:make-js-action)
-           (:import-from #:weblocks/app
+           (:import-from #:reblocks/app
                     #:defapp))
 #<PACKAGE \"TODO\">
 CL-USER> (in-package todo)
@@ -86,13 +86,13 @@ TODO> (defapp tasks
 Now our app runs under the root url.
 
 ```
-TODO> (weblocks/debug:on)
+TODO> (reblocks/debug:on)
 TODO> (defvar *port* (find-port:find-port))
-TODO> (weblocks/server:start :port *port*)
- <INFO> [19:41:00] weblocks/server server.lisp (start) -
+TODO> (reblocks/server:start :port *port*)
+ <INFO> [19:41:00] reblocks/server server.lisp (start) -
   Starting weblocks WEBLOCKS/SERVER::PORT: 40000
   WEBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
- <INFO> [19:41:00] weblocks/server server.lisp (start-server) -
+ <INFO> [19:41:00] reblocks/server server.lisp (start-server) -
   Starting webserver on WEBLOCKS/SERVER::INTERFACE: \"localhost\"
   WEBLOCKS/SERVER::PORT: 40000 DEBUG: T
  #<SERVER port=40000 running>
@@ -103,12 +103,12 @@ Open <http://localhost:40000/tasks/> in your browser (double check the port) and
 text like that:
 
 ```
-No weblocks/session:init method defined.
+No reblocks/session:init method defined.
 Please define a method weblocks.session:init to initialize a session.
 
 It could be something simple, like this one:
 
-(defmethod weblocks/session:init ((app tasks))
+(defmethod reblocks/session:init ((app tasks))
             \"Hello world!\")
 
 Read more in the documentaion.
@@ -231,7 +231,7 @@ TODO> (defun make-task-list (&rest rest)
                         collect (make-task title))))
           (make-instance 'task-list :tasks tasks)))
 
-TODO> (defmethod weblocks/session:init ((app tasks))
+TODO> (defmethod reblocks/session:init ((app tasks))
          (declare (ignorable app))
          (make-task-list \"Make my first Weblocks app\"
                          \"Deploy it somewhere\"
@@ -244,7 +244,7 @@ list in memory) and returns what will be our session's root widget..
 Restart the application:
 
 ```
-TODO> (weblocks/debug:reset-latest-session)
+TODO> (reblocks/debug:reset-latest-session)
 ```
 
 Right now it should look like this:"
@@ -287,7 +287,7 @@ TODO> (defmethod render ((task-list task-list))
             (:input :type \"submit\"
                     :value \"Add\"))))
 
-TODO> (weblocks/debug:reset-latest-session)
+TODO> (reblocks/debug:reset-latest-session)
 ```
 
 The method ADD-TASK does only two simple things:
@@ -389,7 +389,7 @@ As a homework:
 
 
 (defexample example1 ()
-  (weblocks/widget:defwidget task ()
+  (reblocks/widget:defwidget task ()
     ((title
       :initarg :title
       :accessor title)
@@ -398,25 +398,25 @@ As a homework:
       :initform nil
       :accessor done)))
   
-  (weblocks/widget:defwidget task-list ()
+  (reblocks/widget:defwidget task-list ()
     ((tasks
       :initarg :tasks
       :accessor tasks)))
 
-  (defmethod weblocks/widget:render ((task task))
+  (defmethod reblocks/widget:render ((task task))
     "Render a task."
-    (weblocks/html:with-html
+    (reblocks/html:with-html
       (:span (if (done task)
                  (:s (title task))
                  (title task)))))
 
-  (defmethod weblocks/widget:render ((widget task-list))
+  (defmethod reblocks/widget:render ((widget task-list))
     "Render a list of tasks."
-    (weblocks/html:with-html
+    (reblocks/html:with-html
       (:h1 "Tasks")
       (:ul
        (loop for task in (tasks widget) do
-         (:li (weblocks/widget:render task))))))
+         (:li (reblocks/widget:render task))))))
 
   (defun make-task (title &key done)
     (make-instance 'task :title title :done done))
@@ -432,13 +432,13 @@ As a homework:
   (defmethod add-task ((task-list task-list) title)
     (push (make-task title)
           (tasks task-list))
-    (weblocks/widget:update task-list))
+    (reblocks/widget:update task-list))
   
-  (defmethod weblocks/widget:render ((task-list task-list))
-    (weblocks/html:with-html
+  (defmethod reblocks/widget:render ((task-list task-list))
+    (reblocks/html:with-html
       (:h1 "Tasks")
       (loop for task in (tasks task-list) do
-        (weblocks/widget:render task))
+        (reblocks/widget:render task))
       (weblocks-ui/form:with-html-form (:POST (lambda (&key title &allow-other-keys)
                                                 (add-task task-list title)))
         (:input :type "text"
@@ -455,19 +455,19 @@ As a homework:
           (if (done task)
               nil
               t))
-    (weblocks/widget:update task))
+    (reblocks/widget:update task))
 
-  (defmethod weblocks/widget:render ((task task))
-    (weblocks/html:with-html
-      ;; (:a :href "http://localhost:40000/examples/weblocks/doc/quickstart/example3?some=arg"
+  (defmethod reblocks/widget:render ((task task))
+    (reblocks/html:with-html
+      ;; (:a :href "http://localhost:40000/examples/reblocks/doc/quickstart/example3?some=arg"
       ;;     "Click me to test POST cookies")
       (:p (:input :type "checkbox"
                   :checked (done task)
-                  :onclick (weblocks/actions:make-js-action
+                  :onclick (reblocks/actions:make-js-action
                             (lambda (&key &allow-other-keys)
                               (toggle task))))
           (:span (if (done task)
-                     (weblocks/html:with-html
+                     (reblocks/html:with-html
                        ;; strike
                        (:s (title task)))
                      (title task)))))))

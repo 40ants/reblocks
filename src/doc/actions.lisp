@@ -1,6 +1,6 @@
-(uiop:define-package #:weblocks/doc/actions
+(uiop:define-package #:reblocks/doc/actions
   (:use #:cl)
-  (:import-from #:weblocks/actions
+  (:import-from #:reblocks/actions
                 #:eval-action
                 #:make-action
                 #:make-js-action
@@ -13,12 +13,12 @@
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*action-string*
                 #:*ignore-missing-actions*)
-  (:import-from #:weblocks/doc/example
+  (:import-from #:reblocks/doc/example
                 #:defexample))
-(in-package weblocks/doc/actions)
+(in-package reblocks/doc/actions)
 
 
 (in-readtable pythonic-string-syntax)
@@ -58,10 +58,10 @@
   Here is an example, how to define such action which will create a new user:
 
   ```lisp
-  (weblocks/app:defapp demo-actions
+  (reblocks/app:defapp demo-actions
     :autostart nil)
 
-  (weblocks/app-actions:define-action create-user demo-actions (name email)
+  (reblocks/app-actions:define-action create-user demo-actions (name email)
     (format t "User ~A with email ~A was created.~%"
             name email))
   ```
@@ -70,7 +70,7 @@
 
   ```lisp
   (let ((app (make-instance 'demo-actions)))
-    (weblocks/actions:eval-action app
+    (reblocks/actions:eval-action app
                                   "create-user"
                                   (list "Bob"
                                         "bob@40ants.com"))))
@@ -100,14 +100,14 @@
   (let ((user "Bob"))
     (weblocks-test/utils:with-session
       (let ((action-id
-              (weblocks/actions:make-action
+              (reblocks/actions:make-action
                (lambda (email)
                  (format t "Changing email for user ~A to ~A"
                          user email)))))
-        (weblocks/actions:eval-action nil
+        (reblocks/actions:eval-action nil
                                       action-id
                                       (list "bob@40ants.com")))))
-  .. <DEBUG> [12:11:44] weblocks/actions actions.lisp (eval-action) -
+  .. <DEBUG> [12:11:44] reblocks/actions actions.lisp (eval-action) -
   ..   Calling WEBLOCKS/ACTIONS::ACTION: #<FUNCTION (LAMBDA
   ..                                                    (
   ..                                                     EMAIL)) {7009B6328B}>
@@ -204,17 +204,17 @@
 
 
 (defexample button-click ()
-  (weblocks/widget:defwidget button-with-counter ()
+  (reblocks/widget:defwidget button-with-counter ()
     ((counter :initform 0
               :accessor counter)))
 
-  (defmethod weblocks/widget:render ((widget button-with-counter))
-    (let ((action (weblocks/actions:make-js-action
+  (defmethod reblocks/widget:render ((widget button-with-counter))
+    (let ((action (reblocks/actions:make-js-action
                    (lambda (&rest args)
                      (declare (ignore args))
                      (incf (counter widget))
-                     (weblocks/widget:update widget)))))
-      (weblocks/html:with-html
+                     (reblocks/widget:update widget)))))
+      (reblocks/html:with-html
         (:a :class "button"
             :onclick action
             (format nil "Clicked ~A time~:P"
@@ -222,20 +222,20 @@
 
 
 (defexample many-buttons-click ()
-  (weblocks/widget:defwidget two-buttons ()
+  (reblocks/widget:defwidget two-buttons ()
     ((first-counter :initform 0
                     :accessor first-counter)
      (second-counter :initform 0
                      :accessor second-counter)))
   
-  (defmethod weblocks/widget:render ((widget two-buttons))
-    (let ((action-code (weblocks/actions:make-action
+  (defmethod reblocks/widget:render ((widget two-buttons))
+    (let ((action-code (reblocks/actions:make-action
                         (lambda (&key button-id &allow-other-keys)
                           (case button-id
                             (0 (incf (first-counter widget)))
                             (1 (incf (second-counter widget))))
-                          (weblocks/widget:update widget)))))
-      (weblocks/html:with-html
+                          (reblocks/widget:update widget)))))
+      (reblocks/html:with-html
         (:a :class "button"
             :onclick (format nil "initiateAction(\"~A\", {\"args\": {\"button-id\": 0}}) ; return false;"
   action-code)
@@ -249,7 +249,7 @@
 
 
 (defexample form-example ()
-  (weblocks/widget:defwidget registration-form ()
+  (reblocks/widget:defwidget registration-form ()
     ((name :initform nil
            :accessor name)
      (email :initform nil
@@ -257,26 +257,26 @@
      (sent :initform nil
            :accessor sent)))
 
-  (defmethod weblocks/widget:render ((widget registration-form))
-    (weblocks/html:with-html
+  (defmethod reblocks/widget:render ((widget registration-form))
+    (reblocks/html:with-html
       (cond
         ((sent widget)
-         (let ((action (weblocks/actions:make-js-action
+         (let ((action (reblocks/actions:make-js-action
                         (lambda (&rest args)
                           (declare (ignore args))
                           (setf (sent widget) nil)
-                          (weblocks/widget:update widget)))))
-           (weblocks/html:with-html
+                          (reblocks/widget:update widget)))))
+           (reblocks/html:with-html
              (:p (format nil "Congratulations, ~A!"
                          (name widget)))
              (:p (:a :class "button" :onclick action "Reset")))))
         (t
-         (let ((action (weblocks/actions:make-js-form-action
+         (let ((action (reblocks/actions:make-js-form-action
                         (lambda (&key name email &allow-other-keys)
                           (setf (name widget) name
                                 (email widget) email
                                 (sent widget) t)
-                          (weblocks/widget:update widget)))))
+                          (reblocks/widget:update widget)))))
            (:form :method :post
                   :onsubmit action
                   (:input :name "name"
@@ -291,17 +291,17 @@
 
 
 (defexample just-href ()
-  (weblocks/widget:defwidget button-with-counter ()
+  (reblocks/widget:defwidget button-with-counter ()
     ((counter :initform 0
               :accessor counter)))
 
-  (defmethod weblocks/widget:render ((widget button-with-counter))
-    (let ((action-url (weblocks/actions:make-action-url
+  (defmethod reblocks/widget:render ((widget button-with-counter))
+    (let ((action-url (reblocks/actions:make-action-url
                        (lambda (&rest args)
                          (declare (ignore args))
                          (incf (counter widget))
-                         (weblocks/widget:update widget)))))
-      (weblocks/html:with-html
+                         (reblocks/widget:update widget)))))
+      (reblocks/html:with-html
         (:a :href action-url
             (format nil "Clicked ~A time~:P"
                     (counter widget)))))))

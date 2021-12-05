@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/app
+(uiop:define-package #:reblocks/doc/app
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:defapp
                 #:app
                 #:get-registered-apps
@@ -11,7 +11,7 @@
                 #:get-prefix
                 #:initialize-webapp
                 #:with-app))
-(in-package weblocks/doc/app)
+(in-package reblocks/doc/app)
 
 
 (defsection @apps (:title "Apps"

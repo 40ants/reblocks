@@ -1,9 +1,9 @@
-(defpackage #:weblocks/server
+(defpackage #:reblocks/server
   (:use #:cl
         #:f-underscore)
   ;; to load js dependencies after app was started
-  (:import-from #:weblocks/app-dependencies)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app-dependencies)
+  (:import-from #:reblocks/app
                 #:with-app)
   ;; we need to depend on this package, because
   ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`
@@ -11,30 +11,30 @@
   (:import-from #:lack.middleware.session)
   ;; We need this import because this module defines important method
   ;; make-js-backend
-  (:import-from #:weblocks/js/jquery)
+  (:import-from #:reblocks/js/jquery)
  
-  (:import-from #:weblocks/session
+  (:import-from #:reblocks/session
                 #:make-session-middleware
                 #:with-session)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:prepare-hooks)
-  (:import-from #:weblocks/routes
+  (:import-from #:reblocks/routes
                 #:route
                 #:get-route
                 #:add-route
                 #:add-routes)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:get-prefix
                 #:app-serves-hostname-p
                 #:weblocks-webapp-name
                 #:get-autostarting-apps)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:with-request)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:get-code
                 #:get-headers
                 #:get-content)
-  (:import-from #:weblocks/request-handler
+  (:import-from #:reblocks/request-handler
                 #:handle-request)
     
   (:import-from #:lack.request
@@ -46,7 +46,7 @@
   (:import-from #:cl-strings
                 #:starts-with)
   ;; Just dependencies
-  (:import-from #:weblocks/debug)
+  (:import-from #:reblocks/debug)
   (:import-from #:log)
   (:import-from #:alexandria
                 #:hash-table-values)
@@ -60,7 +60,7 @@
            #:serve-static-file
            #:servers
            #:running-p))
-(in-package weblocks/server)
+(in-package reblocks/server)
 
 
 (defvar *server*)
@@ -85,7 +85,7 @@
                 :reader get-server-type)
    (handler :initform nil
             :accessor get-handler)
-   (routes :initform (weblocks/routes::make-routes)
+   (routes :initform (reblocks/routes::make-routes)
            :accessor routes)
    (apps :initform nil
          :accessor apps)))
@@ -123,7 +123,7 @@ Make instance, then start it with ``start`` method."
 
 (defun make-response-for-clack (response)
   (etypecase response
-    (weblocks/response:response
+    (reblocks/response:response
      (list (get-code response)
            (get-headers response)
            ;; Here we use catch to allow to abort usual response
@@ -136,7 +136,7 @@ Make instance, then start it with ``start`` method."
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
     (let ((*server* server)
-          (weblocks/routes::*routes* (routes server)))
+          (reblocks/routes::*routes* (routes server)))
       (call-next-method))))
 
 
@@ -153,7 +153,7 @@ This function serves all started applications and their static files."
         ;; some sort of middlewares, which change *request* and *session*
         ;; variables.
         (prepare-hooks
-          (weblocks/hooks:with-handle-http-request-hook (env)
+          (reblocks/hooks:with-handle-http-request-hook (env)
 
             (let* ((path-info (getf env :path-info))
                    (hostname (getf env :server-name))
@@ -168,7 +168,7 @@ This function serves all started applications and their static files."
                  (cond
                    (route
                     (log:debug "Route was found" route)
-                    (weblocks/routes:serve route env))
+                    (reblocks/routes:serve route env))
                    (app
                     (log:debug "App was found" route)
                     (handle-request app))
@@ -307,7 +307,7 @@ Also opens all stores declared via DEFSTORE and starts webapps
 declared AUTOSTART unless APPS argument is provided."
 
   (let ((server (find-server interface port)))
-    (weblocks/hooks:with-start-weblocks-hook ()
+    (reblocks/hooks:with-start-weblocks-hook ()
       (cond
         (server
          (restart-case
@@ -316,7 +316,7 @@ declared AUTOSTART unless APPS argument is provided."
              :report "Stop the old server and start a new one."
              (stop)
              (setf (routes server)
-                   (weblocks/routes::make-routes)))))
+                   (reblocks/routes::make-routes)))))
         (t
          (setf server
                (make-server :interface interface
@@ -329,8 +329,8 @@ declared AUTOSTART unless APPS argument is provided."
 
       ;; TODO: move these settings to the server level
       (if debug
-          (weblocks/debug:on)
-          (weblocks/debug:off))
+          (reblocks/debug:on)
+          (reblocks/debug:off))
 
       (start-server server
                     :debug debug)
@@ -338,7 +338,7 @@ declared AUTOSTART unless APPS argument is provided."
       ;; We need to set this bindings to allow apps to use
       ;; WEBLOCKS/ROUTES:ADD-ROUTE without given a current
       ;; routes mapping.
-      (let ((weblocks/routes::*routes* (routes server)))
+      (let ((reblocks/routes::*routes* (routes server)))
         (loop for app-class in (uiop:ensure-list
                                 (or apps
                                     (get-autostarting-apps)))
@@ -361,12 +361,12 @@ declared AUTOSTART unless APPS argument is provided."
         do (setf (gethash prefix seen)
                  t))
   ;; Also, we should add app's routes to the mapper:
-  (weblocks/routes:add-routes app :routes (routes server)))
+  (reblocks/routes:add-routes app :routes (routes server)))
 
 
 (defun start-app (server app-class &rest app-args)
   (cond
-    ((member app-class (mapcar #'weblocks/app::webapp-name (apps server)))
+    ((member app-class (mapcar #'reblocks/app::webapp-name (apps server)))
      (log:warn "App ~A already started" app-class))
     (t
      (let* ((app (apply #'make-instance app-class app-args))
@@ -380,11 +380,11 @@ declared AUTOSTART unless APPS argument is provided."
                   do (error "App ~A already uses prefix \"~A\""
                             other-app other-prefix)))
          (t
-          (weblocks/app:initialize-webapp app)
+          (reblocks/app:initialize-webapp app)
           (register-app-routes server app)
           (push app (apps server))
           (log:debug "App \"~A\" started at http://~A:~A~A"
-                     (weblocks/app::webapp-name app)
+                     (reblocks/app::webapp-name app)
                      (get-interface server)
                      (get-port server)
                      prefix))))))
@@ -401,10 +401,10 @@ declared AUTOSTART unless APPS argument is provided."
   (loop for server in (servers interface port)
         when (running-p server)
           collect
-          (weblocks/hooks:with-stop-weblocks-hook ()
+          (reblocks/hooks:with-stop-weblocks-hook ()
             ;; TODO: maybe implement stop app generic function again?
             ;; (loop for app in (apps server)
-            ;;       do (weblocks/app:stop (weblocks-webapp-name app)))
+            ;;       do (reblocks/app:stop (weblocks-webapp-name app)))
             (stop-server server)
             (values server))))
 
@@ -417,7 +417,7 @@ declared AUTOSTART unless APPS argument is provided."
                  :reader get-content-type)))
 
 
-(defmethod weblocks/routes:serve ((route static-route-from-file) env)
+(defmethod reblocks/routes:serve ((route static-route-from-file) env)
   "Returns a file's content"
   (declare (ignorable env))
   (list 200

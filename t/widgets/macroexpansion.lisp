@@ -1,10 +1,10 @@
 (defpackage #:weblocks-test/widgets/macroexpansion
   (:use #:cl
         #:rove)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:widget
                 #:defwidget)
-  (:import-from #:weblocks/widgets/mop
+  (:import-from #:reblocks/widgets/mop
                 #:widget-class))
 (in-package weblocks-test/widgets/macroexpansion)
 

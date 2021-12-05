@@ -1,14 +1,14 @@
-(defpackage #:weblocks/js/jquery
+(defpackage #:reblocks/js/jquery
   (:use #:cl)
-  (:import-from #:weblocks/js
+  (:import-from #:reblocks/js
                 #:js-backend
                 #:make-js-backend)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:get-dependencies
                 #:make-dependency)
   ;; Just dependencies
   (:import-from #:log))
-(in-package weblocks/js/jquery)
+(in-package reblocks/js/jquery)
 
 
 (defclass jquery-backend (js-backend)

@@ -1,4 +1,4 @@
-(defpackage #:weblocks/utils/string
+(defpackage #:reblocks/utils/string
   (:use #:cl)
   (:import-from #:cl-fad
                 #:pathname-as-directory)
@@ -9,7 +9,7 @@
            #:string-remove-right
            #:string-invert-case
            #:remove-spurious-slashes))
-(in-package weblocks/utils/string)
+(in-package reblocks/utils/string)
 
 
 (defgeneric humanize-name (name)

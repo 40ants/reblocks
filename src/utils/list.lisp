@@ -1,4 +1,4 @@
-(defpackage #:weblocks/utils/list
+(defpackage #:reblocks/utils/list
   (:use #:cl)
   (:export #:safe-subseq
            #:alist->plist
@@ -14,7 +14,7 @@
            #:find-all
            #:remove-keyword-parameter
            #:remove-keyword-parameters))
-(in-package weblocks/utils/list)
+(in-package reblocks/utils/list)
 
 
 (defun safe-subseq (sequence start &optional end)

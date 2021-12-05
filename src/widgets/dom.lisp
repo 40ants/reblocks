@@ -1,13 +1,13 @@
-(defpackage #:weblocks/widgets/dom
+(defpackage #:reblocks/widgets/dom
   (:use #:cl)
-  (:import-from #:weblocks/session
+  (:import-from #:reblocks/session
                 #:in-session-p
                 #:gen-id)
-  (:import-from #:weblocks/utils/string
+  (:import-from #:reblocks/utils/string
                 #:attributize-name)
   (:export #:dom-object-mixin
            #:dom-id))
-(in-package weblocks/widgets/dom)
+(in-package reblocks/widgets/dom)
 
 
 (defclass dom-object-mixin ()

@@ -1,4 +1,4 @@
-(uiop:define-package #:weblocks/doc/request
+(uiop:define-package #:reblocks/doc/request
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
@@ -6,8 +6,8 @@
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
-  (:import-from #:weblocks/request))
-(in-package weblocks/doc/request)
+  (:import-from #:reblocks/request))
+(in-package reblocks/doc/request)
 
 
 (in-readtable pythonic-string-syntax)
@@ -23,17 +23,17 @@
   ## API
   """
 
-  (weblocks/request:get-parameters function)
-  (weblocks/request:get-parameter function)
-  (weblocks/request:get-header function)
-  (weblocks/request:get-scheme function)
-  (weblocks/request:ajax-request-p function)
-  (weblocks/request:get-host function)
-  (weblocks/request:get-port function)
-  (weblocks/request:get-method function)
-  (weblocks/request:refresh-request-p function)
-  (weblocks/request:remove-header function)
-  (weblocks/request:get-uri function)
-  (weblocks/request:get-path function)
-  (weblocks/request:with-request macro)
-  (weblocks/request:pure-request-p function))
+  (reblocks/request:get-parameters function)
+  (reblocks/request:get-parameter function)
+  (reblocks/request:get-header function)
+  (reblocks/request:get-scheme function)
+  (reblocks/request:ajax-request-p function)
+  (reblocks/request:get-host function)
+  (reblocks/request:get-port function)
+  (reblocks/request:get-method function)
+  (reblocks/request:refresh-request-p function)
+  (reblocks/request:remove-header function)
+  (reblocks/request:get-uri function)
+  (reblocks/request:get-path function)
+  (reblocks/request:with-request macro)
+  (reblocks/request:pure-request-p function))

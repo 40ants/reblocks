@@ -1,23 +1,23 @@
-(uiop:define-package #:weblocks/doc/example-server
+(uiop:define-package #:reblocks/doc/example-server
   (:use #:cl)
   (:import-from #:log4cl)
   (:import-from #:clack-handler-hunchentoot)
   (:import-from #:40ants-doc/locatives/base
                 #:define-locative-type)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:defwidget)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:defapp)
   (:import-from #:find-port
                 #:find-port)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:alexandria
                 #:hash-table-keys)
   (:import-from #:serapeum)
   (:import-from #:40ants-doc/commondoc/builder)
-  (:import-from #:weblocks/doc/example
+  (:import-from #:reblocks/doc/example
                 #:*server-url*
                 #:*port*
                 #:weblocks-example
@@ -25,12 +25,12 @@
                 #:example-body
                 #:example-original-body
                 #:example-package)
-  (:import-from #:weblocks/server)
+  (:import-from #:reblocks/server)
   (:import-from #:weblocks-file-server)
-  (:import-from #:weblocks/hooks)
+  (:import-from #:reblocks/hooks)
   (:export #:start-server
            #:update-examples))
-(in-package weblocks/doc/example-server)
+(in-package reblocks/doc/example-server)
 
 
 (defvar *examples* (make-hash-table :test 'equal
@@ -42,7 +42,7 @@
 (defun widget-class (example)
   (loop for form in (example-body example)
         when (eql (first form)
-                  'weblocks/widget:defwidget)
+                  'reblocks/widget:defwidget)
           do (return (second form))
         finally (error "No DEFWIDGET form was found in the example's body.")))
 
@@ -70,7 +70,7 @@
        (make-instance (widget-class example))))))
 
 
-(weblocks/hooks:on-application-hook-register-example
+(reblocks/hooks:on-application-hook-register-example
     add-example-to-registry (example)
   
   (let ((path (example-path example))
@@ -99,7 +99,7 @@
                    :accessor current-widget)))
 
 
-(defmethod weblocks/app::initialize-webapp ((app examples-server))
+(defmethod reblocks/app::initialize-webapp ((app examples-server))
   (call-next-method)
   
   (weblocks-file-server:make-route :uri "/docs/"
@@ -107,11 +107,11 @@
                                    :dir-listing t))
 
 
-(defmethod weblocks/session:init ((app examples-server))
+(defmethod reblocks/session:init ((app examples-server))
   (make-instance 'examples-widget))
 
 
-(defmethod weblocks/page:render-dependencies :after ((app examples-server) dependencies)
+(defmethod reblocks/page:render-dependencies :after ((app examples-server) dependencies)
   (with-html
     (:link :rel "stylesheet"
            :href "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/a11y-dark.min.css")
@@ -157,9 +157,9 @@ pre {
 ")))
 
 
-(defmethod weblocks/widget:render ((widget examples-widget))
-  (let* ((app-prefix (weblocks/app:get-prefix (weblocks/app:get-current)))
-         (full-path (string-downcase (weblocks/request:get-path)))
+(defmethod reblocks/widget:render ((widget examples-widget))
+  (let* ((app-prefix (reblocks/app:get-prefix (reblocks/app:get-current)))
+         (full-path (string-downcase (reblocks/request:get-path)))
          (path (subseq full-path (length app-prefix)))
          (item (gethash path *examples*)))
     (unless (or (null item)
@@ -169,7 +169,7 @@ pre {
           item
         (setf (current-widget widget)
               (when new-widget
-                (weblocks/widget:create-widget-from new-widget))
+                (reblocks/widget:create-widget-from new-widget))
               (current-example widget)
               example
               (current-path widget)
@@ -193,7 +193,7 @@ pre {
                :data-tabs-content "example-tabs"
                (:div :class "tabs-panel is-active"
                      :id "demo"
-                     (weblocks/widget:render (current-widget widget)))
+                     (reblocks/widget:render (current-widget widget)))
                (:div :class "tabs-panel"
                      :id "code"
                      (:pre
@@ -244,7 +244,7 @@ pre {
                              (typep var 'weblocks-example))
                      do (setf (gethash (example-path var) results)
                               (cons var
-                                    (weblocks/widget:create-widget-from var))))
+                                    (reblocks/widget:create-widget-from var))))
         finally (return results)))
 
 
@@ -277,8 +277,8 @@ pre {
                     (find-port)))
           ;; To prevent weblocks from complaining
           ;; about other running server
-          (weblocks/server::*server* nil))
-      (weblocks/server:start :port port
+          (reblocks/server::*server* nil))
+      (reblocks/server:start :port port
                              :interface interface
                              :apps 'examples-server)
       (setf *port* port)))

@@ -4,20 +4,20 @@
         #:hamcrest/rove
         ;;        #:weblocks
         #:weblocks-test/utils)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:defapp
                 #:*current-app*)
-  (:import-from #:weblocks/widgets/string-widget
+  (:import-from #:reblocks/widgets/string-widget
                 #:make-string-widget)
-  (:import-from #:weblocks/request-handler
+  (:import-from #:reblocks/request-handler
                 #:handle-request)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:get-code
                 #:get-content
                 #:get-custom-headers)
   
   ;; Just dependencies
-  (:import-from #:weblocks/session))
+  (:import-from #:reblocks/session))
 (in-package weblocks-test/request-handler)
 
 
@@ -26,7 +26,7 @@
   :autostart nil)
 
 
-(defmethod weblocks/session:init ((app app-with-init))
+(defmethod reblocks/session:init ((app app-with-init))
   (make-string-widget
    "Hello world"))
 

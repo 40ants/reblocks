@@ -2,7 +2,7 @@
   (:use #:cl
         #:rove
         #:weblocks-test/utils)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:last-request-path
                 #:refresh-request-p
                 #:get-uri)
@@ -17,7 +17,7 @@
 (deftest refresh-request-p-1
   (with-session
     (with-request ("/foo/bar")
-      (setf (weblocks/session:get-value 'last-request-path)
+      (setf (reblocks/session:get-value 'last-request-path)
             "/foo/bar")
       (ok (refresh-request-p)
           "Refresh-request-p should return true, because current URI has same tokens as last-request-path."))))
@@ -46,7 +46,7 @@
   (with-session
     (let* ((env (generate-env "/" :method :get))
            (request (make-request env)))
-      (ok (equal (weblocks/request:with-request (request)
+      (ok (equal (reblocks/request:with-request (request)
                    100500
                    42)
                  42)

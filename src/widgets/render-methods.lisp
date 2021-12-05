@@ -1,21 +1,21 @@
-(defpackage #:weblocks/widgets/render-methods
+(defpackage #:reblocks/widgets/render-methods
   (:use #:cl)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:get-collected-dependencies
                 #:get-dependencies
                 #:push-dependencies
                 #:render-in-ajax-response)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:get-css-classes-as-string
                 #:get-html-tag
                 #:render)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:ajax-request-p)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html)
-  (:import-from #:weblocks/widgets/dom
+  (:import-from #:reblocks/widgets/dom
                 #:dom-id))
-(in-package weblocks/widgets/render-methods)
+(in-package reblocks/widgets/render-methods)
 
 
 (defmethod render (widget)
@@ -24,8 +24,8 @@
     (with-html
       (:p "Please, define:"
           (:pre (format nil
-                        "(defmethod weblocks/widget:render ((widget ~a))
-    (weblocks/html:with-html
+                        "(defmethod reblocks/widget:render ((widget ~a))
+    (reblocks/html:with-html
         (:p \"My ~a widget\")))"
                         class-name
                         class-name))))))
@@ -34,7 +34,7 @@
 (defmethod render :around (widget)
   "This function is intended for internal usage only.
    It renders widget with surrounding HTML tag and attributes."
-  (check-type widget weblocks/widget:widget)
+  (check-type widget reblocks/widget:widget)
   (log:debug "Rendering widget" widget "with" (get-collected-dependencies))
   
   (let ((widget-dependencies (get-dependencies widget)))

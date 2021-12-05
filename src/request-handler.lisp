@@ -1,50 +1,50 @@
-(defpackage #:weblocks/request-handler
+(defpackage #:reblocks/request-handler
   (:use #:cl
         #:f-underscore)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:get-path
                 #:get-action-name-from-request
                 #:get-parameter
                 #:get-parameters
                 #:pure-request-p
                 #:ajax-request-p)
-  (:import-from #:weblocks/utils/list
+  (:import-from #:reblocks/utils/list
                 #:alist->plist)
-  (:import-from #:weblocks/utils/uri
+  (:import-from #:reblocks/utils/uri
                 #:remove-parameter-from-uri)
-  (:import-from #:weblocks/page
+  (:import-from #:reblocks/page
                 #:render-page-with-widgets)
-  (:import-from #:weblocks/session-lock
+  (:import-from #:reblocks/session-lock
                 #:get-lock)
-  (:import-from #:weblocks/widget
+  (:import-from #:reblocks/widget
                 #:render)
-  (:import-from #:weblocks/widgets/dom
+  (:import-from #:reblocks/widgets/dom
                 #:dom-id)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html-string
                 #:*stream*)
-  (:import-from #:weblocks/utils/warn
+  (:import-from #:reblocks/utils/warn
                 #:style-warn
                 #:non-idempotent-rendering)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:with-collected-dependencies
                 #:push-dependencies
                 #:get-dependencies
                 #:get-collected-dependencies
                 #:register-dependencies)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:app)
-  (:import-from #:weblocks/actions
+  (:import-from #:reblocks/actions
                 #:eval-action)
-  (:import-from #:weblocks/commands
+  (:import-from #:reblocks/commands
                 #:get-collected-commands)
-  (:import-from #:weblocks/error-handler
+  (:import-from #:reblocks/error-handler
                 #:with-handled-errors
                 #:on-error)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*backtrace-on-session-init-error*
                 #:*action-string*)
-  (:import-from #:weblocks/utils/timing
+  (:import-from #:reblocks/utils/timing
                 #:*timing-level*
                 #:*timing-report-fn*
                 #:timing)
@@ -57,20 +57,20 @@
   (:import-from #:trivial-timeout
                 #:timeout-error
                 #:with-timeout)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:get-response
                 #:response
                 #:immediate-response
                 #:make-response
                 #:redirect)
   ;; Just dependencies
-  (:import-from #:weblocks/hooks)
+  (:import-from #:reblocks/hooks)
   (:import-from #:log)
-  ;; This package defines an :around method for weblocks/widgets:render
+  ;; This package defines an :around method for reblocks/widgets:render
   ;; which adds a wrapper around widget body
-  (:import-from #:weblocks/widgets/render-methods)
-  (:import-from #:weblocks/widgets/root)
-  (:import-from #:weblocks/session)
+  (:import-from #:reblocks/widgets/render-methods)
+  (:import-from #:reblocks/widgets/root)
+  (:import-from #:reblocks/session)
   (:import-from #:alexandria
                 #:make-keyword)
   (:import-from #:log4cl-extras/error
@@ -81,7 +81,7 @@
    #:page-not-found-handler
    *request-timeout*
    #:handle-ajax-request))
-(in-package weblocks/request-handler)
+(in-package reblocks/request-handler)
 
 
 (defvar *request-timeout* 180
@@ -99,7 +99,7 @@ dynamic variables. The default implementation executes a user
 action (if any) and renders the root widget wrapped in HTML
 provided by 'render-page'. If the request is an AJAX request, only the
 dirty widgets are rendered into a JSON data structure. It also invokes
-user supplied 'weblocks/session:init' method on the first request that has no
+user supplied 'reblocks/session:init' method on the first request that has no
 session setup.
 
 'handle-request' immediately returns '+http-not-found+' if it
@@ -191,7 +191,7 @@ customize behavior."))
   (write
    (to-json
     (list :|commands| (get-collected-commands)))
-   ;; Seems like a hack, because we have to know implementation details of weblocks/html here.
+   ;; Seems like a hack, because we have to know implementation details of reblocks/html here.
    ;; TODO: hide implementation details.
    :stream *stream*
    :escape nil))
@@ -203,10 +203,10 @@ customize behavior."))
   ;; stylesheet dependencies.
   (log:debug "Handling normal request")
 
-  ;; TODO: make a macro weblocks/session-lock:with-lock
+  ;; TODO: make a macro reblocks/session-lock:with-lock
   (with-lock-held ((get-lock))
     (timing "widget tree rendering"
-      (render (weblocks/widgets/root:get))))
+      (render (reblocks/widgets/root:get))))
 
   ;; render page will wrap the HTML already rendered to
   ;; weblocks.html::*stream* with necessary boilerplate HTML
@@ -242,7 +242,7 @@ customize behavior."))
           action-arguments)))
 
       (timing "action processing (w/ hooks)"
-        (weblocks/hooks:with-action-hook (app action-name action-arguments)
+        (reblocks/hooks:with-action-hook (app action-name action-arguments)
           (eval-action
            app
            action-name
@@ -265,20 +265,20 @@ customize behavior."))
     (log:debug "Handling client request" path)
 
     ;; TODO: write a test
-    (when (null (weblocks/widgets/root:get))
+    (when (null (reblocks/widgets/root:get))
       (log:debug "Initializing session")
       (handler-bind ((error (lambda (c) 
                               (when *backtrace-on-session-init-error*
                                 (let ((traceback))
                                   (log:error "Error during session initialization" traceback)))
                               (signal c))))
-        (setf (weblocks/widgets/root:get)
-              (weblocks/session:init app))))
+        (setf (reblocks/widgets/root:get)
+              (reblocks/session:init app))))
     
     ;; TODO: understand why there is coupling with Dialog here and
     ;;       how to move it into the Dialog's code.
     
-    ;; (weblocks/hooks:on-session-hook-action
+    ;; (reblocks/hooks:on-session-hook-action
     ;;     update-dialog ()
     ;;   (weblocks::update-dialog-on-request)))
 
@@ -294,7 +294,7 @@ customize behavior."))
 
         (setf content
               (timing "rendering (w/ hooks)"
-                (weblocks/hooks:with-render-hook (app)
+                (reblocks/hooks:with-render-hook (app)
                   (with-html-string
                     (if (ajax-request-p)
                         (handle-ajax-request app)

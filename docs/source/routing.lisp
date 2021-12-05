@@ -7,14 +7,14 @@
 (defpackage todo
   (:use #:cl
         #:weblocks-ui/form
-        #:weblocks/html)
-  (:import-from #:weblocks/widget
+        #:reblocks/html)
+  (:import-from #:reblocks/widget
                 #:render
                 #:update
                 #:defwidget)
-  (:import-from #:weblocks/actions
+  (:import-from #:reblocks/actions
                 #:make-js-action)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:defapp)
   (:import-from #:weblocks-navigation-widget
                 #:defroutes))
@@ -23,7 +23,7 @@
 
 (defapp tasks)
 
-(weblocks/debug:on)
+(reblocks/debug:on)
 
 (defvar *port* (find-port:find-port))
 
@@ -138,7 +138,7 @@
     (:div "Task not found.")))
 
 (defun make-task-page ()
-  (let* ((path (weblocks/request:get-path))
+  (let* ((path (reblocks/request:get-path))
          (id (first (ppcre:all-matches-as-strings "\\d+" path)))
          (task (gethash (parse-integer id) *store*)))
     (if task
@@ -148,17 +148,17 @@
 ;; The router must return a widget.
 (defroutes tasks-routes
   ("/tasks/\\d+" (make-task-page))
-  ("/tasks/list/?" (weblocks/response:redirect "/tasks/"))
+  ("/tasks/list/?" (reblocks/response:redirect "/tasks/"))
   ("/tasks/" (make-task-list "Make my first Weblocks app"
                              "Deploy it somewhere"
                              "Have a profit")))
 
-(defmethod weblocks/session:init ((app tasks))
+(defmethod reblocks/session:init ((app tasks))
   (declare (ignorable app))
   (make-tasks-routes))
 
-(weblocks/server:start :port *port*)
+(reblocks/server:start :port *port*)
 
 (defun reset ()
   (setf *counter* 0)
-  (weblocks/debug:reset-latest-session))
+  (reblocks/debug:reset-latest-session))

@@ -1,4 +1,4 @@
-(defpackage #:weblocks/session
+(defpackage #:reblocks/session
   (:use #:cl)
   (:import-from #:alexandria
                 #:ensure-gethash)
@@ -21,7 +21,7 @@
    #:get-number-of-sessions
    #:make-session-middleware
    #:get-number-of-anonymous-sessions))
-(in-package weblocks/session)
+(in-package reblocks/session)
 
 
 (defvar *session* nil

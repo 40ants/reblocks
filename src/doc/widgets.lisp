@@ -1,12 +1,12 @@
-(defpackage #:weblocks/doc/widgets
+(defpackage #:reblocks/doc/widgets
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
-  (:import-from #:weblocks/widget)
-  (:import-from #:weblocks/dependencies)
-  (:import-from #:weblocks/doc/example
+  (:import-from #:reblocks/widget)
+  (:import-from #:reblocks/dependencies)
+  (:import-from #:reblocks/doc/example
                 #:defexample))
-(in-package weblocks/doc/widgets)
+(in-package reblocks/doc/widgets)
 
 
 (defsection @widgets (:title "Widgets"
@@ -35,13 +35,13 @@
    discover changes slots, and probably this feature will be returned back some day.
 
    ```
-   CL-USER> (weblocks/widget:defwidget hello ()
+   CL-USER> (reblocks/widget:defwidget hello ()
               ((name :initarg :name
                      :reader get-name)))
    #<WEBLOCKS/WIDGETS/MOP:WIDGET-CLASS COMMON-LISP-USER::HELLO>
 
-   CL-USER> (defmethod weblocks/widget:render ((widget hello))
-              (weblocks/html:with-html
+   CL-USER> (defmethod reblocks/widget:render ((widget hello))
+              (reblocks/html:with-html
                 (:span (\"Hello ~A\" (get-name widget)))))
    #<STANDARD-METHOD WEBLOCKS/WIDGET:RENDER (HELLO) {1004E27BC3}>
    ```
@@ -49,7 +49,7 @@
    Then call this, to run a webserver and preview your widget in the browser:
 
    ```
-   CL-USER> (weblocks/preview:preview
+   CL-USER> (reblocks/preview:preview
              (make-instance 'hello
                             :name \"Bob\"))
    ```
@@ -61,22 +61,22 @@
   
   "# API"
   
-  (weblocks/widget:widget class)
-  (weblocks/widget:defwidget macro)
-  (weblocks/widget:render generic-function)
-  (weblocks/widget:update generic-function)
-  (weblocks/widget:get-html-tag generic-function)
-  (weblocks/widget:get-css-classes generic-function)
-  (weblocks/widget:create-widget-from generic-function))
+  (reblocks/widget:widget class)
+  (reblocks/widget:defwidget macro)
+  (reblocks/widget:render generic-function)
+  (reblocks/widget:update generic-function)
+  (reblocks/widget:get-html-tag generic-function)
+  (reblocks/widget:get-css-classes generic-function)
+  (reblocks/widget:create-widget-from generic-function))
 
 
 (defexample hello-world ()
-  (weblocks/widget:defwidget hello ()
+  (reblocks/widget:defwidget hello ()
     ((name :initarg :name
            :reader get-name)))
 
-  (defmethod weblocks/widget:render ((widget hello))
-    (weblocks/html:with-html
+  (defmethod reblocks/widget:render ((widget hello))
+    (reblocks/html:with-html
       (:h1 ("Hello ~A" (get-name widget)))
       (:ul (:li "Just a list.")
            (:li "To demonstrate templating.")

@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/contribute
+(uiop:define-package #:reblocks/doc/contribute
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package weblocks/doc/contribute)
+(in-package reblocks/doc/contribute)
 
 
 (defsection @contribute (:title "Contributing to Reblocks"

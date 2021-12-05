@@ -1,4 +1,4 @@
-(defpackage #:weblocks/utils/timing
+(defpackage #:reblocks/utils/timing
   (:use #:cl)
   (:import-from #:alexandria
                 #:with-gensyms)
@@ -6,7 +6,7 @@
   (:export #:*enable-timings*
            #:*timing-report-fn*
            #:timing))
-(in-package weblocks/utils/timing)
+(in-package reblocks/utils/timing)
 
 
 ;; TODO: rebuild this functionality, making

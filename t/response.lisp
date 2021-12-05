@@ -2,7 +2,7 @@
   (:use #:cl
         #:rove
         #:weblocks-test/utils)
-  (:import-from #:weblocks/response
+  (:import-from #:reblocks/response
                 #:make-uri
                 #:add-retpath-to))
 (in-package weblocks-test/response)

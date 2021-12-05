@@ -1,12 +1,12 @@
-(defpackage #:weblocks/utils/i18n
+(defpackage #:reblocks/utils/i18n
   (:use #:cl)
-  (:import-from #:weblocks/linguistic/grammar
+  (:import-from #:reblocks/linguistic/grammar
                 #:default-translation-function)
   
   (:export #:*translation-function*
            #:translate
            #:default-translation-function))
-(in-package weblocks/utils/i18n)
+(in-package reblocks/utils/i18n)
 
 
 ;; TODO: rethink this module, unexport variable and make

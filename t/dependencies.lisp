@@ -10,7 +10,7 @@
                 #:invocations
                 #:with-mocks
                 #:answer)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:*cache-remote-dependencies-in*
                 #:make-dependency
                 #:with-collected-dependencies

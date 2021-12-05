@@ -1,17 +1,17 @@
-(defpackage #:weblocks/page
+(defpackage #:reblocks/page
   (:use #:cl)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*default-content-type*)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:*lang*
                 #:with-html
                 #:get-rendered-chunk)
-  (:import-from #:weblocks/dependencies
+  (:import-from #:reblocks/dependencies
                 #:render-in-head
                 #:get-dependencies
                 #:register-dependencies
                 #:get-collected-dependencies)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:app)
   (:import-from #:alexandria
                 #:symbolicate)
@@ -29,7 +29,7 @@
    #:get-keywords
    #:get-language
    #:with-layout))
-(in-package weblocks/page)
+(in-package reblocks/page)
 
 
 (defvar *title* nil)
@@ -124,7 +124,7 @@
   (log:debug "Special Rendering page for" app)
 
   ;; At the moment when this method is called, there is already
-  ;; rendered page's content in the weblocks/html::*stream*.
+  ;; rendered page's content in the reblocks/html::*stream*.
   ;; All we need to do now – is to render dependencies in the header
   ;; and paste content into the body.
   (let* ((rendered-html (get-rendered-chunk))

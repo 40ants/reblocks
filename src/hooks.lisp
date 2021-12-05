@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/hooks
+(uiop:define-package #:reblocks/hooks
   (:use #:cl
         #:f-underscore)
   ;; Just dependencies
-  (:import-from #:weblocks/session)
+  (:import-from #:reblocks/session)
   (:import-from #:log)
   (:import-from #:metatilities)
   (:import-from #:alexandria
@@ -14,7 +14,7 @@
   
   (:export #:call-next-hook
            #:defhook))
-(in-package weblocks/hooks)
+(in-package reblocks/hooks)
 
 
 (defclass hooks ()
@@ -30,15 +30,15 @@
 
 (defun reset-session-hooks ()
   (let ((hooks (make-instance 'hooks)))
-    (setf (weblocks/session:get-value 'hooks)
+    (setf (reblocks/session:get-value 'hooks)
           hooks)
     hooks))
 
 
 (defun get-or-create-session-hooks ()
   "A request hook object used in the session scope."
-  (if (weblocks/session:get-value 'hooks)
-      (weblocks/session:get-value 'hooks)
+  (if (reblocks/session:get-value 'hooks)
+      (reblocks/session:get-value 'hooks)
       (reset-session-hooks)))
 
 
@@ -271,15 +271,15 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
   "Registers a hook"
   (with-gensyms ()
     (let ((session-macro-name (ensure-symbol (symbolicate "ON-SESSION-HOOK-" name)
-                                             :weblocks/hooks))
+                                             :reblocks/hooks))
           (request-macro-name (ensure-symbol (symbolicate "ON-REQUEST-HOOK-" name)
-                                             :weblocks/hooks))
+                                             :reblocks/hooks))
           (application-macro-name (ensure-symbol (symbolicate "ON-APPLICATION-HOOK-" name)
-                                     :weblocks/hooks))
+                                     :reblocks/hooks))
           (with-macro-name (ensure-symbol (symbolicate "WITH-" name "-HOOK")
-                                          :weblocks/hooks))
+                                          :reblocks/hooks))
           (call-macro-name (ensure-symbol (symbolicate "CALL-" name "-HOOK")
-                                          :weblocks/hooks)))
+                                          :reblocks/hooks)))
       ;; Here we need eval-when, because otherwice, exported functions
       ;; will not be available at load time
       `(eval-when (:compile-toplevel :load-toplevel :execute)
@@ -339,7 +339,7 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
                        ',application-macro-name
                        ',with-macro-name
                        ',call-macro-name)
-                 :weblocks/hooks)))))
+                 :reblocks/hooks)))))
 
 
 ;; Weblocks core hooks

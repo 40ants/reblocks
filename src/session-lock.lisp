@@ -1,13 +1,13 @@
-(defpackage #:weblocks/session-lock
+(defpackage #:reblocks/session-lock
   (:use #:cl)
   (:import-from #:bordeaux-threads
                 #:with-lock-held
                 #:make-lock)
   ;; Just dependencies
-  (:import-from #:weblocks/session)
+  (:import-from #:reblocks/session)
   
   (:export #:get-lock))
-(in-package weblocks/session-lock)
+(in-package reblocks/session-lock)
 
 
 (defvar *session-locks* (make-hash-table :test #'eq
@@ -24,9 +24,9 @@
 
 (defun get-lock ()
   (bordeaux-threads:with-lock-held (*session-lock-table-lock*)
-    (weblocks/session:get-value *session-locks*
+    (reblocks/session:get-value *session-locks*
                                 (make-lock
                                  (format nil "session lock for session ~S"
-                                         (weblocks/session:get-session-id))))))
+                                         (reblocks/session:get-session-id))))))
 
 

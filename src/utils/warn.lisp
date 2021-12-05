@@ -1,11 +1,11 @@
-(defpackage #:weblocks/utils/warn
+(defpackage #:reblocks/utils/warn
   (:use #:cl)
   (:shadow #:style-warning)
   (:export #:style-warn
            #:style-warning
            #:non-idempotent-rendering
            #:misunderstood-action))
-(in-package weblocks/utils/warn)
+(in-package reblocks/utils/warn)
 
 
 (defun style-warn (condition &rest warn-args)

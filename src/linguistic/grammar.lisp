@@ -1,4 +1,4 @@
-(defpackage #:weblocks/linguistic/grammar
+(defpackage #:reblocks/linguistic/grammar
   (:use #:cl)
   (:export #:pluralize
            #:singularize
@@ -14,7 +14,7 @@
            #:*debug-words-forms*
            #:*debug-words-genders*
            #:determine-gender))
-(in-package weblocks/linguistic/grammar)
+(in-package reblocks/linguistic/grammar)
 
 
 (defvar *current-locale* :en)

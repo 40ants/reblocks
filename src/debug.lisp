@@ -1,19 +1,19 @@
-(defpackage #:weblocks/debug
+(defpackage #:reblocks/debug
   (:use #:cl)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:on-application-hook-handle-http-request)
-  (:import-from #:weblocks/app
+  (:import-from #:reblocks/app
                 #:*current-app*
                 #:find-app-by-name
                 #:get-registered-apps)
-  (:import-from #:weblocks/session
+  (:import-from #:reblocks/session
                 #:*session*)
-  (:import-from #:weblocks/request
+  (:import-from #:reblocks/request
                 #:*request*)
-  (:import-from #:weblocks/variables
+  (:import-from #:reblocks/variables
                 #:*invoke-debugger-on-error*
                 #:*ignore-missing-actions*)
-  (:import-from #:weblocks/session-reset
+  (:import-from #:reblocks/session-reset
                 #:reset-session)
   (:export #:*latest-session*
            #:*latest-request*
@@ -23,7 +23,7 @@
            #:status
            #:in-app
            #:get-session-value))
-(in-package weblocks/debug)
+(in-package reblocks/debug)
 
 
 ;; TODO: move useful staff from debug-mode.lisp, to this package
@@ -141,5 +141,5 @@ To clear, use function \(reset-last-session\).")
 (defun get-session-value (key)
   "Returns a value from the latest session."
   (unless *latest-session*
-    (error "Please, turn on debug mode with (weblocks/debug:on) call and refresh the page."))
+    (error "Please, turn on debug mode with (reblocks/debug:on) call and refresh the page."))
   (gethash key *latest-session*))

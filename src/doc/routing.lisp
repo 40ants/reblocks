@@ -1,9 +1,9 @@
-(defpackage #:weblocks/doc/routing
+(defpackage #:reblocks/doc/routing
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
   (:export #:@routing))
-(in-package weblocks/doc/routing)
+(in-package reblocks/doc/routing)
 
 
 (defsection @routing (:title "Routing"
@@ -45,7 +45,7 @@ Weblocks:
   widget, using the MAKE-TASKS-ROUTES constructor created by DEFROUTES macro.
 
 Let's start. Note that you can see the full code
-[on Github](https://github.com/40ants/weblocks/blob/reblocks/docs/source/routing.lisp).
+[on Github](https://github.com/40ants/reblocks/blob/reblocks/docs/source/routing.lisp).
 
 
 # Getting started
@@ -73,14 +73,14 @@ The package definition becomes::
 TODO> (defpackage todo
         (:use #:cl
               #:weblocks-ui/form
-              #:weblocks/html)
-        (:import-from #:weblocks/widget
+              #:reblocks/html)
+        (:import-from #:reblocks/widget
                       #:render
                       #:update
                       #:defwidget)
-        (:import-from #:weblocks/actions
+        (:import-from #:reblocks/actions
                       #:make-js-action)
-        (:import-from #:weblocks/app
+        (:import-from #:reblocks/app
                       #:defapp)
         (:import-from #:weblocks-navigation-widget
                       #:defroutes))
@@ -194,14 +194,14 @@ matched by the route.
 
 # Path and URL parameters
 
-To get the current path, use `(weblocks/request:get-path)`. Then,
+To get the current path, use `(reblocks/request:get-path)`. Then,
 you can find the matching parameters with [CL-PPCRE][CL-PPCRE].
 
 Our TASK-PAGE constructor becomes:
 
 ```
 TODO> (defun make-task-page ()
-        (let* ((path (weblocks/request:get-path))
+        (let* ((path (reblocks/request:get-path))
                (id (first (ppcre:all-matches-as-strings \"\\d+\" path)))
                (task (get-task (parse-integer id))))
           (if task
@@ -233,13 +233,13 @@ The DEFROUTES macro creates a new class and its constructor, named
 
 # Redirections
 
-To perform redirections, use `(weblocks/response:redirect \"/url\")`:
+To perform redirections, use `(reblocks/response:redirect \"/url\")`:
 
 
 ```
 TODO> (defroutes tasks-routes
         (\"/tasks/\\d+\" (make-task-page))
-        (\"/tasks/list/?\" (weblocks/response:redirect \"/tasks/\"))  ;; <-- redirection
+        (\"/tasks/list/?\" (reblocks/response:redirect \"/tasks/\"))  ;; <-- redirection
         (\"/tasks/\" (make-task-list \"Make my first Weblocks app\"
                                    \"Deploy it somewhere\"
                                    \"Have a profit\")))
@@ -256,7 +256,7 @@ WEBLOCKS/RESPONSE:REDIRECT does not return a widget but signals a specital condi
 Make our router the main widget for this session:
 
 ```
-TODO> (defmethod weblocks/session:init ((app tasks))
+TODO> (defmethod reblocks/session:init ((app tasks))
         (declare (ignorable app))
         (make-tasks-routes))
 ```
@@ -266,7 +266,7 @@ Reset the session:
 ```
 TODO> (defun reset ()
         (setf *counter* 0)
-        (weblocks/debug:reset-latest-session))
+        (reblocks/debug:reset-latest-session))
 TODO> (reset)
 ```
 

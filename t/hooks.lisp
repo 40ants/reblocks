@@ -2,7 +2,7 @@
   (:use #:cl
         #:rove
         #:weblocks-test/utils)
-  (:import-from #:weblocks/hooks
+  (:import-from #:reblocks/hooks
                 #:get-callbacks
                 #:*session-hooks*
                 #:get-callbacks-names
@@ -21,14 +21,14 @@
             "If no callbacks were added for the name, then get-callbacks should return an empty list.")))))
 
 
-(weblocks/hooks:defhook test-action ()
+(reblocks/hooks:defhook test-action ()
   "Just a test hook.")
 
 
 (deftest on-session-hook-test
   (with-session
       (with-request ("/")
-        (weblocks/hooks:on-session-hook-test-action 
+        (reblocks/hooks:on-session-hook-test-action 
           foo ())
 
         (let ((callbacks (get-callbacks-names
@@ -39,7 +39,7 @@
           "Macro on-session-hook-test-action should put a callable into the list of callbacks bound to the session."))))
 
 
-(weblocks/hooks:defhook some-hook (param))
+(reblocks/hooks:defhook some-hook (param))
 
 
 (deftest hooks-evaluation
@@ -48,12 +48,12 @@
       (with-request ("/")
         (let (call-result)
           
-          (weblocks/hooks:on-session-hook-test-action
+          (reblocks/hooks:on-session-hook-test-action
             set-result ()
             (setf call-result
                   'callback-was-called))
           
-          (weblocks/hooks:with-test-action-hook ()
+          (reblocks/hooks:with-test-action-hook ()
             ;; do nothing
             )
 
@@ -64,12 +64,12 @@
     (with-session
       (with-request ("/")
         (let (call-result)
-          (weblocks/hooks:on-session-hook-some-hook
+          (reblocks/hooks:on-session-hook-some-hook
            add-value (param)
            (push param call-result))
           
-          (weblocks/hooks:with-some-hook-hook ('blah))
-          (weblocks/hooks:with-some-hook-hook ('minor))
+          (reblocks/hooks:with-some-hook-hook ('blah))
+          (reblocks/hooks:with-some-hook-hook ('minor))
           
           (ok (equal call-result
                      '(minor blah)))))))
@@ -78,7 +78,7 @@
   (testing "Hook should return last form's value"
     (with-session
       (with-request ("/")
-        (let ((result (weblocks/hooks:with-test-action-hook ()
+        (let ((result (reblocks/hooks:with-test-action-hook ()
                         'foo
                         'bar)))
 
@@ -90,14 +90,14 @@
   ;; Here we check if hooks are propertly chained
   (with-session
     (with-request ("/")
-      (weblocks/hooks:on-session-hook-some-hook 
+      (reblocks/hooks:on-session-hook-some-hook 
         inner-value (param)
         (append 
          (list :inner-before)
          (call-next-hook)
          (list :inner-after)))
       
-      (weblocks/hooks:on-session-hook-some-hook
+      (reblocks/hooks:on-session-hook-some-hook
         outer-value (param)
         (append
          (list :outer-before)
@@ -105,7 +105,7 @@
          (list :outer-after)))
       
       (let* ((param 'ignored)
-             (result (weblocks/hooks:with-some-hook-hook (param)
+             (result (reblocks/hooks:with-some-hook-hook (param)
                        ;; Now we surrounded this code with hooks
                        ;; and will insert another value to the list
                        (list :real-value))))
@@ -123,17 +123,17 @@
     (with-session
       (with-request ("/")
         (let (result)
-          (weblocks/hooks:on-session-hook-test-action foo ()
+          (reblocks/hooks:on-session-hook-test-action foo ()
             (push :foo result)
             (call-next-hook))
 
           ;; Add a hook with same name, but now it will push :bar
           ;; into the list.
-          (weblocks/hooks:on-session-hook-test-action foo ()
+          (reblocks/hooks:on-session-hook-test-action foo ()
             (push :bar result)
             (call-next-hook))
 
-          (weblocks/hooks:with-test-action-hook ()
+          (reblocks/hooks:with-test-action-hook ()
             t)
 
           (ok (equal result
@@ -147,18 +147,18 @@
       (with-request ("/")
         (let (result)
           ;; First callback will push :foo
-          (weblocks/hooks:on-session-hook-test-action
+          (reblocks/hooks:on-session-hook-test-action
             foo ()
             (push :foo result))
 
           ;; Second will push :bar
-          (weblocks/hooks:on-session-hook-test-action
+          (reblocks/hooks:on-session-hook-test-action
             bar ()
             (push :bar result))
 
           ;; But these callbacks does not call call-next-hook
 
-          (weblocks/hooks:with-test-action-hook ()
+          (reblocks/hooks:with-test-action-hook ()
             t)
 
           ;; Neither of two callbacks use call-next-hook,

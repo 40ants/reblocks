@@ -1,4 +1,4 @@
-(uiop:define-package #:weblocks/app-mop
+(uiop:define-package #:reblocks/app-mop
   (:use #:cl)
   (:shadowing-import-from #:closer-mop
                           #:standard-class
@@ -15,7 +15,7 @@
                           )
   (:export #:get-registered-apps
            #:get-autostarting-apps))
-(in-package weblocks/app-mop)
+(in-package reblocks/app-mop)
 
 
 ;; (eval-when (:compile-toplevel :load-toplevel :execute))

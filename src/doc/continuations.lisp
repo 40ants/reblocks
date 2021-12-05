@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/continuations
+(uiop:define-package #:reblocks/doc/continuations
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package weblocks/doc/continuations)
+(in-package reblocks/doc/continuations)
 
 
 (defsection @continuations (:title "Continuations-based tools")

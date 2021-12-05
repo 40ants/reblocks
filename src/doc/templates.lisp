@@ -1,8 +1,8 @@
-(uiop:define-package #:weblocks/doc/templates
+(uiop:define-package #:reblocks/doc/templates
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package weblocks/doc/templates)
+(in-package reblocks/doc/templates)
 
 
 (defsection @templates (:title "Templates"

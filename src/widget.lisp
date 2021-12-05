@@ -1,13 +1,13 @@
-(uiop:define-package #:weblocks/widget
+(uiop:define-package #:reblocks/widget
   (:use #:cl)
-  (:import-from #:weblocks/html
+  (:import-from #:reblocks/html
                 #:with-html
                 #:with-html-string)
-  (:import-from #:weblocks/widgets/mop
+  (:import-from #:reblocks/widgets/mop
                 #:widget-class)
-  (:import-from #:weblocks/commands
+  (:import-from #:reblocks/commands
                 #:add-command)
-  (:import-from #:weblocks/widgets/dom
+  (:import-from #:reblocks/widgets/dom
                 #:dom-id
                 #:dom-object-mixin)
   (:import-from #:alexandria
@@ -27,7 +27,7 @@
            #:update
            #:widget
            #:create-widget-from))
-(in-package weblocks/widget)
+(in-package reblocks/widget)
 
 
 (defclass widget (dom-object-mixin)
@@ -172,7 +172,7 @@ propagation code."))
 
 
 (defgeneric create-widget-from (object)
-  (:documentation "Methods of this generic should return an instance of subclass of weblocks/widget:widget
+  (:documentation "Methods of this generic should return an instance of subclass of reblocks/widget:widget
                    The most obvious cases are transformation of strings and functions into the widget, but
                    these methods are already supplied by Weblocks.
 
