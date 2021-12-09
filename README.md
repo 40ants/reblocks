@@ -1,11 +1,11 @@
-<a id="x-28WEBLOCKS-2FDOC-2FINDEX-3A-40README-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+<a id="x-28REBLOCKS-2FDOC-2FINDEX-3A-40README-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 # Quickstart
 
 > This version of Weblocks is not in Quicklisp yet. To
 > install it you need to clone the repository somewhere where
 > `ASDF` will find it, for example, to the `~/common-lisp/` directory.
-> You also need to clone [weblocks-ui][f3cf].
+> You also need to clone [reblocks-ui][ec9f].
 > 
 > You can also install the [Ultralisp][3e27] Quicklisp distribution where all Weblocks-related libraries are present and up to date.
 > 
@@ -16,18 +16,18 @@ Load weblocks and create a package for a sandbox:
 ```
 CL-USER> (ql-dist:install-dist "http://dist.ultralisp.org/"
                                :prompt nil)
-CL-USER> (ql:quickload '(:weblocks :weblocks-ui :find-port))
+CL-USER> (ql:quickload '(:weblocks :reblocks-ui :find-port))
 CL-USER> (defpackage todo
            (:use #:cl
-                 #:weblocks-ui/form
-                 #:weblocks/html)
-           (:import-from #:weblocks/widget
+                 #:reblocks-ui/form
+                 #:reblocks/html)
+           (:import-from #:reblocks/widget
                     #:render
                     #:update
                     #:defwidget)
-           (:import-from #:weblocks/actions
+           (:import-from #:reblocks/actions
                     #:make-js-action)
-           (:import-from #:weblocks/app
+           (:import-from #:reblocks/app
                     #:defapp))
 #<PACKAGE "TODO">
 CL-USER> (in-package todo)
@@ -41,7 +41,7 @@ TODO> (defapp tasks)
 By default, the name of the app defines the url where it is
 accessible. Here, the "tasks" app will be accessible under
 [http://localhost:40000/tasks][5ff5]. We can change it with the
-`PREFIX` argument of [`weblocks/app:defapp`][92cd]:
+`PREFIX` argument of [`reblocks/app:defapp`][f9d3]:
 
 ```
 TODO> (defapp tasks
@@ -50,15 +50,15 @@ TODO> (defapp tasks
 Now our app runs under the root url.
 
 ```
-TODO> (weblocks/debug:on)
+TODO> (reblocks/debug:on)
 TODO> (defvar *port* (find-port:find-port))
-TODO> (weblocks/server:start :port *port*)
- <INFO> [19:41:00] weblocks/server server.lisp (start) -
-  Starting weblocks WEBLOCKS/SERVER::PORT: 40000
-  WEBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
- <INFO> [19:41:00] weblocks/server server.lisp (start-server) -
-  Starting webserver on WEBLOCKS/SERVER::INTERFACE: "localhost"
-  WEBLOCKS/SERVER::PORT: 40000 DEBUG: T
+TODO> (reblocks/server:start :port *port*)
+ <INFO> [19:41:00] reblocks/server server.lisp (start) -
+  Starting weblocks REBLOCKS/SERVER::PORT: 40000
+  REBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
+ <INFO> [19:41:00] reblocks/server server.lisp (start-server) -
+  Starting webserver on REBLOCKS/SERVER::INTERFACE: "localhost"
+  REBLOCKS/SERVER::PORT: 40000 DEBUG: T
  #<SERVER port=40000 running>
  (NIL)
 ```
@@ -66,12 +66,12 @@ Open [http://localhost:40000/tasks/][2e0b] in your browser (double check the por
 text like that:
 
 ```
-No weblocks/session:init method defined.
+No reblocks/session:init method defined.
 Please define a method weblocks.session:init to initialize a session.
 
 It could be something simple, like this one:
 
-(defmethod weblocks/session:init ((app tasks))
+(defmethod reblocks/session:init ((app tasks))
             "Hello world!")
 
 Read more in the documentaion.
@@ -98,7 +98,7 @@ TODO> (defwidget task ()
           :accessor done)))
 ```
 This code defines a task widget, the building block of our
-application. [`weblocks/widget:defwidget`][0071] is similar to Common Lisp's `DEFCLASS`,
+application. [`reblocks/widget:defwidget`][33d7] is similar to Common Lisp's `DEFCLASS`,
 in fact it is only a wrapper around it. It takes a name, a list of
 super-classes (here `()`) and a list of slot definitions.
 
@@ -142,7 +142,7 @@ Now let's carry on with our application.
 
 Below we define a more general widget that contains a list of tasks,
 and we tell Weblocks how to display them by *specializing* the
-[`weblocks/widget:render`][f259] generic-function for our newly defined classes:
+[`reblocks/widget:render`][c703] generic-function for our newly defined classes:
 
 ```
 TODO> (defwidget task-list ()
@@ -166,12 +166,12 @@ TODO> (defmethod render ((widget task-list))
                 (loop for task in (tasks widget) do
                       (:li (render task))))))
 ```
-The [`weblocks/html:with-html`][174e] macro uses
+The [`reblocks/html:with-html`][3333] macro uses
 [Spinneret][a443] under the hood,
 but you can use anything that outputs html.
 
 We can check how the generated html looks like by calling
-[`weblocks/widget:render`][f259] generic-function in the `REPL`:
+[`reblocks/widget:render`][c703] generic-function in the `REPL`:
 
 ```
 TODO> (render *task-1*)
@@ -187,7 +187,7 @@ TODO> (defun make-task-list (&rest rest)
                         collect (make-task title))))
           (make-instance 'task-list :tasks tasks)))
 
-TODO> (defmethod weblocks/session:init ((app tasks))
+TODO> (defmethod reblocks/session:init ((app tasks))
          (declare (ignorable app))
          (make-task-list "Make my first Weblocks app"
                          "Deploy it somewhere"
@@ -199,7 +199,7 @@ list in memory) and returns what will be our session's root widget..
 Restart the application:
 
 ```
-TODO> (weblocks/debug:reset-latest-session)
+TODO> (reblocks/debug:reset-latest-session)
 ```
 Right now it should look like this:
 
@@ -207,8 +207,8 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-418
-         src="http://localhost:40000/examples/weblocks/doc/quickstart/example1?iframe-id=example-418"
+         id=example-106
+         src="http://localhost:40000/examples/reblocks/doc/quickstart/example1?iframe-id=example-106"
          style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
 <script>
@@ -230,11 +230,11 @@ into it, like so:
 
 ![](docs/images/quickstart-add-task.gif)
 
-Import a new module, [weblocks-ui][f3cf] to help in creating forms and other `UI` elements:
+Import a new module, [reblocks-ui][ec9f] to help in creating forms and other `UI` elements:
 
 ```
-TODO> (ql:quickload "weblocks-ui")
-TODO> (use-package :weblocks-ui/form)
+TODO> (ql:quickload "reblocks-ui")
+TODO> (use-package :reblocks-ui/form)
 ```
 Write a new `ADD-TASK` method and modify the `RENDER` method of a
 task-list to call `ADD-TASK` in response to `POST` method:
@@ -258,21 +258,21 @@ TODO> (defmethod render ((task-list task-list))
             (:input :type "submit"
                     :value "Add"))))
 
-TODO> (weblocks/debug:reset-latest-session)
+TODO> (reblocks/debug:reset-latest-session)
 ```
 The method `ADD-TASK` does only two simple things:
 
 * it adds a task into a list;
 
-* it tells Weblocks that our task list should be redrawn.
+* it tells Reblocks that our task list should be redrawn.
 
-This second point is really important because it allows Weblocks to render
+This second point is really important because it allows Reblocks to render
 necessary parts of the page on the server and to inject it into the `HTML` `DOM`
-in the browser. Here it rerenders the task-list widget, but we can as well [`weblocks/widget:update`][cb7e]
+in the browser. Here it rerenders the task-list widget, but we can as well [`reblocks/widget:update`][fbc8]
 a specific task widget, as we'll do soon.
 
 We are calling `ADD-TASK` from a lambda function to catch a
-`TASK-LIST` in a closure and make it availabe when weblocks will
+`TASK-LIST` in a closure and make it availabe when reblocks will
 process `AJAX` request with `POST` parameters later.
 
 Another block in our new version of `RENDER` of a `TASK-LIST` is the form:
@@ -294,8 +294,8 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-419
-         src="http://localhost:40000/examples/weblocks/doc/quickstart/example2?iframe-id=example-419"
+         id=example-107
+         src="http://localhost:40000/examples/reblocks/doc/quickstart/example2?iframe-id=example-107"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -310,14 +310,14 @@ window.addEventListener('message', function(e) {
 
 > **This is really amazing!**
 > 
-> With Weblocks, you can handle all the business logic
+> With Reblocks, you can handle all the business logic
 > server-side, because an action can be any lisp function, even an
 > anonymous lambda, closuring all necessary variables.
 > 
 > 
 
 Restart the application and reload the page. Test your form now and see in a
-[Webinspector][c3de] how Weblocks sends requests to the server and receives
+[Webinspector][c3de] how Reblocks sends requests to the server and receives
 `HTML` code with rendered `HTML` block.
 
 Now we'll make our application really useful – we'll add code to toggle the tasks' status.
@@ -352,9 +352,9 @@ modified our task rendering function by adding a code to render a
 checkbox with an anonymous lisp function, attached to its
 `ONCLICK` attribute.
 
-The [`weblocks/actions:make-js-action`][b26e] function returns a Javascript code,
+The [`reblocks/actions:make-js-action`][cb44] function returns a Javascript code,
 which calls back a lisp lambda function when evaluated in the browser.
-And because `TOGGLE` updates a Task widget, Weblocks returns on this
+And because `TOGGLE` updates a Task widget, Reblocks returns on this
 callback a new prerendered `HTML` for this one task only.
 
 Here is how our app will work now:
@@ -363,8 +363,8 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-420
-         src="http://localhost:40000/examples/weblocks/doc/quickstart/example3?iframe-id=example-420"
+         id=example-108
+         src="http://localhost:40000/examples/reblocks/doc/quickstart/example3?iframe-id=example-108"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -390,28 +390,28 @@ As a homework:
 
 3. Save tasks in a database (this [Cookbook chapter][63e3] might help).
 
-4. Read the [`Routing`][507a] section.
+4. Read the [`Routing`][3f5e] section.
 
 5. Read the rest of the documentation and make a real application, using the full
    power of Common Lisp.
 
 
-[b26e]: actions.html#x-28WEBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
-[92cd]: apps.html#x-28WEBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[174e]: html.html#x-28WEBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[cb44]: actions.html#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
+[f9d3]: apps.html#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[3333]: html.html#x-28REBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [5ff5]: http://localhost:40000/tasks
 [2e0b]: http://localhost:40000/tasks/
 [9dee]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
 [c3de]: https://developers.google.com/web/tools/chrome-devtools/inspect-styles/
-[f3cf]: https://github.com/40ants/weblocks-ui/
+[ec9f]: https://github.com/40ants/reblocks-ui/
 [a443]: https://github.com/ruricolist/spinneret/
 [7210]: https://lispcookbook.github.io/cl-cookbook/clos.html
 [63e3]: https://lispcookbook.github.io/cl-cookbook/databases.html
 [3e27]: https://ultralisp.org/
-[507a]: routing.html#x-28WEBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
-[0071]: widgets.html#x-28WEBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[f259]: widgets.html#x-28WEBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
-[cb7e]: widgets.html#x-28WEBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
+[3f5e]: routing.html#x-28REBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+[33d7]: widgets.html#x-28REBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[c703]: widgets.html#x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
+[fbc8]: widgets.html#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 
 * * *
 ###### [generated by [40ANTS-DOC](https://40ants.com/doc/)]

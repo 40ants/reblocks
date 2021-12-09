@@ -1,7 +1,7 @@
-(defpackage #:weblocks-test/request
+(defpackage #:reblocks-test/request
   (:use #:cl
         #:rove
-        #:weblocks-test/utils)
+        #:reblocks-test/utils)
   (:import-from #:reblocks/request
                 #:last-request-path
                 #:refresh-request-p
@@ -11,7 +11,7 @@
   (:import-from #:lack.request
                 #:make-request
                 #:request-uri))
-(in-package weblocks-test/request)
+(in-package reblocks-test/request)
 
 
 (deftest refresh-request-p-1

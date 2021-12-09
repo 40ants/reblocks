@@ -72,7 +72,7 @@ The package definition becomes::
 ```
 TODO> (defpackage todo
         (:use #:cl
-              #:weblocks-ui/form
+              #:reblocks-ui/form
               #:reblocks/html)
         (:import-from #:reblocks/widget
                       #:render

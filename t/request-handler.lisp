@@ -1,9 +1,9 @@
-(defpackage #:weblocks-test/request-handler
+(defpackage #:reblocks-test/request-handler
   (:use #:cl
         #:rove
         #:hamcrest/rove
         ;;        #:weblocks
-        #:weblocks-test/utils)
+        #:reblocks-test/utils)
   (:import-from #:reblocks/app
                 #:defapp
                 #:*current-app*)
@@ -18,7 +18,7 @@
   
   ;; Just dependencies
   (:import-from #:reblocks/session))
-(in-package weblocks-test/request-handler)
+(in-package reblocks-test/request-handler)
 
 
 (defapp app-with-init

@@ -147,7 +147,10 @@ situation (e.g. redirect, signal an error, etc.)."))
   (let ((reblocks/request::*request*
           (lack.request:make-request
            '(:path-info "/blah/minor"))))
-    (reblocks/actions:make-action-url "test-action"))
+    (reblocks/app:defapp test-app :autostart nil)
+    (reblocks/app:with-app (make-instance 'test-app)
+      (reblocks/app-actions:define-action test-action test-app ())
+      (reblocks/actions:make-action-url "test-action")))
   => "/blah/minor?action=test-action"
   ```
 

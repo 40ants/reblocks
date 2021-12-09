@@ -1,4 +1,4 @@
-(defpackage #:weblocks-test/widgets/render-methods
+(defpackage #:reblocks-test/widgets/render-methods
   (:use #:cl
         #:rove)
   (:import-from #:reblocks/widget
@@ -7,9 +7,9 @@
                 #:defwidget)
   (:import-from #:reblocks/html
                 #:with-html)
-  (:import-from #:weblocks-test/utils
+  (:import-from #:reblocks-test/utils
                 #:is-html))
-(in-package weblocks-test/widgets/render-methods)
+(in-package reblocks-test/widgets/render-methods)
 
 (defwidget simple-widget ()
   ())

@@ -24,10 +24,10 @@
                                   "CSS"
                                   "CL-WHO"
                                   "UI"
-                                  "WEBLOCKS-UI")
+                                  "REBLOCKS-UI")
                    :external-links (("Spinneret" . "https://github.com/ruricolist/spinneret")
                                     ("CL-WHO" . "https://edicl.github.io/cl-who/")
-                                    ("WEBLOCKS-UI" . "https://github.com/40ants/weblocks-ui")))
+                                    ("REBLOCKS-UI" . "https://github.com/40ants/reblocks-ui")))
 """
 Out of the box, Reblocks provides a few facilities for HTML generation.
 They are based on [`Spinneret`][Spinneret] templating engine. Old version of Weblocks used
@@ -72,7 +72,7 @@ REBLOCKS/HTML:WITH-HTML-STRING:
 You can use any other templating engine, just ensure
 it writes output to the REBLOCKS/HTML:*STREAM* variable.
 
-For more advanced UI, look at the [WEBLOCKS-UI][WEBLOCKS-UI] documentation.
+For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
 
 ## API
   

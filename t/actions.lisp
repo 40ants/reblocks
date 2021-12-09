@@ -1,8 +1,8 @@
-(defpackage #:weblocks-test/actions
+(defpackage #:reblocks-test/actions
   (:use #:cl
         #:rove
         #:hamcrest/rove
-        #:weblocks-test/utils)
+        #:reblocks-test/utils)
   (:import-from #:reblocks/actions
                 #:make-action
                 #:eval-action
@@ -13,7 +13,7 @@
                 #:get-action-name-from-request)
   (:import-from #:reblocks/request-handler
                 #:handle-action-if-needed))
-(in-package weblocks-test/actions)
+(in-package reblocks-test/actions)
 
 
 (reblocks/app:defapp test-app
@@ -102,8 +102,14 @@
           "This also should work if a function was given as an argument"))))
 
 
+(defun test-action ()
+  )
+
 (deftest make-action-url-test
   (with-session
     (with-request ("/foo/bar" :method :get)
-      (make-action-url "test-action")))
-  "/foo/bar?action=test-action")
+
+      (internal-make-action 'test-action "test-action")
+      
+      (ok (equal (make-action-url "test-action")
+                 "/foo/bar?action=test-action")))))

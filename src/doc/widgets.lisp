@@ -56,7 +56,7 @@
 
    A result will look like this:"
 
-  (hello-world weblocks-example)
+  (hello-world reblocks-example)
 
   
   "# API"

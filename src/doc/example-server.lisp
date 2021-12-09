@@ -20,16 +20,17 @@
   (:import-from #:reblocks/doc/example
                 #:*server-url*
                 #:*port*
-                #:weblocks-example
+                #:reblocks-example
                 #:example-name
                 #:example-body
                 #:example-original-body
                 #:example-package)
   (:import-from #:reblocks/server)
-  (:import-from #:weblocks-file-server)
+  (:import-from #:reblocks-file-server)
   (:import-from #:reblocks/hooks)
   (:export #:start-server
-           #:update-examples))
+           #:update-examples
+           #:stop-server))
 (in-package reblocks/doc/example-server)
 
 
@@ -38,6 +39,9 @@
                                     :synchronized
                                     #+sbcl
                                     t))
+
+(defvar *interface* "localhost")
+
 
 (defun widget-class (example)
   (loop for form in (example-body example)
@@ -54,7 +58,7 @@
             (string-downcase (symbol-name name)))))
 
 
-(defmethod create-widget-from ((example weblocks-example))
+(defmethod create-widget-from ((example reblocks-example))
   ;; First, we need to evaluate example's code
   (eval (list* 'progn
                (example-body example)))
@@ -102,8 +106,8 @@
 (defmethod reblocks/app::initialize-webapp ((app examples-server))
   (call-next-method)
   
-  (weblocks-file-server:make-route :uri "/docs/"
-                                   :root (asdf:system-relative-pathname :weblocks "docs/build/")
+  (reblocks-file-server:make-route :uri "/docs/"
+                                   :root (asdf:system-relative-pathname :reblocks "docs/build/")
                                    :dir-listing t))
 
 
@@ -241,7 +245,7 @@ pre {
                    for var = (and (boundp symbol)
                                   (symbol-value symbol))
                    when (and var
-                             (typep var 'weblocks-example))
+                             (typep var 'reblocks-example))
                      do (setf (gethash (example-path var) results)
                               (cons var
                                     (reblocks/widget:create-widget-from var))))
@@ -275,18 +279,28 @@ pre {
   (when (null *port*)
     (let ((port (or port
                     (find-port)))
-          ;; To prevent weblocks from complaining
+          ;; To prevent reblocks from complaining
           ;; about other running server
           (reblocks/server::*server* nil))
       (reblocks/server:start :port port
                              :interface interface
                              :apps 'examples-server)
-      (setf *port* port)))
+      (break)
+      (setf *port* port
+            *interface* interface)))
   
-  (let ((url (format nil "http://localhost:~A/docs/"
+  (let ((url (format nil "http://~A:~A/docs/"
+                     *interface*
                      *port*)))
     (log:info "Started examples server at ~A"
               url)))
+
+
+(defun stop-server ()
+  (when *port*
+    (reblocks/server:stop *interface* *port*)
+    (setf *port* nil
+          *interface* nil)))
 
 
 ;; Entry-point for Heroku deployment
@@ -297,4 +311,4 @@ pre {
           interface port)
   (start-server :port port
                 :interface interface
-                :for-asdf-system "weblocks"))
+                :for-asdf-system "reblocks"))

@@ -1,4 +1,4 @@
-(defpackage #:weblocks-test/widgets/macroexpansion
+(defpackage #:reblocks-test/widgets/macroexpansion
   (:use #:cl
         #:rove)
   (:import-from #:reblocks/widget
@@ -6,7 +6,7 @@
                 #:defwidget)
   (:import-from #:reblocks/widgets/mop
                 #:widget-class))
-(in-package weblocks-test/widgets/macroexpansion)
+(in-package reblocks-test/widgets/macroexpansion)
 
 
 (deftest test-defwidget-adds-metaclass

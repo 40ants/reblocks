@@ -1,11 +1,11 @@
-(defpackage #:weblocks-test/default-init
+(defpackage #:reblocks-test/default-init
   (:use #:cl
         #:rove
         #:hamcrest/rove
-        #:weblocks-test/utils)
+        #:reblocks-test/utils)
   (:import-from #:reblocks/app
                 #:defapp))
-(in-package weblocks-test/default-init)
+(in-package reblocks-test/default-init)
 
 
 (deftest default-init-method-should-return-string-widget

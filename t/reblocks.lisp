@@ -1,13 +1,13 @@
-(defpackage #:weblocks-test/weblocks
+(defpackage #:reblocks-test/reblocks
   (:use #:cl
         #:rove
-        #:weblocks-test/utils)
+        #:reblocks-test/utils)
   (:import-from #:reblocks/html
                 #:with-html-string)
   (:import-from #:reblocks/js
                 #:with-javascript
                 #:with-javascript-to-string))
-(in-package weblocks-test/weblocks)
+(in-package reblocks-test/reblocks)
 
 
 (deftest with-javascript-1

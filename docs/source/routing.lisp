@@ -1,12 +1,12 @@
 (declaim (optimize (debug 3)))
-(ql:quickload '(:weblocks :weblocks-ui :find-port))
+(ql:quickload '(:weblocks :reblocks-ui :find-port))
 (ql:quickload '(:weblocks-navigation-widget))
 
 ;; From quickstart: task, task-list.
 
 (defpackage todo
   (:use #:cl
-        #:weblocks-ui/form
+        #:reblocks-ui/form
         #:reblocks/html)
   (:import-from #:reblocks/widget
                 #:render

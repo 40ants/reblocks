@@ -75,7 +75,7 @@
                                    "ON-REQUEST-HOOK"
                                    "CALL"
                                    "WITH"
-                                   "WEBLOCKS"
+                                   "REBLOCKS"
                                    "HOOKS"))
   "Weblocks provides a hooks mechanism to allow to set callbacks on different events.
    These callbacks are cooled \"hooks\". Each hook can be added on one of three levels:

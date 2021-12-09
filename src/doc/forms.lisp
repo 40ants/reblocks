@@ -24,7 +24,7 @@
 
 > **Warning!** This section is outdated and belongs to the old Weblocks documention.
 > All widgets, described below, were removed from the core framework.
-> Probably we need only to link to the [weblocks-ui](https://github.com/40ants/weblocks-ui) here.
+> Probably we need only to link to the [reblocks-ui](https://github.com/40ants/reblocks-ui) here.
 >
 > Below you'll find a description how did forms work in the
 > original Weblocks. It is given to here to show who one might

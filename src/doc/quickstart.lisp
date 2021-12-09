@@ -6,7 +6,7 @@
                 #:@routing)
   (:import-from #:reblocks/doc/example
                 #:defexample)
-  (:import-from #:weblocks-ui/form)
+  (:import-from #:reblocks-ui/form)
   (:import-from #:reblocks/html)
   (:export #:@quickstart))
 (in-package reblocks/doc/quickstart)
@@ -30,7 +30,7 @@
                                         "AJAX")
                          :external-links (("Webinspector" . "https://developers.google.com/web/tools/chrome-devtools/inspect-styles/")
                                           ("Ultralisp" . "https://ultralisp.org/")
-                                          ("Weblocks-ui" . "https://github.com/40ants/weblocks-ui/")
+                                          ("Reblocks-ui" . "https://github.com/40ants/reblocks-ui/")
                                           ("PCL" . "http://www.gigamonkeys.com/book/object-reorientation-classes.html")
                                           ("CLOS-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/clos.html")
                                           ("DB-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/databases.html")
@@ -39,7 +39,7 @@
 > This version of Weblocks is not in Quicklisp yet. To
 > install it you need to clone the repository somewhere where
 > ASDF will find it, for example, to the `~/common-lisp/` directory.
-> You also need to clone [weblocks-ui][weblocks-ui].
+> You also need to clone [reblocks-ui][reblocks-ui].
 
 > You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Weblocks-related libraries are present and up to date.
 
@@ -49,10 +49,10 @@ Load weblocks and create a package for a sandbox:
 ```
 CL-USER> (ql-dist:install-dist \"http://dist.ultralisp.org/\"
                                :prompt nil)
-CL-USER> (ql:quickload '(:weblocks :weblocks-ui :find-port))
+CL-USER> (ql:quickload '(:weblocks :reblocks-ui :find-port))
 CL-USER> (defpackage todo
            (:use #:cl
-                 #:weblocks-ui/form
+                 #:reblocks-ui/form
                  #:reblocks/html)
            (:import-from #:reblocks/widget
                     #:render
@@ -249,7 +249,7 @@ TODO> (reblocks/debug:reset-latest-session)
 
 Right now it should look like this:"
 
-  (example1 weblocks-example)
+  (example1 reblocks-example)
 
   "# Adding tasks
 
@@ -258,11 +258,11 @@ into it, like so:
 
 ![Adding tasks in our TODO-list interactively.](docs/images/quickstart-add-task.gif)
 
-Import a new module, [weblocks-ui][weblocks-ui] to help in creating forms and other UI elements:
+Import a new module, [reblocks-ui][reblocks-ui] to help in creating forms and other UI elements:
 
 ```
-TODO> (ql:quickload \"weblocks-ui\")
-TODO> (use-package :weblocks-ui/form)
+TODO> (ql:quickload \"reblocks-ui\")
+TODO> (use-package :reblocks-ui/form)
 ```
 
 Write a new ADD-TASK method and modify the RENDER method of a
@@ -293,15 +293,15 @@ TODO> (reblocks/debug:reset-latest-session)
 The method ADD-TASK does only two simple things:
 
 - it adds a task into a list;
-- it tells Weblocks that our task list should be redrawn.
+- it tells Reblocks that our task list should be redrawn.
 
-This second point is really important because it allows Weblocks to render
+This second point is really important because it allows Reblocks to render
 necessary parts of the page on the server and to inject it into the HTML DOM
 in the browser. Here it rerenders the task-list widget, but we can as well [REBLOCKS/WIDGET:UPDATE][generic-function]
 a specific task widget, as we'll do soon.
 
 We are calling ADD-TASK from a lambda function to catch a
-TASK-LIST in a closure and make it availabe when weblocks will
+TASK-LIST in a closure and make it availabe when reblocks will
 process AJAX request with POST parameters later.
 
 Another block in our new version of RENDER of a TASK-LIST is the form:
@@ -320,18 +320,18 @@ form submit.
 
 Go, try it! This demo is interative:"
 
-  (example2 weblocks-example)
+  (example2 reblocks-example)
 
   
   "
 > **This is really amazing!**
 > 
-> With Weblocks, you can handle all the business logic
+> With Reblocks, you can handle all the business logic
 > server-side, because an action can be any lisp function, even an
 > anonymous lambda, closuring all necessary variables.
 
 Restart the application and reload the page. Test your form now and see in a
-[Webinspector][Webinspector] how Weblocks sends requests to the server and receives
+[Webinspector][Webinspector] how Reblocks sends requests to the server and receives
 HTML code with rendered HTML block.
 
 Now we'll make our application really useful – we'll add code to toggle the tasks' status.
@@ -368,12 +368,12 @@ ONCLICK attribute.
 
 The REBLOCKS/ACTIONS:MAKE-JS-ACTION function returns a Javascript code,
 which calls back a lisp lambda function when evaluated in the browser.
-And because TOGGLE updates a Task widget, Weblocks returns on this
+And because TOGGLE updates a Task widget, Reblocks returns on this
 callback a new prerendered HTML for this one task only.
 
 Here is how our app will work now:"
 
-  (example3 weblocks-example)
+  (example3 reblocks-example)
 
   "# What is next?
 
@@ -423,7 +423,7 @@ As a homework:
 
   (defun make-example ()
     (make-instance 'task-list
-                   :tasks (list (make-task "Make my first Weblocks app")
+                   :tasks (list (make-task "Make my first Reblocks app")
                                 (make-task "Deploy it somewhere")
                                 (make-task "Have a profit")))))
 
@@ -439,7 +439,7 @@ As a homework:
       (:h1 "Tasks")
       (loop for task in (tasks task-list) do
         (reblocks/widget:render task))
-      (weblocks-ui/form:with-html-form (:POST (lambda (&key title &allow-other-keys)
+      (reblocks-ui/form:with-html-form (:POST (lambda (&key title &allow-other-keys)
                                                 (add-task task-list title)))
         (:input :type "text"
                 :name "title"

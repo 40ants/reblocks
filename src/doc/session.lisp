@@ -22,7 +22,7 @@
 
 
 (defsection @session (:title "Using the Session"
-                      :ignore-words ("WEBLOCKS"
+                      :ignore-words ("REBLOCKS"
                                      "SESSION"
                                      "HTML"
                                      "HTTP"
@@ -60,7 +60,7 @@ To set a value, use `(SETF GET-VALUE)` function.
 For example, you might want to store information about the current user if he logged in:
 
 "
-  (login-example weblocks-example)
+  (login-example reblocks-example)
 
   "# API"
   (with-session macro)

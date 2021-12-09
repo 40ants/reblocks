@@ -98,7 +98,7 @@
 
   ```lisp
   (let ((user "Bob"))
-    (weblocks-test/utils:with-session
+    (reblocks-test/utils:with-session
       (let ((action-id
               (reblocks/actions:make-action
                (lambda (email)
@@ -153,7 +153,7 @@
   bound to an anonymous lisp function:
 
   """
-  (button-click weblocks-example)
+  (button-click reblocks-example)
 
   """
   Also, you might generate a link using MAKE-ACTION-URL function and use it as HREF
@@ -167,13 +167,13 @@
   piece of page get updated.
   """
 
-  (just-href weblocks-example)
+  (just-href reblocks-example)
 
   """
   In the next example, we'll pass arguments to our action. To do this, we have
   to call MAKE-ACTION and render JS code manually:
   """
-  (many-buttons-click weblocks-example)
+  (many-buttons-click reblocks-example)
 
   """
   **`initiateFormAction(actionCode, form, options)`**
@@ -187,7 +187,7 @@
   registered with MAKE-JS-FORM-ACTION:
   """
   
-  (form-example weblocks-example)
+  (form-example reblocks-example)
 
   """
   ## API

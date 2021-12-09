@@ -16,7 +16,7 @@
   (:import-from #:global-vars
                 #:define-global-var)
   (:export #:defexample
-           #:weblocks-example
+           #:reblocks-example
            #:start-server
            #:update-examples
            #:*server-url*
@@ -31,7 +31,7 @@
   "A port where examples server is listening.")
 
 
-(defclass weblocks-example ()
+(defclass reblocks-example ()
   ((name :initarg :name
          :type symbol
          :reader example-name)
@@ -51,26 +51,26 @@
          :reader example-body)))
 
 
-(define-locative-type weblocks-example ()
-  "Allows to define an example of Weblocks application and to insert it into the documentation as iframe.
+(define-locative-type reblocks-example ()
+  "Allows to define an example of Reblocks application and to insert it into the documentation as iframe.
 
    To show application, you also have to deploy a server part for serving dynamic content.")
 
 
-(defmethod 40ants-doc/locatives/base:locate-object (symbol (locative-type (eql '40ants-doc/locatives::weblocks-example))
+(defmethod 40ants-doc/locatives/base:locate-object (symbol (locative-type (eql '40ants-doc/locatives::reblocks-example))
                                                     locative-args)
   (declare (ignore locative-args))
   (unless (and (boundp symbol)
                (typep (symbol-value symbol)
-                      'weblocks-example))
-    (error "Weblocks example locative works only with objects defined by DEFEXAMPLE."))
+                      'reblocks-example))
+    (error "Reblocks example locative works only with objects defined by DEFEXAMPLE."))
   (symbol-value symbol))
 
 
 (define-global-var *iframe-id* 0)
 
 
-(defmethod 40ants-doc/commondoc/builder:to-commondoc ((example weblocks-example))
+(defmethod 40ants-doc/commondoc/builder:to-commondoc ((example reblocks-example))
   (let* ((iframe-id (format nil "example-~A"
                             (incf *iframe-id*)))
          (full-url (format nil "~A~A?iframe-id=~A"
@@ -123,7 +123,7 @@ window.addEventListener('message', function(e) {
 
 
 (defhook register-example (example)
-  "Called when an weblocks documentation example is being defined.")
+  "Called when an reblocks documentation example is being defined.")
 
 
 (defun register (example)
@@ -136,7 +136,7 @@ window.addEventListener('message', function(e) {
                               (inherits nil)
                               (show-code-tab t))
                       &body body)
-  "Defines Weblocks app example.
+  "Defines Reblocks app example.
 
    Body should contain a code snippet which includes
 
@@ -160,7 +160,7 @@ window.addEventListener('message', function(e) {
                 (new-body (replace-internal-symbols ',full-body
                                                     :from-package *package*
                                                     :to-package package))
-                (example (make-instance 'weblocks-example
+                (example (make-instance 'reblocks-example
                                         :name ',name
                                         :package package
                                         :width ,width
@@ -179,7 +179,7 @@ window.addEventListener('message', function(e) {
 
 
 
-(defmethod 40ants-doc/object-package::object-package ((object weblocks-example))
+(defmethod 40ants-doc/object-package::object-package ((object reblocks-example))
   (example-package object))
 
 
