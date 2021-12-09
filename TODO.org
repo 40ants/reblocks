@@ -1,6 +1,6 @@
 * Roadmap
 ** TODO Create defroute macro to simplify adding of additional routes
-Also, all functions like weblocks/request:get-parameters should work
+Also, all functions like reblocks/request:get-parameters should work
 within defined route.
 ** DONE Make hooks system easier to use
 - State "DONE"       from "TODO"       [2017-09-11 Mon 09:59]
@@ -30,7 +30,7 @@ Instead of
 ** TODO Process (declare ...) forms in add-xxxx-hook macrose
 Need to place these forms in the top of flet from
 ** TODO Make a package per file in all codebase
-** TODO Remove all special widgets with html rendering code into separate weblocks-ui library
+** TODO Remove all special widgets with html rendering code into separate reblocks-ui library
 ** Use Websocket for actions and all communications between client and server
 This way it will be possible also to push data from server to the
 client. This can be initiated by a timer or by some event or action from

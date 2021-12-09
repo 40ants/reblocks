@@ -1,9 +1,0 @@
-# to build documentation
-sphinx>=1.8
-pygments-cl-repl
-sphinx-bootstrap-theme
-releases
-
-# to support docstring extraction and cross-referencing
--e git+https://github.com/40ants/sphinxcontrib-cldomain.git#egg=sphinxcontrib-cldomain
-
