@@ -29,7 +29,7 @@
     (make-string-widget
      (with-html-string
        (:h1 "No reblocks/session:init method defined.")
-       (:p "Please define a method weblocks.session:init to initialize a session.")
+       (:p "Please define a method reblocks.session:init to initialize a session.")
        (:p "It could be something simple, like this one:")
        (:pre
         (:code
@@ -64,8 +64,8 @@
   ;; s
   ;; (let ((apps (reblocks/app:get-active-apps)))
   ;;   (with-html
-  ;;     (:h1 "Welcome to Weblocks!")
-  ;;     (:div "To learn more about Weblocks, head over its "
+  ;;     (:h1 "Welcome to Reblocks!")
+  ;;     (:div "To learn more about Reblocks, head over its "
   ;;           (:a :href "http://40ants.com/reblocks/" "documentation.")
   ;;           " To learn how to create apps and widgets, see the "
   ;;           (:a :href "http://40ants.com/reblocks/quickstart.html" "quickstart guide")
@@ -83,7 +83,7 @@
 
   ;;       (:h3)
   ;;       (when (app-active-p 'welcome-screen-app)
-  ;;         (:div "This is the welcome screen, a Weblocks app itself.")
+  ;;         (:div "This is the welcome screen, a Reblocks app itself.")
   ;;         (:div "If you want to stop it, do:")
   ;;         (:code "(reblocks/app:stop 'reblocks/default-init:welcome-screen-app)")
   ;;         (:div "And in case you want to disable it before the server starts, do:")

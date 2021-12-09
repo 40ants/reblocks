@@ -16,9 +16,9 @@
                                      "MAKE"
                                      "CL-PPCRE"
                                      ;; TODO: make an external-link
-                                     "WEBLOCKS-NAVIGATION-WIDGET"
-                                     "WEBLOCKS-NAVIGATION-WIDGET:DEFROUTES")
-                      ;; :external-docs ("https://40ants.com/weblocks-navigation-widget/") 
+                                     "REBLOCKS-NAVIGATION-WIDGET"
+                                     "REBLOCKS-NAVIGATION-WIDGET:DEFROUTES")
+                      ;; :external-docs ("https://40ants.com/reblocks-navigation-widget/") 
                       )
   "
 In the quickstart tutorial, we saw how to create and render widgets,
@@ -29,9 +29,9 @@ Here, we will extend the example and make each task accessible under
 `/tasks/<task id>`.
 
 Before we start, here's the summary on how to handle routing in
-Weblocks:
+Reblocks:
 
-* use WEBLOCKS-NAVIGATION-WIDGET:DEFROUTES.
+* use REBLOCKS-NAVIGATION-WIDGET:DEFROUTES.
 
 * DEFROUTES associates URLs (as strings) to a widget:
 
@@ -52,19 +52,19 @@ Let's start. Note that you can see the full code
 
 > **Warning!**
 >
-> As for this version of Weblocks,
-> WEBLOCKS-NAVIGATION-WIDGET system is not in Quicklisp
+> As for this version of Reblocks,
+> REBLOCKS-NAVIGATION-WIDGET system is not in Quicklisp
 > yet. To install it you need to clone the repository
 > somewhere where ASDF will find it, for example, to the
 > `~/common-lisp/` or `~/quicklisp/local-projects/`
 > directories.
 
-You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Weblocks-related libraries are present and up to date.
+You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Reblocks-related libraries are present and up to date.
 
 Load and import the routing library:
 
 ```
-TODO> (ql:quickload '(:weblocks-navigation-widget))
+TODO> (ql:quickload '(:reblocks-navigation-widget))
 ```
 
 The package definition becomes::
@@ -82,7 +82,7 @@ TODO> (defpackage todo
                       #:make-js-action)
         (:import-from #:reblocks/app
                       #:defapp)
-        (:import-from #:weblocks-navigation-widget
+        (:import-from #:reblocks-navigation-widget
                       #:defroutes))
 ```
 
@@ -154,7 +154,7 @@ TODO> (defmethod render ((task task))
 
 # The task-page widget
 
-In Weblocks, an HTML block that we want to display, and possibly update
+In Reblocks, an HTML block that we want to display, and possibly update
 independently, is a widget. Here, we want to show a task's details on
 their own page, it is then a widget.
 
@@ -218,7 +218,7 @@ And our router is simply:
 ```
 TODO> (defroutes tasks-routes
         (\"/tasks/\\d+\" (make-task-page))
-        (\"/tasks/\" (make-task-list \"Make my first Weblocks app\"
+        (\"/tasks/\" (make-task-list \"Make my first Reblocks app\"
                                    \"Deploy it somewhere\"
                                    \"Have a profit\")))
 ```
@@ -240,7 +240,7 @@ To perform redirections, use `(reblocks/response:redirect \"/url\")`:
 TODO> (defroutes tasks-routes
         (\"/tasks/\\d+\" (make-task-page))
         (\"/tasks/list/?\" (reblocks/response:redirect \"/tasks/\"))  ;; <-- redirection
-        (\"/tasks/\" (make-task-list \"Make my first Weblocks app\"
+        (\"/tasks/\" (make-task-list \"Make my first Reblocks app\"
                                    \"Deploy it somewhere\"
                                    \"Have a profit\")))
 ```

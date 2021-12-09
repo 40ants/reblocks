@@ -87,7 +87,7 @@ For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
 
 (defvar *stream*
   (make-synonym-stream '*standard-output*)
-  "Weblocks will write all output into this stream.
+  "Reblocks will write all output into this stream.
 
    This stream is created for each request and available to
    code executed within a request as a special

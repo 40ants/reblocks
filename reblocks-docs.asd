@@ -4,4 +4,5 @@
   :licence "LLGPL"
   :description "A documentation for Reblocks, Common Lisp web framework."
   :pathname "src"
-  :depends-on ("reblocks/doc/index"))
+  :depends-on ("reblocks"
+               "reblocks/doc/index"))

@@ -27,7 +27,7 @@ You can skip this section if you already have a comfortable Common Lisp environm
 
 First you must choose a Common Lisp implementation.
 
-Weblocks is designed and implemented to be portable and should run on the most popular
+Reblocks is designed and implemented to be portable and should run on the most popular
 Common Lisp implementations. It is currently tested best on SBCL and Clozure CL, though.
 
 
@@ -63,21 +63,21 @@ For a basic comfortable SBCL setup, see :ref:`Basic SBCL setup`.
 
 > **Note**
 >
-> The official quicklisp distribution contains an old Weblocks
+> The official quicklisp distribution contains an old Reblocks
 > version.
 >
-> This documentation is about newer Weblocks, built from
+> This documentation is about newer Reblocks, built from
 > `reblocks` branch. It is only available on the
 > Ultralisp.org.
 
-The easiest way to install Weblocks and additional libraries is to use
+The easiest way to install Reblocks and additional libraries is to use
 <https://ultralisp.org> distribution. It is Quicklisp compatible. To
-install Weblocks from Ultralisp, do eval these commands in your REPL:
+install Reblocks from Ultralisp, do eval these commands in your REPL:
 
 ```
 CL-USER> (ql-dist:install-dist \"http://dist.ultralisp.org/\"
                                :prompt nil)
-CL-USER> (ql:quickload :weblocks)
+CL-USER> (ql:quickload :reblocks)
 ```
 
 If you are using [Qlot][Qlot] to pin versions, you can add such lines into your
@@ -89,7 +89,7 @@ ql :all :latest
 ultralisp :all :latest
 ```
 
-Run `qlot update` after these changes, and new Weblocks will be
+Run `qlot update` after these changes, and new Reblocks will be
 available to install.
 
 

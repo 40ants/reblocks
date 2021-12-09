@@ -35,7 +35,7 @@
                                      "USER")
                       :external-links (("sticky" . "https://www.haproxy.com/blog/client-ip-persistence-or-source-ip-hash-load-balancing/")))
   """
-  Actions is the core component allowing interactivity in Weblocks applications.
+  Actions is the core component allowing interactivity in Reblocks applications.
 
   Actions are callbacks that are stored in a session and can be called from the browser
   using AJAX, POST or GET requests.

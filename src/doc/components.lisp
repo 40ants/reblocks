@@ -13,28 +13,28 @@
                                         "CLOS"
                                         "MAKE-WIDGET"
                                         ;; TODO: make an external-link
-                                        "WEBLOCKS-NAVIGATION-WIDGET"
+                                        "REBLOCKS-NAVIGATION-WIDGET"
                                         )
-                         ;; :external-docs ("https://40ants.com/weblocks-navigation-widget/")
+                         ;; :external-docs ("https://40ants.com/reblocks-navigation-widget/")
                          )
   "
 # Widgets
 
-Widgets are the main building blocks of Weblocks (hence the name).
+Widgets are the main building blocks of Reblocks (hence the name).
 
-At the heart of Weblocks is a tree of widgets that is manipulated by the clients
-requests. When a client sends its first request to a Weblocks application then
+At the heart of Reblocks is a tree of widgets that is manipulated by the clients
+requests. When a client sends its first request to a Reblocks application then
 a new session is started for it and a widget tree is associated with this session.
 
 This initial widget tree <sup>[1](#tree)</sup> is computed as defined by the application developer.
-A generic-function REBLOCKS/SESSION:INIT is called by Weblocks
+A generic-function REBLOCKS/SESSION:INIT is called by Reblocks
 to initialize a new session. This function should return a single widget which become
 a root of a tree:
 
 ```
 TODO> (defmethod reblocks/session:init ((app tasks))
          (declare (ignorable app))
-         (make-task-list \"Make my first Weblocks app\"
+         (make-task-list \"Make my first Reblocks app\"
                          \"Deploy it somewhere\"
                          \"Have a profit\"))
 ```
@@ -90,5 +90,5 @@ an URI token <sup>[2](#uri-tokens)</sup> a widget.
 
 Old versions of Weblocks supported such dispatchers out of the box,
 but during refactoring this functionality was moved into a separate
-WEBLOCKS-NAVIGATION-WIDGET system. Read its documentation to learn more.
+REBLOCKS-NAVIGATION-WIDGET system. Read its documentation to learn more.
 ")

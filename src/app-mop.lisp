@@ -24,7 +24,7 @@
 
 
 (defvar *autostarting-apps* nil
-  "A list of webapps to start when start-weblocks is called")
+  "A list of webapps to start when start-reblocks is called")
 
 
 (defclass app-class (standard-class)

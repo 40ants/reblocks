@@ -124,8 +124,8 @@ inherits from 'widget' if no direct superclasses are provided."
 
 
 ;; (defmethod mark-dirty ((w widget) &key (propagate t))
-;;   (unless (weblocks:widget-dirty-p w)
-;;     (pushnew w weblocks::*dirty-widgets*)
+;;   (unless (reblocks:widget-dirty-p w)
+;;     (pushnew w reblocks::*dirty-widgets*)
 ;;     ;; NOTE: we have to check for unbound slots because this function
 ;;     ;; may get called at initialization time before those slots are bound
 ;;     (values t (when (and propagate (slot-boundp w 'propagate-dirty))
@@ -138,7 +138,7 @@ inherits from 'widget' if no direct superclasses are provided."
 
 Usually this required as a result of an action execution.
 
-In the old weblocks there was a mark-dirty method. This one replaces it.
+In the old reblocks there was a mark-dirty method. This one replaces it.
 To make everything easier, the new protocol excludes \"propagation\". If you
 need to update other widgets, please define an \"update\" method for your widget.
 You can use :before or :after modifiers, to keep the current behavior and to add
@@ -170,7 +170,7 @@ propagation code."))
 (defgeneric create-widget-from (object)
   (:documentation "Methods of this generic should return an instance of subclass of reblocks/widget:widget
                    The most obvious cases are transformation of strings and functions into the widget, but
-                   these methods are already supplied by Weblocks."))
+                   these methods are already supplied by Reblocks."))
 
 
 (defmethod create-widget-from ((object widget))

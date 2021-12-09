@@ -1,7 +1,6 @@
 (defpackage #:reblocks-test/dependencies
   (:use #:cl
         ;; #:cl-mock
-        ;; #:weblocks.dependencies
         ;; #:prove
         #:rove
 ;;        #:hamcrest/rove
@@ -95,7 +94,7 @@
     (let* ((original-url "http://ya.ru/some.css")
            (random-string (cl-fad::generate-random-string))
            (*cache-remote-dependencies-in*
-             (pathname (format nil "/tmp/weblocks-cache/unittests/~A/"
+             (pathname (format nil "/tmp/reblocks-cache/unittests/~A/"
                                random-string)))
            (dependency (make-dependency
                          original-url))
@@ -104,7 +103,7 @@
       
       (unwind-protect
            (progn (ok (equal (pathname-directory resulting-path)
-                             `(:absolute "tmp" "weblocks-cache" "unittests" ,random-string))
+                             `(:absolute "tmp" "reblocks-cache" "unittests" ,random-string))
                       "When *cache-remote-dependencies-in* is set to a path, get-path should return local path.")
 
                   (ok (equal resulting-url
@@ -121,7 +120,7 @@
 
                       (let ((result (serve dependency)))
                         (ok (equal (pathname-directory result)
-                                   `(:absolute "tmp" "weblocks-cache" "unittests" ,random-string))
+                                   `(:absolute "tmp" "reblocks-cache" "unittests" ,random-string))
                             "Call to (serve) should return a path to a cached file.")
 
                         (ok (equal (length (invocations 'dex:get))

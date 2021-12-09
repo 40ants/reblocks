@@ -36,20 +36,20 @@
                                           ("DB-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/databases.html")
                                           ("Spinneret" . "https://github.com/ruricolist/spinneret/")))
   "
-> This version of Weblocks is not in Quicklisp yet. To
+> This version of Reblocks is not in Quicklisp yet. To
 > install it you need to clone the repository somewhere where
 > ASDF will find it, for example, to the `~/common-lisp/` directory.
 > You also need to clone [reblocks-ui][reblocks-ui].
 
-> You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Weblocks-related libraries are present and up to date.
+> You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Reblocks-related libraries are present and up to date.
 
 
-Load weblocks and create a package for a sandbox:
+Load reblocks and create a package for a sandbox:
 
 ```
 CL-USER> (ql-dist:install-dist \"http://dist.ultralisp.org/\"
                                :prompt nil)
-CL-USER> (ql:quickload '(:weblocks :reblocks-ui :find-port))
+CL-USER> (ql:quickload '(:reblocks :reblocks-ui :find-port))
 CL-USER> (defpackage todo
            (:use #:cl
                  #:reblocks-ui/form
@@ -90,7 +90,7 @@ TODO> (reblocks/debug:on)
 TODO> (defvar *port* (find-port:find-port))
 TODO> (reblocks/server:start :port *port*)
  <INFO> [19:41:00] reblocks/server server.lisp (start) -
-  Starting weblocks REBLOCKS/SERVER::PORT: 40000
+  Starting reblocks REBLOCKS/SERVER::PORT: 40000
   REBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
  <INFO> [19:41:00] reblocks/server server.lisp (start-server) -
   Starting webserver on REBLOCKS/SERVER::INTERFACE: \"localhost\"
@@ -104,7 +104,7 @@ text like that:
 
 ```
 No reblocks/session:init method defined.
-Please define a method weblocks.session:init to initialize a session.
+Please define a method reblocks.session:init to initialize a session.
 
 It could be something simple, like this one:
 
@@ -119,7 +119,7 @@ it now and make an application which outputs a list of tasks.
 
 In the end, we'll build the mandatory TODO-list app:
 
-![The TODO-list app in Weblocks](docs/images/quickstart-check-task.gif)
+![The TODO-list app in Reblocks](docs/images/quickstart-check-task.gif)
 
 # The Task widget
 
@@ -142,7 +142,7 @@ super-classes (here `()`) and a list of slot definitions.
 We can create a task with MAKE-INSTANCE:
 
 ```
-TODO> (defvar *task-1* (make-instance 'task :title \"Make my first Weblocks app\"))
+TODO> (defvar *task-1* (make-instance 'task :title \"Make my first Reblocks app\"))
 TODO> *task-1*
 #<TASK {1005406F33}>
 ```
@@ -154,7 +154,7 @@ We defined accessors for both slots, so we can read and set them easily:
 
 ```
 TODO> (title *task-1*)
-\"Make my first Weblocks app\"
+\"Make my first Reblocks app\"
 TODO> (done *TASK-1*)
 NIL
 TODO> (setf (done *TASK-1*) t)
@@ -181,7 +181,7 @@ Now let's carry on with our application.
 # The Tasks-list widget
 
 Below we define a more general widget that contains a list of tasks,
-and we tell Weblocks how to display them by *specializing* the
+and we tell Reblocks how to display them by *specializing* the
 REBLOCKS/WIDGET:RENDER generic-function for our newly defined classes:
 
 ```
@@ -217,7 +217,7 @@ REBLOCKS/WIDGET:RENDER generic-function in the REPL:
 
 ```
 TODO> (render *task-1*)
-<div class=\"widget task\"><span>Make my first Weblocks app</span>
+<div class=\"widget task\"><span>Make my first Reblocks app</span>
 </div>
 NIL
 ```
@@ -233,7 +233,7 @@ TODO> (defun make-task-list (&rest rest)
 
 TODO> (defmethod reblocks/session:init ((app tasks))
          (declare (ignorable app))
-         (make-task-list \"Make my first Weblocks app\"
+         (make-task-list \"Make my first Reblocks app\"
                          \"Deploy it somewhere\"
                          \"Have a profit\"))
 ```

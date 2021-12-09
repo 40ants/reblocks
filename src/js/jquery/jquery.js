@@ -1,8 +1,8 @@
 /*!
- * Weblocks-jQuery - javascript helper functions for Weblocks 
+ * Reblocks-jQuery - javascript helper functions for Reblocks 
  * v0.2.0
  *
- * https://github.com/html/weblocks-jquery
+ * https://github.com/html/reblocks-jquery
  */
 
 // Taken from http://css-tricks.com/snippets/jquery/serialize-form-to-json/
@@ -24,7 +24,7 @@ jQuery.fn.serializeObject = function()
 };
 
 /*
- * This prevents javascript error, but does not any effect like with usual weblocks flashes.
+ * This prevents javascript error, but does not any effect like with usual reblocks flashes.
  */
 window.Effect = Effect = {
   Pulsate: function(){ return {};},
@@ -32,7 +32,7 @@ window.Effect = Effect = {
 };
 
 /*
- * This prevents javascript error and replaces weblocks focusFirstElement form functionality
+ * This prevents javascript error and replaces reblocks focusFirstElement form functionality
  */
 jQuery.fn.focusFirstElement = function(){
   if(jQuery(this).length){
@@ -61,8 +61,8 @@ function updateElement(element, newElement) {
 
 function applySubmitClickEvent() {
   jQuery("form input[type=submit]")
-    .unbind('click.weblocks-submit-event')
-    .bind('click.weblocks-submit-event', function() {
+    .unbind('click.reblocks-submit-event')
+    .bind('click.reblocks-submit-event', function() {
       $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
       $(this).attr("clicked", "true");
     });
@@ -462,13 +462,13 @@ function updateWidgetStateFromHash() {
     $(window).bind('hashchange', function(event){
         var hash = window.location.hash;
         if (hash) {
-            initiateActionWithArgs(null, null, {'weblocks-internal-location-hash':hash}, "GET", "/");
+            initiateActionWithArgs(null, null, {'reblocks-internal-location-hash':hash}, "GET", "/");
         }
     }).trigger('hashchange');
     
   // }).error(function(){
   //   if(!jQuery.bbq){
-  //     window.console && console.log("It seems that jQuery BBQ library is missing, hashchange event will not be dispatched by weblocks");
+  //     window.console && console.log("It seems that jQuery BBQ library is missing, hashchange event will not be dispatched by Reblocks");
   //   }
   // });
 }

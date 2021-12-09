@@ -17,5 +17,5 @@
               "foo~A" "bar"))
           (with-javascript-to-string "foo~A" "bar"))
       
-   "Macro with-javascript should write into weblocks.html:*stream*"))
+   "Macro with-javascript should write into reblocks.html:*stream*"))
 

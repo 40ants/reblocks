@@ -2,7 +2,6 @@
   (:use #:cl
         #:rove
         #:hamcrest/rove
-        ;;        #:weblocks
         #:reblocks-test/utils)
   (:import-from #:reblocks/app
                 #:defapp

@@ -20,10 +20,10 @@
                                           "LASS"
                                           "ASDF"
                                           ;; TODO: Make an external link
-                                          ;; after documenting weblocks-lass using 40ants-doc
-                                          "WEBLOCKS-LASS:MAKE-DEPENDENCY"
-                                          "WEBLOCKS-LASS"))
-  "When Weblocks renders page, it collects CSS and JS dependencies from all widgets
+                                          ;; after documenting reblocks-lass using 40ants-doc
+                                          "REBLOCKS-LASS:MAKE-DEPENDENCY"
+                                          "REBLOCKS-LASS"))
+  "When Reblocks renders page, it collects CSS and JS dependencies from all widgets
    by calling generic-function REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
    is called on the current app to get such common dependencies as jQuery and CSS framework.
 
@@ -46,15 +46,15 @@
    ```
    (defmethod reblocks/dependencies:get-dependencies ((widget my-custom-widget))
      (list*
-      (weblocks-lass:make-dependency
+      (reblocks-lass:make-dependency
        `(.my-custom-widget
          :border 2px solid red
          :padding 1em))
       (call-next-method)))
    ```
 
-   Pay attention, this code uses WEBLOCKS-LASS:MAKE-DEPENDENCY function which is available from
-   the separate asdf system WEBLOCKS-LASS.
+   Pay attention, this code uses REBLOCKS-LASS:MAKE-DEPENDENCY function which is available from
+   the separate asdf system REBLOCKS-LASS.
 
    ## API
 "

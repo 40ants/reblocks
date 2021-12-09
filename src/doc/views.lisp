@@ -10,7 +10,7 @@
   "
 Views provided convenient ways to define how data object are to be rendered.
 
-Weblocks supported three types of views:
+Originally, Weblocks supported three types of views:
 
 - data views;
 - table views;

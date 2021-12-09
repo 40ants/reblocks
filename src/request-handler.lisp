@@ -209,10 +209,10 @@ customize behavior."))
       (render (reblocks/widgets/root:get))))
 
   ;; render page will wrap the HTML already rendered to
-  ;; weblocks.html::*stream* with necessary boilerplate HTML
+  ;; reblocks.html::*stream* with necessary boilerplate HTML
   (timing "page render"
     ;; Here we are using internal symbol, because we don't want to expose
-    ;; this method for usage outside of the weblocks.
+    ;; this method for usage outside of the reblocks.
     (render-page-with-widgets app)))
 
 
@@ -280,7 +280,7 @@ customize behavior."))
     
     ;; (reblocks/hooks:on-session-hook-action
     ;;     update-dialog ()
-    ;;   (weblocks::update-dialog-on-request)))
+    ;;   (reblocks::update-dialog-on-request)))
 
     (with-collected-dependencies
       ;; This variable will be set to HTML string after rendering

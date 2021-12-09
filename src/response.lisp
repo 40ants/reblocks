@@ -139,7 +139,7 @@
    Keeps all other parameters and overwrites \"retpath\" parameter if it is
    already exists in the URL.
 
-   By default, retpath is the current page, rendered by the weblocks.
+   By default, retpath is the current page, rendered by the reblocks.
    This is very useful to redirect user to login page and return him to the
    same page where he has been before."
   (let* ((parsed-base (quri:uri uri))
@@ -195,7 +195,7 @@
                   (string script)
                   (list (ps:ps* script)))))
     (if (ajax-request-p)
-        (let ((code (if (equalp (get-header "X-Weblocks-Client")
+        (let ((code (if (equalp (get-header "X-Reblocks-Client")
                                 "JQuery")
                         script
                         (with-javascript-to-string script))))

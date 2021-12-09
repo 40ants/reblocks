@@ -342,7 +342,7 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
                  :reblocks/hooks)))))
 
 
-;; Weblocks core hooks
+;; Reblocks core hooks
 
 (defhook handle-http-request (env)
   "Called around code reponsible for an HTTP request processing,
@@ -356,15 +356,15 @@ one of add-xxxx-hook and a (call-next-hook) inside of it."
    * a plist of HTTP headers;
    * a list of strings corresponding to the page's content.")
 
-(defhook start-weblocks ()
+(defhook start-reblocks ()
   "Called around code which starts all applications and a webserver.
 
-   Returns a weblocks server object.")
+   Returns a reblocks server object.")
 
-(defhook stop-weblocks ()
+(defhook stop-reblocks ()
   "Called around code which stops all applications and a webserver.
 
-   Returns a weblocks server object.")
+   Returns a reblocks server object.")
 
 (defhook action (app action-name action-arguments)
   "Called when action is processed.

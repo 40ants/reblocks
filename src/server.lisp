@@ -26,7 +26,7 @@
   (:import-from #:reblocks/app
                 #:get-prefix
                 #:app-serves-hostname-p
-                #:weblocks-webapp-name
+                #:reblocks-webapp-name
                 #:get-autostarting-apps)
   (:import-from #:reblocks/request
                 #:with-request)
@@ -71,7 +71,7 @@
 
 
 (defvar *clack-output* nil
-  "Here we'll store all output from the Clack, because we don't want it to mix with weblocks own output.")
+  "Here we'll store all output from the Clack, because we don't want it to mix with reblocks own output.")
 
 
 (defclass server ()
@@ -141,7 +141,7 @@ Make instance, then start it with ``start`` method."
 
 
 (defmethod handle-http-request ((server server) env)
-  "Weblocks HTTP dispatcher.
+  "Reblocks HTTP dispatcher.
 This function serves all started applications and their static files."
 
   (let (;; This "hack" is needed to allow widgets to change *random-state*
@@ -271,7 +271,7 @@ If server is already started, then logs a warning and does nothing."
 
 
 (defun servers (&optional interface port)
-  "Returns a list of Weblocks servers."
+  "Returns a list of Reblocks servers."
   (check-type interface (or null string))
   (check-type port (or null integer))
   
@@ -293,7 +293,7 @@ If server is already started, then logs a warning and does nothing."
                 (interface "localhost")
                 (server-type :hunchentoot)
                 apps)
-  "Starts weblocks framework hooked into Clack server.
+  "Starts reblocks framework hooked into Clack server.
 
 Set DEBUG to true in order for error messages and stack traces to be shown
 to the client (note: stack traces are temporarily not available due to changes
@@ -301,13 +301,13 @@ in Hunchentoot 1.0.0).
 
 All other keywords will be passed as initargs to the acceptor;
 the initargs :PORT and :SESSION-COOKIE-NAME default to
-8080 and `weblocks-GENSYM'.
+8080 and `reblocks-GENSYM'.
 
 Also opens all stores declared via DEFSTORE and starts webapps
 declared AUTOSTART unless APPS argument is provided."
 
   (let ((server (find-server interface port)))
-    (reblocks/hooks:with-start-weblocks-hook ()
+    (reblocks/hooks:with-start-reblocks-hook ()
       (cond
         (server
          (restart-case
@@ -325,7 +325,7 @@ declared AUTOSTART unless APPS argument is provided."
          (setf (gethash (cons interface port) *servers*)
                server)))
       
-      (log:info "Starting weblocks" port server-type debug)
+      (log:info "Starting reblocks" port server-type debug)
 
       ;; TODO: move these settings to the server level
       (if debug
@@ -392,7 +392,7 @@ declared AUTOSTART unless APPS argument is provided."
 
 
 (defun stop (&optional interface port)
-  "Stops Weblocks servers matching given INTERFACE and PORT.
+  "Stops Reblocks servers matching given INTERFACE and PORT.
 
    This function deactivates all applications bound to the server and stopps a Clack server.
 
@@ -401,10 +401,10 @@ declared AUTOSTART unless APPS argument is provided."
   (loop for server in (servers interface port)
         when (running-p server)
           collect
-          (reblocks/hooks:with-stop-weblocks-hook ()
+          (reblocks/hooks:with-stop-reblocks-hook ()
             ;; TODO: maybe implement stop app generic function again?
             ;; (loop for app in (apps server)
-            ;;       do (reblocks/app:stop (weblocks-webapp-name app)))
+            ;;       do (reblocks/app:stop (reblocks-webapp-name app)))
             (stop-server server)
             (values server))))
 

@@ -4,8 +4,8 @@
                 #:defsection)
   (:import-from #:reblocks/hooks
                 #:handle-http-request
-                #:start-weblocks
-                #:stop-weblocks
+                #:start-reblocks
+                #:stop-reblocks
                 #:action
                 #:render
                 #:reset-session
@@ -77,7 +77,7 @@
                                    "WITH"
                                    "REBLOCKS"
                                    "HOOKS"))
-  "Weblocks provides a hooks mechanism to allow to set callbacks on different events.
+  "Reblocks provides a hooks mechanism to allow to set callbacks on different events.
    These callbacks are cooled \"hooks\". Each hook can be added on one of three levels:
 
    - application;
@@ -92,14 +92,14 @@
    This way you might implement such things like turning on debug information, etc.
 
    Application level hooks are stored permanently and work for every user. Despite the name, they aren't
-   bound to an application. These hooks are global and work for any application and any weblocks server.
+   bound to an application. These hooks are global and work for any application and any reblocks server.
 
-   Hooks are defined to be called on some event happened in the weblocks application.
-   Here is a list of hooks, predefined in the Weblocks:"
+   Hooks are defined to be called on some event happened in the reblocks application.
+   Here is a list of hooks, predefined in the Reblocks:"
 
   (handle-http-request hook)
-  (start-weblocks hook)
-  (stop-weblocks hook)
+  (start-reblocks hook)
+  (stop-reblocks hook)
   (action hook)
   (render hook)
   (reset-session hook)
@@ -142,7 +142,7 @@
    First, you need to define a hook using DEFHOOK macro. Then choose piece of code
    you want to make hookable and wrap it with another macro, defined by DEFHOOK.
 
-   For example, you creating a Weblocks extension which allows users to register
+   For example, you creating a Reblocks extension which allows users to register
    on a website. You also want to allow develope who will use your extension
    to define additional actions when a new user get registered on site. For example,
    admin might want to validate age and also to send user a greeting email after registration.

@@ -38,7 +38,7 @@
 (defun preview (widget)
   (when (null *port*)
     (let ((random-port (find-port))
-          ;; To prevent weblocks from complaining
+          ;; To prevent Reblocks from complaining
           ;; about other running server
           (reblocks/server::*server* nil))
       (reblocks/server:start :port random-port

@@ -14,7 +14,7 @@ allows to customize views look.  Most of weblocks code supported templates
 and this gave us ability to change widget html without changing widget
 logic.
 
-Templates brought theming functionality into Weblocks, and intended to
+Templates brought theming functionality into original Weblocks, and intended to
 improve widgets reusing.
 
 I think it is better to split you render method into a smaller ones

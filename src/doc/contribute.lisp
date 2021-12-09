@@ -13,7 +13,7 @@
 1. Checkout the branch.
 2. Make changes.
 3. Add tests to the `t/` subdirectory.
-4. Test changes: `(asdf:test-system :weblocks)`.
+4. Test changes: `(asdf:test-system :reblocks)`.
 5. Ensure you've updated documentation in the `docs` folder if you've
    changed or added functionality.
 6. Describe your changes for in a readable way ontop of the

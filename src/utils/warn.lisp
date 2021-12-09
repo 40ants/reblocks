@@ -17,13 +17,13 @@ arguments."
 (define-compiler-macro style-warn (condition &rest warn-args)
   `(when (or (not (boundp '*current-webapp*))
              (null *current-webapp*)
-             (weblocks-webapp-debug *current-webapp*))
+             (reblocks-webapp-debug *current-webapp*))
      (warn ,condition . ,warn-args)))
 
 
 (define-condition style-warning (cl:style-warning)
   ()
-  (:documentation "Signalled by Weblocks when detecting unwise
+  (:documentation "Signalled by Reblocks when detecting unwise
 behavior on the part of webapps."))
 
 

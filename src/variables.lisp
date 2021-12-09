@@ -20,7 +20,7 @@
 (defvar *ignore-missing-actions* t)
 
 (defvar *invoke-debugger-on-error* nil
-  "If this variable is t, then weblocks will start lisp's debugger on unhandled conditions.")
+  "If this variable is t, then Weblocks will start lisp's debugger on unhandled conditions.")
 
 (defvar *backtrace-on-session-init-error* t)
 

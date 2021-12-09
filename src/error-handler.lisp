@@ -63,11 +63,11 @@
                                                 (get-response c)))))
            (handler-bind ((error (lambda (c)
                                    (cond (*invoke-debugger-on-error*
-                                          (log:warn "Invoking interactive debugger because Weblocks is in the debug mode")
+                                          (log:warn "Invoking interactive debugger because Reblocks is in the debug mode")
                                           (setf debugger-was-invoked-on-cond c)
                                           (invoke-debugger c))
                                          (t
-                                          (log:warn "Returning error because Weblocks is not in the debug mode")
+                                          (log:warn "Returning error because Reblocks is not in the debug mode")
                                           (on-error *current-app* c))))))
              (restart-case
                  (progn ,@body)

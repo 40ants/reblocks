@@ -190,7 +190,7 @@ if there is an action involved (even if the user hits refresh)."
 
 
 (defun parse-location-hash ()
-  (let ((raw-hash (get-parameter "weblocks-internal-location-hash")))
+  (let ((raw-hash (get-parameter "reblocks-internal-location-hash")))
     (when raw-hash
       (query-string->alist (cl-ppcre:regex-replace "^#" raw-hash "")))))
 
@@ -202,7 +202,7 @@ if there is an action involved (even if the user hits refresh)."
 ;;   `(progn
 ;;      ,@body
 ;;      (unless (ajax-request-p)
-;;        (setf (weblocks.session:get-value 'last-request-path)
+;;        (setf (reblocks.session:get-value 'last-request-path)
 ;;              ,path))))
 
 

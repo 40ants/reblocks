@@ -30,7 +30,7 @@
 
 
 (defvar *on* nil
-  "When true, then Weblocks will be saving addional information useful
+  "When true, then Reblocks will be saving addional information useful
 for debugging.")
 
 
@@ -98,7 +98,7 @@ To clear, use function \(reset-last-session\).")
 
   (when (getf *config* :track-latest-session)
     ;; TODO: implement hook removal
-    ;; (weblocks.hooks:remove-application-hook :handle-request
+    ;; (reblocks/hooks:remove-application-hook :handle-request
     ;;                                         track-latest-session)
     )
   

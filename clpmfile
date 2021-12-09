@@ -6,7 +6,7 @@
 (:source "quicklisp" :url "https://quicklisp.common-lisp-project-index.org/" :type :ql-clpi)
 
 
-;; (:asd "weblocks.asd")
-;; (:asd "weblocks-test.asd")
+;; (:asd "reblocks.asd")
+;; (:asd "reblocks-test.asd")
 
 (:system "ironclad" :source "quicklisp")

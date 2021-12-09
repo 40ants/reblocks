@@ -42,7 +42,7 @@
 (defvar-unbound *page-dependencies*
   "A list which contains all page dependencies.
 
-Weblocks fills this list during page rendering.")
+Reblocks fills this list during page rendering.")
 
 
 (defvar *cache-remote-dependencies-in* nil
@@ -107,7 +107,7 @@ See more information at: <https://www.w3.org/TR/SRI/>")
            :initarg :binary
            :initform nil
            :reader is-binary))
-  (:documentation "Local dependencies are served by the same webserver which renders weblocks widgets.
+  (:documentation "Local dependencies are served by the same webserver which renders reblocks widgets.
 
                    Each local dependency should provide a route, which will be added to the server routing
                    table. Also, it might define a path to the file on the local file-system."))
@@ -244,7 +244,7 @@ Example output::
   (:documentation "Returns a list of object's dependencies.
 
 Object could be an application or a widget.
-Weblocks will call this method for application and every widget on a page
+Reblocks will call this method for application and every widget on a page
 to gather necessary dependencies and to inject them into resulting HTML.")
 
   (:method ((object t))

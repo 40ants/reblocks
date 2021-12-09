@@ -34,10 +34,10 @@
 
 (defclass app ()
   ((name :type (or symbol string)
-         :accessor weblocks-webapp-name
+         :accessor reblocks-webapp-name
          :initarg :name)
    (description :type (or null string)
-                :accessor weblocks-webapp-description
+                :accessor reblocks-webapp-description
                 :initarg :description 
                 :initform nil 
                 :documentation "The name of the application.  This slot will be used 
@@ -48,7 +48,7 @@
                :documentation "Specify a javascript backend for
                framework (default is :jquery)")
    (hostnames :type list
-              :reader weblocks-webapp-hostnames
+              :reader reblocks-webapp-hostnames
               :initarg :hostnames
               :initform nil
               :documentation "The hostnames (a list of strings) reserved for this webapp.
@@ -66,8 +66,8 @@
            :initarg :prefix
            :documentation "The subtree of the URI space at this site that belongs to
            the webapp.")
-   (session-key :type symbol :accessor weblocks-webapp-session-key :initarg :session-key)
-   (debug :accessor weblocks-webapp-debug :initarg :debug :initform nil 
+   (session-key :type symbol :accessor reblocks-webapp-session-key :initarg :session-key)
+   (debug :accessor reblocks-webapp-debug :initarg :debug :initform nil 
           :documentation "Responsible for debug mode, use WEBAPP-DEBUG function for getting slot value"))
   (:metaclass app-class)
   (:documentation 
@@ -130,7 +130,7 @@ co-exist, so long as they have different prefixes
 
 DESCRIPTION - A description of the application for the title page
 
-AUTOSTART - Whether this webapp is started automatically when start-weblocks is
+AUTOSTART - Whether this webapp is started automatically when start-reblocks is
 called (primarily for backward compatibility"
   `(progn
      (defclass ,name (,@subclasses app)
@@ -178,17 +178,17 @@ called (primarily for backward compatibility"
   "Get a running web application"
   (let ((app (find (if (symbolp name) (attributize-name name) name)
                    active-apps
-                   :key #'weblocks-webapp-name :test #'equal)))
+                   :key #'reblocks-webapp-name :test #'equal)))
     (when (and (null app)
                signal-error)
-      (error "Argument ~a is not a running weblocks application." name))
+      (error "Argument ~a is not a running reblocks application." name))
     app))
 
 
 (defun check-if-valid-class-name (name)
   "Ensure that the we have a valid webapp class"
   (unless (find-class name nil)
-    (error "~a is not a valid weblocks application class." name)))
+    (error "~a is not a valid reblocks application class." name)))
 
 (defun sort-webapps (webapps) 
   (let* ((webapps-sorted-by-prefix (sort webapps #'string> :key #'get-prefix))
@@ -196,7 +196,7 @@ called (primarily for backward compatibility"
                                                   webapps-sorted-by-prefix
                                                   (lambda (x y)
                                                     (and x (null y)))
-                                                  :key #'weblocks-webapp-hostnames)))
+                                                  :key #'reblocks-webapp-hostnames)))
     webapps-sorted-by-hostname-and-prefix))
 
 
@@ -232,17 +232,17 @@ this app, with regard to WEBAPP."
   "Returns the name of the web application (also see 'defwebapp'). Please
    note, this name will be used for the composition of the page title
    displayed to the user. See 'application-page-title' for details."
-  (weblocks-webapp-name app))
+  (reblocks-webapp-name app))
 
 (defun webapp-description (&optional (app *current-app*))
   "Returns the description of the web application. Please note, this
    description will be used for the composition of the page title
    displayed to the user. See 'application-page-title' for details."
-  (weblocks-webapp-description app))
+  (reblocks-webapp-description app))
 
 (defun webapp-hostnames (&optional (app *current-app*))
   "Returns the hostnames this application will serve requests for."
-  (weblocks-webapp-hostnames app))
+  (reblocks-webapp-hostnames app))
 
 
 (defun hostname-match-p (pattern hostname)
@@ -261,7 +261,7 @@ this app, with regard to WEBAPP."
 
 (defun webapp-debug (&optional (app *current-app*))
   "Whether APP is in debug mode."
-  (weblocks-webapp-debug app))
+  (reblocks-webapp-debug app))
 
 
 (defun get-current ()
