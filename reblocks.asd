@@ -22,7 +22,8 @@
                "reblocks/widgets/string-widget"
                "reblocks/widgets/funcall-widget"
                "reblocks/utils/clos"
-               "reblocks/utils/i18n")
+               "reblocks/utils/i18n"
+               "reblocks/preview")
   :in-order-to ((test-op (test-op "reblocks-test"))))
 
 

@@ -272,7 +272,7 @@ pre {
 (defun start-server (&key
                        port
                        (interface "localhost")
-                       for-asdf-system)
+                       (for-asdf-system "reblocks"))
   (when for-asdf-system
     (update-examples (string-downcase for-asdf-system)))
   
@@ -285,7 +285,6 @@ pre {
       (reblocks/server:start :port port
                              :interface interface
                              :apps 'examples-server)
-      (break)
       (setf *port* port
             *interface* interface)))
   

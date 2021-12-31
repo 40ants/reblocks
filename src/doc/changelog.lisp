@@ -1,77 +1,101 @@
-===========
- ChangeLog
-===========
+(uiop:define-package #:reblocks/doc/changelog
+  (:use #:cl)
+  (:import-from #:named-readtables
+                #:in-readtable)
+  (:import-from #:pythonic-string-reader
+                #:pythonic-string-syntax))
+(in-package reblocks/doc/changelog)
 
-dev
-===
+(in-readtable pythonic-string-syntax)
 
+
+(40ants-doc/changelog:defchangelog (:ignore-words ("DSL"
+                                                   "URL"
+                                                   "URI"
+                                                   "API"
+                                                   "AJAX"
+                                                   "JSON"
+                                                   "JSON-RPC"
+                                                   "SBCL"
+                                                   "ASDF"
+                                                   "MOP"
+                                                   "JS"
+                                                   "GET"
+                                                   "POST"
+                                                   "LOADED"
+                                                   "HTML"
+                                                   "HTTP")
+                                    :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.40.0 2021-12-10
+          """
 Added
------
+=====
 
 * Added a welcome screen app on "/" that lists the active apps.
-* ``create-widget-from`` now returns a more user-friendly error
+* Generic-function REBLOCKS/WIDGET:CREATE-WIDGET-FROM now returns a more user-friendly error
   message, explaining that the widget is not of a good type, instead
   of "no applicable generic method".
-* A new function WEBLOCKS/PREVIEW:PREVIEW was added. Give it a widget and it will setup
+* A new function REBLOCKS/PREVIEW:PREVIEW was added. Give it a widget and it will setup
   a server on a random port and show the widget in a browser!
 * Ability to run many web servers each on it's own HTTP port. Each server can have
   it's own set of applications.
-
-New Functions:
-
-* WEBLOCKS/SERVER:SERVERS
-* WEBLOCKS/SERVER:RUNNING-P
-
-
-* Package WEBLOCKS/WIDGETS/BASE was removed. All code now is in the WEBLOCKS/WIDGET package,
-  which was a nickname previously.
 * Added a log in ``weblocks/app:start`` to show the prefix of the app
   that is started.
 * Changed ``(weblocks/debug:on)`` and ``off`` so they set the log
   level to ``debug`` and ``warn``, respectively.
-* Changed a library used to log unhandled errors. Now `log4cl-extras <https://github.com/40ants/log4cl-extras>`_ is used, because it is a successor of `log4cl-json <https://github.com/40ants/log4cl-json>`_.
-* Function WEBLOCKS/SERVER:STOP now accepts optional INTERFACE and PORT arguments.
-* Function WEBLOCKS/ACTION::FUNCTION-OR-ACTION->ACTION was renamed to WEBLOCKS/ACTION:MAKE-ACTION and made public.
-  Old WEBLOCKS/ACTION:MAKE-ACTION was renamed to WEBLOCKS/ACTION::INTERNAL-MAKE-ACTION.
+* Changed a library used to log unhandled errors.
+  Now [log4cl-extras](https://github.com/40ants/log4cl-extras) is used,
+  because it is a successor of [log4cl-json](https://github.com/40ants/log4cl-json).
+* Function REBLOCKS/SERVER:STOP now accepts optional `interface` and `port` arguments.
+* Function `reblocks/action::function-or-action->action` was renamed to REBLOCKS/ACTIONS:MAKE-ACTION and made public.
+  Old `reblocks/action:make-action` was renamed to `reblocks/action::internal-make-action`.
 * JS function initiateActionWithArgs now uses POST method by default.
-* Function WEBLOCKS/ACTION:MAKE-ACTION-URL is exported now and it keeps query params by default.
+* Function REBLOCKS/ACTIONS:MAKE-ACTION-URL is exported now and it keeps query params by default.
 
-These functions were removed:
+New Functions
+=============
 
-* WEBLOCKS/APP:GET-ACTIVE-APPS
-* [WEBLOCKS/APP:FINALIZE-WEBAPP][generic-function]
-* WEBLOCKS/APP:APP-ACTIVE-P
-* WEBLOCKS/APP:START (it was replaced with WEBLOCKS/SERVER:START-APP function)
-* WEBLOCKS/APP:STOP
-* WEBLOCKS/APP:RESTART
-* JS function initiateActionWithArgsAndDeferredCallback was removed because of leaky
+* REBLOCKS/SERVER:SERVERS
+* REBLOCKS/SERVER:RUNNING-P
+
+Removals
+========
+
+* Package `reblocks/widgets/base` was removed. All code now is in the `reblocks/widget` package,
+  which was a nickname previously.
+* `reblocks/app:get-active-apps`
+* `reblocks/app:finalize-webapp`
+* `reblocks/app:app-active-p`
+* `reblocks/app:start`
+* `reblocks/app:stop`
+* `reblocks/app:restart`
+* JS function `initiateActionWithArgsAndDeferredCallback` was removed because of leaky
   abstraction of a single deferred object per page.
-* JS functions initiateActionWithArgs and initiateActionWithArgsAndCallback were combined
-  into a single initiateAction function.
-* JS functions initiateFormAction and initiateFormActionWithCallback were combined
-  into a initiateFormAction function.
+* JS functions `initiateActionWithArgs` and `initiateActionWithArgsAndCallback` were combined
+  into a single `initiateAction` function.
+* JS functions `initiateFormAction` and `initiateFormActionWithCallback` were combined
+  into a `initiateFormAction` function.
 
 Also removed:
 
-* A variable *CURRENT-PAGE-HEADERS*, define an :AFTER method for WEBLOCKS/PAGE:RENDER-HEADERS instead.
-* *APPROVED-RETURN-CODES*
-* *CURRENT-PAGE-KEYWORDS*
-* *CURRENT-PAGE-TITLE*
-* *STYLE-WARN-ON-CIRCULAR-DIRTYING*
-* *STYLE-WARN-ON-LATE-PROPAGATION*
-* *REWRITE-FOR-SESSION-URLS*
+* A variable `*current-page-headers*`, define an :AFTER method for REBLOCKS/PAGE:RENDER-HEADERS instead.
+* `*approved-return-codes*`
+* `*current-page-keywords*`
+* `*current-page-title*`
+* `*style-warn-on-circular-dirtying*`
+* `*style-warn-on-late-propagation*`
+* `*rewrite-for-session-urls*`
+* Functions `reblocks/routes:add-route` and `reblocks/routes:add-routes` were made internal.
 
-
-Hooks API was refactored in a backward incompatible manner. DEFHOOK macro now requires
-to specify hook's arguments and all macros generated by the DEFHOOK also require arguments
+Hooks API was refactored in a backward incompatible manner. REBLOCKS/HOOKS:DEFHOOK macro now requires
+to specify hook's arguments and all macros generated by the REBLOCKS/HOOKS:DEFHOOK also require arguments
 specification.
 
 jQuery was upgraded from 1.8.2 to 3.6.0. It's plugins jquery.ba-bbq.js and jquery-seq.js were
 turned off.
-
-0.39.1 (2020-01-20)
-===================
-
+""")
+  (0.39.1 2020-01-20
+          """
 Fixed
 -----
 
@@ -79,45 +103,42 @@ Fixed
   was used along with lastest (after the 2019-09-07) ``Woo`` server, this header
   lead to the 500 error. Because behavior of the ``Woo`` was changed:
 
-  https://github.com/fukamachi/woo/issues/84
+  <https://github.com/fukamachi/woo/issues/84>
 
   Now Woo does not parses numeric headers and Weblocks has to do it itself.
 
-0.39.0 (2019-09-16)
-===================
-
+""")
+  (0.39.0 2019-09-16
+          """
 Changes
 -------
 
-* A new macro ``weblocks/routes:defroute`` was added.
+* A new macro REBLOCKS/ROUTES:DEFROUTE was added.
 
   It defines a handler for a given route. By default route should return
   a serialized JSON:
 
-  .. code:: common-lisp
-            
-     (defroute (app /api/data)
-         "{\"my-data\": [1, 2, 3]}")
+```lisp
+(defroute (app /api/data)
+    "{\"my-data\": [1, 2, 3]}")
+```
 
   but you can redefine the content type:
 
-  .. code:: common-lisp
- 
-     (defroute (app /api/data :content-type "application/xml")
-         "<my-data><item>1</item><item>2</item></my-data>")
+```lisp
+(defroute (app /api/data :content-type "application/xml")
+    "<my-data><item>1</item><item>2</item></my-data>")
+```
 
   each route is associate with application class and these routes
   are added to the mapper when you call a ``start`` method.
-
-
-0.38.1 (2019-08-02)
-===================
-
+""")
+  (0.38.1 2019-08-02
+          """
 * A small fix to make it work with ``weblocks-websocket``.
-
-0.38.0 (2019-07-07)
-===================
-
+""")
+  (0.38.0 2019-07-07
+          """
 * Unhandled error processing was fixed. There were numerous problems with error processing:
   * Previosly server stopped to work because clack tried to write into a closed stream.
   * Also, before this fix, error page didn't showed propertly.
@@ -125,16 +146,15 @@ Changes
     Now they are handled with ``on-error`` method as errors in block/page rendering.
 
   All of them are fixed now.
-
-0.37.0 (2019-06-01)
-===================
-
+""")
+  (0.37.0 2019-06-01
+          """
 * Removed check if ``:bordeaux-threads`` is in the ``*features*``, because this does not work
   in runtime in precompiled binary.
 
-0.36.0(2019-05-03)
-===================
-
+""")
+  (0.36.0 2019-05-03
+          """
 * Added function ``weblocks/session:expire``, which can be used to tell Weblocks to delete current session
   after request processing.
 * Also, now session middleware is created explicitly along with memory store. This made possible to add
@@ -151,42 +171,45 @@ Changes
 * A new setting ``weblocks/html:*pretty-html*`` was created, to further control pretty printing of html
   both in code and in tests.
 
-0.35.3 (2019-03-31)
-===================
-
+""")
+  (0.35.3 2019-03-31
+          """
 * Added a ``weblocks/response:add-retpath-to`` function, useful to add a
   ``retpath`` GET parameter to the URL.
 
-  For example, calling::
+  For example, calling:
 
-    (add-retpath-to "/login" :retpath
-    "http://example.com:10050/foo/bar")
+```lisp
+(add-retpath-to "/login" :retpath
+  "http://example.com:10050/foo/bar")
 
-  Will return::
+  Will return:
 
-    "/login?retpath=http%3A%2F%2Fexample.com%3A10050%2Ffoo%2Fbar"
+```lisp
+"/login?retpath=http%3A%2F%2Fexample.com%3A10050%2Ffoo%2Fbar"
+```
 
   Argument ``:retpath`` is optional. By default, function
   will take an URL of the current web page.
 
-0.35.2 (2019-03-21)
-===================
-
+""")
+  (0.35.2 2019-03-21
+          """
 * Subsystem ``weblocks/utils/i18n`` was added to asd file, because
-  otherwise system ``weblocks-ui`` can't be installed from the Ultralisp.
-
-0.35.1 (2019-02-02)
-===================
-
+  otherwise system ``weblocks-ui`` can't be installed from the [Ultralisp][ultralisp].
+""")
+  (0.35.1 2019-02-02
+          """
 * Previosly, when you called ``(weblocks/debug:off)``, subsequent
   call to ``(weblocks/debug:status)`` returned ``T``, but should return
   ``NIL``.
 
   This was fixed now.
 
-0.35.0
-======
-
+"""
+          )
+  (0.35.0 2019-01-22
+          """
 Request handling pipeline was refactored.
 
 The idea of this refactoring, is to separate roles of the functions
@@ -225,9 +248,10 @@ Here is a list of changes:
   which can be used by a ``weblocks/request-handler:handle-reqiest`` to
   return response.
 
-0.34.0
-======
-
+"""
+          )
+  (0.34.0 2019-01-19
+          """
 New
 ---
 
@@ -252,27 +276,29 @@ Fixes
 * Function ``weblocks/request:get-uri`` was fixed to work correctly when
   server is behind a reverse proxy which provides ``X-Forwarded-*`` headers.
 
-0.33.2 (2018-12-06)
-===================
-
+"""
+          )
+  (0.33.2 2018-12-06
+          """
 Fixes
 -----
 
 * Added dependency on ``lack-middleware-session`` system
   because wee use it to store sessions.
 
-0.33.1 (2018-11-24)
-===================
-
+"""
+          )
+  (0.33.1 2018-11-24
+          """
 Improvements
 ------------
 
 * Now unhandled exceptions are logged with tracebacks if you are using
   ``log4cl-json`` library. To turn it on, just do:
 
-  .. code:: common-lisp
-
-     (log4cl-json:setup)
+```common-lisp
+(log4cl-json:setup)
+```
 
 Fixes
 -----
@@ -287,27 +313,27 @@ Fixes
 
   For example:
 
-  .. code:: common-lisp
+```
+(weblocks/hooks:on-application-hook-handle-request
+  connect-to-database ()
 
-
-     (weblocks/hooks:on-application-hook-handle-request
-       connect-to-database ()
-
-       (let ((success nil))
-         (unwind-protect (progn (setup-transaction)
-                                (weblocks/hooks:call-next-hook)
-                                (setf success t))
-           (if success
-               (commit)
-               (rollback)))))
+  (let ((success nil))
+    (unwind-protect (progn (setup-transaction)
+                           (weblocks/hooks:call-next-hook)
+                           (setf success t))
+      (if success
+          (commit)
+          (rollback)))))
+```
 
   Before this fix, ``rollback`` always called, because execution never
   hitted ``(setf success t)``. Now this is fixed.
 
 
-0.33.0 (2018-11-22)
-===================
-
+"""
+          )
+  (0.33.0 2018-11-22
+          """
 Changes
 -------
 
@@ -325,9 +351,10 @@ Fixes
   system. Seems it plays badly when ``weblocks/widget`` is nickname for
   ``weblocks/widgets/base``.
 
-0.32.1 (2018-08-13)
-===================
-
+"""
+          )
+  (0.32.1 2018-08-13
+          """
 Changes
 -------
 
@@ -342,57 +369,65 @@ Fixes
   system class and don't have explicit dependency on the ``weblocks``
   page.
 
-  The error was raised during code loading::
+  The error was raised during code loading:
 
-    ;;; > Error: There is no applicable method for the generic function:
-    >          #<STANDARD-GENERIC-FUNCTION WEBLOCKS/JS/BASE:MAKE-JS-BACKEND #x3020027E292F>
-    >        when called with arguments:
-    >          (:JQUERY)
+  ```
+  ;;; > Error: There is no applicable method for the generic function:
+  >          #<STANDARD-GENERIC-FUNCTION WEBLOCKS/JS/BASE:MAKE-JS-BACKEND #x3020027E292F>
+  >        when called with arguments:
+  >          (:JQUERY)
+  ```
 
   Now it is fixed and package ``weblocks/js/jquery`` is a dependency of
   ``weblocks/server`` and always loads.
 
-0.32.0 (2018-06-26)
-===================
-
+"""
+          )
+  (0.32.0 2018-06-26
+          """
 * Now weblocks system explicitly requires ASDF >= 3.1, because it uses
   ``package-inferred-system`` class.
 
-0.31.1 (2018-06-16)
-===================
-
+"""
+          )
+  (0.31.1 2018-06-16
+          """
 * Fixed error about missing 'bool type under SBCL.
-
-0.31.0 (2018-05-29)
-===================
-
+"""
+          )
+  (0.31.0 2018-05-29
+          """
 * We don't enforce ``*print-pretty*`` inside of
   ``weblocks/html:with-html`` macro. This hack was required because
   the bug in the spinneret, which was fixed at 2018-01-04:
 
-  https://github.com/ruricolist/spinneret/commit/06b280612aff07cf376f593746d080230f2c7462
-
-0.30.1 (2018-05-20)
-===================
-
+  <https://github.com/ruricolist/spinneret/commit/06b280612aff07cf376f593746d080230f2c7462>
+"""
+          )
+  (0.30.1 2018-05-20
+          """
 * Error was fixed when you are trying to start a server which is already
   running. Now you have a "restart" to stop the old version of the
   server before starting the new one.
 
   However, it does not work with ``Woo`` server, because C library libev
-  crashes with error::
+  crashes with error:
 
-    Assertion failed: (("libev: a signal must not be attached to two different loops", !signals [w->signum - 1].loop || signals [w->signum - 1].loop == loop)), function ev_signal_start, file ev.c, line 4082
+```
+Assertion failed: (("libev: a signal must not be attached to two different loops", !signals [w->signum - 1].loop || signals [w->signum - 1].loop == loop)), function ev_signal_start, file ev.c, line 4082
+```
 
 
-0.30.0 (2018-05-19)
-===================
-
+"""
+          )
+  (0.30.0 2018-05-19
+          """
 * Fixed the order of commands for frontend. Now they are returned in the chronological order.
 
-0.29.0 (2018-05-05)
-===================
-
+"""
+          )
+  (0.29.0 2018-05-05
+          """
 Backward incompatibilities
 --------------------------
 
@@ -411,10 +446,10 @@ Improvements
 A new function ``weblocks/debug:get-session-value`` was added. It can be
 used to get values from the last session seen by weblocks.
 
-
-0.28.0 (2018-04-23)
-===================
-
+"""
+          )
+  (0.28.0 2018-04-23
+          """
 Error handling was fixed. Previously it aborted Woo's worker thread and
 break the server.
 
@@ -430,20 +465,22 @@ Method ``weblocks/error-handler:on-error`` now is called when you abort
 request processing from the debugger. It is called with current app as
 the first argument and the ``nil`` instead of condition.
 
-0.27.2 (2018-04-09)
-===================
-
+"""
+          )
+  (0.27.2 2018-04-09
+          """
 Fixed a typo in  ``string-widget`` and ``funcall-widget`` package definitions.
-
-0.27.1 (2018-04-09)
-===================
-
+"""
+          )
+  (0.27.1 2018-04-09
+          """
 Now ``string-widget`` and ``funcall-widget`` depends on
-``weblocks/widgets/base`` instead of ``weblocks/widget.
+``weblocks/widgets/base`` instead of ``weblocks/widget``.
 
-0.27.0 (2018-03-11)
-===================
-
+"""
+          )
+  (0.27.0 2018-03-11
+          """
 Reloading of the defapp definition now does not tries to restart an
 application. Previously, restart caused the problem – when there is only
 one application, whole Weblocks server was shut down. So, I've removed
@@ -451,9 +488,10 @@ this implicit action.
 
 Code which logs action result on the client-side was improved.
 
-0.26.0 (2018-02-20)
-===================
-
+"""
+          )
+  (0.26.0 2018-02-20
+          """
 Symbols ``add-application-hook``, ``add-request-hook``,
 ``add-session-hook``, ``prepare-hooks`` and ``call-hook``
 aren't exported from ``weblocks/hooks`` anymore. Use new macro
@@ -465,10 +503,10 @@ You use ``defhook`` as the toplevel form of your file if you want to define
 a new hook. This macro will create few other macroses in
 ``weblocks/hooks`` package and will export them. For example:
 
-.. code:: common-lisp
-
-   (defhook database-opened
-      "This hook is called when your application opens a database.")
+```common-lisp
+(defhook database-opened
+   "This hook is called when your application opens a database.")
+```
 
 This code will add these macroses into the ``weblocks/hooks`` package:
 ``on-session-hook-database-opened``,
@@ -480,35 +518,36 @@ This code will add these macroses into the ``weblocks/hooks`` package:
 You need to wrap code, which opens a database, with
 ``with-database-opened-hook``:
 
-.. code:: common-lisp
-
-   (weblocks/hooks:with-database-opened-hook ()
-      (do-some-staff-to-open-database))
+```common-lisp
+(weblocks/hooks:with-database-opened-hook ()
+   (do-some-staff-to-open-database))
+```
 
 And in any other piece of code, you can define callbacks, using one of
 other three macroses:
 
-.. code:: common-lisp
+```common-lisp
+(weblocks/hooks:on-session-hook-database-opened
+    log-database-opening ()
 
-   (weblocks/hooks:on-session-hook-database-opened
-       log-database-opening ()
-
-     (weblocks/hooks:call-next-hook)
-     (log:info "Database was opened"))
+  (weblocks/hooks:call-next-hook)
+  (log:info "Database was opened"))
+```
 
 Usage of ``defhook`` macro gives more transparency to all defined hooks,
 because all of them now visible as external symbols in
 ``weblocks/hooks`` package.
-
-0.25.2 (2018-02-04)
-===================
-
+"""
+          )
+  (0.25.2 2018-02-04
+          """
 System ``weblocks/hooks`` now depends on ``log4cl`` and
 ``metatilities``, because previously sometimes it was impossible to load ``weblocks``.
 
-0.25.1 (2018-02-04)
-===================
-
+"""
+          )
+  (0.25.1 2018-02-04
+          """
 Old tests for widgets, removed from core framework were removed.
 
 Tests for widget's MOP methods were ported to Rove.
@@ -520,9 +559,10 @@ Few old widget tests were removed.
 
 Added function ``weblocks/session:reset`` which resets current session.
 
-0.25.0 (2018-01-31)
-===================
-
+"""
+          )
+  (0.25.0 2018-01-31
+          """
 Good news, everyone!
 --------------------
 
@@ -587,10 +627,10 @@ Removals
 
 * Macro ``defrender`` was removed.
 
-
-0.24.0 (2018-01-29)
-===================
-
+"""
+          )
+  (0.24.0 2018-01-29
+          """
 All rendering code was refactored.
 
 Macroses ``with-html`` and ``with-html-to-string`` replaced
@@ -600,7 +640,7 @@ Stream ``*weblocks-output-stream*`` was moved to
 use it directly.
 
 Widget refactorings
--------------------
+===================
 
 Procedure ``update-widget-tree`` was removed and not widgets can't
 change html header's tags, description, title, etc. If you need this,
@@ -610,7 +650,7 @@ Macro ``root-widget`` was removed and replaced with function
 ``weblocks.widgets.root:get``.
 
 Request level
--------------
+=============
 
 Functions ``post-action-redirect``, ``post-render-redirect`` and
 ``initial-request-p`` were removed from ``weblocks`` package.
@@ -631,7 +671,7 @@ or deferring redirection until the end of action or rendering was
 removed.
 
 Request handler
----------------
+===============
 
 Functions ``remove-duplicate-dirty-widgets``,
 ``update-location-hash-dependents`` and ``update-widget-tree`` were
@@ -642,14 +682,14 @@ Call to ``weblocks::update-dialog-on-request`` from
 
 
 Error handler
--------------
+=============
 
 Generic method ``weblocks/error-handler:on-error`` now accepts two
 arguments - application object and condition.
 
 
 Application level
------------------
+=================
 
 All code from ``uri-parameters-slotmap.lisp`` was removed.
 
@@ -753,7 +793,7 @@ These functions were moved into the separate package
 * ``webapp-prefix`` -> ``get-prefix``;
 
 Actions and commands
---------------------
+====================
 
 Function ``weblocks.actions:add-command`` was moved to
 ``weblocks.commands``.
@@ -764,7 +804,7 @@ Function ``weblocks:get-request-action`` was moved to
 Keyword argment ``:action`` was removed from action calls.
 
 Javascript
-----------
+==========
 
 Package ``weblocks.js`` was renamed to ``weblocks/js/base``.
 
@@ -773,7 +813,7 @@ Functions ``escape-script-tags``, ``%js`` and macroses
 package ``weblocks/js/base``.
 
 Variables
----------
+=========
 
 These variables were moved from ``weblocks`` package to
 ``weblocks/variables``:
@@ -786,23 +826,23 @@ These variables were moved from ``weblocks`` package to
 * ``*ignore-missing-actions*``
 
 Symbols moved from :weblocks to other packages
-----------------------------------------------
+==============================================
 
 To :weblocks/widgets/dom
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 * ``dom-object-mixin``
 * ``dom-id``
 
 To :weblocks/utils/uri
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 * ``request-uri-path``
 * ``add-get-param-to-url``
 * ``remove-parameter-from-uri``
 
 To :weblocks/linguistic/grammar
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 * ``pluralize``
 * ``singularize``
@@ -820,7 +860,7 @@ To :weblocks/linguistic/grammar
 * ``determine-gender``
 
 To weblocks/utils/warn
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 * ``style-warn``
 * ``webapp-style-warning`` renamed to ``style-warning``.
@@ -828,7 +868,7 @@ To weblocks/utils/warn
 * ``misunderstood-action``
 
 To weblocks/actions
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 * ``function-or-action->action``
 * ``make-action``
@@ -836,7 +876,7 @@ To weblocks/actions
 
 
 Removals
---------
+========
 
 To make Weblocks core smaller, many files were removed: ``views``, ``widgets``,
 ``html-parts``, ``utilities``.
@@ -853,13 +893,14 @@ Variable ``*dirty-widgets*`` was removed along with
 
 
 Dependencies
-------------
+============
 
 Rendering of remote (non cached) dependencies was fixed.
 
-0.23.0 (2018-01-11)
-===================
-
+"""
+          )
+  (0.23.0 2018-01-11
+          """
 * Symbol ``weblocks.routes:*routes*`` is not external anymore.
   Use ``weblocks.routes:add-route`` and ``weblocks.routes:get-route``
   to add new routes and to search a route matched on a path.
@@ -869,21 +910,22 @@ Rendering of remote (non cached) dependencies was fixed.
 * Temporary added method ``weblocks::child-of-p`` for new type of
   widget. This should fix some issues, with widgets updating.
 
-0.22.2 (2018-01-07)
-===================
-
+"""
+          )
+  (0.22.2 2018-01-07
+          """
 * Class ``weblocks.widget:widget`` was exported, to make possible to
   define widgets based on it and some mixins.
 
-0.22.1 (2018-01-07)
-===================
-
+"""
+          )
+  (0.22.1 2018-01-07
+          """
 * Code broken in previos release was fixed.
-
-
-0.22.0 (2018-01-06)
-===================
-
+"""
+          )
+  (0.22.0 2018-01-06
+          """
 Most functions from ``weblocks.request`` were refactored and renamed:
 
 * ``request-parameters`` -> ``get-parameters``;
@@ -899,32 +941,34 @@ Most functions from ``weblocks.request`` were refactored and renamed:
   strings like ``/some/path?with=parameters``;
 * ``request-method`` -> ``get-method``.
 
-All these function now accept keyword argument ``:request``. Previously
-it was ``&optional``.
+  All these function now accept keyword argument ``:request``. Previously
+  it was ``&optional``.
 
-Another change is a new function ``weblocks.response:make-uri``. It can
-be used to build new uri, based on the uri of the current request. This
-can be useful when embedding links into emails, for example.
+  Another change is a new function ``weblocks.response:make-uri``. It can
+  be used to build new uri, based on the uri of the current request. This
+  can be useful when embedding links into emails, for example.
 
-.. warning:: These changes require a newer version of Lack.
+   **Warning!** These changes require a newer version of Lack.
 
-   I've made a pull request https://github.com/fukamachi/lack/pull/31
+   I've made a pull request <https://github.com/fukamachi/lack/pull/31>
    it is not merged yet, so, alternative version of Lack can be used, by
    installing it using Qlot, from here:
 
-   https://github.com/40ants/lack
+   <https://github.com/40ants/lack>
 
-0.21.0 (2018-01-01)
-===================
-
+"""
+          )
+  (0.21.0 2018-01-01
+          """
 * Macro ``weblocks.session:get-value`` was replaced with a regular
   function.
 * Function ``weblocks.session:set-value`` was removed and replaced with
   a setter ``(setf get-value)``.
 
-0.20.1 (2017-12-20)
-===================
-
+"""
+          )
+  (0.20.1 2017-12-20
+          """
 * Removed debug these debug messages from client-side JS:
 
   * LOADED;
@@ -933,9 +977,10 @@ can be useful when embedding links into emails, for example.
   * Some AJAX error;
   * Action success.
 
-0.20.0 (2017-12-15)
-===================
-
+"""
+          )
+  (0.20.0 2017-12-15
+          """
 * Package ``weblocks.debug`` now does not export ``*on`` variable,
   but provides three functions ``on``, ``off`` and ``status``.
 * New method ``weblocks.server:serve-static-file`` was introduced.
@@ -943,27 +988,28 @@ can be useful when embedding links into emails, for example.
   file's content. For example, you could add this to your app's
   ``initialize-instance`` method:
 
-  .. code:: common-lisp
-
-     (weblocks.server:serve-static-file
-        "/favicon.png"
-        (asdf:system-relative-pathname :app "favicon.png"))
-
-0.19.2 (2017-11-29)
-===================
-
+```common-lisp
+(weblocks.server:serve-static-file
+   "/favicon.png"
+   (asdf:system-relative-pathname :app "favicon.png"))
+```
+"""
+          )
+  (0.19.2 2017-11-29
+          """
 * Now weblocks rebinds ``*random-state*`` to itself for each request to
   allow it to use ``setf`` and change ``*random-state*`` until the end
   of request processing.
 
-0.19.1 (2017-11-23)
-===================
-
+"""
+          )
+  (0.19.1 2017-11-23
+          """
 * Dirty widgets rendering was fixed.
-
-0.19.0 (2017-11-13)
-===================
-
+"""
+          )
+  (0.19.0 2017-11-13
+          """
 * Variable ``*expired-action-handler*``, method
   ``expired-action-handler`` and function
   ``default-expired-action-handler`` were replaced with method
@@ -972,16 +1018,17 @@ can be useful when embedding links into emails, for example.
 * Old method ``weblocks:handle-client-request ((app weblocks-webapp))``
   was removed. Look at it's newer version in ``weblocks.request-handler``.
 
-
-0.18.0 (2017-11-12)
-===================
-
+"""
+          )
+  (0.18.0 2017-11-12
+          """
 * Commented out call to ``update-widget-tree`` inside of ``(setf
   widget-children)``, because it breaks on
   ``(get-widgets-by-type 'selector :root obj)`` sometimes. Seems this is
   because I've removed selector's code previously.
 
-  .. warning:: Probably parent/children handling code will be removed soon.
+  **Warning!** Probably parent/children handling code will be removed soon.
+
 * Backtrace printing code was replaced with direct usage of
   ``trivial-backtrace:print-backtrace``.
 
@@ -989,21 +1036,24 @@ can be useful when embedding links into emails, for example.
   to the the weblocks.server:handler-request, to fix session hooks processing when
   ``:process-request`` hook is called.
 
-0.17.2 (2017-11-11)
-===================
-
+"""
+          )
+  (0.17.2 2017-11-11
+          """
 * Error handling code was fixed. It was broken in 0.17.1 and prevented
   system loading.
 
-0.17.1 (2017-11-11)
-===================
-
+"""
+          )
+  (0.17.1 2017-11-11
+          """
 * Fixed error handling when debug mode is "off". Now weblocks returns
   result of ``(weblocks.error-handler:on-error app)`` call.
 
-0.17.0 (2017-11-11)
-===================
-
+"""
+          )
+  (0.17.0 2017-11-11
+          """
 * Added a ``weblocks.actions`` package.
 * Also, a ``commands`` were introduced. Commands describe remote calls
   which have to be applied on a client as a result of action's
@@ -1022,10 +1072,10 @@ can be useful when embedding links into emails, for example.
   executed in same order as they were added. If you want some code to be
   executed before widget update, just execute ``send-code`` before
   ``weblocks.widget:update``.
-
-0.16.0 (2017-11-04)
-===================
-
+"""
+          )
+  (0.16.0 2017-11-04
+          """
 * New package was introduced - ``weblocks.widget`` it contains a new
   ``widget`` class with simplified rendering based on ``spinneret``
   templating library.
@@ -1037,53 +1087,58 @@ can be useful when embedding links into emails, for example.
 * Fixed issue of adding multuple routes mapped to the same path. Now if
   url mapper already have a route all subsequent attempts to add a route
   with same path are ignored.
-* Fixed error::
+* Fixed error:
 
-    Undefined function WEBLOCKS:WEBAPP-SESSION-KEY called with arguments
-    (#<APP::APP #x3020052F01DD>)
+  ```
+  Undefined function WEBLOCKS:WEBAPP-SESSION-KEY called with arguments
+  (#<APP::APP #x3020052F01DD>)
+  ```
+
 * Fixed ``Content-Type`` of the default 500 page. Previously it was
   ``plain/text`` and browser didn't undestand that and downloaded the
   file.
 
   Now ``Content-Type`` is ``text/plain``.
 
-0.15.0 (2017-11-03)
-===================
-
+"""
+          )
+  (0.15.0 2017-11-03
+          """
 * Now weblocks does not checks if all tokens from URL were consumed by
   app during root widget rendering. Previously it returned 404 if some
   token weren't consumed. Implement this logic in your app if needed.
-* Macro ``assert-hooks-called`` was changed to return hooks in the order
+* Macro `assert-hooks-called` was changed to return hooks in the order
   they were called. Also, now it waits hooks description as a DSL,
   like:
 
-  .. code:: common-lisp
+  ```lisp
+  (assert-hooks-called
+    (:fact-created contact "vasya@pupkin.com")
+    (:fact-removed contact "vasya@pupkin.com"))
+  ```
 
-     (assert-hooks-called
-       (:fact-created contact "vasya@pupkin.com")
-       (:fact-removed contact "vasya@pupkin.com"))
-
-* New system ``weblocks-testutils`` was introduced. It
-  compiles ``weblocks.t.utils`` package which macroses useful for
+* New system `weblocks-testutils` was introduced. It
+  compiles `weblocks.t.utils` package which macroses useful for
   unittesting.
 
-  Also, a new macro ``catch-hooks`` was added to check if some
+  Also, a new macro `catch-hooks` was added to check if some
   hooks were called during a unittest.
-
 * Now weblocks does not open a new tab or window on 500 error
   during an action execution.
 
-0.14.4 (2017-10-07)
-===================
-
+"""
+          )
+  (0.14.4 2017-10-07
+          """
 * No more ``declaim optimize`` in different places. These
   declarations changed compiler's settings at unexpected moments.
 * Fixed error happened when "File not found", and now
   ``with-hook`` macro returns the value of the last form's evaluation.
 
-0.14.3 (2017-09-23)
-===================
-
+"""
+          )
+  (0.14.3 2017-09-23
+          """
 * Default method of ``render-page`` was fixed to really wrap
   page with ``<html>...`` block.
 
@@ -1094,23 +1149,26 @@ can be useful when embedding links into emails, for example.
   returns a new instance of request object and does not modify the
   original request. This fixes issue in ``weblocks-websocket``.
 
-0.14.2 (2017-09-22)
-===================
-
+"""
+          )
+  (0.14.2 2017-09-22
+          """
 * Added package ``weblocks.debug`` and keeping latest
   session was rewritten using ``:process-request`` hook.
 
-0.14.1 (2017-09-22)
-===================
-
+"""
+          )
+  (0.14.1 2017-09-22
+          """
 * Added function ``weblocks.request:remove-request-header``.
 * Added a hook ``(:reset-session session)``, which is
   called around a code for clearing given session. Right now it is
   called only from ``weblocks.sessions:reset-latest-session``.
 
-0.14.0 (2017-09-20)
-===================
-
+"""
+          )
+  (0.14.0 2017-09-20
+          """
 * ``html``, ``menu``, ``suggest`` and ``repl`` utilities
   were excluded.
 * Code which was in ``request-handler.lisp``, was excluded
@@ -1136,16 +1194,18 @@ can be useful when embedding links into emails, for example.
   * ``render-link`` function was moved to ``weblocks-ui.form`` in
     separate system.
 
-0.13.11 (2017-09-12)
-====================
-
+"""
+          )
+  (0.13.11 2017-09-12
+           """
 * Added ``weblocks.hooks:call-hook`` helper.
 * Now ``call-next-hook`` is called automatically if it
   wasn't called explicitly.
 
-0.13.10 (2017-09-06)
-====================
-
+"""
+           )
+  (0.13.10 2017-09-06
+           """
 Changes in weblocks.request-hooks:
 ----------------------------------
 
@@ -1171,24 +1231,27 @@ Changes in weblocks.request-hooks:
            first-param
            second-param)
 
-0.13.10 (2017-09-06)
-====================
-
+"""
+           )
+  (0.13.10 2017-09-06
+           """
 * Added ``:handle-request`` dynamic hook called around request handling code.
 
   Called when ``weblocks.request:*request*`` and ``weblocks.session:*session*`` are already bound.
 
-0.13.9 (2017-09-02)
-===================
-
+"""
+           )
+  (0.13.9 2017-09-02
+          """
 * Added integrity field for remove javascript dependencies.
   Also, ``get-cross-origin`` and ``:cross-origin`` were removed to
   ``get-crossorigin`` and ``:crossorigin``, to conform the html
   attibute's spelling.
 
-0.13.8 (2017-09-02)
-===================
-
+"""
+          )
+  (0.13.8 2017-09-02
+          """
 * Fixed error on ``(weblocks:redirect...)`` call.
 * Fixed dependency handling in ajax requests.
 * Now if unhandled exception occure, Woo's handler remains
@@ -1199,10 +1262,11 @@ Changes in weblocks.request-hooks:
   take optional speed parameters from ``data-*`` attributes
   ``data-show-speed`` and ``data-hide-speed``.
 
-* Reformatted documentation. Started to `keep a changelog
-  <http://keepachangelog.com/>`_.
+* Reformatted documentation. Started to [keep a changelog](http://keepachangelog.com/).
 
-0.13.7 (2017-04-15)
-===================
-
+"""
+          )
+  (0.13.7 2017-04-15
+          """
 * Previous history wasn't tracked.
+"""))

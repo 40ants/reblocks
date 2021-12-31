@@ -166,7 +166,7 @@ TODO> (defmethod render ((widget task-list))
                 (loop for task in (tasks widget) do
                       (:li (render task))))))
 ```
-The [`reblocks/html:with-html`][3333] macro uses
+The [`reblocks/html:with-html`][a282] macro uses
 [Spinneret][a443] under the hood,
 but you can use anything that outputs html.
 
@@ -207,8 +207,8 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-22
-         src="https://com-40ants-reblocks-examples.herokuapp.com/examples/reblocks/doc/quickstart/example1?iframe-id=example-22"
+         id=example-82
+         src="http://localhost:40000/examples/reblocks/doc/quickstart/example1?iframe-id=example-82"
          style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
 <script>
@@ -294,8 +294,8 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-23
-         src="https://com-40ants-reblocks-examples.herokuapp.com/examples/reblocks/doc/quickstart/example2?iframe-id=example-23"
+         id=example-83
+         src="http://localhost:40000/examples/reblocks/doc/quickstart/example2?iframe-id=example-83"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -363,8 +363,8 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-24
-         src="https://com-40ants-reblocks-examples.herokuapp.com/examples/reblocks/doc/quickstart/example3?iframe-id=example-24"
+         id=example-84
+         src="http://localhost:40000/examples/reblocks/doc/quickstart/example3?iframe-id=example-84"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -398,7 +398,6 @@ As a homework:
 
 [cb44]: actions.html#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
 [f9d3]: apps.html#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[3333]: html.html#x-28REBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [5ff5]: http://localhost:40000/tasks
 [2e0b]: http://localhost:40000/tasks/
 [9dee]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
@@ -408,6 +407,7 @@ As a homework:
 [7210]: https://lispcookbook.github.io/cl-cookbook/clos.html
 [63e3]: https://lispcookbook.github.io/cl-cookbook/databases.html
 [3e27]: https://ultralisp.org/
+[a282]: rendering.html#x-28REBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [3f5e]: routing.html#x-28REBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
 [33d7]: widgets.html#x-28REBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [c703]: widgets.html#x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29

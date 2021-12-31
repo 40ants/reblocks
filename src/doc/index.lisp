@@ -3,8 +3,8 @@
   (:import-from #:40ants-doc
                 #:defsection
                 #:defsection-copy)
-  (:import-from #:reblocks/html
-                #:@html)
+  (:import-from #:reblocks/doc/rendering
+                #:@rendering)
   (:import-from #:reblocks/doc/intro
                 #:@intro)
   (:import-from #:reblocks/doc/installation
@@ -43,6 +43,8 @@
                 #:@response)
   (:import-from #:reblocks/doc/request
                 #:@request)
+  (:import-from #:reblocks/doc/changelog
+                #:@changelog)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -58,7 +60,7 @@
 - @COMPONENTS
 - @APPS
 - @WIDGETS
-- @HTML
+- @RENDERING
 - @ACTIONS
 - @ROUTING
 - @DEPENDENCIES
@@ -69,6 +71,7 @@
 - @REMOVED-FEATURES
 - @API
 - @CONTRIBUTE
+- @CHANGELOG
 ")
 
 (defsection-copy @readme @quickstart)
@@ -100,7 +103,7 @@
                            @components
                            @apps
                            @widgets
-                           @html
+                           @rendering
                            @actions
                            @routing
                            @dependencies
@@ -111,6 +114,7 @@
                            @removed-features
                            @api
                            @contribute
+                           @changelog
                            @readme))))
 
 

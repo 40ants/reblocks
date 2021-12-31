@@ -1,4 +1,4 @@
-(defpackage #:reblocks/server
+(uiop:define-package #:reblocks/server
   (:use #:cl
         #:f-underscore)
   ;; to load js dependencies after app was started
@@ -295,16 +295,12 @@ If server is already started, then logs a warning and does nothing."
                 apps)
   "Starts reblocks framework hooked into Clack server.
 
-Set DEBUG to true in order for error messages and stack traces to be shown
-to the client (note: stack traces are temporarily not available due to changes
-in Hunchentoot 1.0.0).
+   Set DEBUG to true in order for error messages and stack traces to be shown
+   to the client (note: stack traces are temporarily not available due to changes
+   in Hunchentoot 1.0.0).
 
-All other keywords will be passed as initargs to the acceptor;
-the initargs :PORT and :SESSION-COOKIE-NAME default to
-8080 and `reblocks-GENSYM'.
-
-Also opens all stores declared via DEFSTORE and starts webapps
-declared AUTOSTART unless APPS argument is provided."
+   Server will start all apps declared having `autostart t` in their definition
+   unless APPS argument is provided."
 
   (let ((server (find-server interface port)))
     (reblocks/hooks:with-start-reblocks-hook ()
@@ -361,7 +357,7 @@ declared AUTOSTART unless APPS argument is provided."
         do (setf (gethash prefix seen)
                  t))
   ;; Also, we should add app's routes to the mapper:
-  (reblocks/routes:add-routes app :routes (routes server)))
+  (add-routes app :routes (routes server)))
 
 
 (defun start-app (server app-class &rest app-args)

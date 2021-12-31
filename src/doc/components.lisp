@@ -11,6 +11,7 @@
                                         "URI"
                                         "HTML"
                                         "CLOS"
+                                        "TCP"
                                         "MAKE-WIDGET"
                                         ;; TODO: make an external-link
                                         "REBLOCKS-NAVIGATION-WIDGET"
@@ -91,4 +92,19 @@ an URI token <sup>[2](#uri-tokens)</sup> a widget.
 Old versions of Weblocks supported such dispatchers out of the box,
 but during refactoring this functionality was moved into a separate
 REBLOCKS-NAVIGATION-WIDGET system. Read its documentation to learn more.
-")
+
+# Servers
+
+To make everything work, you need to start one or more webservers on some TCP ports.
+
+When you are starting a server, usually you specify an interface and port to listen on
+and a list os Reblocks apps to serve.
+
+Here is the list of functions useful when working with Reblocks servers:
+"
+  (reblocks/server:start function)
+  (reblocks/server:stop function)
+  (reblocks/server:servers function)
+  (reblocks/server:running-p function)
+  (reblocks/server:serve-static-file generic-function)
+  (reblocks/preview:preview function))

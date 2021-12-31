@@ -44,4 +44,8 @@ user will open https://yoursite.com/blog/ in his browser.
   (get-current function)
   (get-prefix (reader app))
   (initialize-webapp generic-function)
-  (with-app macro))
+  (with-app macro)
+
+  ;; TODO: probably, we should move these to a separate documentation chapter
+  ;; about the "rendering flow".
+  (reblocks/page:render-headers generic-function))

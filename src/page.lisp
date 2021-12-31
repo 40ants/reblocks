@@ -1,4 +1,4 @@
-(defpackage #:reblocks/page
+(uiop:define-package #:reblocks/page
   (:use #:cl)
   (:import-from #:reblocks/variables
                 #:*default-content-type*)
@@ -27,8 +27,7 @@
    #:get-title
    #:get-description
    #:get-keywords
-   #:get-language
-   #:with-layout))
+   #:get-language))
 (in-package reblocks/page)
 
 
@@ -56,12 +55,11 @@
 (def-get-set language)
 
 
+(defgeneric render-headers (app)
+  (:documentation   "
+   By default, adds <meta> entries with Content-Type, description and keywords to the app's page."))
+
 (defmethod render-headers ((app app))
-  "A placeholder to add :meta entries, :expires headers and other 
-   header content on a per-webapp basis.  For example, using a dynamic 
-   hook on rendering you can bind special variables that are dereferenced 
-   here to customize header rendering on a per-request basis.  By default
-   this function renders the current content type."
   (with-html
     (:meta :http-equiv "Content-type"
            :content *default-content-type*)
@@ -74,19 +72,44 @@
              :content (format nil "~{~A~^,~}" (get-keywords))))))
 
 
-(defmethod render-body ((app app) body-string)
+(defgeneric render-body (app body-html-string)
+  (:documentation "By default, it just renders BODY-HTML-STRING as is, without escaping.
+
+                   BODY-HTML-STRING argument contains a rendered widget tree, generated
+                   by REBLOCKS/WIDGET:RENDER generic-function call on the root widget."))
+
+(defmethod render-body ((app app) body-html-string)
   "Default page-body rendering method"
   
   (with-html
-    (:raw body-string)))
+    (:raw body-html-string)))
+
+
+(defgeneric render-dependencies (app dependencies)
+  (:documentation "Renders links to CSS and JS dependencies.
+
+                   DEPENDENCIES argument contains a list of
+                   objects inherited from REBLOCKS/DEPENDENCIES:DEPENDENCY class."))
 
 
 (defmethod render-dependencies ((app app) dependencies)
   (etypecase dependencies
     (list (mapc #'render-in-head
-                 dependencies))
+                dependencies))
     (string (with-html
               (:raw dependencies)))))
+
+
+(defgeneric render (app inner-html &key dependencies)
+  (:documentation "Renders HTML page for the current application.
+
+                   By default, it renders:
+
+                   * HTML <head> where calls
+                     RENDER-HEADERS generic-function and RENDER-DEPENDENCIES
+                     generic-function.
+                   * HTML <body> where RENDER-BODY generic-function is called
+                     with APP and INNER-HTML arguments."))
 
 
 (defmethod render ((app app)

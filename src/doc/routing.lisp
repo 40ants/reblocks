@@ -2,24 +2,34 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
+  (:import-from #:reblocks/routes
+                #:route
+                #:get-route
+                #:defroute
+                #:serve)
   (:export #:@routing))
 (in-package reblocks/doc/routing)
 
 
-(defsection @routing (:title "Routing"
-                      :ignore-words ("URL"
-                                     "DEFROUTES"
-                                     "MAKE-TASKS-ROUTES"
-                                     "ASDF"
-                                     "HTML"
-                                     "TASK-PAGE"
-                                     "MAKE"
-                                     "CL-PPCRE"
-                                     ;; TODO: make an external-link
-                                     "REBLOCKS-NAVIGATION-WIDGET"
-                                     "REBLOCKS-NAVIGATION-WIDGET:DEFROUTES")
-                      ;; :external-docs ("https://40ants.com/reblocks-navigation-widget/") 
-                      )
+(defsection @routing (:title "Routing")
+  (@quickstart section)
+  (@lowlevel-api section))
+
+
+(defsection @quickstart (:title "Quickstart"
+                         :ignore-words ("URL"
+                                        "DEFROUTES"
+                                        "MAKE-TASKS-ROUTES"
+                                        "ASDF"
+                                        "HTML"
+                                        "TASK-PAGE"
+                                        "MAKE"
+                                        "CL-PPCRE"
+                                        ;; TODO: make an external-link
+                                        "REBLOCKS-NAVIGATION-WIDGET"
+                                        "REBLOCKS-NAVIGATION-WIDGET:DEFROUTES")
+                         ;; :external-docs ("https://40ants.com/reblocks-navigation-widget/") 
+                         )
   "
 In the quickstart tutorial, we saw how to create and render widgets,
 and how to react to user events. We also learned that by default the
@@ -275,3 +285,12 @@ And access the app at <http://localhost:40000/tasks/>.
 [Ultralisp]: https://ultralisp.org/
 [CL-PPCRE]: https://edicl.github.io/cl-ppcre/
 ")
+
+
+(defsection @lowlevel-api (:title "Lowlevel API"
+                           :ignore-words ("JSON"
+                                          "URL"))
+  (route class)
+  (defroute macro)
+  (get-route function)
+  (serve generic-function))

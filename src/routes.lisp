@@ -1,15 +1,14 @@
-(defpackage #:reblocks/routes
+(uiop:define-package #:reblocks/routes
   (:use #:cl)
   (:import-from #:routes)
   (:import-from #:reblocks/error-handler
                 #:with-handled-errors)
-  (:export
-   #:add-route
-   #:route
-   #:serve
-   #:get-route
-   #:defroute
-   #:add-routes))
+  (:import-from #:40ants-doc/ignored-words
+                #:ignore-words-in-package)
+  (:export #:route
+           #:serve
+           #:get-route
+           #:defroute))
 (in-package reblocks/routes)
 
 
@@ -37,7 +36,10 @@
   "Returns a route, matched on given path.
    If none matched, then returns nil.
  
-   Path should be a string."
+   Path should be a string.
+
+   This function could be useful for customizing widget rendering
+   depending on the URL in the browser."
   (check-type path string)
   (routes:match *routes* path))
 
@@ -60,10 +62,12 @@
 
 (defgeneric serve (route env) 
   (:documentation "Methods should return a list like that:
-\(list 200                                 ;; status-code
-       \(list :content-type content-type\) ;; headers
-       content\)                           ;; content
-")
+
+                   ```lisp
+                   (list 200                                ;; status-code
+                         (list :content-type content-type)  ;; headers
+                         content)                           ;; content
+                   ```")
   (:method ((route route) env)
     (let ((handler (get-handler route)))
       (cond
@@ -88,13 +92,17 @@
   "Defines a handler for a given route. By default route should return
    a serialized JSON:
 
+   ```lisp
    (defroute (app /api/data)
        \"{\"my-data\": [1, 2, 3]}\")
+   ```
 
    but you can redefine the content type:
 
+   ```lisp
    (defroute (app /api/data :content-type \"application/xml\")
        \"<my-data><item>1</item><item>2</item></my-data>\")
+   ```
    "
   (let* ((uri (string-downcase (symbol-name route)))
          (route-var (gensym "ROUTE")))

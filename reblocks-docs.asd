@@ -3,6 +3,6 @@
   :author "Alexander Artemenko"
   :licence "LLGPL"
   :description "A documentation for Reblocks, Common Lisp web framework."
-  :pathname "src"
   :depends-on ("reblocks"
-               "reblocks/doc/index"))
+               "reblocks/doc/index"
+               "reblocks/doc/changelog"))
