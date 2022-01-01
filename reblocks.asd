@@ -1,18 +1,19 @@
-(defun search-version-in-changelog (lines)
-  (let* ((line (nth 4 lines))
-         (space-pos (position #\Space line)))
-    (when space-pos
-      (subseq line 0 space-pos))))
+;; (defun search-version-in-changelog (lines)
+;;   (let* ((line (nth 4 lines))
+;;          (space-pos (position #\Space line)))
+;;     (when space-pos
+;;       (subseq line 0 space-pos))))
 
 
 (defsystem reblocks
   :name "reblocks"
   :class :package-inferred-system
-  :version (:read-file-line "ChangeLog.rst" :at search-version-in-changelog)
-  :maintainer "Alexander Artemenko, Olexiy Zamkoviy, Scott L. Burson"
-  :author "Slava Akhmechet"
+  ;; TODO: Take version from the src/doc/changelog.lisp
+  ;; :version (:read-file-line "ChangeLog.rst" :at search-version-in-changelog)
+  :maintainer "Alexander Artemenko"
+  :author "Alexander Artemenko"
   :licence "LLGPL"
-  :description "A Common Lisp web framework."
+  :description "A Common Lisp web framework, successor of the Weblocks."
   :pathname "src"
   :depends-on ("reblocks/app"
                "reblocks/server"
