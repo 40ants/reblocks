@@ -41,7 +41,7 @@ TODO> (defapp tasks)
 By default, the name of the app defines the url where it is
 accessible. Here, the "tasks" app will be accessible under
 [http://localhost:40000/tasks][5ff5]. We can change it with the
-`PREFIX` argument of [`reblocks/app:defapp`][f9d3]:
+`PREFIX` argument of [`reblocks/app:defapp`][8d6f]:
 
 ```
 TODO> (defapp tasks
@@ -98,7 +98,7 @@ TODO> (defwidget task ()
           :accessor done)))
 ```
 This code defines a task widget, the building block of our
-application. [`reblocks/widget:defwidget`][33d7] is similar to Common Lisp's `DEFCLASS`,
+application. [`reblocks/widget:defwidget`][98f1] is similar to Common Lisp's `DEFCLASS`,
 in fact it is only a wrapper around it. It takes a name, a list of
 super-classes (here `()`) and a list of slot definitions.
 
@@ -142,7 +142,7 @@ Now let's carry on with our application.
 
 Below we define a more general widget that contains a list of tasks,
 and we tell Reblocks how to display them by *specializing* the
-[`reblocks/widget:render`][c703] generic-function for our newly defined classes:
+[`reblocks/widget:render`][3a3d] generic-function for our newly defined classes:
 
 ```
 TODO> (defwidget task-list ()
@@ -166,12 +166,12 @@ TODO> (defmethod render ((widget task-list))
                 (loop for task in (tasks widget) do
                       (:li (render task))))))
 ```
-The [`reblocks/html:with-html`][a282] macro uses
+The [`reblocks/html:with-html`][6c6c] macro uses
 [Spinneret][a443] under the hood,
 but you can use anything that outputs html.
 
 We can check how the generated html looks like by calling
-[`reblocks/widget:render`][c703] generic-function in the `REPL`:
+[`reblocks/widget:render`][3a3d] generic-function in the `REPL`:
 
 ```
 TODO> (render *task-1*)
@@ -207,8 +207,8 @@ Right now it should look like this:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-82
-         src="http://localhost:40000/examples/reblocks/doc/quickstart/example1?iframe-id=example-82"
+         id=example-10
+         src="https://com-40ants-reblocks-examples.herokuapp.com/examples/reblocks/doc/quickstart/example1?iframe-id=example-10"
          style="width: 100%; height: 10em; border: 0"></iframe>
 </div>
 <script>
@@ -268,7 +268,7 @@ The method `ADD-TASK` does only two simple things:
 
 This second point is really important because it allows Reblocks to render
 necessary parts of the page on the server and to inject it into the `HTML` `DOM`
-in the browser. Here it rerenders the task-list widget, but we can as well [`reblocks/widget:update`][fbc8]
+in the browser. Here it rerenders the task-list widget, but we can as well [`reblocks/widget:update`][42fc]
 a specific task widget, as we'll do soon.
 
 We are calling `ADD-TASK` from a lambda function to catch a
@@ -294,8 +294,8 @@ Go, try it! This demo is interative:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-83
-         src="http://localhost:40000/examples/reblocks/doc/quickstart/example2?iframe-id=example-83"
+         id=example-11
+         src="https://com-40ants-reblocks-examples.herokuapp.com/examples/reblocks/doc/quickstart/example2?iframe-id=example-11"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -352,7 +352,7 @@ modified our task rendering function by adding a code to render a
 checkbox with an anonymous lisp function, attached to its
 `ONCLICK` attribute.
 
-The [`reblocks/actions:make-js-action`][cb44] function returns a Javascript code,
+The [`reblocks/actions:make-js-action`][c25a] function returns a Javascript code,
 which calls back a lisp lambda function when evaluated in the browser.
 And because `TOGGLE` updates a Task widget, Reblocks returns on this
 callback a new prerendered `HTML` for this one task only.
@@ -363,8 +363,8 @@ Here is how our app will work now:
 <div class=demo>
  <iframe
          sandbox="allow-forms allow-same-origin allow-scripts"
-         id=example-84
-         src="http://localhost:40000/examples/reblocks/doc/quickstart/example3?iframe-id=example-84"
+         id=example-12
+         src="https://com-40ants-reblocks-examples.herokuapp.com/examples/reblocks/doc/quickstart/example3?iframe-id=example-12"
          style="width: 100%; height: 15em; border: 0"></iframe>
 </div>
 <script>
@@ -390,14 +390,14 @@ As a homework:
 
 3. Save tasks in a database (this [Cookbook chapter][63e3] might help).
 
-4. Read the [`Routing`][3f5e] section.
+4. Read the [`Routing`][7992] section.
 
 5. Read the rest of the documentation and make a real application, using the full
    power of Common Lisp.
 
 
-[cb44]: actions.html#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
-[f9d3]: apps.html#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[c25a]: actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
+[8d6f]: apps/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [5ff5]: http://localhost:40000/tasks
 [2e0b]: http://localhost:40000/tasks/
 [9dee]: http://www.gigamonkeys.com/book/object-reorientation-classes.html
@@ -407,11 +407,11 @@ As a homework:
 [7210]: https://lispcookbook.github.io/cl-cookbook/clos.html
 [63e3]: https://lispcookbook.github.io/cl-cookbook/databases.html
 [3e27]: https://ultralisp.org/
-[a282]: rendering.html#x-28REBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[3f5e]: routing.html#x-28REBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
-[33d7]: widgets.html#x-28REBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[c703]: widgets.html#x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
-[fbc8]: widgets.html#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
+[6c6c]: rendering/#x-28REBLOCKS-2FHTML-3AWITH-HTML-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[7992]: routing/#x-28REBLOCKS-2FDOC-2FROUTING-3A-40ROUTING-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+[98f1]: widgets/#x-28REBLOCKS-2FWIDGET-3ADEFWIDGET-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[3a3d]: widgets/#x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
+[42fc]: widgets/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 
 * * *
 ###### [generated by [40ANTS-DOC](https://40ants.com/doc/)]
