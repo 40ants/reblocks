@@ -1,8 +1,12 @@
 ("quicklisp" .
  (:class qlot/source/dist:source-dist
   :initargs (:distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
-  :version "2021-10-21"))
+  :version "2021-12-30"))
 ("ultralisp" .
  (:class qlot/source/dist:source-dist
   :initargs (:distribution "http://dist.ultralisp.org" :%version :latest)
-  :version "20211027152500"))
+  :version "20211230000001"))
+("reblocks-ui" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "40ants/reblocks-ui" :ref nil :branch nil :tag nil)
+  :version "github-fd0f06d4601c8d774aa3ebf020fdee2cea8afe58"))
