@@ -105,10 +105,14 @@
 
 (defmethod reblocks/app::initialize-webapp ((app examples-server))
   (call-next-method)
-  
-  (reblocks-file-server:make-route :uri "/docs/"
-                                   :root (asdf:system-relative-pathname :reblocks "docs/build/")
-                                   :dir-listing t))
+
+  ;; We only need to serve docs in the development mode,
+  ;; when they we built and lay on the disk at docs/build
+  (let ((path (asdf:system-relative-pathname :reblocks "docs/build/")))
+    (when (probe-file path)
+      (reblocks-file-server:make-route :uri "/docs/"
+                                       :root path
+                                       :dir-listing t))))
 
 
 (defmethod reblocks/session:init ((app examples-server))
