@@ -21,7 +21,7 @@
   (qlot:with-local-quicklisp (qlfile)
     (push "./" asdf:*central-registry*)
     (ql:quickload "reblocks/doc/index")
-    (ql:quickload "reblocks/doc/example")
+    (ql:quickload "reblocks/doc/example-server")
 
     ;; These modules are required because sources will not be available at runtime
     ;; on Heroku and SLYNK will die tryng to do asdf:load-system unless we preload
