@@ -5,11 +5,15 @@
 ("ultralisp" .
  (:class qlot/source/dist:source-dist
   :initargs (:distribution "http://dist.ultralisp.org" :%version :latest)
-  :version "20220101175500"))
+  :version "20220101182500"))
 ("reblocks-ui" .
  (:class qlot/source/github:source-github
   :initargs (:repos "40ants/reblocks-ui" :ref nil :branch nil :tag nil)
   :version "github-fd0f06d4601c8d774aa3ebf020fdee2cea8afe58"))
+("reblocks-file-server" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "40ants/reblocks-file-server" :ref nil :branch nil :tag nil)
+  :version "github-0bc773f6df77712a53a70996102621e923568312"))
 ("40ants-doc" .
  (:class qlot/source/github:source-github
   :initargs (:repos "40ants/doc" :ref nil :branch nil :tag nil)
