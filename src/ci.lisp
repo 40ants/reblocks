@@ -26,4 +26,5 @@
   :on-push-to "master"
   :on-pull-request t
   :cache t
-  :jobs ((40ants-ci/jobs/docs:build-docs)))
+  :jobs ((40ants-ci/jobs/docs:build-docs
+          :asdf-system "reblocks-docs")))
