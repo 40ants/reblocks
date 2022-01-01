@@ -2,6 +2,8 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
+  (:import-from #:reblocks/server)
+  (:import-from #:reblocks/preview)
   (:export #:@components))
 (in-package reblocks/doc/components)
 
