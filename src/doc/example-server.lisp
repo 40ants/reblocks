@@ -1,5 +1,6 @@
 (uiop:define-package #:reblocks/doc/example-server
   (:use #:cl)
+  (:import-from #:slynk)
   (:import-from #:log4cl)
   (:import-from #:clack-handler-hunchentoot)
   (:import-from #:40ants-doc/locatives/base
@@ -275,6 +276,7 @@ pre {
 
 (defun start-server (&key
                        port
+                       (debug t)
                        (interface "localhost")
                        (for-asdf-system "reblocks"))
   (when for-asdf-system
@@ -287,6 +289,7 @@ pre {
           ;; about other running server
           (reblocks/server::*server* nil))
       (reblocks/server:start :port port
+                             :debug debug
                              :interface interface
                              :apps 'examples-server)
       (setf *port* port
@@ -306,12 +309,39 @@ pre {
           *interface* nil)))
 
 
+(defvar slynk:*use-dedicated-output-stream* nil
+  "This var is defined only on SLY connection by MREPL
+   plugin. Here we'll define it before this will happen
+   to be able to set the value to nil in the START function.")
+
+
 ;; Entry-point for Heroku deployment
 (defun cl-user::initialize-application (&key
                                           (port 8080)
                                           (interface "0.0.0.0"))
   (format t "Starting examples server on ~A:~A~%"
           interface port)
-  (start-server :port port
-                :interface interface
-                :for-asdf-system "reblocks"))
+
+  (let ((slynk-port (uiop:getenv "SLYNK_PORT"))
+        (slynk-interface (or (uiop:getenv "SLYNK_INTERFACE")
+                             "127.0.0.1"))
+        (debug (when (uiop:getenv "DEBUG")
+                 t)))
+
+    (cond
+      (slynk-port
+       (log:info "Starting SLYNK on ~A:~A"
+                 slynk-interface
+                 slynk-port)
+       (slynk:create-server :dont-close t
+                            :interface slynk-interface
+                            :port (parse-integer slynk-port)))
+      (t
+       (log:info "To start SLYNK, provide SLYNK_PORT environment variable.")))
+    
+    (log:info "Starting HTTP server on" port "with" debug)
+    
+    (start-server :port port
+                  :debug debug
+                  :interface interface
+                  :for-asdf-system "reblocks")))
