@@ -291,6 +291,9 @@ pre {
       (reblocks/server:start :port port
                              :debug debug
                              :interface interface
+                             ;; Probably we need this only when running server
+                             ;; inside Heroku:
+                             :samesite-policy t
                              :apps 'examples-server)
       (setf *port* port
             *interface* interface)))
