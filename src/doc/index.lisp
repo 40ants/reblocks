@@ -52,28 +52,7 @@
 (in-package reblocks/doc/index)
 
 
-(defsection @index (:title "Contents")
-  "
-- @INTRO
-- @INSTALLATION
-- @QUICKSTART
-- @COMPONENTS
-- @APPS
-- @WIDGETS
-- @RENDERING
-- @ACTIONS
-- @ROUTING
-- @DEPENDENCIES
-- @REQUEST
-- @RESPONSE
-- @HOOKS
-- @SESSION
-- @REMOVED-FEATURES
-- @API
-- @CONTRIBUTE
-- @CHANGELOG
-")
-
+(defsection-copy @index @intro)
 (defsection-copy @readme @intro)
 
 
@@ -97,7 +76,6 @@
           :dynamic-bindings (list (cons 'reblocks/doc/example:*server-url*
                                         server-url))
           :root-sections '(@index
-                           @intro
                            @installation
                            @quickstart
                            @components

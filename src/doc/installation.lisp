@@ -63,12 +63,11 @@ For a basic comfortable SBCL setup, see :ref:`Basic SBCL setup`.
 
 > **Note**
 >
-> The official quicklisp distribution contains an old Reblocks
+> The official Quicklisp distribution contains an old Weblocks
 > version.
 >
-> This documentation is about newer Reblocks, built from
-> `reblocks` branch. It is only available on the
-> Ultralisp.org.
+> This documentation is about newer Reblocks fork.
+> It is only available on the Ultralisp.org for a while.
 
 The easiest way to install Reblocks and additional libraries is to use
 <https://ultralisp.org> distribution. It is Quicklisp compatible. To
