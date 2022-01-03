@@ -74,7 +74,7 @@
 - @CHANGELOG
 ")
 
-(defsection-copy @readme @quickstart)
+(defsection-copy @readme @intro)
 
 
 (defmethod docs-config ((system (eql (asdf:find-system "reblocks-docs"))))
