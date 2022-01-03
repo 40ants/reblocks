@@ -19,7 +19,10 @@
   (make-instance 'jquery-backend))
 
 
-(defvar *js-dependencies*
+(defvar *js-dependencies-cache* nil)
+
+
+(defun make-js-dependencies ()
   (list (make-dependency "src/js/jquery/jquery-3.6.0.min.js"
                          ;; "https://code.jquery.com/jquery-3.6.0.min.js"
                          :system :reblocks)
@@ -41,5 +44,7 @@
 
 (defmethod get-dependencies ((self jquery-backend))
   (log:debug "Returning dependencies for jquery backend.")
-  (append *js-dependencies*
-          (call-next-method)))
+  (or *js-dependencies-cache*
+      (setf *js-dependencies-cache*
+            (append (make-js-dependencies)
+                    (call-next-method)))))
