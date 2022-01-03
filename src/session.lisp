@@ -154,7 +154,12 @@ used to create IDs for html elements, widgets, etc."
                       *allowed-samesite-policies*))
   
   (let* ((store (lack.session.store.memory:make-memory-store))
-         (state (lack.session.state.cookie:make-cookie-state :samesite samesite-policy)))
+         (state (lack.session.state.cookie:make-cookie-state :samesite samesite-policy
+                                                             ;; This is requirement
+                                                             ;; to mark cookie as Secure
+                                                             ;; when SameSite is None.
+                                                             :secure (eql samesite-policy
+                                                                          :none))))
 
     (setf !get-number-of-sessions
           (lambda ()
