@@ -26,6 +26,9 @@ the Quicklisp under this name.
 
 * Framework's code is separated by functionality into a separate packages.
 
+* Project now has a [hyperlinked documentation][22e2]
+  with code snippets and embedded interactive demos.
+
 Framework's `API` is still under active development. All significant changes are
 described in the [`ChangeLog`][c059]. You can add ChangeLog page
 into your `RSS` reader to be notified on new releases.
@@ -55,7 +58,7 @@ You can read about these tools in the [`Removed Features`][5abd] section.
 To learn, how to use Reblocks to build a simple single-page application, proceed to the
 [`Quickstart`][e776] section.
 
-To learn how a realworld application can be built,
+To learn how a real-world application can be built,
 inspect [Ultralisp's][2a0d] code:
 
 [https://github.com/ultralisp/ultralisp][8e2a]
@@ -70,6 +73,7 @@ You can get support in our Gitter Chat:
 
 
 [c059]: changelog/#x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+[22e2]: https://40ants.com/reblocks/
 [8e2a]: https://github.com/ultralisp/ultralisp
 [1886]: https://gitter.im/40ants/weblocks
 [2a0d]: https://ultralisp.org
