@@ -181,7 +181,8 @@ This function serves all started applications and their static files."
                                         path-info))))))))))))))
 
 
-(defun start-server (server &key debug)
+(defun start-server (server &key debug
+                              (samesite-policy :lax))
   "Starts a Clack webserver, returns this server as result.
 
 If server is already started, then logs a warning and does nothing."
@@ -194,7 +195,7 @@ If server is already started, then logs a warning and does nothing."
          (let* ((port (get-port server))
                 (interface (get-interface server))
                 (app (builder
-                      (make-session-middleware)
+                      (make-session-middleware :samesite-policy samesite-policy)
                       (lambda (env)
                         (handle-http-request server env)
                         ;; Don't remember, why this code was commented
@@ -292,6 +293,7 @@ If server is already started, then logs a warning and does nothing."
                 (port 8080)
                 (interface "localhost")
                 (server-type :hunchentoot)
+                (samesite-policy :lax)
                 apps)
   "Starts reblocks framework hooked into Clack server.
 
@@ -329,6 +331,7 @@ If server is already started, then logs a warning and does nothing."
           (reblocks/debug:off))
 
       (start-server server
+                    :samesite-policy samesite-policy
                     :debug debug)
 
       ;; We need to set this bindings to allow apps to use

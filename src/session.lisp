@@ -133,11 +133,28 @@ used to create IDs for html elements, widgets, etc."
   (funcall !get-number-of-anonymous-sessions))
 
 
-(defun make-session-middleware ()
+(defvar *allowed-samesite-policies*
+  (list :lax :strict :none))
+
+
+(defun allowed-samesite-policy-p (value)
+  (member value *allowed-samesite-policies*))
+
+
+(deftype samesite-policy-type ()
+  `(and keyword
+        (satisfies allowed-samesite-policy-p)))
+
+
+(defun make-session-middleware (&key (samesite-policy :lax))
   ;; We don't want to expose session store as a global variable,
   ;; that is why we use these closures to extract statistics.
+  (check-type samesite-policy samesite-policy-type
+              (format nil "one of ~{~S~#[~; or ~:;, ~]~}"
+                      *allowed-samesite-policies*))
+  
   (let* ((store (lack.session.store.memory:make-memory-store))
-         (state (lack.session.state.cookie:make-cookie-state)))
+         (state (lack.session.state.cookie:make-cookie-state :samesite samesite-policy)))
 
     (setf !get-number-of-sessions
           (lambda ()
