@@ -293,7 +293,7 @@ pre {
                              :interface interface
                              ;; Probably we need this only when running server
                              ;; inside Heroku:
-                             :samesite-policy t
+                             :samesite-policy :none
                              :apps 'examples-server)
       (setf *port* port
             *interface* interface)))
