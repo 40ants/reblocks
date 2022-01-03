@@ -32,6 +32,8 @@ Core Features of Reblocks
 * Application pages are built from \"widgets\".
 * All business logic could be implemented in Common Lisp in server-side.
 * Framework's code is separated by functionality into a separate packages.
+* Project now has a [hyperlinked documentation](https://40ants.com/reblocks/)
+  with code snippets and embedded interactive demos.
 
 Framework's API is still under active development. All significant changes are
 described in the REBLOCKS/DOC/CHANGELOG:@CHANGELOG. You can add ChangeLog page
@@ -57,7 +59,7 @@ Learning Reblocks
 To learn, how to use Reblocks to build a simple single-page application, proceed to the
 REBLOCKS/DOC/QUICKSTART:@QUICKSTART section.
 
-To learn how a realworld application can be built,
+To learn how a real-world application can be built,
 inspect [Ultralisp's](https://ultralisp.org) code:
 
 <https://github.com/ultralisp/ultralisp>
