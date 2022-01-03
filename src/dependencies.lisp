@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:serapeum
                 #:defvar-unbound)
+  (:import-from #:log4cl)
   (:import-from #:reblocks/utils/misc
                 #:md5)
   (:import-from #:reblocks/html
@@ -350,12 +351,25 @@ to this system's source root."
                              :remote-url path-or-url
                              :integrity integrity
                              :crossorigin crossorigin))
-      (pathname (make-instance 'local-dependency
-                               :type type
-                               :path (if system
-                                         (asdf:system-relative-pathname system
-                                                                        path-or-url)
-                                         path-or-url))))))
+      (pathname
+       (let ((path path-or-url))
+         (when system
+           (let ((path-to-test (probe-file
+                                (asdf:system-relative-pathname
+                                 system path))))
+             (if path-to-test 
+                 (setf path path-to-test)
+                 (log:warn "Local dependency at ~A not found, will try to use just ~A"
+                           path-to-test
+                           path))))
+
+         (unless (probe-file path)
+           (error "Local dependency ~A not found."
+                  path))
+         
+         (make-instance 'local-dependency
+                        :type type
+                        :path path))))))
 
 
 (defmethod serve ((dependency local-dependency))
