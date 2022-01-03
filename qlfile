@@ -1,6 +1,1 @@
 dist ultralisp http://dist.ultralisp.org
-
-# While these projects aren't at Ultralisp
-github reblocks-ui 40ants/reblocks-ui
-github reblocks-file-server 40ants/reblocks-file-server
-github 40ants-doc 40ants/doc
