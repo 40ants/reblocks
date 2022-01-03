@@ -26,7 +26,7 @@
                                                    "HTML"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
-  (0.40.0 2021-12-10
+  (0.40.0 2022-01-03
           """
 Added
 =====
