@@ -1,5 +1,6 @@
 (defpackage #:reblocks/js/base
   (:use #:cl)
+  (:import-from #:parenscript)
   (:import-from #:reblocks/html
                 #:with-html
                 #:with-html-string)
@@ -11,7 +12,7 @@
    #:make-js-backend
    #:with-javascript-to-string
    #:with-javascript))
-(in-package reblocks/js/base)
+(in-package #:reblocks/js/base)
 
 
 (defclass js-backend ()
@@ -24,7 +25,7 @@
 Name should be a keyword like a :jquery or a :prototype."))
 
 
-(defun escape-script-tags (source &key (delimiter ps:*js-string-delimiter*))
+(defun escape-script-tags (source &key (delimiter parenscript:*js-string-delimiter*))
   "Escape script blocks inside scripts."
   (regex-replace-all
    (quote-meta-chars "</script>")

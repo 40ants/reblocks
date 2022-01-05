@@ -11,7 +11,7 @@
   (:import-from #:reblocks/variables)
   (:export
    #:@api))
-(in-package reblocks/doc/api)
+(in-package #:reblocks/doc/api)
 
 
 (defsection @api (:title "Unsorted API"

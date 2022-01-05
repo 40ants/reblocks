@@ -18,7 +18,7 @@
                 #:*ignore-missing-actions*)
   (:import-from #:reblocks/doc/example
                 #:defexample))
-(in-package reblocks/doc/actions)
+(in-package #:reblocks/doc/actions)
 
 
 (in-readtable pythonic-string-syntax)

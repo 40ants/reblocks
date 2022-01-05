@@ -4,7 +4,7 @@
                 #:defsection)
   (:export
    #:@installation))
-(in-package reblocks/doc/installation)
+(in-package #:reblocks/doc/installation)
 
 
 (defsection @installation (:title "Installation"

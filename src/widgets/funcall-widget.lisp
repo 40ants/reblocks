@@ -7,7 +7,7 @@
                 #:defwidget)
   (:export
    #:make-funcall-widget))
-(in-package reblocks/widgets/funcall-widget)
+(in-package #:reblocks/widgets/funcall-widget)
 
 
 (defwidget funcall-widget ()

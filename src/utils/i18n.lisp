@@ -6,7 +6,7 @@
   (:export #:*translation-function*
            #:translate
            #:default-translation-function))
-(in-package reblocks/utils/i18n)
+(in-package #:reblocks/utils/i18n)
 
 
 ;; TODO: rethink this module, unexport variable and make

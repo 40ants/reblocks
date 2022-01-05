@@ -7,7 +7,7 @@
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
   (:import-from #:reblocks/request))
-(in-package reblocks/doc/request)
+(in-package #:reblocks/doc/request)
 
 
 (in-readtable pythonic-string-syntax)

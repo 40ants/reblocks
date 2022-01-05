@@ -4,7 +4,7 @@
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax))
-(in-package reblocks/doc/changelog)
+(in-package #:reblocks/doc/changelog)
 
 (in-readtable pythonic-string-syntax)
 

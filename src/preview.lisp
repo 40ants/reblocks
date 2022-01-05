@@ -2,13 +2,16 @@
   (:use #:cl)
   (:import-from #:find-port
                 #:find-port)
-  (:import-from #:log4cl)
+  (:import-from #:log)
+  (:import-from #:reblocks/app)
+  (:import-from #:reblocks/server)
+  (:import-from #:reblocks/session)
   (:import-from #:trivial-open-browser
                 #:open-browser)
   (:import-from #:reblocks/widget
                 #:defwidget)
   (:export #:preview))
-(in-package reblocks/preview)
+(in-package #:reblocks/preview)
 
 
 (reblocks/app:defapp preview

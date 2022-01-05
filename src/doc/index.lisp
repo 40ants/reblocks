@@ -49,7 +49,7 @@
                 #:docs-config)
   (:export #:@index
            #:@readme))
-(in-package reblocks/doc/index)
+(in-package #:reblocks/doc/index)
 
 
 (defsection-copy @index @intro)

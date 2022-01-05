@@ -2,7 +2,8 @@
   (:use #:cl)
   (:import-from #:alexandria
                 #:ensure-gethash)
-  (:import-from #:log4cl)
+  (:import-from #:log)
+  (:import-from #:lack.util)
   (:import-from #:lack.middleware.session.store.memory
                 #:memory-store-stash)
   (:import-from #:lack.session.state.cookie)
@@ -21,7 +22,7 @@
    #:get-number-of-sessions
    #:make-session-middleware
    #:get-number-of-anonymous-sessions))
-(in-package reblocks/session)
+(in-package #:reblocks/session)
 
 
 (defvar *session* nil

@@ -2,7 +2,7 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/contribute)
+(in-package #:reblocks/doc/contribute)
 
 
 (defsection @contribute (:title "Contributing to Reblocks"

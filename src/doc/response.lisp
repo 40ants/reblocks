@@ -8,7 +8,7 @@
                 #:response)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/response)
+(in-package #:reblocks/doc/response)
 
 
 (in-readtable pythonic-string-syntax)

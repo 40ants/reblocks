@@ -2,14 +2,12 @@
   (:use #:cl)
   (:import-from #:spinneret
                 #:*html*)
-  (:import-from #:40ants-doc
-                #:defsection)
   (:export #:with-html
            #:*pretty-html*
            #:*lang*
            #:with-html-string
            #:*stream*))
-(in-package reblocks/html)
+(in-package #:reblocks/html)
 
 
 (defvar *stream*

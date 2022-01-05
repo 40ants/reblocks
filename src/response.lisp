@@ -1,5 +1,7 @@
 (uiop:define-package #:reblocks/response
   (:use #:cl)
+  (:import-from #:log)
+  (:import-from #:parenscript)
   (:import-from #:reblocks/request
                 #:get-uri
                 #:ajax-request-p
@@ -30,7 +32,7 @@
            #:get-content-type
            #:add-retpath-to
            #:response))
-(in-package reblocks/response)
+(in-package #:reblocks/response)
 
 
 (defvar *custom-headers* nil
@@ -193,7 +195,7 @@
   (declare (ignorable place))
   (let ((script (etypecase script
                   (string script)
-                  (list (ps:ps* script)))))
+                  (list (parenscript:ps* script)))))
     (if (ajax-request-p)
         (let ((code (if (equalp (get-header "X-Reblocks-Client")
                                 "JQuery")

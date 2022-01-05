@@ -5,7 +5,7 @@
                 #:call-next-hook)
   (:import-from #:reblocks/commands
                 #:*commands*))
-(in-package reblocks/commands-hook)
+(in-package #:reblocks/commands-hook)
 
 
 (on-application-hook-handle-http-request

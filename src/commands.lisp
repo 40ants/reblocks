@@ -1,8 +1,10 @@
 (defpackage #:reblocks/commands
   (:use #:cl)
+  (:import-from #:alexandria)
+  (:import-from #:parenscript)
   (:export #:add-command
            #:get-collected-commands))
-(in-package reblocks/commands)
+(in-package #:reblocks/commands)
 
 
 (defvar *commands* nil
@@ -15,7 +17,7 @@ as some sort of JSON-rpc calls to be esecuted on a client-side.")
 (defun cl-symbol-to-js-symbol (symbol)
   "A little helper to transform symbols like :foo-baz-bar into keywords :|fooBazBar|."
   (alexandria:make-keyword
-   (ps:symbol-to-js-string symbol)))
+   (parenscript:symbol-to-js-string symbol)))
 
 
 (defun create-command (name &rest args)

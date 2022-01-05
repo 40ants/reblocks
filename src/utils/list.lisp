@@ -14,7 +14,7 @@
            #:find-all
            #:remove-keyword-parameter
            #:remove-keyword-parameters))
-(in-package reblocks/utils/list)
+(in-package #:reblocks/utils/list)
 
 
 (defun safe-subseq (sequence start &optional end)

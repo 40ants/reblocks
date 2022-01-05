@@ -30,7 +30,7 @@
            #:gzip-file
            #:md5
            #:concatenate-keywords))
-(in-package :reblocks/utils/misc)
+(in-package #:reblocks/utils/misc)
 
 
 (defun safe-apply (fn &rest args)

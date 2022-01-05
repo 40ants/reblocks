@@ -13,7 +13,7 @@
                           #:standard-effective-slot-definition)
   
   (:export #:widget-class))
-(in-package reblocks/widgets/mop)
+(in-package #:reblocks/widgets/mop)
 
 
 (defclass widget-class (standard-class)

@@ -11,7 +11,7 @@
    #:string-widget
    #:get-content
    #:escape-p))
-(in-package reblocks/widgets/string-widget)
+(in-package #:reblocks/widgets/string-widget)
 
 
 (defwidget string-widget ()

@@ -5,7 +5,7 @@
   (:import-from #:40ants-ci/jobs/linter)
   (:import-from #:40ants-ci/jobs/run-tests)
   (:import-from #:40ants-ci/jobs/docs))
-(in-package reblocks/ci)
+(in-package #:reblocks/ci)
 
 
 (defworkflow linter

@@ -11,7 +11,7 @@
                 #:get-prefix
                 #:initialize-webapp
                 #:with-app))
-(in-package reblocks/doc/app)
+(in-package #:reblocks/doc/app)
 
 
 (defsection @apps (:title "Apps"

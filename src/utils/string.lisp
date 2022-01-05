@@ -9,7 +9,7 @@
            #:string-remove-right
            #:string-invert-case
            #:remove-spurious-slashes))
-(in-package reblocks/utils/string)
+(in-package #:reblocks/utils/string)
 
 
 (defgeneric humanize-name (name)

@@ -5,8 +5,7 @@
            #:find-slot-esd
            #:object-class-name
            #:slot-equal))
-
-(in-package reblocks/utils/clos)
+(in-package #:reblocks/utils/clos)
 
 ;;; CLOS and MOP utils.
 

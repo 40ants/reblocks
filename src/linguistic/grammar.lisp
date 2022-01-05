@@ -14,7 +14,7 @@
            #:*debug-words-forms*
            #:*debug-words-genders*
            #:determine-gender))
-(in-package reblocks/linguistic/grammar)
+(in-package #:reblocks/linguistic/grammar)
 
 
 (defvar *current-locale* :en)

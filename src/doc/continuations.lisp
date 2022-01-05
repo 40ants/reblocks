@@ -2,7 +2,7 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/continuations)
+(in-package #:reblocks/doc/continuations)
 
 
 (defsection @continuations (:title "Continuations-based tools")
