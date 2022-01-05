@@ -1,5 +1,14 @@
 (defpackage #:reblocks/utils/clos
   (:use #:cl)
+  (:import-from #:closer-mop
+                #:slot-definition-name
+                #:class-slots
+                #:class-direct-superclasses
+                #:class-direct-slots)
+  (:import-from #:alexandria
+                #:compose)
+  (:import-from #:metatilities
+                #:curry-after)
   (:export #:slot-value-by-path 
            #:find-slot-dsd
            #:find-slot-esd
@@ -87,7 +96,7 @@ method to change the name for particular objects.")
     (when diff
       (error "Objects with differing slot names detected. Difference: ~S~%" diff))
     (dolist (slotname slotnames-o1 t)
-      (unless (member slotname (ensure-list exclude) :test #'eq)
+      (unless (member slotname (uiop:ensure-list exclude) :test #'eq)
         (cond
           ((or (and (slot-boundp o1 slotname) (not (slot-boundp o2 slotname)))
                (and (slot-boundp o2 slotname) (not (slot-boundp o1 slotname))))

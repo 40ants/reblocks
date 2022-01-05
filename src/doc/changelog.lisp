@@ -26,6 +26,14 @@
                                                    "HTML"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.41.0 2022-01-05
+          """
+Removed
+=======
+
+* Function `reblocks/utils/misc:asdf-system-directory`. Use `asdf:system-source-directory` instead.
+
+""")
   (0.40.0 2022-01-03
           """
 Added

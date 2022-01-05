@@ -3,6 +3,8 @@
   (:import-from #:anaphora
                 #:awhen
                 #:it)
+  (:import-from #:closer-mop
+                #:subclassp)
   (:shadowing-import-from #:closer-mop
                           #:standard-class
                           #:validate-superclass

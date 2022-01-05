@@ -1,5 +1,8 @@
 (defpackage #:reblocks/utils/list
   (:use #:cl)
+  (:import-from #:anaphora
+                #:it
+                #:aif)
   (:export #:safe-subseq
            #:alist->plist
            #:insert-after
@@ -86,7 +89,7 @@ item before passing it to 'predicate'."
 
 (defun list-starts-with (list elements &key (test 'eq))
   "Determines if a list starts with the given elements."
-  (let ((elements (ensure-list elements)))
+  (let ((elements (uiop:ensure-list elements)))
     (if elements
         (when (funcall test (car list) (car elements))
           (list-starts-with (cdr list) (cdr elements) :test test))

@@ -2,6 +2,8 @@
   (:use #:cl)
   (:import-from #:cl-fad
                 #:pathname-as-directory)
+  (:import-from #:metatilities
+                #:whitespacep)
   (:export #:humanize-name
            #:attributize-name
            #:string-whitespace-p

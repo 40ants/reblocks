@@ -7,6 +7,15 @@
                 #:digest-sequence)
   (:import-from #:babel
                 #:string-to-octets)
+  (:import-from #:anaphora
+                #:it
+                #:aand)
+  (:import-from #:f-underscore
+                #:_
+                #:f_)
+  (:import-from #:closer-mop
+                #:funcallable-standard-object
+                #:required-args)
   (:export #:gen-id
            #:safe-apply
            #:safe-funcall
@@ -15,7 +24,6 @@
            #:public-file-relative-path
            #:public-files-relative-paths
            #:symbol-status
-           #:asdf-system-directory
            #:hash-keys
            #:append-custom-fields
            #:function-designator-p
@@ -103,15 +111,6 @@ etc.)"
 
 (defvar *asdf-system-cache* (make-hash-table :test #'equalp))
 
-(defun asdf-system-directory (asdf-system-name)
-  "Computes the directory in which the .asdf file for a given ASDF
-system resides."
-  (sor (gethash asdf-system-name *asdf-system-cache*)
-       (setf it (make-pathname :directory
-                               (pathname-directory
-                                 (truename
-                                   (asdf:system-definition-pathname
-                                     (asdf:find-system asdf-system-name))))))))
 
 (defun hash-keys (hashtable)
   "Returns all keys in the hashtable."
