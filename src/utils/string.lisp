@@ -3,6 +3,8 @@
   (:import-from #:cl-fad
                 #:pathname-as-directory)
   (:import-from #:metatilities
+                #:string-starts-with
+                #:string-ends-with
                 #:whitespacep)
   (:export #:humanize-name
            #:attributize-name
