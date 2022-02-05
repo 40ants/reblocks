@@ -21,7 +21,7 @@
            #:update-examples
            #:*server-url*
            #:start-doc-server))
-(in-package reblocks/doc/example)
+(in-package #:reblocks/doc/example)
 
 
 (defvar *server-url* nil

@@ -2,11 +2,11 @@
   (:use #:cl)
   (:import-from #:alexandria
                 #:with-gensyms)
-  
+  (:import-from #:log)
   (:export #:*enable-timings*
            #:*timing-report-fn*
            #:timing))
-(in-package reblocks/utils/timing)
+(in-package #:reblocks/utils/timing)
 
 
 ;; TODO: rebuild this functionality, making

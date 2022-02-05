@@ -3,13 +3,11 @@
   (:import-from #:routes)
   (:import-from #:reblocks/error-handler
                 #:with-handled-errors)
-  (:import-from #:40ants-doc/ignored-words
-                #:ignore-words-in-package)
   (:export #:route
            #:serve
            #:get-route
            #:defroute))
-(in-package reblocks/routes)
+(in-package #:reblocks/routes)
 
 
 (defclass route (routes:route)

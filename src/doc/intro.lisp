@@ -4,7 +4,7 @@
                 #:defsection)
   (:export
    #:@intro))
-(in-package reblocks/doc/intro)
+(in-package #:reblocks/doc/intro)
 
 
 (defsection @intro (:title "Introduction"

@@ -9,10 +9,11 @@
   (:import-from #:quri
                 #:url-encode-params
                 #:url-decode-params)
+  (:import-from #:cl-ppcre)
   (:export #:request-uri-path
            #:add-get-param-to-url
            #:remove-parameter-from-uri))
-(in-package reblocks/utils/uri)
+(in-package #:reblocks/utils/uri)
 
 
 ;;; URI from pathname

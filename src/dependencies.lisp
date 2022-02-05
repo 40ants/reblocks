@@ -1,8 +1,13 @@
 (uiop:define-package #:reblocks/dependencies
   (:use #:cl)
+  (:import-from #:cl-ppcre)
+  (:import-from #:cl-fad)
+  (:import-from #:parenscript)
+  (:import-from #:routes)
+  (:import-from #:puri)
   (:import-from #:serapeum
                 #:defvar-unbound)
-  (:import-from #:log4cl)
+  (:import-from #:log)
   (:import-from #:reblocks/utils/misc
                 #:md5)
   (:import-from #:reblocks/html
@@ -13,8 +18,6 @@
                 #:send-script)
   ;; Just a dependency
   (:import-from #:dexador)
-  (:import-from #:alexandria
-                #:make-keyword)
   
   (:export
    #:dependency
@@ -37,7 +40,7 @@
    #:with-collected-dependencies
    #:push-dependency
    #:push-dependencies))
-(in-package reblocks/dependencies)
+(in-package #:reblocks/dependencies)
 
 
 (defvar-unbound *page-dependencies*

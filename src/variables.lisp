@@ -8,8 +8,7 @@
            #:*backtrace-on-session-init-error*
            #:*action-string*
            #:*current-app*))
-
-(in-package reblocks/variables)
+(in-package #:reblocks/variables)
 
 (defvar-unbound *current-app*
   "A currently active web application.")

@@ -5,7 +5,7 @@
            #:style-warning
            #:non-idempotent-rendering
            #:misunderstood-action))
-(in-package reblocks/utils/warn)
+(in-package #:reblocks/utils/warn)
 
 
 (defun style-warn (condition &rest warn-args)

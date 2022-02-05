@@ -8,7 +8,7 @@
                 #:defroute
                 #:serve)
   (:export #:@routing))
-(in-package reblocks/doc/routing)
+(in-package #:reblocks/doc/routing)
 
 
 (defsection @routing (:title "Routing")

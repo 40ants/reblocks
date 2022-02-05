@@ -30,7 +30,7 @@
            #:update
            #:widget
            #:create-widget-from))
-(in-package reblocks/widgets/base)
+(in-package #:reblocks/widgets/base)
 
 
 (defclass widget (dom-object-mixin)

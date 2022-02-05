@@ -2,7 +2,7 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/forms)
+(in-package #:reblocks/doc/forms)
 
 
 (defsection @forms (:title "Forms"

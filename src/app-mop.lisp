@@ -15,7 +15,7 @@
                           )
   (:export #:get-registered-apps
            #:get-autostarting-apps))
-(in-package reblocks/app-mop)
+(in-package #:reblocks/app-mop)
 
 
 ;; (eval-when (:compile-toplevel :load-toplevel :execute))

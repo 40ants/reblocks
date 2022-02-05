@@ -7,7 +7,7 @@
                 #:attributize-name)
   (:export #:dom-object-mixin
            #:dom-id))
-(in-package reblocks/widgets/dom)
+(in-package #:reblocks/widgets/dom)
 
 
 (defclass dom-object-mixin ()

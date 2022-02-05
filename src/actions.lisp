@@ -1,6 +1,7 @@
 (uiop:define-package #:reblocks/actions
   (:use #:cl)
-  (:import-from #:log4cl)
+  (:import-from #:log)
+  (:import-from #:reblocks/app-actions)
   (:import-from #:reblocks/utils/misc
                 #:safe-apply)
   (:import-from #:reblocks/variables
@@ -25,7 +26,7 @@
            #:make-js-action
            #:make-js-form-action
            #:make-action-url))
-(in-package reblocks/actions)
+(in-package #:reblocks/actions)
 
 (in-readtable pythonic-string-syntax)
 

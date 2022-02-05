@@ -21,7 +21,7 @@
   (:import-from #:reblocks/app
                 #:*current-app*)
   (:export #:welcome-screen-app))
-(in-package reblocks/default-init)
+(in-package #:reblocks/default-init)
 
 
 (defmethod init ((app t))

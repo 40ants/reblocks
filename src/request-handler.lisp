@@ -1,6 +1,5 @@
-(defpackage #:reblocks/request-handler
-  (:use #:cl
-        #:f-underscore)
+(uiop:define-package #:reblocks/request-handler
+  (:use #:cl)
   (:import-from #:reblocks/request
                 #:get-path
                 #:get-action-name-from-request
@@ -18,14 +17,9 @@
                 #:get-lock)
   (:import-from #:reblocks/widget
                 #:render)
-  (:import-from #:reblocks/widgets/dom
-                #:dom-id)
   (:import-from #:reblocks/html
                 #:with-html-string
                 #:*stream*)
-  (:import-from #:reblocks/utils/warn
-                #:style-warn
-                #:non-idempotent-rendering)
   (:import-from #:reblocks/dependencies
                 #:with-collected-dependencies
                 #:push-dependencies
@@ -52,8 +46,6 @@
                 #:with-lock-held)
   (:import-from #:jonathan
                 #:to-json)
-  (:import-from #:trivial-backtrace
-                #:print-backtrace)
   (:import-from #:trivial-timeout
                 #:timeout-error
                 #:with-timeout)
@@ -66,9 +58,6 @@
   ;; Just dependencies
   (:import-from #:reblocks/hooks)
   (:import-from #:log)
-  ;; This package defines an :around method for reblocks/widgets:render
-  ;; which adds a wrapper around widget body
-  (:import-from #:reblocks/widgets/render-methods)
   (:import-from #:reblocks/widgets/root)
   (:import-from #:reblocks/session)
   (:import-from #:alexandria
@@ -79,9 +68,9 @@
   (:export
    #:handle-request
    #:page-not-found-handler
-   *request-timeout*
+   #:*request-timeout*
    #:handle-ajax-request))
-(in-package reblocks/request-handler)
+(in-package #:reblocks/request-handler)
 
 
 (defvar *request-timeout* 180

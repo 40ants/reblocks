@@ -5,7 +5,7 @@
   (:import-from #:reblocks/server)
   (:import-from #:reblocks/preview)
   (:export #:@components))
-(in-package reblocks/doc/components)
+(in-package #:reblocks/doc/components)
 
 
 (defsection @components (:title "Components"

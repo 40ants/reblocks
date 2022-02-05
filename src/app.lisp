@@ -1,8 +1,7 @@
 (uiop:define-package #:reblocks/app
   (:use #:cl
         #:f-underscore)
-  (:import-from #:metatilities
-                #:form-symbol)
+  (:import-from #:cl-ppcre)
   (:import-from #:reblocks/app-mop
                 #:get-autostarting-apps
                 #:get-registered-apps
@@ -19,8 +18,6 @@
                 #:remove-keyword-parameters)
   (:import-from #:reblocks/variables
                 #:*current-app*)
-  ;; Just dependencies
-  (:import-from #:log)
   (:export #:defapp
            #:app
            #:get-autostarting-apps
@@ -29,7 +26,7 @@
            #:get-current
            #:with-app
            #:initialize-webapp))
-(in-package reblocks/app)
+(in-package #:reblocks/app)
 
 
 (defclass app ()
@@ -132,14 +129,17 @@ DESCRIPTION - A description of the application for the title page
 
 AUTOSTART - Whether this webapp is started automatically when start-reblocks is
 called (primarily for backward compatibility"
-  `(progn
-     (defclass ,name (,@subclasses app)
-       ,slots
-       (:autostart . ,autostart)
-       (:default-initargs
-        . ,(remove-keyword-parameters
-            initargs :subclasses :slots :autostart))
-       (:metaclass app-class))))
+  (declare (ignore prefix description))
+  
+  (let ((default-initargs
+          (remove-keyword-parameters initargs
+                                     :subclasses :slots :autostart)))
+    `(progn
+       (defclass ,name (,@subclasses app)
+         ,slots
+         (:autostart . ,autostart)
+         (:default-initargs ,@default-initargs)
+         (:metaclass app-class)))))
 
 
 (defmethod initialize-instance :after

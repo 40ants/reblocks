@@ -2,6 +2,10 @@
   (:use #:cl)
   (:import-from #:cl-fad
                 #:pathname-as-directory)
+  (:import-from #:metatilities
+                #:string-starts-with
+                #:string-ends-with
+                #:whitespacep)
   (:export #:humanize-name
            #:attributize-name
            #:string-whitespace-p
@@ -9,7 +13,7 @@
            #:string-remove-right
            #:string-invert-case
            #:remove-spurious-slashes))
-(in-package reblocks/utils/string)
+(in-package #:reblocks/utils/string)
 
 
 (defgeneric humanize-name (name)

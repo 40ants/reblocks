@@ -1,18 +1,8 @@
 (uiop:define-package #:reblocks/server
-  (:use #:cl
-        #:f-underscore)
-  ;; to load js dependencies after app was started
-  (:import-from #:reblocks/app-dependencies)
+  (:use #:cl)
+  (:import-from #:routes)
   (:import-from #:reblocks/app
                 #:with-app)
-  ;; we need to depend on this package, because
-  ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`
-  ;; package
-  (:import-from #:lack.middleware.session)
-  ;; We need this import because this module defines important method
-  ;; make-js-backend
-  (:import-from #:reblocks/js/jquery)
- 
   (:import-from #:reblocks/session
                 #:make-session-middleware
                 #:with-session)
@@ -48,19 +38,17 @@
   ;; Just dependencies
   (:import-from #:reblocks/debug)
   (:import-from #:log)
-  (:import-from #:alexandria
-                #:hash-table-values)
   
   (:export ;; #:get-server-type
-           ;; #:get-port
-           ;; #:make-server
-           ;; #:handle-http-request
-           #:stop
-           #:start
-           #:serve-static-file
-           #:servers
-           #:running-p))
-(in-package reblocks/server)
+   ;; #:get-port
+   ;; #:make-server
+   ;; #:handle-http-request
+   #:stop
+   #:start
+   #:serve-static-file
+   #:servers
+   #:running-p))
+(in-package #:reblocks/server)
 
 
 (defvar *server*)

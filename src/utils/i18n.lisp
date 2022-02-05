@@ -1,20 +1,16 @@
 (defpackage #:reblocks/utils/i18n
   (:use #:cl)
-  (:import-from #:reblocks/linguistic/grammar
-                #:default-translation-function)
-  
   (:export #:*translation-function*
            #:translate
            #:default-translation-function))
-(in-package reblocks/utils/i18n)
+(in-package #:reblocks/utils/i18n)
 
 
 ;; TODO: rethink this module, unexport variable and make
 ;;       it more pluggable, probably by making translate a
 ;;       a generic function. Or may be to remove i18n at all?
 
-
-(defvar *translation-function* 'default-translation-function)
+(defvar *translation-function* nil)
 
 
 (defun translate (string &rest scope)

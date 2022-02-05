@@ -6,7 +6,7 @@
   (:import-from #:reblocks/dependencies)
   (:import-from #:reblocks/doc/example
                 #:defexample))
-(in-package reblocks/doc/widgets)
+(in-package #:reblocks/doc/widgets)
 
 
 (defsection @widgets (:title "Widgets"

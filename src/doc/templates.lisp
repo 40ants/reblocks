@@ -2,7 +2,7 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/templates)
+(in-package #:reblocks/doc/templates)
 
 
 (defsection @templates (:title "Templates"
