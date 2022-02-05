@@ -26,7 +26,19 @@
                "reblocks/widgets/funcall-widget"
                "reblocks/utils/clos"
                "reblocks/utils/i18n"
-               "reblocks/preview")
+               "reblocks/preview"
+               ;; We need this because this module defines important method
+               ;; make-js-backend
+               "reblocks/js/jquery"
+               ;; to load js dependencies after app was started
+               "reblocks/app-dependencies"
+               ;; This package defines an :around method for reblocks/widgets:render
+               ;; which adds a wrapper around widget body
+               "reblocks/widgets/render-methods"
+               ;; we need to depend on this package, because
+               ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`
+               ;; package
+               "lack-middleware-session")
   :in-order-to ((test-op (test-op "reblocks-test"))))
 
 

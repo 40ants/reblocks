@@ -32,7 +32,7 @@
   (:export #:start-server
            #:update-examples
            #:stop-server))
-(in-package reblocks/doc/example-server)
+(in-package #:reblocks/doc/example-server)
 
 
 (defvar *examples* (make-hash-table :test 'equal

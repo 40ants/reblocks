@@ -14,7 +14,7 @@
   
   (:export #:call-next-hook
            #:defhook))
-(in-package reblocks/hooks)
+(in-package #:reblocks/hooks)
 
 
 (defclass hooks ()

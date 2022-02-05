@@ -18,7 +18,7 @@
                 #:make-session-middleware
                                          
                 #:get-number-of-anonymous-sessions))
-(in-package reblocks/doc/session)
+(in-package #:reblocks/doc/session)
 
 
 (defsection @session (:title "Using the Session"

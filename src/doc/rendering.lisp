@@ -8,7 +8,7 @@
   (:import-from #:reblocks/page)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/rendering)
+(in-package #:reblocks/doc/rendering)
 
 
 (in-readtable pythonic-string-syntax)

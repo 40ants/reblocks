@@ -6,7 +6,7 @@
    #:add-action
    #:remove-action
    #:define-action))
-(in-package reblocks/app-actions)
+(in-package #:reblocks/app-actions)
 
 ;;
 ;; Permanent actions

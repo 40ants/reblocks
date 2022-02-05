@@ -28,7 +28,7 @@
    #:get-description
    #:get-keywords
    #:get-language))
-(in-package reblocks/page)
+(in-package #:reblocks/page)
 
 
 (defvar *title* nil)

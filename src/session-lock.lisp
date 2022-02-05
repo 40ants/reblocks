@@ -7,7 +7,7 @@
   (:import-from #:reblocks/session)
   
   (:export #:get-lock))
-(in-package reblocks/session-lock)
+(in-package #:reblocks/session-lock)
 
 
 (defvar *session-locks* (make-hash-table :test #'eq

@@ -1,5 +1,10 @@
 (defpackage #:reblocks/linguistic/grammar
   (:use #:cl)
+  (:import-from #:metatilities
+                #:substring
+                #:string-ends-with)
+  (:import-from #:reblocks/utils/i18n
+                #:translate)
   (:export #:pluralize
            #:singularize
            #:proper-number-form
@@ -14,7 +19,7 @@
            #:*debug-words-forms*
            #:*debug-words-genders*
            #:determine-gender))
-(in-package reblocks/linguistic/grammar)
+(in-package #:reblocks/linguistic/grammar)
 
 
 (defvar *current-locale* :en)
@@ -157,8 +162,6 @@ apple' for 'apple' and 'a table' for 'table'."
     :masculine))
 
 (defun default-translation-function (string &key plural-p genitive-form-p items-count accusative-form-p &allow-other-keys)
-  (declare (ignore args))
-
   (when plural-p  
     (setf string (pluralize string)))
 
@@ -172,3 +175,9 @@ apple' for 'apple' and 'a table' for 'table'."
     (setf string (proper-number-form items-count string)))
 
   string)
+
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (unless *translation-function*
+    (setf *translation-function*
+          'default-translation-function)))

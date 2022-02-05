@@ -1,11 +1,12 @@
 (defpackage #:reblocks/debug
   (:use #:cl)
+  (:import-from #:log)
   (:import-from #:reblocks/hooks
                 #:on-application-hook-handle-http-request)
-  (:import-from #:reblocks/app
-                #:*current-app*
-                #:find-app-by-name
-                #:get-registered-apps)
+  ;; (:import-from #:reblocks/app
+  ;;               #:*current-app*
+  ;;               #:find-app-by-name
+  ;;               #:get-registered-apps)
   (:import-from #:reblocks/session
                 #:*session*)
   (:import-from #:reblocks/request
@@ -23,7 +24,7 @@
            #:status
            #:in-app
            #:get-session-value))
-(in-package reblocks/debug)
+(in-package #:reblocks/debug)
 
 
 ;; TODO: move useful staff from debug-mode.lisp, to this package

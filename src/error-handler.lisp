@@ -6,7 +6,7 @@
   (:import-from #:reblocks/response
                 #:get-response
                 #:immediate-response)
-  (:import-from #:log4cl)
+  (:import-from #:log)
   (:import-from #:reblocks/variables
                 #:*current-app*
                 #:*invoke-debugger-on-error*)
@@ -17,7 +17,7 @@
   
   (:export #:on-error
            #:with-handled-errors))
-(in-package reblocks/error-handler)
+(in-package #:reblocks/error-handler)
 
 
 (defgeneric on-error (app condition)

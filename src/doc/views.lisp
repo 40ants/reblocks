@@ -2,7 +2,7 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection))
-(in-package reblocks/doc/views)
+(in-package #:reblocks/doc/views)
 
 
 (defsection @views (:title "Views"

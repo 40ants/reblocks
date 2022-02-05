@@ -5,7 +5,7 @@
   (:import-from #:reblocks/session)
   
   (:export #:get))
-(in-package reblocks/widgets/root)
+(in-package #:reblocks/widgets/root)
 
 
 (defun get ()

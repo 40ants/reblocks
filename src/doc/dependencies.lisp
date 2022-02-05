@@ -6,7 +6,7 @@
                 #:remote-dependency
                 #:dependency
                 #:local-dependency))
-(in-package reblocks/doc/dependencies)
+(in-package #:reblocks/doc/dependencies)
 
 
 (defsection @dependencies (:title "Dependencies"

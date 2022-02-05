@@ -6,7 +6,7 @@
   (:export
    #:make-uri
    #:get-prefix))
-(in-package reblocks/current-app)
+(in-package #:reblocks/current-app)
 
 
 (defun get-prefix ()

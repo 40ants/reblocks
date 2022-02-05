@@ -8,7 +8,7 @@
                 #:make-dependency)
   ;; Just dependencies
   (:import-from #:log))
-(in-package reblocks/js/jquery)
+(in-package #:reblocks/js/jquery)
 
 
 (defclass jquery-backend (js-backend)

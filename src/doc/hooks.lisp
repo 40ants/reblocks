@@ -15,7 +15,7 @@
   (:import-from #:alexandria
                 #:ensure-symbol
                 #:symbolicate))
-(in-package reblocks/doc/hooks)
+(in-package #:reblocks/doc/hooks)
 
 
 (40ants-doc/locatives/base:define-locative-type hook ()

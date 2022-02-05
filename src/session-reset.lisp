@@ -3,7 +3,7 @@
   (:import-from #:reblocks/session
                 #:*session*)
   (:import-from #:reblocks/hooks))
-(in-package reblocks/session-reset)
+(in-package #:reblocks/session-reset)
 
 
 (defun reset-session (session)

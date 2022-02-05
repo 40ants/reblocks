@@ -9,7 +9,7 @@
   (:import-from #:reblocks-ui/form)
   (:import-from #:reblocks/html)
   (:export #:@quickstart))
-(in-package reblocks/doc/quickstart)
+(in-package #:reblocks/doc/quickstart)
 
 
 (defsection @quickstart (:title "Quickstart"

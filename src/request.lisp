@@ -1,9 +1,8 @@
 (defpackage #:reblocks/request
   (:use #:cl)
-  (:import-from #:reblocks/app-actions)
-  
   (:import-from #:metacopy
                 #:copy-thing)
+  (:import-from #:cl-ppcre)
   (:import-from #:lack.request
                 #:request-uri-scheme
                 #:request-query-string
@@ -40,7 +39,7 @@
            #:get-path
            #:with-request
            #:pure-request-p))
-(in-package reblocks/request)
+(in-package #:reblocks/request)
 
 
 (defvar *request* nil

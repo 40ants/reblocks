@@ -14,8 +14,9 @@
   (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:reblocks/widgets/dom
-                #:dom-id))
-(in-package reblocks/widgets/render-methods)
+                #:dom-id)
+  (:import-from #:log))
+(in-package #:reblocks/widgets/render-methods)
 
 
 (defmethod render (widget)
