@@ -6,6 +6,7 @@
   (:import-from #:trivial-open-browser
                 #:open-browser)
   (:import-from #:reblocks/widget
+                #:create-widget-from
                 #:defwidget)
   (:export #:preview))
 (in-package reblocks/preview)
@@ -45,7 +46,7 @@
                              :apps 'preview)
       (setf *port* random-port)))
 
-  (setf *widget* widget)
+  (setf *widget* (create-widget-from widget))
   
   (let ((url (format nil "http://localhost:~A"
                      *port*)))

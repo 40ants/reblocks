@@ -35,6 +35,13 @@ Fixed
   and current application depends on the url path prefix. Previously site with multiple apps
   always shown the same root widget.
 
+Changed
+=======
+
+* Documentation examples server was changed to render a list of ASDF systems for which documentation
+  was built.
+* REBLOCKS/PREVIEW:PREVIEW is able to accept a widget's class as a symbol.
+
 """)
   (0.40.0 2022-01-03
           """
