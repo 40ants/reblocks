@@ -1,4 +1,4 @@
-(defpackage #:reblocks/utils/clos
+(uiop:define-package #:reblocks/utils/clos
   (:use #:cl)
   (:export #:slot-value-by-path 
            #:find-slot-dsd
