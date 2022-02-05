@@ -34,6 +34,8 @@ Fixed
 * Now each app set's its own root widget. Root widgets is choosen depending on current application.
   and current application depends on the url path prefix. Previously site with multiple apps
   always shown the same root widget.
+* Fixed the error occured after you stopped the webserver and started it again using the same port.
+  Previously Reblocks complained that the server is already running on this port.
 
 Changed
 =======

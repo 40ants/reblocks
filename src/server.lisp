@@ -307,7 +307,8 @@ If server is already started, then logs a warning and does nothing."
   (let ((server (find-server interface port)))
     (reblocks/hooks:with-start-reblocks-hook ()
       (cond
-        (server
+        ((and server
+              (running-p server))
          (restart-case
              (error "Server already running on port ~A" port)
            (continue ()
