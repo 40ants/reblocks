@@ -26,6 +26,16 @@
                                                    "HTML"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.41.0 2022-02-06
+          """
+Fixed
+=====
+
+* Now each app set's its own root widget. Root widgets is choosen depending on current application.
+  and current application depends on the url path prefix. Previously site with multiple apps
+  always shown the same root widget.
+
+""")
   (0.40.0 2022-01-03
           """
 Added

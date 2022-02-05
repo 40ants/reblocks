@@ -206,7 +206,7 @@ customize behavior."))
   ;; TODO: make a macro reblocks/session-lock:with-lock
   (with-lock-held ((get-lock))
     (timing "widget tree rendering"
-      (render (reblocks/widgets/root:get))))
+      (render (reblocks/widgets/root:get app))))
 
   ;; render page will wrap the HTML already rendered to
   ;; reblocks.html::*stream* with necessary boilerplate HTML
@@ -265,14 +265,14 @@ customize behavior."))
     (log:debug "Handling client request" path)
 
     ;; TODO: write a test
-    (when (null (reblocks/widgets/root:get))
+    (when (null (reblocks/widgets/root:get app))
       (log:debug "Initializing session")
       (handler-bind ((error (lambda (c) 
                               (when *backtrace-on-session-init-error*
                                 (let ((traceback))
                                   (log:error "Error during session initialization" traceback)))
                               (signal c))))
-        (setf (reblocks/widgets/root:get)
+        (setf (reblocks/widgets/root:get app)
               (reblocks/session:init app))))
     
     ;; TODO: understand why there is coupling with Dialog here and
