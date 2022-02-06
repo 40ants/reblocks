@@ -1,4 +1,4 @@
-(defpackage #:reblocks/utils/list
+(uiop:define-package #:reblocks/utils/list
   (:use #:cl)
   (:import-from #:anaphora
                 #:it

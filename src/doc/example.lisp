@@ -99,7 +99,10 @@ window.addEventListener('message', function(e) {
                       :style (format nil "width: ~A; height: ~A; border: 0"
                                      (example-width example)
                                      (example-height example))))
-       (:script js-code)))))
+       (:script
+        ;; TODO: remove :RAW after this issue will be solved:
+        ;; https://github.com/ruricolist/spinneret/issues/59
+        (:raw js-code))))))
 
 
 (defun replace-internal-symbols (body &key from-package to-package)

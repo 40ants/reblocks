@@ -42,7 +42,8 @@
 (deftest process-request-with-missing-action
   (with-session
     (with-request ("/foo/bar?action=store-data" :app app-with-init)
-      (let ((response (handle-request *current-app*)))
+      (let* ((reblocks/variables:*ignore-missing-actions* t)
+             (response (handle-request *current-app*)))
         (ok (equal (get-content response)
                    "")
             "Result should have an error message.")

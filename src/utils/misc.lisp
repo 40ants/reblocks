@@ -1,4 +1,4 @@
-(defpackage #:reblocks/utils/misc
+(uiop:define-package #:reblocks/utils/misc
   (:use #:cl)
   (:import-from #:salza2
                 #:gzip-stream)

@@ -213,8 +213,4 @@ situation (e.g. redirect, signal an error, etc.)."))
            (session-action (unless app-wide-action
                              (get-session-action action-name)))
            (request-action (or app-wide-action session-action)))
-      ;; TODO: rethink this form. May be throw a special condition instead of string
-      (unless *ignore-missing-actions*
-        (assert request-action (request-action)
-                (concatenate 'string "Cannot find action: " action-name)))
       request-action)))

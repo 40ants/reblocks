@@ -31,8 +31,10 @@
   (:import-from #:reblocks/hooks)
   (:export #:start-server
            #:update-examples
-           #:stop-server))
+           #:stop-server
+           #:serve-system-docs))
 (in-package #:reblocks/doc/example-server)
+
 
 
 (defvar *examples* (make-hash-table :test 'equal
@@ -40,6 +42,10 @@
                                     :synchronized
                                     #+sbcl
                                     t))
+
+(defvar *for-asdf-systems* nil)
+
+(defvar *asdf-systems-initialized* nil)
 
 (defvar *interface* "localhost")
 
@@ -95,6 +101,11 @@
   :autostart nil)
 
 
+(defapp docs-server
+  :prefix "/docs/"
+  :autostart nil)
+
+
 (defwidget examples-widget ()
   ((current-path :initform nil
                  :accessor current-path)
@@ -104,20 +115,35 @@
                    :accessor current-widget)))
 
 
-(defmethod reblocks/app::initialize-webapp ((app examples-server))
-  (call-next-method)
+(defwidget docs-widget ()
+  ())
 
-  ;; We only need to serve docs in the development mode,
-  ;; when they we built and lay on the disk at docs/build
-  (let ((path (asdf:system-relative-pathname :reblocks "docs/build/")))
-    (when (probe-file path)
-      (reblocks-file-server:make-route :uri "/docs/"
-                                       :root path
-                                       :dir-listing t))))
+
+(defmethod reblocks/request-handler:handle-request :before ((app docs-server))
+  (loop for system-name in (set-difference *for-asdf-systems*
+                                           *asdf-systems-initialized*)
+        do (let ((path (asdf:system-relative-pathname system-name "docs/build/")))
+             (reblocks-file-server:make-route :uri (format nil "/docs/~A/"
+                                                           system-name)
+                                              :root path
+                                              :dir-listing t)
+             (push system-name
+                   *asdf-systems-initialized*))))
+
+
+(defmethod serve-system-docs (system-name)
+  "Adds routes to given system's docs/build/ folder to routes served from "
+  (check-type system-name string)
+  (pushnew system-name *for-asdf-systems*
+           :test #'string-equal)
+  (values))
 
 
 (defmethod reblocks/session:init ((app examples-server))
   (make-instance 'examples-widget))
+
+(defmethod reblocks/session:init ((app docs-server))
+  (make-instance 'docs-widget))
 
 
 (defmethod reblocks/page:render-dependencies :after ((app examples-server) dependencies)
@@ -134,7 +160,10 @@
     (:script :src "https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js"
              :crossorigin "anonymous")
     
-    (:script "
+    (:script
+     ;; TODO: remove :RAW after this issue will be solved
+     ;; https://github.com/ruricolist/spinneret/issues/59
+     (:raw "
 window.addEventListener('load', function() {
   $(document).foundation();
 
@@ -152,7 +181,7 @@ window.addEventListener('load', function() {
     window.top.postMessage(message, \"*\");
   }, 500);
 });
-")
+"))
     
     (:style "
 body {margin: 0px}
@@ -167,6 +196,8 @@ pre {
 
 
 (defmethod reblocks/widget:render ((widget examples-widget))
+  (update-examples)
+  
   (let* ((app-prefix (reblocks/app:get-prefix (reblocks/app:get-current)))
          (full-path (string-downcase (reblocks/request:get-path)))
          (path (subseq full-path (length app-prefix)))
@@ -228,11 +259,24 @@ pre {
            ((zerop (hash-table-count *examples*))
             (:p "No examples are registered yet."))
            (t
-            (:p "Here is list of awailable examples:")
+            (:p "Here is list of available examples:")
             (loop for path in (sort (hash-table-keys *examples*)
                                     #'string>)
                   for uri = (format nil "/examples~A" path)
                   do (:li (:a :href uri uri))))))))))
+
+
+(defmethod reblocks/widget:render ((widget docs-widget))
+  (reblocks/html:with-html
+    (cond
+      (*for-asdf-systems*
+       (:h1 "Documentation is available for these systems")
+       (:ul
+        (loop for system-name in *for-asdf-systems*
+              do (:li (:a :href (format nil "/docs/~A/" system-name)
+                          system-name)))))
+      (t
+       (:h1 "No ASDF system. Add one to build and serve documentation")))))
 
 
 (defun collect-examples (asdf-system-name &key (results (make-hash-table :test 'equal)))
@@ -257,18 +301,14 @@ pre {
         finally (return results)))
 
 
-(defparameter *known-asdf-systems* nil
-  "When UPDATE-EXAMPLES is called without arguments, it will
-   update examples for all these systems.")
-
 (defun update-examples (&rest asdf-system-names)
-  (setf *known-asdf-systems*
+  (setf *for-asdf-systems*
         (union asdf-system-names
-               *known-asdf-systems*
+               *for-asdf-systems*
                :test #'string-equal))
   
   (loop with results = (make-hash-table :test 'equal)
-        for asdf-system-name in *known-asdf-systems*
+        for asdf-system-name in *for-asdf-systems*
         do (collect-examples asdf-system-name
                              :results *examples*))
   (values))
@@ -280,6 +320,9 @@ pre {
                        (interface "localhost")
                        (for-asdf-system "reblocks"))
   (when for-asdf-system
+    (pushnew for-asdf-system
+             *for-asdf-systems*
+             :test #'string-equal)
     (update-examples (string-downcase for-asdf-system)))
   
   (when (null *port*)
@@ -294,7 +337,8 @@ pre {
                              ;; Probably we need this only when running server
                              ;; inside Heroku:
                              :samesite-policy :none
-                             :apps 'examples-server)
+                             :apps '(examples-server
+                                     docs-server))
       (setf *port* port
             *interface* interface)))
   

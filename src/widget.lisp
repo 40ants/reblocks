@@ -186,6 +186,15 @@ with an explicit error message."
   (error "We tried to create a widget from ~A but this object type is not recognized. Did you forget to create a widget?~&There is no applicable method for REBLOCKS/WIDGET:CREATE-WIDGET-FROM."
          object))
 
+(defmethod create-widget-from ((object symbol))
+  "If input is a symbol named a widget class, then we'll MAKE-INSTANCE of this class."
+  (unless (subtypep object 'widget)
+    (error "~S is not subclass of the REBLOCKS/WIDGET:WIDGET"
+           object))
+  
+  (make-instance object))
+
+
 (defmethod create-widget-from ((object widget))
   "If input is already a widget, then it is returned as is."
   object)

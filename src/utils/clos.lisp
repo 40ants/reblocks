@@ -1,4 +1,4 @@
-(defpackage #:reblocks/utils/clos
+(uiop:define-package #:reblocks/utils/clos
   (:use #:cl)
   (:import-from #:closer-mop
                 #:slot-definition-name

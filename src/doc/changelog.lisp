@@ -26,13 +26,34 @@
                                                    "HTML"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.42.0 2022-02-06
+          """
+Fixed
+=====
+
+* Now each app set's its own root widget. Root widgets is choosen depending on current application.
+  and current application depends on the url path prefix. Previously site with multiple apps
+  always shown the same root widget.
+* Fixed the error occured after you stopped the webserver and started it again using the same port.
+  Previously Reblocks complained that the server is already running on this port.
+* Fixed the way how Reblocks signal an error on missing action. Now it does this by default
+  from the default implementation of the REBLOCKS/ACTIONS:ON-MISSING-ACTION generic-function.
+  But if variable REBLOCKS/VARIABLES:*IGNORE-MISSING-ACTIONS* is `t`, then error will not be signaled
+  and user will be redirected to the application's previx path.
+
+Changed
+=======
+
+* Documentation examples server was changed to render a list of ASDF systems for which documentation
+  was built.
+* REBLOCKS/PREVIEW:PREVIEW is able to accept a widget's class as a symbol.
+""")
   (0.41.0 2022-01-05
           """
 Removed
 =======
 
 * Function `reblocks/utils/misc:asdf-system-directory`. Use `asdf:system-source-directory` instead.
-
 """)
   (0.40.0 2022-01-03
           """

@@ -247,6 +247,8 @@ window.commandHandlers = {
 
 function processCommand(command) {
     var method = command.method;
+    // TODO: add a documentation on defining a command handler
+    // and calling it from the server-side
     var handler = window.commandHandlers[method];
     if (handler === undefined) {
         console.warn('No handler for ' + method + ' method');
@@ -331,6 +333,7 @@ function initiateAction(actionCode, options) {
     args.action = actionCode;
 
     log('Fireing action', actionCode);
+    log('with options', options);
     
     var ajax_options = {
         type: method,
@@ -387,7 +390,8 @@ if(!window.XMLHttpRequest) {
 function include_css(css_file) {
   libraryMissingWarning('include_css');
 
-  getStylesNotCached([css_file]);
+    // TODO: will need to find out why this is missing
+   //  getStylesNotCached([css_file]);
 }
 
 function include_dom(script_filename) {
