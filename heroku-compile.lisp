@@ -20,6 +20,8 @@
 
   (qlot:with-local-quicklisp (qlfile)
     (push "./" asdf:*central-registry*)
+    ;; To load all necessary components:
+    (ql:quickload "reblocks")
     (ql:quickload "reblocks/doc/index")
     (ql:quickload "reblocks/doc/example-server")
 
