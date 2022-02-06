@@ -2,6 +2,45 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E42-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.42.0 (2022-02-06)
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Now each app set's its own root widget. Root widgets is choosen depending on current application.
+  and current application depends on the url path prefix. Previously site with multiple apps
+  always shown the same root widget.
+
+* Fixed the error occured after you stopped the webserver and started it again using the same port.
+  Previously Reblocks complained that the server is already running on this port.
+
+* Fixed the way how Reblocks signal an error on missing action. Now it does this by default
+  from the default implementation of the [`reblocks/actions:on-missing-action`][7feb] generic-function.
+  But if variable [`reblocks/variables:*ignore-missing-actions*`][f4c7] is `t`, then error will not be signaled
+  and user will be redirected to the application's previx path.
+
+<a id="changed"></a>
+
+### Changed
+
+* Documentation examples server was changed to render a list of `ASDF` systems for which documentation
+  was built.
+
+* [`reblocks/preview:preview`][8415] is able to accept a widget's class as a symbol.
+
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E41-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.41.0 (2022-01-05)
+
+<a id="removed"></a>
+
+### Removed
+
+* Function `reblocks/utils/misc:asdf-system-directory`. Use `asdf:system-source-directory` instead.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E40-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.40.0 (2022-01-03)
@@ -1406,6 +1445,8 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [eeaa]: http://keepachangelog.com/
 [2ce4]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29
 [f521]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29
+[7feb]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29
+[f4c7]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
 [a82c]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
 [8415]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
 [bb0a]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
