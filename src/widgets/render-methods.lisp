@@ -36,7 +36,6 @@
   "This function is intended for internal usage only.
    It renders widget with surrounding HTML tag and attributes."
   (check-type widget reblocks/widget:widget)
-  (log:debug "Rendering widget" widget "with" (get-collected-dependencies))
   
   (let ((widget-dependencies (get-dependencies widget)))
     ;; Update new-style dependencies
