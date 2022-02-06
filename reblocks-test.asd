@@ -15,7 +15,9 @@
                "reblocks-test/widgets/mop"
                "reblocks-test/widgets/macroexpansion"
                "reblocks-test/widgets/render-methods")
-  :perform (test-op (o c) (symbol-call :rove '#:run c)))
+  :perform (test-op (o c)
+                    (unless (symbol-call :rove '#:run c)
+                      (error "Tests failed"))))
 
 
 (register-system-packages "lack-test" '(#:lack.test))
