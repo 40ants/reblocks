@@ -6,6 +6,8 @@
                 #:get-uri
                 #:ajax-request-p
                 #:get-header)
+  (:import-from #:reblocks/variables
+                #:*ignore-missing-actions*)
   (:import-from #:reblocks/js/base
                 #:with-javascript-to-string
                 #:with-javascript)
@@ -219,8 +221,11 @@
 
 
 (defmethod on-missing-action (app action-name)
-  (declare (ignorable app action-name))
-  (redirect
-   (make-uri (get-prefix app))))
+  (cond
+    (*ignore-missing-actions*
+     (redirect
+      (make-uri (get-prefix app))))
+    (t
+     (error "Cannot find action: ~A" action-name))))
 
 

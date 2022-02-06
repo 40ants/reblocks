@@ -36,6 +36,10 @@ Fixed
   always shown the same root widget.
 * Fixed the error occured after you stopped the webserver and started it again using the same port.
   Previously Reblocks complained that the server is already running on this port.
+* Fixed the way how Reblocks signal an error on missing action. Now it does this by default
+  from the default implementation of the REBLOCKS/ACTIONS:ON-MISSING-ACTION generic-function.
+  But if variable REBLOCKS/VARIABLES:*IGNORE-MISSING-ACTIONS* is `t`, then error will not be signaled
+  and user will be redirected to the application's previx path.
 
 Changed
 =======
