@@ -1,4 +1,4 @@
-(defpackage #:reblocks/widgets/mop
+(uiop:define-package #:reblocks/widgets/mop
   (:use #:cl)
   (:import-from #:anaphora
                 #:awhen

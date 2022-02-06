@@ -1,4 +1,4 @@
-(defpackage #:reblocks/utils/string
+(uiop:define-package #:reblocks/utils/string
   (:use #:cl)
   (:import-from #:cl-fad
                 #:pathname-as-directory)
