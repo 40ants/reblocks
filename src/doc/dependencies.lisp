@@ -70,6 +70,7 @@
   (reblocks/dependencies:get-route generic-function)
   (reblocks/dependencies:get-type (reader dependency))
   (reblocks/dependencies:get-url generic-function)
+  (reblocks/dependencies:cache-in-memory-p (reader local-dependency))
   (reblocks/dependencies:infer-type-from generic-function)
   (reblocks/dependencies:push-dependency function)
   (reblocks/dependencies:push-dependencies function)
