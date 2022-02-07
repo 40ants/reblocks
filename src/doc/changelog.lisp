@@ -24,6 +24,7 @@
                                                    "POST"
                                                    "LOADED"
                                                    "HTML"
+                                                   "CSS"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
   (0.43.0 2022-02-07
