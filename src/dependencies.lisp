@@ -39,7 +39,8 @@
    #:render-in-ajax-response
    #:with-collected-dependencies
    #:push-dependency
-   #:push-dependencies))
+   #:push-dependencies
+   #:cache-in-memory-p))
 (in-package #:reblocks/dependencies)
 
 
@@ -107,10 +108,20 @@ See more information at: <https://www.w3.org/TR/SRI/>")
          :initarg :path
          :initform nil
          :reader get-path)
+   ;; TODO: seems this slot does not used:
    (binary :type (or null t)
            :initarg :binary
            :initform nil
-           :reader is-binary))
+           :reader is-binary)
+   (cache-in-memory :type (or null t)
+                    :initarg :cache-in-memory
+                    :initform nil
+                    :reader cache-in-memory-p
+                    :documentation "When true, then on creation dependency will read file's data into the memory.
+                                    This is useful for applications, deployed as a single executable file.
+                                    Create such dependencies in compile time and store in a global variable.")
+   (cached-data :type (or null simple-array)
+                :initform nil))
   (:documentation "Local dependencies are served by the same webserver which renders reblocks widgets.
 
                    Each local dependency should provide a route, which will be added to the server routing
@@ -272,7 +283,11 @@ a browser."
     (setf (slot-value dependency
                       'route)
           (make-route url
-                      dependency))))
+                      dependency)))
+
+  (when (cache-in-memory-p dependency)
+    (setf (slot-value dependency 'cached-data)
+          (alexandria:read-file-into-byte-vector (get-path dependency)))))
 
 
 (defmethod initialize-instance :after ((dependency remote-dependency)
@@ -326,7 +341,8 @@ by infering it from URL or a path"))
 (defun make-dependency (path-or-url &key system
                                       type
                                       integrity
-                                      crossorigin)
+                                      crossorigin
+                                      cache-in-memory)
   "Creates a JavaScript dependency, served from the disk.
 
 If the system's name is given, then the path is calculated relatively
@@ -347,13 +363,17 @@ to this system's source root."
   (let ((type (or type
                   (infer-type-from path-or-url))))
     (typecase path-or-url
-      (string (make-instance (if *cache-remote-dependencies-in*
-                                 'cached-remote-dependency
-                                 'remote-dependency)
-                             :type type
-                             :remote-url path-or-url
-                             :integrity integrity
-                             :crossorigin crossorigin))
+      (string
+       (when cache-in-memory
+         (error "CACHE-IN-MEMORY argument is supported only for local dependencies."))
+       
+       (make-instance (if *cache-remote-dependencies-in*
+                          'cached-remote-dependency
+                          'remote-dependency)
+                      :type type
+                      :remote-url path-or-url
+                      :integrity integrity
+                      :crossorigin crossorigin))
       (pathname
        (let ((path path-or-url))
          (when system
@@ -372,12 +392,17 @@ to this system's source root."
          
          (make-instance 'local-dependency
                         :type type
-                        :path path))))))
+                        :path path
+                        :cache-in-memory cache-in-memory))))))
 
 
 (defmethod serve ((dependency local-dependency))
   "Serves local dependency from the disk."
-  (values (pathname (get-path dependency))
+  (values (cond
+            ((cache-in-memory-p dependency)
+             (slot-value dependency 'cached-data))
+            (t
+             (pathname (get-path dependency))))
           (get-content-type dependency)))
 
 
@@ -480,6 +505,19 @@ Automatically adds a prefix depending on current webapp and widget."
                  :template (routes:parse-template uri)
                  :dependency dependency))
 
+
+;; We need to override this internal method, to merge
+;; redefined routes of redefined dependencies. Otherwise
+;; they will be stacked inside OR-TEMPLATE components and
+;; newer version of dependency might not work (this depends on
+;; sorting inside ROUTES library):
+(defmethod routes::merge-uri-templates :around ((a cons) (b cons))
+  (if (and (typep (car a) 'dependency-route)
+           (typep (car b) 'dependency-route))
+      ;; Here we will choose a new one
+      (list (car b))
+      ;; otherwise
+      (call-next-method)))
 
 
 (defmethod reblocks/routes:serve ((route dependency-route) env)

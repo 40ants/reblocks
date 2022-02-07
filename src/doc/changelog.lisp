@@ -26,6 +26,16 @@
                                                    "HTML"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.43.0 2022-02-07
+          """
+Changed
+=======
+
+* Argument CACHE-IN-MEMORY was added to REBLOCKS/DEPENDENCIES:MAKE-DEPENDENCY function.
+  It allows to compile local dependency into the memory. This way you can build a standalone
+  executable webserver without JS and CSS dependencies!
+* jQuery and some other dependencies now are cached in memory at compilation time.
+""")
   (0.42.0 2022-02-06
           """
 Fixed

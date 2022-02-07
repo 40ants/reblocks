@@ -22,12 +22,14 @@
 (defvar *js-dependencies-cache* nil)
 
 
-(defun make-js-dependencies ()
+(defvar *jquery-dependencies*
   (list (make-dependency "src/js/jquery/jquery-3.6.0.min.js"
-                         ;; "https://code.jquery.com/jquery-3.6.0.min.js"
-                         :system :reblocks)
+          ;; "https://code.jquery.com/jquery-3.6.0.min.js"
+          :system :reblocks
+          :cache-in-memory t)
         (make-dependency "src/js/jquery/jquery.js"
-                         :system :reblocks)
+          :system :reblocks
+          :cache-in-memory t)
 
         ;; TODO: read code in jquery.js and learn how it uses ba-bbq and seq plugins.
         ;;       Probably we don't need them anymore. These plugins are not working
@@ -39,12 +41,13 @@
         ;;                  :system :reblocks)
 
         (make-dependency "src/js/jquery/progress.gif"
-                         :system :reblocks)))
+          :system :reblocks
+          :cache-in-memory t)))
 
 
 (defmethod get-dependencies ((self jquery-backend))
   (log:debug "Returning dependencies for jquery backend.")
   (or *js-dependencies-cache*
       (setf *js-dependencies-cache*
-            (append (make-js-dependencies)
+            (append *jquery-dependencies*
                     (call-next-method)))))

@@ -44,8 +44,7 @@
 
 (defun add-route (route &key (routes *routes*))
   "Inserts a new route into the routing table."
-  (unless (routes:match routes route)
-    (routes:connect routes route)))
+  (routes:connect routes route))
 
 
 (defun add-routes (app &key (routes *routes*))
