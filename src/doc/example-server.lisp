@@ -391,4 +391,5 @@ pre {
     (start-server :port port
                   :debug debug
                   :interface interface
-                  :for-asdf-system "reblocks")))
+                  :for-asdf-system (or (uiop:getenv "ASDF_SYSTEM")
+                                        "reblocks"))))
