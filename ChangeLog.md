@@ -2,6 +2,20 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E43-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.43.0 (2022-02-07)
+
+<a id="changed"></a>
+
+### Changed
+
+* Argument `CACHE-IN-MEMORY` was added to [`reblocks/dependencies:make-dependency`][ac86] function.
+  It allows to compile local dependency into the memory. This way you can build a standalone
+  executable webserver without `JS` and `CSS` dependencies!
+
+* jQuery and some other dependencies now are cached in memory at compilation time.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E42-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.42.0 (2022-02-06)
@@ -1453,6 +1467,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [b988]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29
 [354f]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
 [8ab6]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
+[ac86]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
