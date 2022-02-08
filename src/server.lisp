@@ -38,7 +38,7 @@
   ;; Just dependencies
   (:import-from #:reblocks/debug)
   (:import-from #:log)
-  (:import-from #:reblocks/default-init
+  (:import-from #:reblocks/welcome/app
                 #:welcome-screen-app)
   (:import-from #:alexandria
                 #:compose)
