@@ -1,7 +1,5 @@
 (uiop:define-package #:reblocks/app-mop
   (:use #:cl)
-  (:import-from #:alexandria
-                #:removef)
   (:import-from #:metatilities
                 #:removef)
   (:shadowing-import-from #:closer-mop
