@@ -94,7 +94,8 @@
   )
 
 (defmethod reblocks/session:init ((app welcome-screen-app))
-  (make-instance 'welcome-screen-widget))
+  (when *welcome-screen-enabled*
+    (make-instance 'welcome-screen-widget)))
 
 ;; (when *welcome-screen-enabled*
 ;;   (reblocks/app:start 'welcome-screen-app))
