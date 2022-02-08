@@ -2,6 +2,34 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E44-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.44.0 (2022-02-09)
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Fixed the way how welcome page app is started. Now it always started unless some
+  other application does not use "/" prefix.
+
+* Also, fixed the way how application is choosen depending on request url path.
+
+* Function [`reblocks/server:stop`][8ab6] now removes all application and routes from the
+  server instance. This way when you'll start it again, server might serve another
+  set of the applications.
+
+* Now if you redefine your app using [`reblocks/app:defapp`][6999] macro and change
+  `AUTOSTART` argument from `T` to `NIL`, this app will be removed from the list
+  of applications to autostart.
+
+<a id="added"></a>
+
+### Added
+
+* Now macro [`reblocks/app:defapp`][6999] supports `DOCUMENTATION` argument. Use it to add documentation
+  to application's class.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E43-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.43.0 (2022-02-07)
@@ -1461,6 +1489,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [f521]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29
 [7feb]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29
 [f4c7]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
+[6999]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [a82c]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
 [8415]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
 [bb0a]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
