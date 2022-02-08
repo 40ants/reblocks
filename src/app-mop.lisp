@@ -1,5 +1,7 @@
 (uiop:define-package #:reblocks/app-mop
   (:use #:cl)
+  (:import-from #:metatilities
+                #:removef)
   (:shadowing-import-from #:closer-mop
                           #:standard-class
                           #:validate-superclass
@@ -46,9 +48,9 @@
     ;; (pushnew name (symbol-value '*registered-apps*))
     (pushnew name *registered-apps*)
     
-    (when autostart
-      ;; (pushnew name (symbol-value '*autostarting-apps*))
-      (pushnew name *autostarting-apps*))))
+    (if autostart
+        (pushnew name *autostarting-apps*)
+        (removef name *autostarting-apps*))))
 
 
 (defun get-registered-apps ()

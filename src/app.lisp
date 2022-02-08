@@ -102,6 +102,7 @@ layout and dependencies running on the same server."))
                     subclasses
                     slots
                     description
+                    documentation
                     (autostart t)
                   &allow-other-keys)
   "This macro defines the key parameters for a stand alone web application.  
@@ -127,16 +128,25 @@ co-exist, so long as they have different prefixes
 
 DESCRIPTION - A description of the application for the title page
 
+DOCUMENTATION - Content of this argument will be added as (:documentation ...) form
+to the class definition.
+
 AUTOSTART - Whether this webapp is started automatically when start-reblocks is
 called (primarily for backward compatibility"
   (declare (ignore prefix description))
   
   (let ((default-initargs
           (remove-keyword-parameters initargs
-                                     :subclasses :slots :autostart)))
+                                     :subclasses
+                                     :slots
+                                     :autostart
+                                     :documentation))
+        (documentation (when documentation
+                         (list (list :documentation documentation)))))
     `(progn
        (defclass ,name (,@subclasses app)
          ,slots
+         ,@documentation
          (:autostart . ,autostart)
          (:default-initargs ,@default-initargs)
          (:metaclass app-class)))))

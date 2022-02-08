@@ -24,6 +24,7 @@
                "reblocks/commands-hook"
                "reblocks/widgets/string-widget"
                "reblocks/widgets/funcall-widget"
+               "reblocks/welcome/widget"
                "reblocks/utils/clos"
                "reblocks/utils/i18n"
                "reblocks/preview"
