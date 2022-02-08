@@ -27,6 +27,28 @@
                                                    "CSS"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.44.0 2022-02-09
+          """
+Fixed
+=====
+
+* Fixed the way how welcome page app is started. Now it always started unless some
+  other application does not use "/" prefix.
+* Also, fixed the way how application is choosen depending on request url path.
+* Function REBLOCKS/SERVER:STOP now removes all application and routes from the
+  server instance. This way when you'll start it again, server might serve another
+  set of the applications.
+* Now if you redefine your app using REBLOCKS/APP:DEFAPP macro and change
+  AUTOSTART argument from `T` to NIL, this app will be removed from the list
+  of applications to autostart.
+
+Added
+=====
+
+* Now macro REBLOCKS/APP:DEFAPP supports DOCUMENTATION argument. Use it to add documentation
+  to application's class.
+
+""")
   (0.43.0 2022-02-07
           """
 Changed

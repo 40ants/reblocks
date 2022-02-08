@@ -9,6 +9,7 @@
                 #:symbolicate
                 #:ensure-symbol
                 #:with-gensyms)
+  (:import-from #:40ants-doc)
   (:import-from #:40ants-doc/ignored-words
                 #:ignore-words-in-package)
   

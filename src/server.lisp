@@ -38,6 +38,10 @@
   ;; Just dependencies
   (:import-from #:reblocks/debug)
   (:import-from #:log)
+  (:import-from #:reblocks/default-init
+                #:welcome-screen-app)
+  (:import-from #:alexandria
+                #:compose)
   
   (:export ;; #:get-server-type
    ;; #:get-port
@@ -326,11 +330,20 @@ If server is already started, then logs a warning and does nothing."
       ;; We need to set this bindings to allow apps to use
       ;; REBLOCKS/ROUTES:ADD-ROUTE without given a current
       ;; routes mapping.
-      (let ((reblocks/routes::*routes* (routes server)))
-        (loop for app-class in (uiop:ensure-list
-                                (or apps
-                                    (get-autostarting-apps)))
-              do (start-app server app-class)))
+      (let* ((reblocks/routes::*routes* (routes server))
+             (apps (or (uiop:ensure-list apps)
+                       (get-autostarting-apps))))
+        (loop for app-class in apps
+              do (start-app server app-class))
+
+        ;; If / prefix is not taken, start Welcome Screen app:
+        (loop with found-root = nil
+              for app in (apps server)
+              for prefix = (get-prefix app)
+              when (string= prefix "/")
+                do (setf found-root t)
+              finally (unless found-root
+                        (start-app server 'welcome-screen-app))))
       
       (values server))))
 
@@ -365,12 +378,22 @@ If server is already started, then logs a warning and does nothing."
           (loop for other-app in (apps server)
                 for other-prefix = (get-prefix other-app)
                 when (string-equal prefix other-prefix)
-                  do (error "App ~A already uses prefix \"~A\""
-                            other-app other-prefix)))
+                  do (error "Unable to start app ~S because app ~S already uses prefix \"~A\""
+                            app-class
+                            other-app
+                            other-prefix)))
          (t
           (reblocks/app:initialize-webapp app)
           (register-app-routes server app)
-          (push app (apps server))
+          ;; We need to keep apps sorted from longest prefix to shorters,
+          ;; to find a correct app to serve the request:
+          (setf (apps server)
+                (sort (list* app
+                             (apps server))
+                      #'>
+                      :key (compose #'length
+                                    #'get-prefix)))
+          
           (log:debug "App \"~A\" started at http://~A:~A~A"
                      (reblocks/app::webapp-name app)
                      (get-interface server)
@@ -393,6 +416,10 @@ If server is already started, then logs a warning and does nothing."
             ;; TODO: maybe implement stop app generic function again?
             ;; (loop for app in (apps server)
             ;;       do (reblocks/app:stop (reblocks-webapp-name app)))
+
+            (setf (apps server) nil
+                  (routes server) (reblocks/routes::make-routes))
+            
             (stop-server server)
             (values server))))
 
