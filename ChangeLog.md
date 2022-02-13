@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.45.0 (2022-02-14)
+
+<a id="changed"></a>
+
+### Changed
+
+* Interactive demos now are rendered just as code block into markdown documents.
+  Such code block is followed by a link to `HTML` documentation if `ASDF` system
+  defines a `homepage`.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E44-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.44.0 (2022-02-09)
