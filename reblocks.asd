@@ -14,7 +14,7 @@
   :author "Alexander Artemenko"
   :licence "LLGPL"
   :description "A Common Lisp web framework, successor of the Weblocks."
-  :homepage "https://40ants.com/reblocks"
+  :homepage "https://40ants.com/reblocks/"
   :source-control (:git "https://github.com/40ants/reblocks")
   :pathname "src"
   :depends-on ("40ants-doc"

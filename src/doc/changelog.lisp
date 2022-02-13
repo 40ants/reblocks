@@ -27,6 +27,15 @@
                                                    "CSS"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.45.0 2022-02-14
+          """
+Changed
+=======
+
+* Interactive demos now are rendered just as code block into markdown documents.
+  Such code block is followed by a link to HTML documentation if ASDF system
+  defines a `homepage`.
+""")
   (0.44.0 2022-02-09
           """
 Fixed
