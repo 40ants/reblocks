@@ -240,18 +240,8 @@ pre {
                       (:code :class "language-lisp"
                              ;; :onload "alert('Herel')"
                              ;; :onload "hljs.highlightElement(this)"
-                             (let* ((example (current-example widget))
-                                    (*package* (example-package example)))
-                               (with-output-to-string (s)
-                                 (loop for form in (example-body example)
-                                       do (write form
-                                                 :stream s
-                                                 :case :downcase
-                                                 :readably t)
-                                          (terpri s)
-                                          (terpri s)))))))))
-
-       )
+                             (reblocks/doc/example::example-code
+                              (current-example widget))))))))
       (t
        (with-html
          (:h1 ("No widget with path ~A" path))
