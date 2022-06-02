@@ -30,6 +30,11 @@
 
   (0.45.1 2022-06-02
           """
+Added
+=====
+
+* Added function REBLOCKS/PREVIEW:STOP to stop an app for previewing widgets during development.
+
 Fixed
 =====
 

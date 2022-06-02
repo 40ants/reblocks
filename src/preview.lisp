@@ -11,7 +11,8 @@
   (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:defwidget)
-  (:export #:preview))
+  (:export #:preview
+           #:stop))
 (in-package #:reblocks/preview)
 
 
@@ -56,3 +57,9 @@
     (log:info "Opening a web browser to look at ~A"
               url)
     (open-browser url)))
+
+
+(defun stop ()
+  (when *port*
+    (reblocks/server:stop "localhost" *port*)
+    (setf *port* nil)))
