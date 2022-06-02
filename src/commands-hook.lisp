@@ -1,4 +1,4 @@
-(defpackage #:reblocks/commands-hook
+(uiop:define-package #:reblocks/commands-hook
   (:use #:cl)
   (:import-from #:reblocks/hooks
                 #:on-application-hook-handle-http-request

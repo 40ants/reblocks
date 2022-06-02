@@ -42,8 +42,9 @@
 (in-package #:reblocks/request)
 
 
-(defvar *request* nil
-  "Holds current request from a browser.")
+(defvar *request*)
+(setf (documentation '*request* 'variable)
+      "Holds current request from a browser.")
 
 
 (defun get-uri (&key (request *request*))

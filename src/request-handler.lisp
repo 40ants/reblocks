@@ -177,13 +177,20 @@ customize behavior."))
 (defmethod handle-ajax-request ((app app))
   (log:debug "Handling AJAX request")
   
-  (write
-   (to-json
-    (list :|commands| (get-collected-commands)))
-   ;; Seems like a hack, because we have to know implementation details of reblocks/html here.
-   ;; TODO: hide implementation details.
-   :stream *stream*
-   :escape nil))
+  ;; Generate code to embed new dependencies into the page on the fly.
+  ;; This render will generate commands to include necessary pieces
+  ;; of JS and CSS into the page.
+  (mapc #'reblocks/dependencies:render-in-ajax-response
+        reblocks/dependencies::*page-dependencies*)
+  
+  (let ((commands (get-collected-commands)))
+    (write
+     (to-json
+      (list :|commands| commands))
+     ;; Seems like a hack, because we have to know implementation details of reblocks/html here.
+     ;; TODO: hide implementation details.
+     :stream *stream*
+     :escape nil)))
 
 
 (defmethod handle-normal-request ((app app))

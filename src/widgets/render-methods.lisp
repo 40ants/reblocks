@@ -39,12 +39,7 @@
   
   (let ((widget-dependencies (get-dependencies widget)))
     ;; Update new-style dependencies
-    (push-dependencies widget-dependencies)
-    
-    (when (ajax-request-p)
-      ;; Generate code to embed new dependencies into the page on the fly
-      (mapc #'render-in-ajax-response
-            widget-dependencies)))
+    (push-dependencies widget-dependencies))
   
   (with-html
     (:tag
