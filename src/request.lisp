@@ -213,12 +213,7 @@ if there is an action involved (even if the user hits refresh)."
   (with-gensyms (result)
     `(let* ((*request* ,request)
             (,result (progn
-                      ,@body)))
-     
-       (unless (ajax-request-p)
-         (setf (reblocks/session:get-value 'last-request-path)
-               (get-path)))
-
+                       ,@body)))
        ,result)))
 
 

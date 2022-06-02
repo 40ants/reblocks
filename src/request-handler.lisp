@@ -117,6 +117,13 @@ customize behavior."))
           ;; Hunchentoot already displays warnings into log file, we just suppress output
           (*error-output* (make-string-output-stream)))
       (with-log-unhandled ()
+        (unless (ajax-request-p)
+          ;; We have to set last-request-path only for requests
+          ;; to Reblocks apps, and don't touch it when we are responding
+          ;; with some CSS/JS dependencies:
+          (setf (reblocks/session:get-value 'reblocks/request::last-request-path)
+                (get-path)))
+        
         (let ((response (call-next-method)))
           (typecase response
             (response response)

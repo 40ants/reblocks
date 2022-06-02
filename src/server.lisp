@@ -171,7 +171,7 @@ This function serves all started applications and their static files."
                     (log:debug "Route was found" route)
                     (reblocks/routes:serve route env))
                    (app
-                    (log:debug "App was found" route)
+                    (log:debug "App was found" app)
                     (handle-request app))
                    (t
                     (log:error "Application dispatch failed for" path-info)
