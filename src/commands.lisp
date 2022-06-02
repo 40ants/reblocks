@@ -7,11 +7,13 @@
 (in-package #:reblocks/commands)
 
 
-(defvar *commands* nil
-  "A list of commands to execute on a client as a result of action call.
+(defvar *commands*)
 
-These commands are collected during action processing and rendered to resulting JSON
-as some sort of JSON-rpc calls to be esecuted on a client-side.")
+(setf (documentation '*commands* 'variable)
+      "A list of commands to execute on a client as a result of action call.
+
+       These commands are collected during action processing and rendered to resulting JSON
+       as some sort of JSON-rpc calls to be esecuted on a client-side.")
 
 
 (defun cl-symbol-to-js-symbol (symbol)

@@ -205,18 +205,17 @@ as a response to some action.")
 
 
 (defmethod render-in-ajax-response ((dependency dependency))
-  (case (get-type dependency)
-    (:js
-     (let ((script (parenscript:ps* `(include_dom
-                                      ,(get-url dependency)))))
-       (log:debug "Rendering js dependency in ajax response" dependency)
-       (send-script script :before-load)))
+  (let ((url (get-url dependency)))
+    (case (get-type dependency)
+      (:js
+       (let ((script (parenscript:ps* `(include_dom ,url))))
+         (log:debug "Rendering js dependency in ajax response" dependency)
+         (send-script script :before-load)))
 
-    (:css
-     (let ((script (parenscript:ps* `(include_css
-                                      ,(get-url dependency)))))
-       (log:debug "Rendering css dependency in ajax response" dependency)
-       (send-script script :before-load)))))
+      (:css
+       (let ((script (parenscript:ps* `(include_css ,url))))
+         (log:debug "Rendering css dependency in ajax response" dependency)
+         (send-script script :before-load))))))
 
 
 (defmethod render-in-head ((dependency remote-dependency))

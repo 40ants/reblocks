@@ -27,6 +27,22 @@
                                                    "CSS"
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+
+  (0.45.1 2022-06-02
+          """
+Added
+=====
+
+* Added function REBLOCKS/PREVIEW:STOP to stop an app for previewing widgets during development.
+
+Fixed
+=====
+
+* Fixed the way how dependencies are rendered in AJAX action response. Previously,
+  when many widgets of the same class were updated on one user action Reblocks sent
+  a duplicate css/js dependencies.
+* Function REBLOCKS/REQUEST:REFRESH-REQUEST-P was fixed and now works as expected.
+""")
   (0.45.0 2022-02-14
           """
 Changed

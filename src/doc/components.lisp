@@ -109,4 +109,5 @@ Here is the list of functions useful when working with Reblocks servers:
   (reblocks/server:servers function)
   (reblocks/server:running-p function)
   (reblocks/server:serve-static-file generic-function)
-  (reblocks/preview:preview function))
+  (reblocks/preview:preview function)
+  (reblocks/preview:stop function))

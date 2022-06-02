@@ -147,7 +147,16 @@ This function serves all started applications and their static files."
         (prepare-hooks
           (reblocks/hooks:with-handle-http-request-hook (env)
 
-            (let* ((path-info (getf env :path-info))
+            (let* ((path-info (getf env
+                                    ;; Previously, we used :path-info
+                                    ;; attribute here, but it has %20 replaced
+                                    ;; with white-spaces and get-route breaks
+                                    ;; on URIs having spaces, because it calls
+                                    ;; cl-routes and it calls puri:parse-uri
+                                    ;; which requires URI to be url-encoded.
+                                    ;; Hope, this change will not break other
+                                    ;; places where PATH-INFO is used.
+                                    :request-uri))
                    (hostname (getf env :server-name))
                    (route (get-route path-info))
                    (app (search-app-for-request-handling path-info hostname)))
@@ -162,7 +171,7 @@ This function serves all started applications and their static files."
                     (log:debug "Route was found" route)
                     (reblocks/routes:serve route env))
                    (app
-                    (log:debug "App was found" route)
+                    (log:debug "App was found" app)
                     (handle-request app))
                    (t
                     (log:error "Application dispatch failed for" path-info)
