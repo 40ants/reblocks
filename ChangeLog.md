@@ -2,6 +2,26 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.45.1 (2022-06-02)
+
+<a id="added"></a>
+
+### Added
+
+* Added function [`reblocks/preview:stop`][6d85] to stop an app for previewing widgets during development.
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Fixed the way how dependencies are rendered in `AJAX` action response. Previously,
+  when many widgets of the same class were updated on one user action Reblocks sent
+  a duplicate css/js dependencies.
+
+* Function [`reblocks/request:refresh-request-p`][71db] was fixed and now works as expected.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.45.0 (2022-02-14)
@@ -1504,12 +1524,14 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [6999]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [a82c]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
 [8415]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
+[6d85]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29
 [bb0a]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
 [b988]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29
 [354f]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
 [8ab6]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
 [ac86]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
 [91c9]: https://github.com/40ants/lack
