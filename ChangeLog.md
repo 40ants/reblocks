@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.45.2 (2022-06-06)
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Fixed loading of `CSS` styles for new widgets appearing on a page.
+
+* Fixed starting server in debug mode.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.45.1 (2022-06-02)
