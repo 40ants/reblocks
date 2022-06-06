@@ -27,6 +27,9 @@
           ;; "https://code.jquery.com/jquery-3.6.0.min.js"
           :system :reblocks
           :cache-in-memory t)
+        (make-dependency "src/js/jquery/jquery-seq.js"
+          :system :reblocks
+          :cache-in-memory t)
         (make-dependency "src/js/jquery/jquery.js"
           :system :reblocks
           :cache-in-memory t)
@@ -37,9 +40,7 @@
         ;;       on jQuery 1.8.2.
         ;; (make-dependency "src/js/jquery/jquery.ba-bbq.js"
         ;;                  :system :reblocks)
-        ;; (make-dependency "src/js/jquery/jquery-seq.js"
-        ;;                  :system :reblocks)
-
+        
         (make-dependency "src/js/jquery/progress.gif"
           :system :reblocks
           :cache-in-memory t)))

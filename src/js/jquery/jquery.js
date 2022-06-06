@@ -390,8 +390,7 @@ if(!window.XMLHttpRequest) {
 function include_css(css_file) {
   libraryMissingWarning('include_css');
 
-    // TODO: will need to find out why this is missing
-   //  getStylesNotCached([css_file]);
+  getStylesNotCached([css_file]);
 }
 
 function include_dom(script_filename) {
