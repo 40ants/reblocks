@@ -72,8 +72,9 @@ To clear, use function \(reset-last-session\).")
           t))
 
   (when track-latest-request
-    (setf *latest-request*
-          *request*)
+    (when (boundp '*request*)
+      (setf *latest-request*
+            *request*))
     (setf (getf *config* :track-latest-request)
           t))
 

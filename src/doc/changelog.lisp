@@ -34,6 +34,7 @@ Fixed
 =====
 
 * Fixed loading of CSS styles for new widgets appearing on a page.
+* Fixed starting server in debug mode.
 
 """)
   (0.45.1 2022-06-02
