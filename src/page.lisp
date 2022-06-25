@@ -31,10 +31,11 @@
 (in-package #:reblocks/page)
 
 
-(defvar *title* nil)
-(defvar *description* nil)
-(defvar *keywords* nil)
-(defvar *language* "en")
+(defvar *title*)
+(defvar *description*)
+(defvar *keywords*)
+(defvar *language*)
+(defvar *default-language* "en")
 
 
 (defmacro def-get-set (variable)
@@ -117,6 +118,8 @@
                    &key (dependencies (get-dependencies app)))
   "Default page rendering template and protocol."
   (log:debug "Rendering page for" app)
+  (unless (boundp '*title*)
+    (error "Method REBLOCKS/PAGE:RENDER should be called inside WITH-PAGE-DEFAULTS block."))
 
   (register-dependencies dependencies)
 
@@ -141,9 +144,21 @@
         )))))
 
 
+(defmacro with-page-defaults (&body body)
+  `(let ((*title* nil)
+         (*description* nil)
+         (*keywords* nil)
+         (*language* *default-language*))
+     ,@body))
+
+
 (defmethod render-page-with-widgets ((app app))
   "Renders a full HTML by collecting header elements, dependencies and inner
-   HTML and inserting them into the `render' method."
+   HTML and inserting them into the `render' method.
+
+   This function will be called inside WITH-PAGE-DEFAULTS block,
+   where such variables as *TITLE* are bound to their default values.
+   These variables can be changed by user during widgets or page rendering."
   (log:debug "Special Rendering page for" app)
 
   ;; At the moment when this method is called, there is already

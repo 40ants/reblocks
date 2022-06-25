@@ -107,4 +107,26 @@ For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
   (reblocks/page:get-title function)
   (reblocks/page:get-description function)
   (reblocks/page:get-keywords function)
-  (reblocks/page:get-language function))
+  (reblocks/page:get-language function)
+
+  """
+  If you want to change these variables globally for the whole
+  application, then define a before method like this:
+
+  ```lisp
+  (defmethod reblocks/page:render :before ((app disk-analyzer) inner-html &rest rest)
+    (declare (ignore rest))
+  
+    (setf (reblocks/page:get-title)
+          "Cloud Analyzer - Saves space and money!")
+    (setf (reblocks/page:get-description)
+          "Helps to save money when storing data in the Cloud.")
+    (setf (reblocks/page:get-keywords)
+          (list "cloud"
+                "storage"
+                "analyzer")))
+
+  ```
+
+  """
+  )

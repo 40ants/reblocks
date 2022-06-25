@@ -28,6 +28,14 @@
                                                    "HTTP")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
 
+  (0.45.3 2022-06-25
+          """
+Fixed
+=====
+
+* Fixed how REBLOCKS/PAGE:GET-TITLE and other similar functions change the state.
+  Previously there was a bug and these functions have changed a global variables.
+""")
   (0.45.2 2022-06-06
           """
 Fixed
