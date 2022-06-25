@@ -206,17 +206,18 @@ customize behavior."))
   ;; stylesheet dependencies.
   (log:debug "Handling normal request")
 
-  ;; TODO: make a macro reblocks/session-lock:with-lock
-  (with-lock-held ((get-lock))
-    (timing "widget tree rendering"
-      (render (reblocks/widgets/root:get app))))
+  (reblocks/page::with-page-defaults
+    ;; TODO: make a macro reblocks/session-lock:with-lock
+    (with-lock-held ((get-lock))
+      (timing "widget tree rendering"
+        (render (reblocks/widgets/root:get app))))
 
-  ;; render page will wrap the HTML already rendered to
-  ;; reblocks.html::*stream* with necessary boilerplate HTML
-  (timing "page render"
-    ;; Here we are using internal symbol, because we don't want to expose
-    ;; this method for usage outside of the reblocks.
-    (render-page-with-widgets app)))
+    ;; render page will wrap the HTML already rendered to
+    ;; reblocks.html::*stream* with necessary boilerplate HTML
+    (timing "page render"
+      ;; Here we are using internal symbol, because we don't want to expose
+      ;; this method for usage outside of the reblocks.
+      (render-page-with-widgets app))))
 
 
 (defun remove-action-from-uri (uri)
