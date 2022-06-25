@@ -2,6 +2,17 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.45.3 (2022-06-25)
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Fixed how [`reblocks/page:get-title`][34a6] and other similar functions change the state.
+  Previously there was a bug and these functions have changed a global variables.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.45.2 (2022-06-06)
@@ -1543,6 +1554,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [8ab6]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
 [ac86]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
