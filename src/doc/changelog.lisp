@@ -26,8 +26,20 @@
                                                    "HTML"
                                                    "CSS"
                                                    "HTTP")
-                                    :external-links (("Ultralisp" . "https://ultralisp.org")))
+                                    :external-links (("Ultralisp" . "https://ultralisp.org")
+                                                     ("log4cl-extras" . "https://40ants.com/log4cl-extras/")))
+  (0.46.0 2022-07-03
+          """
+Changed
+=======
 
+* Generic-function REBLOCKS/ERROR-HANDLER:ON-ERROR now accepts BACKTRACE argument which may
+  contain a string with a backtrace. Previously, default method of this generic-function
+  has rendered wrong backtrace when you aborted request in debugger.
+* Also, a function LOG4CL-EXTRAS/ERROR:PRINT-BACKTRACE is used now to format a backtrace
+  for error page and now it looks the same as backtrace in logs.
+* Plus, a backtrace now logged only once when unhandled error happens.
+""")
   (0.45.3 2022-06-25
           """
 Fixed
