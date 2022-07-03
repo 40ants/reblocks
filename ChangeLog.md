@@ -2,6 +2,29 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E46-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.46.0 (2022-07-03)
+
+<a id="changed"></a>
+
+### Changed
+
+* Generic-function [`reblocks/error-handler:on-error`][631c] now accepts `BACKTRACE` argument which may
+  contain a string with a backtrace. Previously, default method of this generic-function
+  has rendered wrong backtrace when you aborted request in debugger.
+
+* Also, a function [`log4cl-extras/error:print-backtrace`][6a57] is used now to format a backtrace
+  for error page and now it looks the same as backtrace in logs.
+
+* Plus, a backtrace now logged only once when unhandled error happens.
+
+<a id="removed"></a>
+
+### Removed
+
+* Macro `WITH-HANDLED-ERRORS` is not exported from `REBLOCKS/ERROR-HANDLER` package anymore.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.45.3 (2022-06-25)
@@ -1540,6 +1563,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 
 
 [eeaa]: http://keepachangelog.com/
+[6a57]: https://40ants.com/log4cl-extras/#x-28LOG4CL-EXTRAS-2FERROR-3APRINT-BACKTRACE-20FUNCTION-29
 [2ce4]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29
 [f521]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29
 [7feb]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29
@@ -1553,6 +1577,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [354f]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
 [8ab6]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
 [ac86]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
+[631c]: https://40ants.com/reblocks/error-handling/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
