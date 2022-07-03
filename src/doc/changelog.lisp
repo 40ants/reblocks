@@ -45,7 +45,7 @@ Changed
 Removed
 =======
 
-* Macro WITH-HANDLED-ERRORS is not external in package REBLOCKS/ERROR-HANDLER anymore.
+* Macro WITH-HANDLED-ERRORS is not exported from `REBLOCKS/ERROR-HANDLER` package anymore.
 """)
   (0.45.3 2022-06-25
           """
