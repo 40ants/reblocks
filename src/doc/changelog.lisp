@@ -26,9 +26,10 @@
                                                    "HTML"
                                                    "CSS"
                                                    "HTTP"
-                                                   "WITH-HANDLED-ERRORS")
-                                    :external-links (("Ultralisp" . "https://ultralisp.org")
-                                                     ("log4cl-extras" . "https://40ants.com/log4cl-extras/")))
+                                                   "WITH-HANDLED-ERRORS"
+                                                   "REBLOCKS/ERROR-HANDLER")
+                                    :external-links (("Ultralisp" . "https://ultralisp.org"))
+                                    :external-docs ("https://40ants.com/log4cl-extras/"))
   (0.46.0 2022-07-03
           """
 Changed
