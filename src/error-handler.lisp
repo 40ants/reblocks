@@ -15,8 +15,7 @@
   (:import-from #:reblocks/html
                 #:with-html-string)
   
-  (:export #:on-error
-           #:with-handled-errors))
+  (:export #:on-error))
 (in-package #:reblocks/error-handler)
 
 
