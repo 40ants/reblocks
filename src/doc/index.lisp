@@ -5,6 +5,8 @@
                 #:defsection-copy)
   (:import-from #:reblocks/doc/rendering
                 #:@rendering)
+  (:import-from #:reblocks/doc/error-handler
+                #:@error-handling)
   (:import-from #:reblocks/doc/intro
                 #:@intro)
   (:import-from #:reblocks/doc/installation
@@ -87,6 +89,7 @@
                            @dependencies
                            @request
                            @response
+                           @error-handling
                            @hooks
                            @session
                            @removed-features
