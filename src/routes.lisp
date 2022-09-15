@@ -1,8 +1,6 @@
 (uiop:define-package #:reblocks/routes
   (:use #:cl)
   (:import-from #:routes)
-  (:import-from #:reblocks/error-handler
-                #:with-handled-errors)
   (:export #:route
            #:serve
            #:get-route
@@ -77,12 +75,6 @@
         (t (list 400
                  (list :content-type "text/plain")
                  "No handler for this route"))))))
-
-
-(defmethod serve :around (route env)
-  "This method handles unhandled exceptions, because this code is common for all routes."
-  (with-handled-errors
-    (call-next-method)))
 
 
 (defmacro defroute ((app route &key (content-type "application/json")) &body body)

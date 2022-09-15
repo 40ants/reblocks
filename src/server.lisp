@@ -13,6 +13,7 @@
                 #:get-route
                 #:add-route
                 #:add-routes)
+  (:import-from #:reblocks/routes-error-handler)
   (:import-from #:reblocks/app
                 #:get-prefix
                 #:app-serves-hostname-p
