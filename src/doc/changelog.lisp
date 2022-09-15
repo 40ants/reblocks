@@ -30,6 +30,14 @@
                                                    "REBLOCKS/ERROR-HANDLER")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.46.1 2022-09-16
+          """
+Fixed
+=====
+
+* Error page rendering was fixed. Now such variables as page description, tags and title are
+  bound to their defaults while calling REBLOCKS/ERROR-HANDLER:ON-ERROR generic-function.
+""")
   (0.46.0 2022-07-03
           """
 Changed

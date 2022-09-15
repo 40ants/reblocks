@@ -14,6 +14,8 @@
                 #:with-gensyms)
   (:import-from #:reblocks/html
                 #:with-html-string)
+  (:import-from #:reblocks/page
+                #:with-page-defaults)
   
   (:export #:on-error))
 (in-package #:reblocks/error-handler)
@@ -44,36 +46,41 @@
                         :code 500)))
 
 
+(defun call-with-handled-errors (body-func)
+  (let ((debugger-was-invoked-on-cond nil)
+        (backtrace nil))
+    ;; We need to have this handler-bind block a separate from the inner one,
+    ;; because when (on-error) call happens, bindings from the inner handler-bind
+    ;; aren't available, but we need to catch an immediate-response condition
+    (handler-bind ((immediate-response (lambda (condition)
+                                         (return-from call-with-handled-errors
+                                           (get-response condition))))
+                   (error (lambda (condition)
+                            (setf backtrace
+                                  (print-backtrace :condition condition
+                                                   :stream nil))
+                            (cond (*invoke-debugger-on-error*
+                                   (log:warn "Invoking interactive debugger because Reblocks is in the debug mode")
+                                   (setf debugger-was-invoked-on-cond
+                                         condition)
+                                   (invoke-debugger condition))
+                                  (t
+                                   (log:warn "Returning error because Reblocks is not in the debug mode")
+                                   (with-page-defaults
+                                     (on-error *current-app*
+                                               condition
+                                               :backtrace backtrace)))))))
+      (restart-case
+          (funcall body-func)
+        (abort ()
+          :report "Abort request processing and return 500."
+          (log:warn "Aborting request processing")
+          (with-page-defaults
+            (on-error *current-app*
+                      debugger-was-invoked-on-cond
+                      :backtrace backtrace)))))))
+
+
 (defmacro with-handled-errors (&body body)
-  (with-gensyms (block-name)
-    `(block ,block-name
-       (let ((debugger-was-invoked-on-cond nil)
-             (backtrace nil))
-         ;; We need to have this handler-bind block a separate from the inner one,
-         ;; because when (on-error) call happens, bindings from the inner handler-bind
-         ;; aren't available, but we need to catch an immediate-response condition
-         (handler-bind ((immediate-response (lambda (condition)
-                                              (return-from ,block-name
-                                                (get-response condition))))
-                        (error (lambda (condition)
-                                 (setf backtrace
-                                       (print-backtrace :condition condition
-                                                        :stream nil))
-                                 (cond (*invoke-debugger-on-error*
-                                        (log:warn "Invoking interactive debugger because Reblocks is in the debug mode")
-                                        (setf debugger-was-invoked-on-cond
-                                              condition)
-                                        (invoke-debugger condition))
-                                       (t
-                                        (log:warn "Returning error because Reblocks is not in the debug mode")
-                                        (on-error *current-app*
-                                                  condition
-                                                  :backtrace backtrace))))))
-           (restart-case
-               (progn ,@body)
-             (abort ()
-               :report "Abort request processing and return 500."
-               (log:warn "Aborting request processing")
-               (on-error *current-app*
-                         debugger-was-invoked-on-cond
-                         :backtrace backtrace))))))))
+  `(call-with-handled-errors (lambda ()
+                               ,@body)))

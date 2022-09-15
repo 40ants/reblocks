@@ -144,12 +144,17 @@
         )))))
 
 
+(defun call-with-page-defaults (body-func)
+  (let ((*title* nil)
+        (*description* nil)
+        (*keywords* nil)
+        (*language* *default-language*))
+    (funcall body-func)))
+
+
 (defmacro with-page-defaults (&body body)
-  `(let ((*title* nil)
-         (*description* nil)
-         (*keywords* nil)
-         (*language* *default-language*))
-     ,@body))
+  `(call-with-page-defaults
+    (lambda () ,@body)))
 
 
 (defmethod render-page-with-widgets ((app app))
