@@ -2,6 +2,17 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E46-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.46.1 (2022-09-16)
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Error page rendering was fixed. Now such variables as page description, tags and title are
+  bound to their defaults while calling [`reblocks/error-handler:on-error`][631c] generic-function.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E46-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.46.0 (2022-07-03)
