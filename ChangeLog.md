@@ -2,6 +2,27 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E47-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.47.0 (2022-11-04)
+
+<a id="added"></a>
+
+### Added
+
+Added ability to set cookie in response handler. You can do it in any render method.
+
+Here is an example how to expire a cookie right now:
+
+```lisp
+(reblocks/response:set-cookie
+     (list :name "auth_token"
+           :value ""
+           :path "/"
+           :expires (get-universal-time)
+           :secure t
+           :samesite :lax))
+```
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E46-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.46.1 (2022-09-16)
