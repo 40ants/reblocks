@@ -19,7 +19,17 @@
                 #:add-command)
   (:import-from #:quri)
   (:import-from #:alexandria
+                #:appendf
+                #:proper-list
+                #:removef
                 #:assoc-value)
+  (:import-from #:serapeum
+                #:soft-list-of
+                #:defvar-unbound)
+  (:import-from #:cl-cookie
+                #:cookie)
+  (:import-from #:lack.response
+                #:response-headers)
   (:export #:immediate-response
            #:make-response
            #:add-header
@@ -33,14 +43,14 @@
            #:get-custom-headers
            #:get-content-type
            #:add-retpath-to
-           #:response))
+           #:response
+           #:set-cookie
+           #:cookies-to-set))
 (in-package #:reblocks/response)
 
 
-(defvar *custom-headers* nil
-  "Additional HTTP headers to return in response to request.
-
-   Use (add-header ...) to add one header.")
+(defvar-unbound *response*
+  "Current response object. It's status code and headers can be changed when processing a request.")
 
 
 (defun get-default-content-type-for-response ()
@@ -48,40 +58,25 @@
       "application/json"
       "text/html"))
 
-(defclass response ()
-  ((content :type string
-            :initarg :content
-            :initform ""
-            :reader get-content
-            :documentation "A string with a content of the response.")
-   (code :type integer
-         :initarg :code
-         :initform 200
-         :reader get-code
-         :documentation "HTTP status code to return in response to request.
 
-                         By default, this slot will be set to 200.")
-   (custom-headers :type (or null list)
-                   :initarg :custom-headers
-                   :initform nil
-                   :reader get-custom-headers
-                   :documentation "Custom HTTP headers of request.
-
-                         By default, this slot will be set to 200.")
-   (content-type :type string
-                 :initarg :content-type
-                 :initform (get-default-content-type-for-response)
-                 :reader get-content-type
-                 :documentation "HTTP content type to return in response to request.
-
-                                 By default, have text/html value for usual requests
-                                 and application/json for AJAX requests.")))
+(defun get-headers (&optional (response *response*))
+  (check-type response lack.response:response)
+  (lack.response:response-headers response))
 
 
-(defun get-headers (response)
-  (check-type response response)
-  (append (list :content-type (get-content-type response))
-          (get-custom-headers response)))
+(defun get-custom-headers (&optional (response *response*))
+  (check-type response lack.response:response)
+  (log:warn "Function GET-CUSTOM-HEADERS is deprecated. Use GET-HEADERS instead.")
+  (lack.response:response-headers response))
+
+
+(defun get-code (&optional (response *response*))
+  (lack.response:response-status response))
+
+
+(defun get-content-type (&optional (response *response*))
+  (getf (get-headers response)
+        :content-type))
 
 
 (defgeneric get-response (obj)
@@ -89,7 +84,7 @@
 
 
 (define-condition immediate-response ()
-  ((response :type response
+  ((response :type lack.response:response
              :initarg :response
              :reader get-response)))
 
@@ -101,12 +96,10 @@
 (defun make-response (content &key
                                 (code 200)
                                 (content-type (get-default-content-type-for-response))
-                                (headers *custom-headers*))
-  (make-instance 'response
-                 :content content
-                 :code code
-                 :content-type content-type
-                 :custom-headers headers))
+                                (headers (get-headers)))
+  (let ((headers (list* :content-type content-type
+                        headers)))
+    (lack.response:make-response code headers content)))
 
 
 (defun add-header (name value)
@@ -118,8 +111,38 @@
 
   (declare (type symbol name)
            (type string value))
-  (push value *custom-headers*)
-  (push name *custom-headers*))
+  
+  (unless (boundp '*response*)
+    (error "Call ADD-HEADER function inside WITH-RESPONSE macro."))
+
+  (setf (getf (response-headers *response*)
+              name)
+        value)
+  (values))
+
+
+(defun set-cookie (cookie &key (response *response*))
+  "Use this function to add Set-Cookie header:
+
+   ```lisp
+   (set-cookie (cookie:make-cookie :name \"user_id\" :value \"bob\"))
+   ```"
+
+  (check-type cookie proper-list)
+  
+  (unless (boundp '*response*)
+    (error "Call SET-COOKIE function inside WITH-RESPONSE macro."))
+
+  (appendf (lack.response:response-set-cookies response)
+           (list (getf cookie :name)
+                 cookie))
+  
+  (values))
+
+
+(defun cookies-to-set (&optional (response *response*))
+  "Returns alist with a map cookie-name -> cookie:cookie object."
+  (lack.response:response-set-cookies response))
 
 
 (defun make-uri (new-path)
@@ -164,14 +187,19 @@
 
 
 (defun immediate-response (content &key
-                                     (content-type (get-default-content-type-for-response))
+                                     (condition-class 'immediate-response) 
                                      (code 200)
-                                     (headers *custom-headers*)
-                                     (condition-class 'immediate-response))
+                                     content-type
+                                     headers 
+                                     cookies-to-set)
   "Aborts request processing by signaling an [IMMEDIATE-RESPONSE][condition]
    and returns a given value as response.
 
-   HTTP code and headers are taken from CODE and CONTENT-TYPE."
+   HTTP code and headers are taken from CODE and CONTENT-TYPE.
+
+   By default, headers and cookies are taken from the current request, but
+   additional headers and cookies may be provides in appropriate arguments.
+"
 
   ;; This abort could be a normal, like 302 redirect,
   ;; that is why we are just informing here
@@ -180,12 +208,28 @@
             content-type
             headers)
 
-  (error condition-class
-         :response (make-response 
-                    content
-                    :code code
-                    :content-type content-type
-                    :headers headers)))
+  (let* ((headers (append headers
+                          (get-headers *response*)))
+         (content-type (or content-type
+                           (getf (get-headers *response*) :content-type)))
+         (cookies-to-set (loop with result = (copy-alist (cookies-to-set *response*))
+                               for (cookie-name cookie) in cookies-to-set
+                               if (null cookie)
+                                 do (removef result cookie-name
+                                             :key #'car
+                                             :test #'string-equal)
+                               else
+                                 do (setf (assoc-value result cookie-name)
+                                          cookie)
+                               finally (return result)))
+         (new-response
+           (make-response content
+                          :code code
+                          :content-type content-type
+                          :headers headers)))
+    (setf (lack.response:response-set-cookies new-response)
+          cookies-to-set)
+    (error condition-class :response new-response)))
 
 
 (defun send-script (script &optional (place :after-load))
@@ -229,3 +273,26 @@
      (error "Cannot find action: ~A" action-name))))
 
 
+(defun call-with-response (thunk)
+  (let* ((headers (list :content-type (get-default-content-type-for-response)))
+         (*response* (lack.response:make-response 200 headers ""))
+         (result (funcall thunk)))
+
+    (cond
+      ((and result (listp result))
+       result)
+      ((typep result 'lack.response:response)
+       (log:warn "Headers and cookies from *response* will be ignored.")
+       result)
+      (result
+       (setf (lack.response:response-body *response*)
+             result)
+       *response*)
+      (t
+       *response*))))
+
+
+(defmacro with-response (() &body body)
+  `(flet ((with-response-thunk ()
+           ,@body))
+     (call-with-response #'with-response-thunk)))

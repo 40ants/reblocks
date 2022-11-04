@@ -53,7 +53,6 @@
                 #:get-response
                 #:response
                 #:immediate-response
-                #:make-response
                 #:redirect)
   ;; Just dependencies
   (:import-from #:reblocks/hooks)
@@ -124,12 +123,7 @@ customize behavior."))
           (setf (reblocks/session:get-value 'reblocks/request::last-request-path)
                 (get-path)))
         
-        (let ((response (call-next-method)))
-          (typecase response
-            (response response)
-            (string (make-response response))
-            (t (error "Responses of type ~A are not supported"
-                      (type-of response)))))))))
+        (call-next-method)))))
 
 
 ;; TODO: make-this method an optional application mixin
