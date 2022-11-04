@@ -74,6 +74,10 @@
   (lack.response:response-status response))
 
 
+(defun get-content (&optional (response *response*))
+  (lack.response:response-body response))
+
+
 (defun get-content-type (&optional (response *response*))
   (getf (get-headers response)
         :content-type))
