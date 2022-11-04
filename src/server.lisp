@@ -22,6 +22,7 @@
   (:import-from #:reblocks/request
                 #:with-request)
   (:import-from #:reblocks/response
+                #:with-response
                 #:get-code
                 #:get-headers
                 #:get-content)
@@ -116,12 +117,8 @@ Make instance, then start it with ``start`` method."
 
 (defun make-response-for-clack (response)
   (etypecase response
-    (reblocks/response:response
-     (list (get-code response)
-           (get-headers response)
-           ;; Here we use catch to allow to abort usual response
-           ;; processing and to return data immediately
-           (list (get-content response))))
+    (lack.response:response
+     (lack.response:finalize-response response))
     (list response)
     (function response)))
 
@@ -173,7 +170,9 @@ This function serves all started applications and their static files."
                     (reblocks/routes:serve route env))
                    (app
                     (log:debug "App was found" app)
-                    (handle-request app))
+                    (with-response ()
+                      (let ((response (handle-request app)))
+                        response)))
                    (t
                     (log:error "Application dispatch failed for" path-info)
 

@@ -73,7 +73,8 @@
               (*routes* (reblocks/routes::make-routes))
               (*current-app* (make-instance ',app)))
          (reblocks/request:with-request ((make-request env))
-           ,@body)))))
+           (reblocks/response::with-response ()
+             ,@body))))))
 
 
 (defmacro is-html (form expected &optional message)

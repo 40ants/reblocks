@@ -33,8 +33,7 @@
 (deftest process-first-request
   (with-session
     (with-request ("/foo/bar" :app app-with-init)
-      (let* ((response (handle-request *current-app*))
-             (content (get-content response)))
+      (let* ((content (handle-request *current-app*)))
         (ok (search "Hello world" content)
             "Result should have a greeting.")))))
 

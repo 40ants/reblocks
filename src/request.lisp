@@ -12,7 +12,8 @@
                 #:request-server-port
                 #:request-method
                 #:request-parameters
-                #:request-headers)
+                #:request-headers
+                #:request-cookies)
   (:import-from #:alexandria
                 #:with-gensyms
                 #:assoc-value)
@@ -38,7 +39,8 @@
            #:get-uri
            #:get-path
            #:with-request
-           #:pure-request-p))
+           #:pure-request-p
+           #:get-cookie))
 (in-package #:reblocks/request)
 
 
@@ -125,6 +127,16 @@
         (lowercased-name (string-downcase name)))
     (gethash lowercased-name
              headers)))
+
+
+(defun get-cookie (name &key (request *request*))
+  "Returns value of the cookie or nil. Name is case insensitive string."
+  (check-type name string)
+  
+  (loop with cookies = (request-cookies request)
+        for (key value) on cookies by #'cddr
+        when (string-equal key name)
+          do (return-from get-cookie value)))
 
 
 (defun remove-header (name &key (request *request*))

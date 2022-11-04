@@ -30,6 +30,25 @@
                                                    "REBLOCKS/ERROR-HANDLER")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.47.0 2022-11-04
+          """
+Added
+=====
+
+Added ability to set cookie in response handler. You can do it in any render method.
+
+Here is an example how to expire a cookie right now:
+
+```lisp
+(reblocks/response:set-cookie
+     (list :name "auth_token"
+           :value ""
+           :path "/"
+           :expires (get-universal-time)
+           :secure t
+           :samesite :lax))
+```
+""")
   (0.46.1 2022-09-16
           """
 Fixed
