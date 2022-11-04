@@ -31,6 +31,8 @@
   (reblocks/response:get-content-type function)
   (reblocks/response:get-custom-headers function)
   (reblocks/response:get-headers function)
+  (reblocks/response:set-cookie function)
+  (reblocks/response:cookies-to-set function)
   ;; (reblocks/response:get-response generic-function)
   (reblocks/response:get-response (reader reblocks/response:immediate-response))
   (reblocks/response:immediate-response function)

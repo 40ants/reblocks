@@ -43,7 +43,6 @@
            #:get-custom-headers
            #:get-content-type
            #:add-retpath-to
-           #:response
            #:set-cookie
            #:cookies-to-set))
 (in-package #:reblocks/response)
@@ -145,7 +144,7 @@
 
 
 (defun cookies-to-set (&optional (response *response*))
-  "Returns alist with a map cookie-name -> cookie:cookie object."
+  "Returns plist with a map cookie-name -> cookie:cookie object."
   (lack.response:response-set-cookies response))
 
 
