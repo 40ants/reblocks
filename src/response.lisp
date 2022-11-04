@@ -144,7 +144,9 @@
 
 
 (defun cookies-to-set (&optional (response *response*))
-  "Returns plist with a map cookie-name -> cookie:cookie object."
+  "Returns a list with a map cookie-name -> cookie:cookie object.
+   Odd items in this list are cookie names and even are lists with
+   cookie parameters."
   (lack.response:response-set-cookies response))
 
 

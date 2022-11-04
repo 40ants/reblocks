@@ -26,6 +26,7 @@
   (reblocks/request:get-parameters function)
   (reblocks/request:get-parameter function)
   (reblocks/request:get-header function)
+  (reblocks/request:get-cookie function)
   (reblocks/request:get-scheme function)
   (reblocks/request:ajax-request-p function)
   (reblocks/request:get-host function)
