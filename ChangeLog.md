@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E48-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.48.0 (2022-11-07)
+
+<a id="fixed"></a>
+
+### Fixed
+
+Now Reblocks remembers which dependencies are already loaded into the page and
+will not fetch them again. This fixes issue when it fetched jQuery and broke
+it's extensions making further action calls made via `GET` instead of Ajax.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E47-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.47.0 (2022-11-04)
