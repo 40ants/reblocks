@@ -565,4 +565,6 @@ Makes deduplication by comparing dependencies' urls."
 
   ;; Dependencies returned as reversed list because that way
   ;; they will have same order as they were pushed.
-  (reverse *page-dependencies*))
+  (remove-duplicates (reverse *page-dependencies*)
+                     :key #'get-url
+                     :test #'string-equal))

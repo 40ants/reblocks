@@ -133,10 +133,9 @@
   "Returns value of the cookie or nil. Name is case insensitive string."
   (check-type name string)
   
-  (loop with cookies = (request-cookies request)
-        for (key value) on cookies by #'cddr
-        when (string-equal key name)
-          do (return-from get-cookie value)))
+  (assoc-value (request-cookies request)
+               name
+               :test #'string-equal))
 
 
 (defun remove-header (name &key (request *request*))

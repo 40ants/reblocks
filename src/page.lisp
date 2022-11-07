@@ -1,5 +1,6 @@
 (uiop:define-package #:reblocks/page
   (:use #:cl)
+  (:import-from #:parenscript)
   (:import-from #:reblocks/variables
                 #:*default-content-type*)
   (:import-from #:reblocks/html
@@ -123,7 +124,10 @@
 
   (register-dependencies dependencies)
 
-  (let ((*lang* (get-language)))
+  (let ((*lang* (get-language))
+        (deps-urls (when (typep dependencies 'list)
+                     (mapcar #'reblocks/dependencies:get-url
+                             dependencies))))
     (with-html
       (:doctype)
       (:html
@@ -136,7 +140,10 @@
                :content "width=device-width, initial-scale=1")
               
         (render-headers app)
-        (render-dependencies app dependencies))
+        (render-dependencies app dependencies)
+        (:script (:raw
+                  (ps:ps* `(setf (ps:@ window loaded-dependencies)
+                                 (list ,@deps-urls))))))
        (:body
         (render-body app inner-html)
         ;; (:script :type "text/javascript"

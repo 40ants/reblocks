@@ -30,6 +30,15 @@
                                                    "REBLOCKS/ERROR-HANDLER")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.48.0 2022-11-07
+          """
+Fixed
+=====
+
+Now Reblocks remembers which dependencies are already loaded into the page and
+will not fetch them again. This fixes issue when it fetched jQuery and broke
+it's extensions making further action calls made via GET instead of Ajax.
+""")
   (0.47.0 2022-11-04
           """
 Added
