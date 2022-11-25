@@ -44,6 +44,9 @@
                 #:welcome-screen-app)
   (:import-from #:alexandria
                 #:compose)
+  (:import-from #:reblocks/utils/list
+                #:insert-after
+                #:insert-at)
   
   (:export ;; #:get-server-type
    ;; #:get-port
@@ -53,7 +56,11 @@
    #:start
    #:serve-static-file
    #:servers
-   #:running-p))
+   #:running-p
+   #:*default-samesite-policy*
+   #:server
+   #:insert-middleware
+   #:make-middlewares))
 (in-package #:reblocks/server)
 
 
@@ -82,7 +89,92 @@
    (routes :initform (reblocks/routes::make-routes)
            :accessor routes)
    (apps :initform nil
-         :accessor apps)))
+         :accessor apps))
+  (:documentation "Base class for all Reblocks servers. Redefine it if you want to add additional HTTP midlewares, etc."))
+
+
+(defvar *default-samesite-policy* :lax
+  "Default value for SameSite header.
+
+   You will find more at [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite).")
+
+
+(defgeneric make-middlewares (server &key samesite-policy)
+  (:documentation "Returns an alist where keys are keywords and values are Lack middlewares or apps.
+
+                   Default primary method returns alist with two keys :SESSION and :APP, where
+                   :SESSION is a middleware and :APP is the main application.
+
+                   To modify middlewares list, define method for a server subclass
+                   and use INSERT-MIDDLEWARE function on the results of CALL-NEXT-METHOD.
+
+                   SAMESITE-POLICY argument if given, should be a keyword. It's semantic
+                   is described at [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite).
+                   It's default value is taken from *DEFAULT-SAMESITE-POLICY* variable.
+
+                   Here is an example, how this generic-function can be used to run
+                   a HTTP API on URLs with path starting from /api/:
+
+                   ```
+                   (defmethod reblocks/server:make-middlewares ((server ultralisp-server) &rest rest)
+                     (declare (ignore rest))
+  
+                     (flet ((test-app (env)
+                              (declare (ignore env))
+                              '(200
+                                (:content-type \"text/plain\")
+                                (\"Hello, World\"))))
+                       (reblocks/server:insert-middleware
+                        (call-next-method)
+                        (cons
+                         :some-api
+                         (lambda (app)
+                           (funcall (lack.util:find-middleware :mount)
+                                    app
+                                    \"/api/\"
+                                    #'test-app)))
+                        :before :app)))
+                   ```
+
+")
+  (:method ((server server) &key (samesite-policy *default-samesite-policy*))
+    (list (cons :session
+                (make-session-middleware :samesite-policy samesite-policy))
+          (cons :app
+                (lambda (env)
+                  (handle-http-request server env))))))
+
+
+(defun insert-middleware (layers new-layer &key before after)
+  "Returns a new stack of layers inserting LAYER before or after a layer with given name.
+
+   You should not give both BEFORE and AFTER arguments. If given layer not found,
+   the function will signal error.
+
+   Original alist LAYERS is not modified."
+  (check-type new-layer cons)
+  (check-type (car new-layer) keyword)
+  (check-type before (or null keyword))
+  (check-type after (or null keyword))
+  
+  (when (and before after)
+    (error "Please specify either BEFORE nor AFTER keyword."))
+  
+  (unless (or before after)
+    (error "Please specify BEFORE or AFTER keyword."))
+
+  (flet ((search-position (key)
+           (or (position key layers :key #'car)
+               (error "Layer ~A was not found among ~{~A~^, ~}."
+                      key
+                      (mapcar #'car layers)))))
+    (if before
+        (insert-at new-layer
+                   (copy-list layers)
+                   (search-position before))
+        (insert-after new-layer
+                      (copy-list layers)
+                      (search-position after)))))
 
 
 (defgeneric handle-http-request (server env)
@@ -90,12 +182,13 @@
 
 
 (defun make-server (&key
-                      (port 8080)
-                      (interface "localhost")
-                      (server-type :hunchentoot))
+                    (port 8080)
+                    (interface "localhost")
+                    (server-type :hunchentoot)
+                    (server-class 'server))
   "Makes a webserver instance.
 Make instance, then start it with ``start`` method."
-  (make-instance 'server
+  (make-instance server-class
                  :port port
                  :interface interface
                  :server-type server-type))
@@ -183,10 +276,12 @@ This function serves all started applications and their static files."
 
 
 (defun start-server (server &key debug
-                              (samesite-policy :lax))
+                                 (samesite-policy *default-samesite-policy*))
   "Starts a Clack webserver, returns this server as result.
 
 If server is already started, then logs a warning and does nothing."
+
+  (check-type server server)
   
   (cond ((get-handler server)
          (log:warn "Webserver already started"))
@@ -195,24 +290,15 @@ If server is already started, then logs a warning and does nothing."
         (t
          (let* ((port (get-port server))
                 (interface (get-interface server))
-                (app (builder
-                      (make-session-middleware :samesite-policy samesite-policy)
-                      (lambda (env)
-                        (handle-http-request server env)
-                        ;; Don't remember, why this code was commented
-                        ;; TODO: check how 500 errors are handled and may be remove
-                        ;;       this code, if everything is handled in some other place.
-                        ;; (handler-case ()
-                        ;;   (t (condition)
-                        ;;     (let* ((traceback (with-output-to-string (stream)
-                        ;;                         (trivial-backtrace:print-condition condition stream)))
-                        ;;            (condition (describe condition))
-                        ;;            (just-traceback (trivial-backtrace:backtrace-string)))
-                        ;;       (log:error "Unhandled exception" condition traceback just-traceback))
-                        ;;     '(500
-                        ;;       ("Content-Type" "text/html")
-                        ;;       ("Something went wrong!"))))
-                        ))))
+                (middlewares
+                  (mapcar #'cdr
+                          (make-middlewares server :samesite-policy samesite-policy)))
+                (app
+                  (reduce #'funcall
+                          (remove-if #'null
+                                     (butlast middlewares))
+                          :initial-value (car (last middlewares))
+                          :from-end t)))
            (log:info "Starting webserver on" interface port debug)
 
            ;; Suppressing output to stdout, because Clack writes message
@@ -291,11 +377,12 @@ If server is already started, then logs a warning and does nothing."
 
 
 (defun start (&key (debug t)
-                (port 8080)
-                (interface "localhost")
-                (server-type :hunchentoot)
-                (samesite-policy :lax)
-                apps)
+                   (port 8080)
+                   (interface "localhost")
+                   (server-type :hunchentoot)
+                   (samesite-policy :lax)
+                   apps
+                   (server-class 'server))
   "Starts reblocks framework hooked into Clack server.
 
    Set DEBUG to true in order for error messages and stack traces to be shown
@@ -321,7 +408,8 @@ If server is already started, then logs a warning and does nothing."
          (setf server
                (make-server :interface interface
                             :port port
-                            :server-type server-type))
+                            :server-type server-type
+                            :server-class server-class))
          (setf (gethash (cons interface port) *servers*)
                server)))
       

@@ -30,6 +30,16 @@
                                                    "REBLOCKS/ERROR-HANDLER")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.49.0 2022-11-26
+          """
+New functional was added which allows to control how does HTTP middlewares list is generated for the server.
+You might define your own REBLOCKS/SERVER:SERVER class and a method for REBLOCKS/SERVER:MAKE-MIDDLEWARES generic-function.
+Inside this method, you might inject additional middlewares using REBLOCKS/SERVER:INSERT-MIDDLEWARE function.
+
+Also, a variable REBLOCKS/SERVER:*DEFAULT-SAMESITE-POLICY* was introdiced, to control default value of the SameSite HTTP header.
+
+As a bonus, loading of reblocks-docs system was fixed.
+""")
   (0.48.0 2022-11-07
           """
 Fixed

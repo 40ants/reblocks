@@ -11,7 +11,8 @@
                 #:hash-table-keys)
   (:import-from #:serapeum
                 #:->)
-  (:import-from #:40ants-doc/commondoc/builder)
+  (:import-from #:40ants-doc-full/commondoc/builder
+                #:to-commondoc)
   (:import-from #:reblocks/hooks
                 #:defhook)
   (:import-from #:global-vars
@@ -21,6 +22,12 @@
   (:import-from #:40ants-doc/ignored-words
                 #:supports-ignored-words-p
                 #:ignore-words-in-package)
+  (:import-from #:40ants-doc-full/commondoc/piece
+                #:documentation-piece)
+  (:import-from #:40ants-doc-full/builder/vars
+                #:*base-url*)
+  (:import-from #:40ants-doc-full/utils
+                #:is-external)
   (:export #:defexample
            #:reblocks-example
            #:start-server
@@ -82,12 +89,12 @@
 (define-global-var *iframe-id* 0)
 
 
-(defclass example-block (40ants-doc/commondoc/piece::documentation-piece
+(defclass example-block (documentation-piece
                          common-doc:document-node)
   ((example :initarg :example :reader example)))
 
 
-(defmethod 40ants-doc/commondoc/builder:to-commondoc ((example reblocks-example))
+(defmethod to-commondoc ((example reblocks-example))
   (make-instance 'example-block
                  :example example
                  :doc-reference (40ants-doc/reference-api:canonical-reference example)))
@@ -102,9 +109,9 @@
   ;; But for now it should work without an indentation.
   (format stream "~2&```lisp~&~A~&```~2&"
           (example-code (example node)))
-  (when 40ants-doc/builder/vars::*base-url*
+  (when *base-url*
     (format stream "~2&Go to [HTML documentation](~A) to see this code in action.~2&"
-            40ants-doc/builder/vars::*base-url*)))
+            *base-url*)))
 
 
 (common-html.emitter::define-emitter (obj example-block)
@@ -160,7 +167,7 @@ window.addEventListener('message', function(e) {
                          (symbol (cond
                                    ((and (eql (symbol-package item)
                                               from-package)
-                                         (not (40ants-doc/utils:is-external item from-package)))
+                                         (not (is-external item from-package)))
                                     (intern (symbol-name item)
                                             to-package))
                                    (t
