@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E49-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.49.0 (2022-11-26)
+
+New functional was added which allows to control how does `HTTP` middlewares list is generated for the server.
+You might define your own [`reblocks/server:server`][cbff] class and a method for [`reblocks/server:make-middlewares`][a14c] generic-function.
+Inside this method, you might inject additional middlewares using [`reblocks/server:insert-middleware`][15b1] function.
+
+Also, a variable [`reblocks/server:*default-samesite-policy*`][8669] was introdiced, to control default value of the SameSite `HTTP` header.
+
+As a bonus, loading of reblocks-docs system was fixed.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E48-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.48.0 (2022-11-07)
@@ -1616,7 +1628,11 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [a82c]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
 [8415]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
 [6d85]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29
+[8669]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
+[15b1]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29
+[a14c]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29
 [bb0a]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
+[cbff]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASERVER-20CLASS-29
 [b988]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29
 [354f]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
 [8ab6]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
