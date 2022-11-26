@@ -10,6 +10,10 @@
 (defsection @intro (:title "Introduction"
                     :ignore-words ("ASDF"
                                    "API"
+                                   "HTTP"
+                                   "URL"
+                                   "HTTP"
+                                   "LAYER"
                                    "RSS"))
   "
 Reblocks is the fork of the Weblocks web frameworks written by Slava Akhmechet

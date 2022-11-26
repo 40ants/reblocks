@@ -39,16 +39,32 @@
                    (intern (string-upcase (car i)) keyword-package))
        collect (cdr i))))
 
-(defun insert-after (newelt list index) 
+(declaim (inline %check-boundaries))
+(defun %check-boundaries (list index)
+  (let ((max-index (1- (length list))))
+    (when (or (< index 0)
+              (> index max-index))
+      (error "Index ~A is out of range [0:~A]"
+             index
+             max-index))))
+
+(declaim (inline %check-boundaries))
+(defun %insert-after-without-boundaries-check (newelt list index) 
   "Destructively inserts 'newelt' into 'list' after 'index'."
   (push newelt (cdr (nthcdr index list))) 
   list)
 
-(defmacro insert-at (newelt list index) 
+(defun insert-after (newelt list index) 
+  "Destructively inserts 'newelt' into 'list' after 'index'."
+  (%check-boundaries list index)
+  (%insert-after-without-boundaries-check newelt list index))
+
+(defun insert-at (newelt list index) 
   "Destructively inserts 'newelt' into 'list' before 'index'."
-  `(if (zerop ,index)
-       (push ,newelt ,list)
-       (insert-after ,newelt ,list (1- ,index))))
+  (%check-boundaries list index)
+  (if (zerop index)
+      (push newelt list)
+      (insert-after newelt list (1- index))))
 
 (defun ninsert (list thing pos)
     (if (zerop pos)

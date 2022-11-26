@@ -14,7 +14,13 @@
                 #:defhook)
   (:import-from #:alexandria
                 #:ensure-symbol
-                #:symbolicate))
+                #:symbolicate)
+  (:import-from #:40ants-doc-full/commondoc/builder
+                #:reference-to-commondoc)
+  (:import-from #:40ants-doc-full/commondoc/markdown
+                #:parse-markdown)
+  (:import-from #:40ants-doc-full/commondoc/bullet
+                #:make-bullet))
 (in-package #:reblocks/doc/hooks)
 
 
@@ -37,7 +43,7 @@
                                   :reblocks/hooks))))
 
 
-(defmethod 40ants-doc/commondoc/builder:reference-to-commondoc
+(defmethod reference-to-commondoc
     ((symbol symbol)
      (locative-type (eql '40ants-doc/locatives::hook))
      locative-args)
@@ -51,11 +57,11 @@
            (get symbol :args))
          (children
            (when docstring
-             (40ants-doc/commondoc/markdown:parse-markdown docstring))))
-    (40ants-doc/commondoc/bullet:make-bullet reference
-                                             :arglist arglist
-                                             :children children
-                                             :ignore-words symbol)))
+             (parse-markdown docstring))))
+    (make-bullet reference
+                 :arglist arglist
+                 :children children
+                 :ignore-words symbol)))
 
 
 (defsection @hooks (:title "Hooks"

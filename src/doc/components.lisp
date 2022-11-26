@@ -13,6 +13,10 @@
                                         "URI"
                                         "HTML"
                                         "CLOS"
+                                        "HTTP"
+                                        "LAYER"
+                                        "API"
+                                        "URL"
                                         "TCP"
                                         "MAKE-WIDGET"
                                         ;; TODO: make an external-link
@@ -102,12 +106,19 @@ To make everything work, you need to start one or more webservers on some TCP po
 When you are starting a server, usually you specify an interface and port to listen on
 and a list os Reblocks apps to serve.
 
+You might define your own server class and inherit it from REBLOCKS/SERVER:SERVER class.
+This will allow to customize a list of HTTP middlewares.
+
 Here is the list of functions useful when working with Reblocks servers:
 "
+  (reblocks/server:server class)
   (reblocks/server:start function)
   (reblocks/server:stop function)
   (reblocks/server:servers function)
   (reblocks/server:running-p function)
   (reblocks/server:serve-static-file generic-function)
   (reblocks/preview:preview function)
-  (reblocks/preview:stop function))
+  (reblocks/preview:stop function)
+  (reblocks/server:insert-middleware function)
+  (reblocks/server:make-middlewares generic-function)
+  (reblocks/server:*default-samesite-policy* variable))
