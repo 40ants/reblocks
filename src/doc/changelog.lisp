@@ -42,6 +42,8 @@ inner hash table.
 Added
 =====
 
+### Current page abstraction
+
 Added a notion of the current page. Now all actions are bound to some page and
 pages can expire, clearing actions from the memory. This should prevent memory leak
 leading to posible DoS attack. Page expiration is controlled by two values:
@@ -53,6 +55,10 @@ leading to posible DoS attack. Page expiration is controlled by two values:
 
 Also, you can use REBLOCKS/PAGE:PROLONG-PAGE function to extend current page's
 expiration time.
+
+### Cached widget dependencies
+
+Another interesting feature is mixin class REBLOCKS/CACHED-DEPENDENCIES:CACHED-DEPENDENCIES-MIXIN.
 
 Changed
 =======

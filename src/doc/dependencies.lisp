@@ -6,7 +6,11 @@
                 #:remote-dependency
                 #:dependency
                 #:local-dependency)
-  (:import-from #:reblocks/page-dependencies))
+  (:import-from #:reblocks/page-dependencies)
+  (:import-from #:reblocks/cached-dependencies-mixin
+                #:cache-dependencies-p
+                #:cached-dependencies
+                #:cached-dependencies-mixin))
 (in-package #:reblocks/doc/dependencies)
 
 
@@ -82,6 +86,10 @@
   (reblocks/page-dependencies:with-collected-dependencies macro)
   
   (reblocks/dependencies:make-dependency function)
-  (reblocks/dependencies:get-dependencies generic-function))
+  (reblocks/dependencies:get-dependencies generic-function)
+  
+  (cached-dependencies-mixin class)
+  (cached-dependencies (accessor cached-dependencies-mixin))
+  (cache-dependencies-p (accessor cached-dependencies-mixin)))
 
 
