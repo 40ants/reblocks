@@ -5,8 +5,11 @@
   (:import-from #:serapeum
                 #:defvar-unbound)
   (:import-from #:reblocks/dependencies
+                #:dependency-equal
                 #:get-url)
   (:import-from #:reblocks/page
+                #:current-page
+                #:in-page-context-p
                 #:render
                 #:page-metadata
                 #:render-page-with-widgets)
@@ -43,9 +46,21 @@ Makes deduplication by comparing dependencies' urls."
   
   (unless (boundp '*page-dependencies*)
     (error "Please, use push-dependency in code, wrapped with with-collected-dependencies macro."))
-  (pushnew dependency *page-dependencies*
-           :key #'get-url
-           :test #'string-equal))
+
+  (cond
+    ((in-page-context-p)
+     (let* ((page (current-page)))
+       (unless (already-loaded-p page dependency)
+         (push dependency (page-dependencies (current-page)))
+         (pushnew dependency *page-dependencies*
+                  :key #'get-url
+                  :test #'string-equal))))
+    (t
+     ;; If application wide action was called, then symbol *current-page*
+     ;; will be unbound and we collect dependencies just inside *page-dependencies*:
+     (pushnew dependency *page-dependencies*
+              :key #'get-url
+              :test #'string-equal))))
 
 
 (defun push-dependencies (list-of-dependencies)
@@ -70,11 +85,18 @@ Makes deduplication by comparing dependencies' urls."
   (page-metadata page :dependencies))
 
 
+(defun (setf page-dependencies) (new-value page)
+  "Associates a list of dependencies with the page."
+  (setf (page-metadata page :dependencies)
+        new-value))
+
+
 (defun already-loaded-p (page dependency)
   "Returns T, if dependency is already loaded into the page."
-  (member (get-url dependency)
-          (page-dependencies page)
-          :test 'equal))
+  (when (member dependency
+                (page-dependencies page)
+                :test 'dependency-equal)
+    t))
 
 
 (defmethod render-page-with-widgets ((app app))

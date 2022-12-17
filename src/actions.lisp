@@ -67,7 +67,7 @@ situation (e.g. redirect, signal an error, etc.)."))
   ;; because GET-REQUEST-ACTION will not return *current-page* for them
   (multiple-value-bind (action *current-page*)
       (get-request-action app action-name)
-
+    
     (unless action
       (on-missing-action app action-name))
     

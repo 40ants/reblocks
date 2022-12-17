@@ -186,11 +186,7 @@ customize behavior."))
   ;; This render will generate commands to include necessary pieces
   ;; of JS and CSS into the page.
   (mapc #'reblocks/dependencies:render-in-ajax-response
-        (if (in-page-context-p)
-            (remove-if (curry #'already-loaded-p
-                              (current-page))
-                       (get-collected-dependencies))
-            (get-collected-dependencies)))
+        (get-collected-dependencies))
   
   (let ((commands (get-collected-commands)))
     (write
@@ -292,9 +288,6 @@ customize behavior."))
       (let ((content nil))
 
         
-        (push-dependencies
-         (get-dependencies app))
-        
         (multiple-value-bind (_ current-page)
             (handle-action-if-needed app)
           (declare (ignore _))
@@ -303,6 +296,13 @@ customize behavior."))
                  (values-to-bind (when current-page
                                    (list current-page))))
             (progv symbols-to-bind values-to-bind
+              ;; We should collect application dependencies here,
+              ;; because this way we have a chance to bind the
+              ;; to the current-page object, bound to the action.
+              (push-dependencies
+               (get-dependencies app))
+
+
               (setf content
                     (reblocks/hooks:with-render-hook (app)
                       (with-html-string

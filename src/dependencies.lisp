@@ -37,7 +37,8 @@
    #:make-dependency
    #:get-type
    #:render-in-ajax-response
-   #:cache-in-memory-p))
+   #:cache-in-memory-p
+   #:dependency-equal))
 (in-package #:reblocks/dependencies)
 
 
@@ -524,4 +525,10 @@ Automatically adds a prefix depending on current webapp and widget."
               (list :content-type content-type)
               content)))))
 
+
+(defgeneric dependency-equal (left right)
+  (:documentation "Should return T if two dependencies are considered equal. By default compares their URLs.")
+  (:method ((left t) (right t))
+    (equal (get-url left)
+           (get-url right))))
 

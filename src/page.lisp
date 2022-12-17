@@ -399,7 +399,7 @@
   (gethash name (%page-metadata page)))
 
 
-(defun (setf page-metadata) (page value name)
+(defun (setf page-metadata) (value page name)
   (setf (gethash name (%page-metadata page))
         value))
 
