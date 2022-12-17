@@ -3,18 +3,19 @@
         ;; #:cl-mock
         ;; #:prove
         #:rove
-;;        #:hamcrest/rove
+        ;;        #:hamcrest/rove
         #:reblocks-test/utils)
   (:import-from #:cl-mock
                 #:invocations
                 #:with-mocks
                 #:answer)
+  (:import-from #:reblocks/page-dependencies
+                #:push-dependency
+                #:get-collected-dependencies
+                #:with-collected-dependencies)
   (:import-from #:reblocks/dependencies
                 #:*cache-remote-dependencies-in*
                 #:make-dependency
-                #:with-collected-dependencies
-                #:push-dependency
-                #:get-collected-dependencies
                 #:infer-type-from
                 #:get-type
                 #:get-path

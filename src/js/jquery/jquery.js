@@ -332,13 +332,14 @@ function initiateAction(actionCode, options) {
     
     args.action = actionCode;
 
-    log('Fireing action', actionCode);
-    log('with options', options);
+    // This logging is for debug only
+    // log('Fireing action', actionCode);
+    // log('with options', options);
     
     var ajax_options = {
         type: method,
         success: function(first, second, third) {
-            log('Action was successful', actionCode);
+            // log('Action was successful', actionCode);
             onActionSuccess(first, second, third);
             on_success && on_success();
         },

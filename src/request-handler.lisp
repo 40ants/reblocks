@@ -12,20 +12,24 @@
   (:import-from #:reblocks/utils/uri
                 #:remove-parameter-from-uri)
   (:import-from #:reblocks/page
+                #:in-page-context-p
+                #:*current-page*
+                #:current-page
                 #:render-page-with-widgets)
-  (:import-from #:reblocks/session-lock
-                #:get-lock)
+  (:import-from #:reblocks/session)
   (:import-from #:reblocks/widget
                 #:render)
   (:import-from #:reblocks/html
                 #:with-html-string
                 #:*stream*)
   (:import-from #:reblocks/dependencies
+                #:get-dependencies
+                #:register-dependencies)
+  (:import-from #:reblocks/page-dependencies
+                #:already-loaded-p
                 #:with-collected-dependencies
                 #:push-dependencies
-                #:get-dependencies
-                #:get-collected-dependencies
-                #:register-dependencies)
+                #:get-collected-dependencies)
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:reblocks/actions
@@ -58,8 +62,8 @@
   (:import-from #:reblocks/hooks)
   (:import-from #:log)
   (:import-from #:reblocks/widgets/root)
-  (:import-from #:reblocks/session)
   (:import-from #:alexandria
+                #:curry
                 #:make-keyword)
   (:import-from #:log4cl-extras/error
                 #:with-log-unhandled)
@@ -182,7 +186,11 @@ customize behavior."))
   ;; This render will generate commands to include necessary pieces
   ;; of JS and CSS into the page.
   (mapc #'reblocks/dependencies:render-in-ajax-response
-        reblocks/dependencies::*page-dependencies*)
+        (if (in-page-context-p)
+            (remove-if (curry #'already-loaded-p
+                              (current-page))
+                       (get-collected-dependencies))
+            (get-collected-dependencies)))
   
   (let ((commands (get-collected-commands)))
     (write
@@ -202,9 +210,8 @@ customize behavior."))
 
   (reblocks/page::with-page-defaults
     ;; TODO: make a macro reblocks/session-lock:with-lock
-    (with-lock-held ((get-lock))
-      (timing "widget tree rendering"
-        (render (reblocks/widgets/root:get app))))
+    (timing "widget tree rendering"
+      (render (reblocks/widgets/root:get app)))
 
     ;; render page will wrap the HTML already rendered to
     ;; reblocks.html::*stream* with necessary boilerplate HTML
@@ -288,24 +295,28 @@ customize behavior."))
         (push-dependencies
          (get-dependencies app))
         
-        (handle-action-if-needed app)
+        (multiple-value-bind (_ current-page)
+            (handle-action-if-needed app)
+          (declare (ignore _))
+          (let* ((symbols-to-bind (when current-page
+                                    (list '*current-page*)))
+                 (values-to-bind (when current-page
+                                   (list current-page))))
+            (progv symbols-to-bind values-to-bind
+              (setf content
+                    (reblocks/hooks:with-render-hook (app)
+                      (with-html-string
+                        (if (ajax-request-p)
+                            (handle-ajax-request app)
+                            (handle-normal-request app))
 
-        (setf content
-              (timing "rendering (w/ hooks)"
-                (reblocks/hooks:with-render-hook (app)
-                  (with-html-string
-                    (if (ajax-request-p)
-                        (handle-ajax-request app)
-                        (handle-normal-request app))
+                        ;; Now we'll add routes for each page dependency.
+                        ;; This way, a dependency for widgets, created by action
+                        ;; can be served when browser will follow up with next request.
+                        (let ((dependencies (get-collected-dependencies)))
+                          (log:debug "Collected dependencies"
+                                     dependencies)
 
-                    ;; Now we'll add routes for each page dependency.
-                    ;; This way, a dependency for widgets, created by action
-                    ;; can be served when browser will follow up with next request.
-                    (let ((dependencies (get-collected-dependencies)))
-                      (log:debug "Collected dependencies"
-                                 dependencies)
-
-                      (register-dependencies
-                       dependencies))))))
+                          (register-dependencies dependencies))))))))
 
         content))))

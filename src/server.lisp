@@ -47,6 +47,8 @@
   (:import-from #:reblocks/utils/list
                 #:insert-after
                 #:insert-at)
+  (:import-from #:reblocks/page
+                #:ensure-pages-cleaner-is-running)
   
   (:export ;; #:get-server-type
    ;; #:get-port
@@ -392,6 +394,8 @@ If server is already started, then logs a warning and does nothing."
    Server will start all apps declared having `autostart t` in their definition
    unless APPS argument is provided."
 
+  (ensure-pages-cleaner-is-running)
+
   (let ((server (find-server interface port)))
     (reblocks/hooks:with-start-reblocks-hook ()
       (cond
@@ -438,7 +442,7 @@ If server is already started, then logs a warning and does nothing."
               for app in (apps server)
               for prefix = (get-prefix app)
               when (string= prefix "/")
-                do (setf found-root t)
+              do (setf found-root t)
               finally (unless found-root
                         (start-app server 'welcome-screen-app))))
       

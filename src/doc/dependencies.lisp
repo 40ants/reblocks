@@ -5,7 +5,8 @@
   (:import-from #:reblocks/dependencies
                 #:remote-dependency
                 #:dependency
-                #:local-dependency))
+                #:local-dependency)
+  (:import-from #:reblocks/page-dependencies))
 (in-package #:reblocks/doc/dependencies)
 
 
@@ -72,12 +73,13 @@
   (reblocks/dependencies:get-url generic-function)
   (reblocks/dependencies:cache-in-memory-p (reader local-dependency))
   (reblocks/dependencies:infer-type-from generic-function)
-  (reblocks/dependencies:push-dependency function)
-  (reblocks/dependencies:push-dependencies function)
   (reblocks/dependencies:render-in-ajax-response generic-function)
   (reblocks/dependencies:render-in-head generic-function)
   (reblocks/dependencies:serve generic-function)
-  (reblocks/dependencies:with-collected-dependencies macro)
+
+  (reblocks/page-dependencies:push-dependency function)
+  (reblocks/page-dependencies:push-dependencies function)
+  (reblocks/page-dependencies:with-collected-dependencies macro)
   
   (reblocks/dependencies:make-dependency function)
   (reblocks/dependencies:get-dependencies generic-function))

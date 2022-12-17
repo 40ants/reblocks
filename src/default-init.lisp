@@ -24,7 +24,7 @@
     (make-string-widget
      (with-html-string
        (:h1 "No reblocks/session:init method defined.")
-       (:p "Please define a method reblocks.session:init to initialize a session.")
+       (:p "Please define a method reblocks/session:init to initialize a session.")
        (:p "It could be something simple, like this one:")
        (:pre
         (:code

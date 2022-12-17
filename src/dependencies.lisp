@@ -37,17 +37,8 @@
    #:make-dependency
    #:get-type
    #:render-in-ajax-response
-   #:with-collected-dependencies
-   #:push-dependency
-   #:push-dependencies
    #:cache-in-memory-p))
 (in-package #:reblocks/dependencies)
-
-
-(defvar-unbound *page-dependencies*
-  "A list which contains all page dependencies.
-
-Reblocks fills this list during page rendering.")
 
 
 (defvar *cache-remote-dependencies-in* nil
@@ -532,39 +523,3 @@ Automatically adds a prefix depending on current webapp and widget."
         (list 200
               (list :content-type content-type)
               content)))))
-
-
-(defmacro with-collected-dependencies (&body body)
-  "Use this macro to wrap code which may push new dependencies for
-the page or an action."
-  `(let (*page-dependencies*)
-     ,@body))
-
-
-(defun push-dependency (dependency)
-  "Pushes dependency into the currently collected list of dependencies.
-
-Makes deduplication by comparing dependencies' urls."
-  
-  (unless (boundp '*page-dependencies*)
-    (error "Please, use push-dependency in code, wrapped with with-collected-dependencies macro."))
-  (pushnew dependency *page-dependencies*
-           :key #'get-url
-           :test #'string-equal))
-
-
-(defun push-dependencies (list-of-dependencies)
-  "Same as `push-dependency' but for the list."
-  (mapc #'push-dependency
-        list-of-dependencies))
-
-
-(defun get-collected-dependencies ()
-  (unless (boundp '*page-dependencies*)
-    (error "Please, use push-dependency in code, wrapped with with-collected-dependencies macro."))
-
-  ;; Dependencies returned as reversed list because that way
-  ;; they will have same order as they were pushed.
-  (remove-duplicates (reverse *page-dependencies*)
-                     :key #'get-url
-                     :test #'string-equal))

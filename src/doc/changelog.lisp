@@ -27,9 +27,45 @@
                                                    "CSS"
                                                    "HTTP"
                                                    "WITH-HANDLED-ERRORS"
-                                                   "REBLOCKS/ERROR-HANDLER")
+                                                   "REBLOCKS/ERROR-HANDLER"
+                                                   "REBLOCKS/PAGE-DEPENDENCIES")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.50.0 2022-12-03
+          """
+Fixed
+=====
+
+Fixed a bug when session lock was written into the session itself instead of into the
+inner hash table.
+
+Added
+=====
+
+Added a notion of the current page. Now all actions are bound to some page and
+pages can expire, clearing actions from the memory. This should prevent memory leak
+leading to posible DoS attack. Page expiration is controlled by two values:
+
+- A number of seconds while page should be considered alive. This prevents
+  evil person from filling memory by creation of many separate sessions.
+- A maximum number of pages per session. This may be needed to protect from
+  opening too many pages within one session.
+
+Also, you can use REBLOCKS/PAGE:PROLONG-PAGE function to extend current page's
+expiration time.
+
+Changed
+=======
+
+These functions were moved to separate package REBLOCKS/PAGE-DEPENDENCIES:
+
+- with-collected-dependencies
+- get-collected-dependencies
+- push-dependencies
+- already-loaded-p
+- page-dependencies
+
+""")
   (0.49.0 2022-11-26
           """
 New functional was added which allows to control how does HTTP middlewares list is generated for the server.

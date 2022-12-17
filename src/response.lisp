@@ -11,8 +11,6 @@
   (:import-from #:reblocks/js/base
                 #:with-javascript-to-string
                 #:with-javascript)
-  (:import-from #:reblocks/actions
-                #:on-missing-action)
   (:import-from #:reblocks/app
                 #:get-prefix)
   (:import-from #:reblocks/commands
@@ -267,15 +265,6 @@
                           :condition-class 'redirect
                           :headers (list :location uri)
                           :code 302)))
-
-
-(defmethod on-missing-action (app action-name)
-  (cond
-    (*ignore-missing-actions*
-     (redirect
-      (make-uri (get-prefix app))))
-    (t
-     (error "Cannot find action: ~A" action-name))))
 
 
 (defun call-with-response (thunk)

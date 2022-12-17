@@ -2,6 +2,11 @@
   (:use #:cl)
   (:import-from #:parenscript)
   (:import-from #:reblocks/variables
+                #:*delay-between-pages-cleanup*
+                #:*extend-page-expiration-by*
+                #:*max-pages-per-session*
+                #:*pages-expire-in*
+                #:*current-app*
                 #:*default-content-type*)
   (:import-from #:reblocks/html
                 #:*lang*
@@ -10,15 +15,38 @@
   (:import-from #:reblocks/dependencies
                 #:render-in-head
                 #:get-dependencies
-                #:register-dependencies
-                #:get-collected-dependencies)
+                #:register-dependencies)
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:alexandria
+                #:hash-table-keys
                 #:symbolicate)
 
   ;; Just dependencies
   (:import-from #:log)
+  (:import-from #:reblocks/request
+                #:get-path)
+  (:import-from #:local-time
+                #:timestamp-maximum
+                #:timestamp>
+                #:timestamp<
+                #:universal-to-timestamp
+                #:timestamp
+                #:now)
+  (:import-from #:serapeum
+                #:take
+                #:length<)
+  (:import-from #:reblocks/session
+                #:map-sessions
+                #:do-sessions
+                #:init)
+  (:import-from #:bordeaux-threads
+                #:make-thread
+                #:with-lock-held
+                #:thread-alive-p
+                #:make-lock)
+  (:import-from #:log4cl-extras/error
+                #:with-log-unhandled)
   
   (:export
    #:render
@@ -28,7 +56,13 @@
    #:get-title
    #:get-description
    #:get-keywords
-   #:get-language))
+   #:get-language
+   #:max-pages-per-session
+   #:page-expire-in
+   #:extend-page-expiration-by
+   #:page-metadata
+   #:current-page
+   #:in-page-context-p))
 (in-package #:reblocks/page)
 
 
@@ -37,6 +71,45 @@
 (defvar *keywords*)
 (defvar *language*)
 (defvar *default-language* "en")
+(defvar *current-page*)
+
+(defvar *pages-cleaner-thread* nil)
+
+(defvar *pages-cleaner-thread-lock*
+  (make-lock "pages cleaner lock"))
+
+
+(defclass page ()
+  ((path :initarg :path
+         :type string
+         :reader page-path)
+   (created-at :initform (now)
+               :type timestamp
+               :reader page-created-at)
+   (expire-at :initarg :expire-at
+              :initform nil
+              :type (or null timestamp)
+              :accessor page-expire-at)
+   (code-to-action :initform (make-hash-table :test 'equal)
+                   :reader page-actions)
+   (metadata :initform (make-hash-table :test 'equal)
+             :reader %page-metadata)))
+
+
+(defmethod print-object ((obj page) stream)
+  (print-unreadable-object (obj stream :type t)
+    (format stream "~A ~A ~A"
+            (page-path obj)
+            (page-created-at obj)
+            (when (page-expire-at obj)
+              (let ((expire-in
+                      (coerce (floor (local-time:timestamp-difference (page-expire-at obj)
+                                                                      (local-time:now)))
+                              'integer)))
+                (if (<= expire-in 0)
+                    "will expire now"
+                    (format nil "~As till expiration"
+                            expire-in)))))))
 
 
 (defmacro def-get-set (variable)
@@ -155,7 +228,57 @@
   (let ((*title* nil)
         (*description* nil)
         (*keywords* nil)
-        (*language* *default-language*))
+        (*language* *default-language*)
+        (*current-page* (let* ((path (get-path))
+                               (expire-in (page-expire-in *current-app*
+                                                          path))
+                               (expire-at (when expire-in
+                                            (universal-to-timestamp
+                                             (+ (get-universal-time)
+                                                expire-in)))))
+                          (make-instance 'page
+                                         :path path
+                                         :expire-at expire-at)))
+        (max-pages (max-pages-per-session *current-app*))
+        (session-pages
+          (reblocks/session:get-value :pages))
+        (next-year (universal-to-timestamp
+                    (+ (get-universal-time)
+                       (* 365 24 60 60)))))
+    ;; Here we are adding a new session object to the map of known sessions
+    (setf (gethash *current-page* session-pages)
+          t)
+    
+    ;; This code is not optimal and should be
+    ;; replaced with some sort of priority queue,
+    ;; but I didn't find a priority queue allowing
+    ;; to reprioretize elements (we need it to update
+    ;; expire-at slot of pages).
+    ;; The first element in this list will be the oldest
+    ;; in terms of expiration time or creation order
+    (let* ((current-pages-count (hash-table-count session-pages))
+           (num-pages-to-expire (if max-pages
+                                    (- current-pages-count
+                                       max-pages)
+                                    0)))
+      (when (< 0 num-pages-to-expire)
+        ;; Probably some sort of priority heap with limited length whould work
+        ;; faster here. But right now I'm not sure it deserve an optimization,
+        ;; because typically a number of pages within one session should not be
+        ;; to large
+        (let* ((sorted-pages (sort (hash-table-keys session-pages)
+                                   #'timestamp<
+                                   :key (lambda (page)
+                                          (or (page-expire-at page)
+                                              next-year))))
+               (pages-to-expire (take num-pages-to-expire sorted-pages )))
+          (loop for page in pages-to-expire
+                do (log:debug "Expiring page ~A because only ~A pages is allowed for one session but we already have ~A."
+                              page
+                              max-pages
+                              current-pages-count)
+                   (remhash page session-pages)))))
+    
     (funcall body-func)))
 
 
@@ -164,21 +287,131 @@
     (lambda () ,@body)))
 
 
-(defmethod render-page-with-widgets ((app app))
-  "Renders a full HTML by collecting header elements, dependencies and inner
+(defgeneric render-page-with-widgets (app)
+  (:documentation "Renders a full HTML by collecting header elements, dependencies and inner
    HTML and inserting them into the `render' method.
 
    This function will be called inside WITH-PAGE-DEFAULTS block,
    where such variables as *TITLE* are bound to their default values.
-   These variables can be changed by user during widgets or page rendering."
-  (log:debug "Special Rendering page for" app)
+   These variables can be changed by user during widgets or page rendering."))
 
-  ;; At the moment when this method is called, there is already
-  ;; rendered page's content in the reblocks/html::*stream*.
-  ;; All we need to do now – is to render dependencies in the header
-  ;; and paste content into the body.
-  (let* ((rendered-html (get-rendered-chunk))
-         (all-dependencies (get-collected-dependencies)))
 
-    (render app rendered-html :dependencies all-dependencies)))
+(defgeneric page-expire-in (app page-path)
+  (:documentation "Returns NIL or a number of seconds after which page should be removed from the memory.
 
+                   Default method returns current value of *PAGES-EXPIRE-IN* variable.")
+  (:method ((app t) (page-path t))
+    *pages-expire-in*))
+
+
+(defgeneric extend-page-expiration-by (app page)
+  (:documentation "Returns NIL or a number of seconds after which page should be removed from the memory.
+
+                   Default method returns current value of *PAGES-EXPIRE-IN* variable.")
+  (:method ((app t) (page t))
+    (if (boundp '*extend-page-expiration-by*)
+        *extend-page-expiration-by*
+        *pages-expire-in*)))
+
+
+(defgeneric max-pages-per-session (app)
+  (:documentation "Returns NIL or a maximum number of pages to keep in the session.
+                   Older pages will be expired and free memory.
+
+                   Default method returns current value of *MAX-PAGES-PER-SESSION* variable.")
+  (:method ((app t))
+    *max-pages-per-session*))
+
+
+(defun expire-session-pages (pages)
+  (list
+   (when pages
+     (loop with now = (now)
+           for page being the hash-key of pages
+           for expire? = (and (page-expire-at page)
+                              (timestamp< (page-expire-at page)
+                                          now))
+           when expire?
+           do (log:debug "Expiring page" page)
+           and collect page into expired-pages
+           finally (mapc (lambda (page )
+                           (remhash page pages))
+                         expired-pages)
+                   (return pages)))))
+
+
+(defun expire-pages ()
+  "Removes from memory expired pages. This function is called periodically
+   from a separate thread."
+  (when reblocks/session::!map-sessions
+    (map-sessions #'expire-session-pages :pages)))
+
+
+(defun extend-expiration-time (app page)
+  (when (and page
+             (page-expire-at page))
+    (setf (page-expire-at page)
+          (timestamp-maximum
+           (universal-to-timestamp
+            (+ (get-universal-time)
+               (extend-page-expiration-by app page)))
+           (page-expire-at page)))))
+
+
+(defun pages-cleaner-loop ()
+  (loop do (handler-case
+               (with-log-unhandled ()
+                 (expire-pages)
+                 (sleep *delay-between-pages-cleanup*))
+             (error ()
+               (sleep *delay-between-pages-cleanup*)))))
+
+
+(defun ensure-pages-cleaner-is-running ()
+  (with-lock-held (*pages-cleaner-thread-lock*)
+    (when (or (null *pages-cleaner-thread*)
+              (not (thread-alive-p *pages-cleaner-thread*)))
+      (setf *pages-cleaner-thread*
+            (make-thread #'pages-cleaner-loop
+                         :name "Reblocks Pages Cleaner")))))
+
+
+
+(defun page-expired-p (page)
+  ;; Page consided exired when it is not found in the list of all session pages
+  (when page
+    (null (gethash page (reblocks/session:get-value :pages)))))
+
+
+(defmethod init :before ((app t))
+  (setf (reblocks/session:get-value :pages)
+        ;; Here we don't use weak hash table,
+        ;; because this map will keep pages
+        ;; in memory, while in all other places
+        ;; we need to use weak references.
+        ;; This way, memory will be freed when
+        ;; pages are expiring.
+        (make-hash-table)))
+
+
+(defun page-metadata (page name)
+  "Returns a metadata with NAME, bound to the current page"
+  (gethash name (%page-metadata page)))
+
+
+(defun (setf page-metadata) (page value name)
+  (setf (gethash name (%page-metadata page))
+        value))
+
+
+(defun in-page-context-p ()
+  "Returns T when CURRENT-PAGE function will be able to return page instead of throwing an error."
+  (and (boundp '*current-page*)
+       *current-page*))
+
+
+(defun current-page ()
+  "Returns current page object. Can be useful to pass to call PAGE-METADATA."
+  (unless (in-page-context-p)
+    (error "Please, run function CURRENT-PAGE in the context where current page is known."))
+  *current-page*)
