@@ -22,7 +22,8 @@
    #:get-collected-dependencies
    #:push-dependencies
    #:already-loaded-p
-   #:page-dependencies))
+   #:page-dependencies
+   #:push-dependency))
 (in-package #:reblocks/page-dependencies)
 
 
