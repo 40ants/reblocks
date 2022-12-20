@@ -383,7 +383,7 @@
     (null (gethash page (reblocks/session:get-value :pages)))))
 
 
-(defmethod init :before ((app t))
+(defun initialize-session-pages ()
   (setf (reblocks/session:get-value :pages)
         ;; Here we don't use weak hash table,
         ;; because this map will keep pages
@@ -392,6 +392,10 @@
         ;; This way, memory will be freed when
         ;; pages are expiring.
         (make-hash-table)))
+
+
+(defmethod init :before ((app t))
+  (initialize-session-pages))
 
 
 (defun page-metadata (page name)
