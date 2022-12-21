@@ -45,6 +45,7 @@
 
 
 (register-system-packages "lack-request" '(#:lack.request))
+(register-system-packages "lack-response" '(#:lack.response))
 (register-system-packages "lack-middleware-session" '(#:lack.middleware.session
                                                       #:lack.session.state.cookie
                                                       #:lack.middleware.session.store.memory))
