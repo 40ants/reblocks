@@ -54,7 +54,7 @@ CL-USER> (reblocks/debug:reset-latest-session)"))
 
 
 (defmethod reblocks/page:init-page ((app t) (path string) expire-at)
-  ;; TODO: replace with content of reblocks/session:init after deprecation
+  ;; TODO: replace with content of %common-init after deprecation
   (%common-init app))
 
 
