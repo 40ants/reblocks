@@ -56,6 +56,8 @@ leading to posible DoS attack. Page expiration is controlled by two values:
 Also, you can use REBLOCKS/PAGE:PROLONG-PAGE function to extend current page's
 expiration time.
 
+Generic-function REBLOCKS/PAGE:ON-PAGE-REFRESH was added.
+
 ### Cached widget dependencies
 
 Another interesting feature is mixin class REBLOCKS/CACHED-DEPENDENCIES:CACHED-DEPENDENCIES-MIXIN.
@@ -70,6 +72,20 @@ These functions were moved to separate package REBLOCKS/PAGE-DEPENDENCIES:
 - push-dependencies
 - already-loaded-p
 - page-dependencies
+
+New generic-function REBLOCKS/SESSION:INIT-SESSION was introduced. Define a method if you
+need to add something into the user's session when it is initialized. This function will
+be called once per user.
+
+Generic function REBLOCKS/SESSION:INIT was replaced with REBLOCKS/PAGE:INIT-PAGE and it will
+be called each time a user opens site in a new browser window or tab. When user refreshes
+the page it will not be called.
+
+Deleted
+=======
+
+Function `reblocks/widgets/root:get` was deleted. Use `(page-root-widget (current-page))` instead.
+Also `root-widget-key` and corresponding package `reblocks/widgets/root` were removed.
 
 """)
   (0.49.0 2022-11-26

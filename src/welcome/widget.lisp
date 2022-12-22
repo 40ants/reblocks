@@ -22,7 +22,7 @@
   ())
 
 
-(defmethod reblocks/session:init ((app welcome-screen-app))
+(defmethod reblocks/page:init-page ((app welcome-screen-app) path expire-at)
   (make-instance 'welcome-screen-widget))
 
 

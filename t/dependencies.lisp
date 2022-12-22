@@ -23,7 +23,9 @@
                 #:get-content-type
                 #:get-route
                 #:serve
-                #:render-in-head))
+                #:render-in-head)
+  (:import-from #:str
+                #:ends-with-p))
 (in-package reblocks-test/dependencies)
 
 
@@ -54,8 +56,8 @@
   (let ((dependency (make-dependency #P"t/data/some.js" :system "reblocks-test")))
     (testing "method get-path should return a local pathname"
       (ok (uiop:absolute-pathname-p (get-path dependency)))
-      (ok (str:ends-with-p "/t/data/some.js"
-                           (namestring (get-path dependency)))))
+      (ok (ends-with-p "/t/data/some.js"
+                       (namestring (get-path dependency)))))
     (ok (equal (get-type dependency)
                :js)
         "dependency's type should be :js")
@@ -74,8 +76,8 @@
   (testing "Also, local dependency can be created using a string."
     (let ((dependency (make-dependency "t/data/some.js" :system "reblocks-test")))
       (ok (uiop:absolute-pathname-p (get-path dependency)))
-      (ok (str:ends-with-p "/t/data/some.js"
-                           (namestring (get-path dependency)))))))
+      (ok (ends-with-p "/t/data/some.js"
+                       (namestring (get-path dependency)))))))
 
 
 (deftest when-caching-is-turned-off

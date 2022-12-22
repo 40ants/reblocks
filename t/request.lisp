@@ -17,10 +17,11 @@
 (deftest refresh-request-p-1
   (with-session
     (with-request ("/foo/bar")
-      (setf (reblocks/session:get-value 'last-request-path)
-            "/foo/bar")
+      (ok (null (refresh-request-p))
+          "When there is no Cache-Control header, function returns NIL"))
+    (with-request ("/foo/bar" :headers ((:cache-control . "max-age=0")))
       (ok (refresh-request-p)
-          "Refresh-request-p should return true, because current URI has same tokens as last-request-path."))))
+          "Refresh-request-p should return T, because browser sends max-age=0 when user refreshes the page"))))
 
 
 (deftest get-full-url

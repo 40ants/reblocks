@@ -126,8 +126,18 @@
   "Use this function to add Set-Cookie header:
 
    ```lisp
-   (set-cookie (cookie:make-cookie :name \"user_id\" :value \"bob\"))
-   ```"
+   (set-cookie (list :name \"user_id\" :value \"bob\" :samesite :lax))
+   ```
+
+   Cookie might include these properties:
+
+   - domain
+   - path
+   - expires
+   - secure
+   - httponly
+   - samesite
+"
 
   (check-type cookie proper-list)
   

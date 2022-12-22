@@ -25,6 +25,7 @@
   ;; Just dependencies
   (:import-from #:log)
   (:import-from #:reblocks/request
+                #:refresh-request-p
                 #:get-path)
   (:import-from #:local-time
                 #:timestamp-maximum
@@ -34,12 +35,13 @@
                 #:timestamp
                 #:now)
   (:import-from #:serapeum
+                #:fmt
                 #:take
                 #:length<)
   (:import-from #:reblocks/session
+                #:init-session
                 #:map-sessions
-                #:do-sessions
-                #:init)
+                #:do-sessions)
   (:import-from #:bordeaux-threads
                 #:make-thread
                 #:with-lock-held
@@ -47,6 +49,11 @@
                 #:make-lock)
   (:import-from #:log4cl-extras/error
                 #:with-log-unhandled)
+  (:import-from #:uuid
+                #:uuid
+                #:make-uuid-from-string
+                #:uuid=
+                #:make-v4-uuid)
   
   (:export
    #:render
@@ -62,7 +69,13 @@
    #:extend-page-expiration-by
    #:page-metadata
    #:current-page
-   #:in-page-context-p))
+   #:in-page-context-p
+   #:page-id
+   #:get-page-by-id
+   #:init-page
+   #:page
+   #:page-root-widget
+   #:on-page-refresh))
 (in-package #:reblocks/page)
 
 
@@ -80,7 +93,10 @@
 
 
 (defclass page ()
-  ((path :initarg :path
+  ((id :initform (make-v4-uuid)
+       :type uuid:uuid
+       :reader page-id)
+   (path :initarg :path
          :type string
          :reader page-path)
    (created-at :initform (now)
@@ -92,6 +108,9 @@
               :accessor page-expire-at)
    (code-to-action :initform (make-hash-table :test 'equal)
                    :reader page-actions)
+   (root-widget :initform nil
+                :initarg :root-widget
+                :accessor page-root-widget)
    (metadata :initform (make-hash-table :test 'equal)
              :reader %page-metadata)))
 
@@ -224,30 +243,42 @@
         )))))
 
 
+(defun find-page-by-path (session-pages path)
+  (check-type session-pages hash-table)
+  (check-type path string)
+  (loop for page being the hash-key of session-pages
+        when (string-equal (page-path page)
+                           path)
+        do (return page)))
+
+
 (defun call-with-page-defaults (body-func)
-  (let ((*title* nil)
-        (*description* nil)
-        (*keywords* nil)
-        (*language* *default-language*)
-        (*current-page* (let* ((path (get-path))
-                               (expire-in (page-expire-in *current-app*
-                                                          path))
-                               (expire-at (when expire-in
-                                            (universal-to-timestamp
-                                             (+ (get-universal-time)
-                                                expire-in)))))
-                          (make-instance 'page
-                                         :path path
-                                         :expire-at expire-at)))
-        (max-pages (max-pages-per-session *current-app*))
-        (session-pages
-          (reblocks/session:get-value :pages))
-        (next-year (universal-to-timestamp
-                    (+ (get-universal-time)
-                       (* 365 24 60 60)))))
+  (let* ((*title* nil)
+         (*description* nil)
+         (*keywords* nil)
+         (*language* *default-language*)
+         (session-pages
+           (reblocks/session:get-value 'session-pages))
+         (*current-page* (let* ((path (get-path))
+                                (expire-in (page-expire-in *current-app*
+                                                           path))
+                                (expire-at (when expire-in
+                                             (universal-to-timestamp
+                                              (+ (get-universal-time)
+                                                 expire-in)))))
+                           (or (find-page-by-path session-pages path)
+                               (progn (log:debug "Initializing a new page")
+                                      (init-page *current-app* path expire-at)))))
+         (max-pages (max-pages-per-session *current-app*))
+         (next-year (universal-to-timestamp
+                     (+ (get-universal-time)
+                        (* 365 24 60 60)))))
     ;; Here we are adding a new session object to the map of known sessions
     (setf (gethash *current-page* session-pages)
           t)
+
+    (when (refresh-request-p)
+      (on-page-refresh *current-page*))
     
     ;; This code is not optimal and should be
     ;; replaced with some sort of priority queue,
@@ -344,7 +375,7 @@
   "Removes from memory expired pages. This function is called periodically
    from a separate thread."
   (when reblocks/session::!map-sessions
-    (map-sessions #'expire-session-pages :pages)))
+    (map-sessions #'expire-session-pages 'session-pages)))
 
 
 (defun extend-expiration-time (app page)
@@ -380,11 +411,11 @@
 (defun page-expired-p (page)
   ;; Page consided exired when it is not found in the list of all session pages
   (when page
-    (null (gethash page (reblocks/session:get-value :pages)))))
+    (null (gethash page (reblocks/session:get-value 'session-pages)))))
 
 
 (defun initialize-session-pages ()
-  (setf (reblocks/session:get-value :pages)
+  (setf (reblocks/session:get-value 'session-pages)
         ;; Here we don't use weak hash table,
         ;; because this map will keep pages
         ;; in memory, while in all other places
@@ -394,7 +425,7 @@
         (make-hash-table)))
 
 
-(defmethod init :before ((app t))
+(defmethod init-session :before ((app t))
   (initialize-session-pages))
 
 
@@ -419,3 +450,28 @@
   (unless (in-page-context-p)
     (error "Please, run function CURRENT-PAGE in the context where current page is known."))
   *current-page*)
+
+
+(defun get-page-by-id (id)
+  "Returns a page from a current session by it's id."
+  (let ((id (etypecase id
+              (string (make-uuid-from-string id))
+              (uuid id))))
+    (find id (hash-table-keys (reblocks/session:get-value 'session-pages))
+          :key #'page-id
+          :test #'uuid=)))
+
+
+(defgeneric init-page (app url-path expire-at)
+  (:documentation "A method for this generic function should be defined to initialize a new page object.
+
+                   It should return a widget which become a root widget of the page or it might return the
+                   page with initialized root widget in case if you want to use your own subclass of the PAGE class."))
+
+
+
+(defgeneric on-page-refresh (page)
+  (:documentation "This generic function gets called when user refreshes page in the browser.
+
+                   Default method resets a list of loaded dependencies to ensure that all of them
+                   will be sent to the browser again."))

@@ -14,6 +14,8 @@
                 #:make-weak-hash-table)
   (:import-from #:alexandria
                 #:ensure-gethash)
+  (:import-from #:metatilities
+                #:deprecated)
 
   (:export
    #:with-session
@@ -28,7 +30,8 @@
    #:expire
    #:get-number-of-sessions
    #:make-session-middleware
-   #:get-number-of-anonymous-sessions))
+   #:get-number-of-anonymous-sessions
+   #:init-session))
 (in-package #:reblocks/session)
 
 
@@ -97,6 +100,14 @@ used to create IDs for html elements, widgets, etc."
   (:documentation "A method for this generic function should be defined to initialize application for a new user session.
 
                    It should return a widget which become a root widget."))
+
+
+(defgeneric init-session (app)
+  (:documentation "A method for this generic function should be defined to initialize application for a new user session.
+
+                   On the moment it get called session has-map already exists and you can use GET-VALUE function to set
+                   some values.")
+  (:method ((app t))))
 
 
 (defun expire ()
@@ -199,7 +210,8 @@ used to create IDs for html elements, widgets, etc."
         (satisfies allowed-samesite-policy-p)))
 
 
-(defun make-session-middleware (&key (samesite-policy :lax) (public-session-keys (list :pages)))
+(defun make-session-middleware (&key (samesite-policy :lax) (public-session-keys
+                                                             (list (cons "REBLOCKS/PAGE" "SESSION-PAGES"))))
   ;; We don't want to expose session store as a global variable,
   ;; that is why we use these closures to extract statistics.
   (check-type samesite-policy samesite-policy-type
@@ -225,7 +237,10 @@ used to create IDs for html elements, widgets, etc."
              ;; For security reasons, we allow to access only
              ;; a few keys inside the session
              (loop for key in keys
-                   unless (member key public-session-keys)
+                   unless (member key public-session-keys
+                                  :key (lambda (pk)
+                                         (intern (cdr pk)
+                                                 (car pk))))
                    do (error "Unable to access ~A key in the session object."
                              key))
              
