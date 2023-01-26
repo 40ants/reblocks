@@ -46,6 +46,7 @@
 
 (register-system-packages "lack-request" '(#:lack.request))
 (register-system-packages "lack-middleware-session" '(#:lack.middleware.session
+                                                      #:lack.session.store
                                                       #:lack.session.state.cookie
                                                       #:lack.middleware.session.store.memory))
 (register-system-packages "lack-util" '(#:lack.util))

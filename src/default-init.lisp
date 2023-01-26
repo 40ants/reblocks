@@ -27,12 +27,12 @@
     (make-string-widget
      (with-html-string
        (:h1 "No reblocks/page:init-page method defined.")
-       (:p "Please define a method reblocks/page:init-page to initialize a session.")
+       (:p "Please define a method reblocks/page:init-page to initialize a new page.")
        (:p "It could be something simple, like this one:")
        (:pre
         (:code
          (format nil "
-CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string))  
+CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) (expire-at local-time:timestamp))
            \"Hello world!\")" (string-downcase
                                (type-of *current-app*)))))
        (:p "And reset current session:")

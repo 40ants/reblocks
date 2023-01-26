@@ -14,8 +14,6 @@
                 #:with-html)
   (:import-from #:reblocks/routes
                 #:add-route)
-  (:import-from #:reblocks/response
-                #:send-script)
   ;; Just a dependency
   (:import-from #:dexador)
   
@@ -194,20 +192,6 @@ as a response to some action.")
        (:link :rel "stylesheet" :type "text/css"
               :href (get-url dependency)
               :media "screen")))))
-
-
-(defmethod render-in-ajax-response ((dependency dependency))
-  (let ((url (get-url dependency)))
-    (case (get-type dependency)
-      (:js
-       (let ((script (parenscript:ps* `(include_dom ,url))))
-         (log:debug "Rendering js dependency in ajax response" dependency)
-         (send-script script :before-load)))
-
-      (:css
-       (let ((script (parenscript:ps* `(include_css ,url))))
-         (log:debug "Rendering css dependency in ajax response" dependency)
-         (send-script script :before-load))))))
 
 
 (defmethod render-in-head ((dependency remote-dependency))

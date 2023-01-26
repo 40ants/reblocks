@@ -124,10 +124,14 @@ To clear, use function \(reset-last-session\).")
 
 
 (defun reset-latest-session ()
-  (unless *on*
-    (error "Debugging wasn't turned on and I know nothing about latest session."))
-  
-  (reset-session *latest-session*))
+  (restart-case
+      (progn
+        (unless *on*
+          (error "Debugging wasn't turned on and I know nothing about latest session."))
+        (reset-session *latest-session*))
+    (enable-debugging ()
+      :report "Enable debug mode (you'll need to refresh page and call RESET-LATEST-SESSION again)."
+      (on))))
 
 
 ;; TODO: This function should be rewritten:

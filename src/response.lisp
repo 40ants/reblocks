@@ -28,6 +28,10 @@
                 #:cookie)
   (:import-from #:lack.response
                 #:response-headers)
+  (:import-from #:reblocks/page
+                #:in-page-context-p
+                #:current-page
+                #:on-page-redirect)
   (:export #:immediate-response
            #:make-response
            #:add-header
@@ -268,6 +272,10 @@
 
 (defun redirect (uri)
   "Redirects the client to a new URI."
+  
+  (when (in-page-context-p)
+    (on-page-redirect (current-page) uri))
+  
   (if (ajax-request-p)
       (add-command :redirect
                    :to uri)
@@ -278,7 +286,12 @@
 
 
 (defun call-with-response (thunk)
-  (let* ((headers (list :content-type (get-default-content-type-for-response)))
+  (let* ((headers (list :content-type (get-default-content-type-for-response)
+                        ;; We don't want content of Reblocks apps was cached
+                        ;; by the browser, because widgets state can be changed
+                        ;; in response to the actions and "Back" button might
+                        ;; show the old state of the page in case of caching.
+                        :cache-control "no-cache, no-store, must-revalidate"))
          (*response* (lack.response:make-response 200 headers ""))
          (result (funcall thunk)))
 
@@ -286,7 +299,6 @@
       ((and result (listp result))
        result)
       ((typep result 'lack.response:response)
-       (log:warn "Headers and cookies from *response* will be ignored.")
        result)
       (result
        (setf (lack.response:response-body *response*)

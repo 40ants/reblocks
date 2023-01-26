@@ -19,12 +19,15 @@
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:alexandria
+                #:with-unique-names
+                #:once-only
                 #:hash-table-keys
                 #:symbolicate)
 
   ;; Just dependencies
   (:import-from #:log)
   (:import-from #:reblocks/request
+                #:ajax-request-p
                 #:refresh-request-p
                 #:get-path)
   (:import-from #:local-time
@@ -35,16 +38,20 @@
                 #:timestamp
                 #:now)
   (:import-from #:serapeum
+                #:maybe-invoke-restart
                 #:fmt
                 #:take
                 #:length<)
   (:import-from #:reblocks/session
+                #:expire-session
                 #:init-session
                 #:map-sessions
                 #:do-sessions)
   (:import-from #:bordeaux-threads
+                #:make-recursive-lock
                 #:make-thread
                 #:with-lock-held
+                #:with-recursive-lock-held
                 #:thread-alive-p
                 #:make-lock)
   (:import-from #:log4cl-extras/error
@@ -75,7 +82,13 @@
    #:init-page
    #:page
    #:page-root-widget
-   #:on-page-refresh))
+   #:on-page-refresh
+   #:on-page-redirect
+   #:on-page-load
+   #:extend-expiration-time
+   #:page-app
+   #:with-metadata-lock
+   #:ensure-page-metadata))
 (in-package #:reblocks/page)
 
 
@@ -111,6 +124,11 @@
    (root-widget :initform nil
                 :initarg :root-widget
                 :accessor page-root-widget)
+   (app :initarg :app
+        :initform *current-app*
+        :accessor page-app)
+   (metadata-lock :initform (make-recursive-lock "Page Metadata")
+                  :accessor %metadata-lock)
    (metadata :initform (make-hash-table :test 'equal)
              :reader %page-metadata)))
 
@@ -267,7 +285,7 @@
                                               (+ (get-universal-time)
                                                  expire-in)))))
                            (or (find-page-by-path session-pages path)
-                               (progn (log:debug "Initializing a new page")
+                               (progn (log:debug "Initializing a new page for path ~A" path)
                                       (init-page *current-app* path expire-at)))))
          (max-pages (max-pages-per-session *current-app*))
          (next-year (universal-to-timestamp
@@ -277,7 +295,14 @@
     (setf (gethash *current-page* session-pages)
           t)
 
+    (unless (ajax-request-p)
+      (log:debug "Calling ON-PAGE-LOAD generic-function")
+        
+      (on-page-load *current-page*))
+    
     (when (refresh-request-p)
+      (log:debug "Calling ON-PAGE-REFRESH generic-function")
+        
       (on-page-refresh *current-page*))
     
     ;; This code is not optimal and should be
@@ -365,9 +390,18 @@
            when expire?
            do (log:debug "Expiring page" page)
            and collect page into expired-pages
-           finally (mapc (lambda (page )
+           finally (mapc (lambda (page)
                            (remhash page pages))
                          expired-pages)
+                   ;; If all pages were expired, then
+                   ;; we'll expire session too, because we don't want
+                   ;; these empty sessions to fill the memory.
+                   ;; 
+                   ;; TODO: Probably we need to setup a separate TTL
+                   ;;       for empty sessions and expire them after longer interval?
+                   ;;       Or maybe we have to create a way to dump such sessions into the database?
+                   (when (zerop (hash-table-count pages))
+                     (maybe-invoke-restart 'expire-session))
                    (return pages)))))
 
 
@@ -378,7 +412,7 @@
     (map-sessions #'expire-session-pages 'session-pages)))
 
 
-(defun extend-expiration-time (app page)
+(defun extend-expiration-time-impl (app page)
   (when (and page
              (page-expire-at page))
     (setf (page-expire-at page)
@@ -387,6 +421,11 @@
             (+ (get-universal-time)
                (extend-page-expiration-by app page)))
            (page-expire-at page)))))
+
+
+(defun extend-expiration-time ()
+  "Extends expiration time of the current page."
+  (extend-expiration-time-impl *current-app* *current-page*))
 
 
 (defun pages-cleaner-loop ()
@@ -429,14 +468,36 @@
   (initialize-session-pages))
 
 
+(defmacro with-metadata-lock ((page) &body body)
+  `(with-recursive-lock-held ((%metadata-lock ,page))
+     ,@body))
+
+
 (defun page-metadata (page name)
   "Returns a metadata with NAME, bound to the current page"
-  (gethash name (%page-metadata page)))
+  (with-metadata-lock (page)
+    (gethash name (%page-metadata page))))
 
 
 (defun (setf page-metadata) (value page name)
-  (setf (gethash name (%page-metadata page))
-        value))
+  (with-metadata-lock (page)
+    (setf (gethash name (%page-metadata page))
+          value)))
+
+
+(defmacro ensure-page-metadata (page name &optional default)
+  "Like PAGE-METADATA, but if metadata piece with NAME is not found saves the DEFAULT
+   before returning it. Secondary return value is true if NAME was
+   already in the metadata."
+  (once-only (page name)
+    (with-unique-names (value presentp)
+      `(with-metadata-lock (,page)
+         (multiple-value-bind (,value ,presentp) (gethash ,name (%page-metadata ,page))
+           (if ,presentp
+               (values ,value ,presentp)
+               (values (setf (gethash ,name (%page-metadata ,page))
+                             ,default)
+                       nil)))))))
 
 
 (defun in-page-context-p ()
@@ -454,12 +515,14 @@
 
 (defun get-page-by-id (id)
   "Returns a page from a current session by it's id."
-  (let ((id (etypecase id
-              (string (make-uuid-from-string id))
-              (uuid id))))
-    (find id (hash-table-keys (reblocks/session:get-value 'session-pages))
-          :key #'page-id
-          :test #'uuid=)))
+  (let* ((id (etypecase id
+               (string (make-uuid-from-string id))
+               (uuid id)))
+         (session-pages (reblocks/session:get-value 'session-pages)))
+    (when session-pages
+      (find id (hash-table-keys session-pages)
+            :key #'page-id
+            :test #'uuid=))))
 
 
 (defgeneric init-page (app url-path expire-at)
@@ -470,8 +533,26 @@
 
 
 
-(defgeneric on-page-refresh (page)
-  (:documentation "This generic function gets called when user refreshes page in the browser.
+(defgeneric on-page-load (page)
+  (:documentation "This generic function gets called when user loads a page in the browser.
+                   It is called for all non Ajax requests.
+
+                   When user reloads page multiple times, the page object can be reused.
+                   Thus this function may be used to reset some page attributes.
 
                    Default method resets a list of loaded dependencies to ensure that all of them
                    will be sent to the browser again."))
+
+
+(defgeneric on-page-refresh (page)
+  (:documentation "This generic function gets called when user refreshes page in the browser.
+
+                   Default method does nothing.")
+  (:method ((page t))))
+
+
+(defgeneric on-page-redirect (from-page to-url)
+  (:documentation "This generic function gets called when user get's a redirect to another page.
+
+                   Default method does nothing.")
+  (:method ((from-page t) (to-url t))))

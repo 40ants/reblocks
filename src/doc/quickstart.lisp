@@ -103,12 +103,12 @@ Open <http://localhost:40000/tasks/> in your browser (double check the port) and
 text like that:
 
 ```
-No reblocks/session:init method defined.
-Please define a method reblocks.session:init to initialize a session.
+No reblocks/page:init-page method defined.
+Please define a method reblocks/page:init-page to initialize a page.
 
 It could be something simple, like this one:
 
-(defmethod reblocks/session:init ((app tasks))
+(defmethod reblocks/page:init-page ((app tasks) url-path expire-at)
             \"Hello world!\")
 
 Read more in the documentaion.

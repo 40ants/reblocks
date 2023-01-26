@@ -8,6 +8,8 @@
                 #:dependency-equal
                 #:get-url)
   (:import-from #:reblocks/page
+                #:on-page-load
+                #:on-page-redirect
                 #:page
                 #:on-page-refresh
                 #:current-page
@@ -115,6 +117,6 @@ Makes deduplication by comparing dependencies' urls."
     (render app rendered-html :dependencies all-dependencies)))
 
 
-(defmethod on-page-refresh ((page page))
+(defmethod on-page-load ((page page))
   (setf (page-dependencies page)
         nil))

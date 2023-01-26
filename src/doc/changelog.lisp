@@ -39,6 +39,13 @@ Fixed
 Fixed a bug when session lock was written into the session itself instead of into the
 inner hash table.
 
+Fixed error handling when debug-mode is off. Previously, the debugger was invoked before showing 500 error page to the user.
+
+Now every response has \"Cache-Control: no-cache, no-store, must-revalidate\" header to prevent
+caching of dynamic content in the browser. This fixes the issue when you did some changes using actions then went to
+another page and returned using \"Back\" button in the browser. Previously browser was able to show you an old content of the
+page.
+
 Added
 =====
 
@@ -55,6 +62,8 @@ leading to posible DoS attack. Page expiration is controlled by two values:
 
 Also, you can use REBLOCKS/PAGE:PROLONG-PAGE function to extend current page's
 expiration time.
+
+When all pages in the session are expired, session is removed from the memory too.
 
 Generic-function REBLOCKS/PAGE:ON-PAGE-REFRESH was added.
 
@@ -80,6 +89,8 @@ be called once per user.
 Generic function REBLOCKS/SESSION:INIT was replaced with REBLOCKS/PAGE:INIT-PAGE and it will
 be called each time a user opens site in a new browser window or tab. When user refreshes
 the page it will not be called.
+
+Function REBLOCKS/DEBUG:RESET-LATEST-SESSION now provides a convenient restart to enable debug mode.
 
 Deleted
 =======

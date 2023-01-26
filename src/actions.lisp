@@ -27,7 +27,7 @@
                 #:page-expired-p
                 #:*current-page*
                 #:page-actions
-                #:extend-expiration-time)
+                #:extend-expiration-time-impl)
   (:import-from #:reblocks/response
                 #:make-uri
                 #:redirect)
@@ -75,7 +75,7 @@ situation (e.g. redirect, signal an error, etc.)."))
     (multiple-value-prog1
         (values (safe-apply action arguments)
                 *current-page*)
-      (extend-expiration-time app *current-page*))))
+      (extend-expiration-time-impl app *current-page*))))
 
 
 (defun generate-action-code ()

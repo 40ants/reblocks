@@ -38,6 +38,7 @@
   (:import-from #:cl-strings
                 #:starts-with)
   ;; Just dependencies
+  (:import-from #:reblocks/dependencies-impl)
   (:import-from #:reblocks/debug)
   (:import-from #:log)
   (:import-from #:reblocks/welcome/app

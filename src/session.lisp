@@ -1,6 +1,7 @@
 (uiop:define-package #:reblocks/session
   (:use #:cl)
   (:import-from #:alexandria
+                #:curry
                 #:ensure-gethash)
   (:import-from #:log)
   (:import-from #:lack.util)
@@ -8,6 +9,8 @@
                 #:memory-store-stash)
   (:import-from #:lack.session.state.cookie)
   (:import-from #:bordeaux-threads
+                #:make-recursive-lock
+                #:with-recursive-lock-held
                 #:with-lock-held
                 #:make-lock)
   (:import-from #:trivial-garbage
@@ -16,6 +19,8 @@
                 #:ensure-gethash)
   (:import-from #:metatilities
                 #:deprecated)
+  (:import-from #:lack.session.store
+                #:remove-session)
 
   (:export
    #:with-session
@@ -132,13 +137,14 @@ used to create IDs for html elements, widgets, etc."
     (with-lock-held (*session-lock-table-lock*)
       (ensure-gethash session
                       *session-locks*
-                      (make-lock
+                      (make-recursive-lock
                        (format nil "Session lock for session ~S"
                                session))))))
 
+(declaim (inline call-with-session-lock))
 
 (defun call-with-session-lock (session thunk)
-  (with-lock-held ((get-lock session))
+  (with-recursive-lock-held ((get-lock session))
     (funcall thunk)))
 
 
@@ -186,6 +192,7 @@ used to create IDs for html elements, widgets, etc."
 
 
 (defun get-number-of-anonymous-sessions ()
+  "Returns a number of sessions where :user key is NIL."
   (unless !get-number-of-anonymous-sessions
     (error "Please, call make-session-middleware first."))
   (funcall !get-number-of-anonymous-sessions))
@@ -244,17 +251,24 @@ used to create IDs for html elements, widgets, etc."
                    do (error "Unable to access ~A key in the session object."
                              key))
              
-             (let ((hash (memory-store-stash store)))
-               (loop for session-hash being the hash-values in hash
-                     do (with-session-lock (session-hash)
-                          (let* ((arguments
-                                   (loop for key in keys
-                                         collect (gethash key session-hash)))
-                                 (results (apply thunk arguments)))
-                            (loop for key in keys
-                                  for result in results
-                                  do (setf (gethash key session-hash)
-                                           result)))))))
+             (loop with hash = (memory-store-stash store)
+                   with expired-session-ids = nil
+                   for session-hash being the hash-values in hash using (hash-key session-id)
+                   do (with-session-lock (session-hash)
+                        (restart-case
+                            (let* ((arguments
+                                     (loop for key in keys
+                                           collect (gethash key session-hash)))
+                                   (results (apply thunk arguments)))
+                              (loop for key in keys
+                                    for result in results
+                                    do (setf (gethash key session-hash)
+                                             result)))
+                          (expire-session ()
+                            :report "Remove current session from the session store."
+                            (push session-id expired-session-ids))))
+                   finally (mapc (curry #'remove-session store)
+                                 expired-session-ids)))
            (session-middleware (app)
              (funcall (lack.util:find-middleware :session) app
                       :store store
