@@ -379,37 +379,74 @@
     *max-pages-per-session*))
 
 
-(defun expire-session-pages (pages)
-  (list
-   (when pages
-     (loop with now = (now)
-           for page being the hash-key of pages
-           for expire? = (and (page-expire-at page)
-                              (timestamp< (page-expire-at page)
-                                          now))
-           when expire?
-           do (log:debug "Expiring page" page)
-           and collect page into expired-pages
-           finally (mapc (lambda (page)
-                           (remhash page pages))
-                         expired-pages)
-                   ;; If all pages were expired, then
-                   ;; we'll expire session too, because we don't want
-                   ;; these empty sessions to fill the memory.
-                   ;; 
-                   ;; TODO: Probably we need to setup a separate TTL
-                   ;;       for empty sessions and expire them after longer interval?
-                   ;;       Or maybe we have to create a way to dump such sessions into the database?
-                   (when (zerop (hash-table-count pages))
-                     (maybe-invoke-restart 'expire-session))
-                   (return pages)))))
-
-
 (defun expire-pages ()
   "Removes from memory expired pages. This function is called periodically
-   from a separate thread."
-  (when reblocks/session::!map-sessions
-    (map-sessions #'expire-session-pages 'session-pages)))
+   from a separate thread.
+
+   Returns a multiple values with counters:
+
+   - processed-sessions
+   - processed-pages
+   - expired-sessions-count
+   - sessions-without-restart-count (non-expired but should be expired, if reblocks works correctly you should see 0 here)
+   - expired-pages-count
+"
+  (let ((processed-sessions 0)
+        (processed-pages 0)
+        (expired-pages-count 0)
+        (expired-sessions-count 0)
+        (sessions-without-restart-count 0))
+    (labels ((expire-session-pages (pages)
+               (incf processed-sessions)
+               (list
+                (cond
+                  (pages (process pages))
+                  (t (try-to-expire-session)))))
+             (try-to-expire-session ()
+               (let ((restart (find-restart 'expire-session)))
+                 (cond
+                   (restart
+                    (incf expired-sessions-count)
+                    (invoke-restart restart))
+                   (t
+                    (incf sessions-without-restart-count)))))
+             (process (pages)
+               (loop with now = (now)
+                     for page being the hash-key of pages
+                     for expire? = (and (page-expire-at page)
+                                        (timestamp< (page-expire-at page)
+                                                    now))
+                     do (incf processed-pages)
+                     when expire?
+                     do (log:debug "Expiring page" page)
+                     and collect page into expired-pages
+                     finally (mapc (lambda (page)
+                                     (remhash page pages))
+                                   expired-pages)
+                             (incf expired-pages-count
+                                   (length expired-pages))
+                             ;; If all pages were expired, then
+                             ;; we'll expire session too, because we don't want
+                             ;; these empty sessions to fill the memory.
+                             ;; 
+                             ;; TODO: Probably we need to setup a separate TTL
+                             ;;       for empty sessions and expire them after longer interval?
+                             ;;       Or maybe we have to create a way to dump such sessions into the database?
+                             (when (zerop (hash-table-count pages))
+                               (try-to-expire-session))
+                             (return pages))))
+      
+      (declare (dynamic-extent #'expire-session-pages
+                               #'try-to-expire-session
+                               #'process))
+      (when reblocks/session::!map-sessions
+        (map-sessions #'expire-session-pages 'session-pages)))
+
+    (values processed-sessions
+            processed-pages
+            expired-sessions-count
+            sessions-without-restart-count
+            expired-pages-count)))
 
 
 (defun extend-expiration-time-impl (app page)
