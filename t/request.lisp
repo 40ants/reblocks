@@ -3,7 +3,6 @@
         #:rove
         #:reblocks-test/utils)
   (:import-from #:reblocks/request
-                #:last-request-path
                 #:refresh-request-p
                 #:get-uri)
   (:import-from #:lack.test
