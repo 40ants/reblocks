@@ -1,10 +1,10 @@
-(defpackage #:reblocks-test/dependencies
+(defpackage #:reblocks-tests/dependencies
   (:use #:cl
         ;; #:cl-mock
         ;; #:prove
         #:rove
         ;;        #:hamcrest/rove
-        #:reblocks-test/utils)
+        #:reblocks-tests/utils)
   (:import-from #:cl-mock
                 #:invocations
                 #:with-mocks
@@ -26,7 +26,7 @@
                 #:render-in-head)
   (:import-from #:str
                 #:ends-with-p))
-(in-package reblocks-test/dependencies)
+(in-package #:reblocks-tests/dependencies)
 
 
 (deftest infer-type

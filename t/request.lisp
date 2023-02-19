@@ -1,7 +1,7 @@
-(defpackage #:reblocks-test/request
+(defpackage #:reblocks-tests/request
   (:use #:cl
         #:rove
-        #:reblocks-test/utils)
+        #:reblocks-tests/utils)
   (:import-from #:reblocks/request
                 #:refresh-request-p
                 #:get-uri)
@@ -10,7 +10,7 @@
   (:import-from #:lack.request
                 #:make-request
                 #:request-uri))
-(in-package reblocks-test/request)
+(in-package #:reblocks-tests/request)
 
 
 (deftest refresh-request-p-1

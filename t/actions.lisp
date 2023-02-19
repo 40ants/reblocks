@@ -1,8 +1,8 @@
-(defpackage #:reblocks-test/actions
+(defpackage #:reblocks-tests/actions
   (:use #:cl
         #:rove
         #:hamcrest/rove
-        #:reblocks-test/utils)
+        #:reblocks-tests/utils)
   (:import-from #:reblocks/actions
                 #:make-action
                 #:eval-action
@@ -20,7 +20,7 @@
                 #:*current-app*)
   (:import-from #:serapeum
                 #:fmt))
-(in-package reblocks-test/actions)
+(in-package #:reblocks-tests/actions)
 
 
 (reblocks/app:defapp test-app
