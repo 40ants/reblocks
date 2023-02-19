@@ -19,7 +19,7 @@
       "steps": [
         {
           "name": "Checkout Code",
-          "uses": "actions/checkout@v1"
+          "uses": "actions/checkout@v3"
         },
         {
           "name": "Grant All Perms to Make Cache Restoring Possible",
@@ -29,16 +29,16 @@
         {
           "name": "Get Current Month",
           "id": "current-month",
-          "run": "echo \"::set-output name=value::$(date -u \"+%Y-%m\")\"",
+          "run": "echo \"value=$(date -u \"+%Y-%m\")\" >> $GITHUB_OUTPUT",
           "shell": "bash"
         },
         {
           "name": "Cache Roswell Setup",
           "id": "cache",
-          "uses": "actions/cache@v2",
+          "uses": "actions/cache@v3",
           "with": {
-            "path": "qlfile\n                           qlfile.lock\n                           /usr/local/bin/ros\n                           ~/.cache/common-lisp/\n                           ~/.roswell\n                           /usr/local/etc/roswell\n                           .qlot",
-            "key": "${{ steps.current-month.outputs.value }}-${{ env.cache-name }}-ubuntu-latest-quicklisp-sbcl-bin-${{ hashFiles('qlfile.lock', '*.asd') }}"
+            "path": "qlfile\nqlfile.lock\n~/.cache/common-lisp/\n~/.roswell\n/usr/local/etc/roswell\n/usr/local/bin/ros\n/usr/local/Cellar/roswell\n.qlot",
+            "key": "a-${{ steps.current-month.outputs.value }}-${{ env.cache-name }}-ubuntu-latest-quicklisp-sbcl-bin-${{ hashFiles('qlfile.lock', '*.asd') }}"
           }
         },
         {
@@ -49,9 +49,10 @@
         },
         {
           "name": "Setup Common Lisp Environment",
-          "uses": "40ants/setup-lisp@v1",
+          "uses": "40ants/setup-lisp@v2",
           "with": {
-            "asdf-system": "reblocks-docs"
+            "asdf-system": "reblocks",
+            "asdf-version": "3.3.6"
           },
           "if": "steps.cache.outputs.cache-hit != 'true'"
         },
@@ -59,7 +60,7 @@
           "name": "Build Docs",
           "uses": "40ants/build-docs@v1",
           "with": {
-            "asdf-system": "reblocks-docs",
+            "asdf-system": "reblocks",
             "error-on-warnings": true
           }
         }
