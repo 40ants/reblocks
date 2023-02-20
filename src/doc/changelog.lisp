@@ -27,9 +27,79 @@
                                                    "CSS"
                                                    "HTTP"
                                                    "WITH-HANDLED-ERRORS"
-                                                   "REBLOCKS/ERROR-HANDLER")
+                                                   "REBLOCKS/ERROR-HANDLER"
+                                                   "REBLOCKS/PAGE-DEPENDENCIES"
+                                                   "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.50.0 2022-12-03
+          """
+Fixed
+=====
+
+Fixed a bug when session lock was written into the session itself instead of into the
+inner hash table.
+
+Fixed error handling when debug-mode is off. Previously, the debugger was invoked before showing 500 error page to the user.
+
+Now every response has \"Cache-Control: no-cache, no-store, must-revalidate\" header to prevent
+caching of dynamic content in the browser. This fixes the issue when you did some changes using actions then went to
+another page and returned using \"Back\" button in the browser. Previously browser was able to show you an old content of the
+page.
+
+Added
+=====
+
+### Current page abstraction
+
+Added a notion of the current page. Now all actions are bound to some page and
+pages can expire, clearing actions from the memory. This should prevent memory leak
+leading to posible DoS attack. Page expiration is controlled by two values:
+
+- A number of seconds while page should be considered alive. This prevents
+  evil person from filling memory by creation of many separate sessions.
+- A maximum number of pages per session. This may be needed to protect from
+  opening too many pages within one session.
+
+Also, you can use REBLOCKS/PAGE:EXTEND-EXPIRATION-TIME function to extend current page's
+expiration time.
+
+When all pages in the session are expired, session is removed from the memory too.
+
+Generic-function REBLOCKS/PAGE:ON-PAGE-REFRESH was added.
+
+### Cached widget dependencies
+
+Another interesting feature is mixin class REBLOCKS/CACHED-DEPENDENCIES-MIXIN:CACHED-DEPENDENCIES-MIXIN.
+
+Changed
+=======
+
+These functions were moved to separate package `REBLOCKS/PAGE-DEPENDENCIES`:
+
+- with-collected-dependencies
+- get-collected-dependencies
+- push-dependencies
+- already-loaded-p
+- page-dependencies
+
+New generic-function REBLOCKS/SESSION:INIT-SESSION was introduced. Define a method if you
+need to add something into the user's session when it is initialized. This function will
+be called once per user.
+
+Generic function REBLOCKS/SESSION:INIT was replaced with REBLOCKS/PAGE:INIT-PAGE and it will
+be called each time a user opens site in a new browser window or tab. When user refreshes
+the page it will not be called.
+
+Function REBLOCKS/DEBUG:RESET-LATEST-SESSION now provides a convenient restart to enable debug mode.
+
+Deleted
+=======
+
+Function `reblocks/widgets/root:get` was deleted. Use `(page-root-widget (current-page))` instead.
+Also `root-widget-key` and corresponding package `reblocks/widgets/root` were removed.
+
+""")
   (0.49.0 2022-11-26
           """
 New functional was added which allows to control how does HTTP middlewares list is generated for the server.

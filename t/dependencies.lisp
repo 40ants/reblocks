@@ -1,20 +1,21 @@
-(defpackage #:reblocks-test/dependencies
+(defpackage #:reblocks-tests/dependencies
   (:use #:cl
         ;; #:cl-mock
         ;; #:prove
         #:rove
-;;        #:hamcrest/rove
-        #:reblocks-test/utils)
+        ;;        #:hamcrest/rove
+        #:reblocks-tests/utils)
   (:import-from #:cl-mock
                 #:invocations
                 #:with-mocks
                 #:answer)
+  (:import-from #:reblocks/page-dependencies
+                #:push-dependency
+                #:get-collected-dependencies
+                #:with-collected-dependencies)
   (:import-from #:reblocks/dependencies
                 #:*cache-remote-dependencies-in*
                 #:make-dependency
-                #:with-collected-dependencies
-                #:push-dependency
-                #:get-collected-dependencies
                 #:infer-type-from
                 #:get-type
                 #:get-path
@@ -22,8 +23,10 @@
                 #:get-content-type
                 #:get-route
                 #:serve
-                #:render-in-head))
-(in-package reblocks-test/dependencies)
+                #:render-in-head)
+  (:import-from #:str
+                #:ends-with-p))
+(in-package #:reblocks-tests/dependencies)
 
 
 (deftest infer-type
@@ -53,8 +56,8 @@
   (let ((dependency (make-dependency #P"t/data/some.js" :system "reblocks-test")))
     (testing "method get-path should return a local pathname"
       (ok (uiop:absolute-pathname-p (get-path dependency)))
-      (ok (str:ends-with-p "/t/data/some.js"
-                           (namestring (get-path dependency)))))
+      (ok (ends-with-p "/t/data/some.js"
+                       (namestring (get-path dependency)))))
     (ok (equal (get-type dependency)
                :js)
         "dependency's type should be :js")
@@ -73,8 +76,8 @@
   (testing "Also, local dependency can be created using a string."
     (let ((dependency (make-dependency "t/data/some.js" :system "reblocks-test")))
       (ok (uiop:absolute-pathname-p (get-path dependency)))
-      (ok (str:ends-with-p "/t/data/some.js"
-                           (namestring (get-path dependency)))))))
+      (ok (ends-with-p "/t/data/some.js"
+                       (namestring (get-path dependency)))))))
 
 
 (deftest when-caching-is-turned-off

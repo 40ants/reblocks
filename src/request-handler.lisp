@@ -12,20 +12,24 @@
   (:import-from #:reblocks/utils/uri
                 #:remove-parameter-from-uri)
   (:import-from #:reblocks/page
+                #:in-page-context-p
+                #:*current-page*
+                #:current-page
                 #:render-page-with-widgets)
-  (:import-from #:reblocks/session-lock
-                #:get-lock)
+  (:import-from #:reblocks/session)
   (:import-from #:reblocks/widget
                 #:render)
   (:import-from #:reblocks/html
                 #:with-html-string
                 #:*stream*)
   (:import-from #:reblocks/dependencies
+                #:get-dependencies
+                #:register-dependencies)
+  (:import-from #:reblocks/page-dependencies
+                #:already-loaded-p
                 #:with-collected-dependencies
                 #:push-dependencies
-                #:get-dependencies
-                #:get-collected-dependencies
-                #:register-dependencies)
+                #:get-collected-dependencies)
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:reblocks/actions
@@ -57,9 +61,8 @@
   ;; Just dependencies
   (:import-from #:reblocks/hooks)
   (:import-from #:log)
-  (:import-from #:reblocks/widgets/root)
-  (:import-from #:reblocks/session)
   (:import-from #:alexandria
+                #:curry
                 #:make-keyword)
   (:import-from #:log4cl-extras/error
                 #:with-log-unhandled)
@@ -116,13 +119,6 @@ customize behavior."))
           ;; Hunchentoot already displays warnings into log file, we just suppress output
           (*error-output* (make-string-output-stream)))
       (with-log-unhandled ()
-        (unless (ajax-request-p)
-          ;; We have to set last-request-path only for requests
-          ;; to Reblocks apps, and don't touch it when we are responding
-          ;; with some CSS/JS dependencies:
-          (setf (reblocks/session:get-value 'reblocks/request::last-request-path)
-                (get-path)))
-        
         (call-next-method)))))
 
 
@@ -182,7 +178,7 @@ customize behavior."))
   ;; This render will generate commands to include necessary pieces
   ;; of JS and CSS into the page.
   (mapc #'reblocks/dependencies:render-in-ajax-response
-        reblocks/dependencies::*page-dependencies*)
+        (get-collected-dependencies))
   
   (let ((commands (get-collected-commands)))
     (write
@@ -202,9 +198,9 @@ customize behavior."))
 
   (reblocks/page::with-page-defaults
     ;; TODO: make a macro reblocks/session-lock:with-lock
-    (with-lock-held ((get-lock))
-      (timing "widget tree rendering"
-        (render (reblocks/widgets/root:get app))))
+    (timing "widget tree rendering"
+      (render (reblocks/page:page-root-widget
+               (current-page))))
 
     ;; render page will wrap the HTML already rendered to
     ;; reblocks.html::*stream* with necessary boilerplate HTML
@@ -263,16 +259,16 @@ customize behavior."))
     (log:debug "Handling client request" path)
 
     ;; TODO: write a test
-    (when (null (reblocks/widgets/root:get app))
-      (log:debug "Initializing session")
+    (unless (reblocks/session:get-value 'initialized)
+      (log:debug "Initializing a new session")
       (handler-bind ((error (lambda (c) 
                               (when *backtrace-on-session-init-error*
                                 (let ((traceback))
                                   (log:error "Error during session initialization" traceback)))
                               (signal c))))
-        (setf (reblocks/widgets/root:get app)
-              (reblocks/session:init app))))
-    
+        (reblocks/session:init-session app)
+        (setf (reblocks/session:get-value 'initialized) t)))
+
     ;; TODO: understand why there is coupling with Dialog here and
     ;;       how to move it into the Dialog's code.
     
@@ -285,27 +281,35 @@ customize behavior."))
       (let ((content nil))
 
         
-        (push-dependencies
-         (get-dependencies app))
-        
-        (handle-action-if-needed app)
+        (multiple-value-bind (_ current-page)
+            (handle-action-if-needed app)
+          (declare (ignore _))
+          (let* ((symbols-to-bind (when current-page
+                                    (list '*current-page*)))
+                 (values-to-bind (when current-page
+                                   (list current-page))))
+            (progv symbols-to-bind values-to-bind
+              ;; We should collect application dependencies here,
+              ;; because this way we have a chance to bind the
+              ;; to the current-page object, bound to the action.
+              (push-dependencies
+               (get-dependencies app))
 
-        (setf content
-              (timing "rendering (w/ hooks)"
-                (reblocks/hooks:with-render-hook (app)
-                  (with-html-string
-                    (if (ajax-request-p)
-                        (handle-ajax-request app)
-                        (handle-normal-request app))
 
-                    ;; Now we'll add routes for each page dependency.
-                    ;; This way, a dependency for widgets, created by action
-                    ;; can be served when browser will follow up with next request.
-                    (let ((dependencies (get-collected-dependencies)))
-                      (log:debug "Collected dependencies"
-                                 dependencies)
+              (setf content
+                    (reblocks/hooks:with-render-hook (app)
+                      (with-html-string
+                        (if (ajax-request-p)
+                            (handle-ajax-request app)
+                            (handle-normal-request app))
 
-                      (register-dependencies
-                       dependencies))))))
+                        ;; Now we'll add routes for each page dependency.
+                        ;; This way, a dependency for widgets, created by action
+                        ;; can be served when browser will follow up with next request.
+                        (let ((dependencies (get-collected-dependencies)))
+                          (log:debug "Collected dependencies"
+                                     dependencies)
+
+                          (register-dependencies dependencies))))))))
 
         content))))

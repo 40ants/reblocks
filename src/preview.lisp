@@ -32,7 +32,7 @@
   ())
 
 
-(defmethod reblocks/session:init ((app preview))
+(defmethod reblocks/page:init-page ((app preview) path expire-at)
   (make-instance 'preview-widget))
 
 

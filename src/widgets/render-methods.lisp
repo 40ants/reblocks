@@ -1,10 +1,10 @@
 (defpackage #:reblocks/widgets/render-methods
   (:use #:cl)
   (:import-from #:reblocks/dependencies
-                #:get-collected-dependencies
                 #:get-dependencies
-                #:push-dependencies
                 #:render-in-ajax-response)
+  (:import-from #:reblocks/page-dependencies
+                #:push-dependencies)
   (:import-from #:reblocks/widget
                 #:get-css-classes-as-string
                 #:get-html-tag

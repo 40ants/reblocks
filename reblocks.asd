@@ -41,12 +41,13 @@
                ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`
                ;; package
                "lack-middleware-session")
-  :in-order-to ((test-op (test-op "reblocks-test"))))
+  :in-order-to ((test-op (test-op "reblocks-tests"))))
 
 
 (register-system-packages "lack-request" '(#:lack.request))
 (register-system-packages "lack-response" '(#:lack.response))
 (register-system-packages "lack-middleware-session" '(#:lack.middleware.session
+                                                      #:lack.session.store
                                                       #:lack.session.state.cookie
                                                       #:lack.middleware.session.store.memory))
 (register-system-packages "lack-util" '(#:lack.util))

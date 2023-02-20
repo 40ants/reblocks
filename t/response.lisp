@@ -1,11 +1,11 @@
-(defpackage #:reblocks-test/response
+(defpackage #:reblocks-tests/response
   (:use #:cl
         #:rove
-        #:reblocks-test/utils)
+        #:reblocks-tests/utils)
   (:import-from #:reblocks/response
                 #:make-uri
                 #:add-retpath-to))
-(in-package reblocks-test/response)
+(in-package #:reblocks-tests/response)
 
 
 (deftest make-uri-test

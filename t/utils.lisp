@@ -1,4 +1,4 @@
-(defpackage #:reblocks-test/utils
+(defpackage #:reblocks-tests/utils
   (:use #:cl)
   (:import-from #:alexandria
                 #:with-gensyms
@@ -35,7 +35,7 @@
    #:is-html
    #:catch-hooks
    #:assert-hooks-called))
-(in-package reblocks-test/utils)
+(in-package #:reblocks-tests/utils)
 
 
 (defmacro with-session (&body body)

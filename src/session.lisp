@@ -1,12 +1,27 @@
-(defpackage #:reblocks/session
+(uiop:define-package #:reblocks/session
   (:use #:cl)
   (:import-from #:alexandria
+                #:curry
                 #:ensure-gethash)
   (:import-from #:log)
   (:import-from #:lack.util)
   (:import-from #:lack.middleware.session.store.memory
                 #:memory-store-stash)
   (:import-from #:lack.session.state.cookie)
+  (:import-from #:bordeaux-threads
+                #:make-recursive-lock
+                #:with-recursive-lock-held
+                #:with-lock-held
+                #:make-lock)
+  (:import-from #:trivial-garbage
+                #:make-weak-hash-table)
+  (:import-from #:alexandria
+                #:ensure-gethash)
+  (:import-from #:metatilities
+                #:deprecated)
+  (:import-from #:lack.session.store
+                #:remove-session)
+
   (:export
    #:with-session
    #:delete-value
@@ -14,14 +29,14 @@
    #:gen-id
    #:in-session-p
    #:init
-   #:get-session-id
    ;; this function is defined in session-reset.lisp
    ;; to not introduce circular dependencies
    #:reset
    #:expire
    #:get-number-of-sessions
    #:make-session-middleware
-   #:get-number-of-anonymous-sessions))
+   #:get-number-of-anonymous-sessions
+   #:init-session))
 (in-package #:reblocks/session)
 
 
@@ -32,6 +47,15 @@
   "Stores current lack environment to configure session's behaviour.")
 
 
+(defvar *session-locks* (make-weak-hash-table :test #'eql
+                                              :weakness :key)
+  "Per-session locks to avoid having unrelated threads
+  waiting.")
+
+
+(defvar *session-lock-table-lock* (make-lock "*session-lock-table-lock*"))
+
+
 (defun in-session-p ()
   "Checks if session is active and data can be safely retrived or stored."
   (when *session*
@@ -39,7 +63,7 @@
 
 
 ;; previously webapp-session-value
-(defun get-value (key &optional default)
+(defun get-value (key &optional (default nil default-given-p))
   "Get a session value from the currently running webapp.
 KEY is compared using EQUAL."
 
@@ -47,7 +71,9 @@ KEY is compared using EQUAL."
     (error "Session was not created for this request!"))
   ;; TODO: seems, previously keys were separated for different weblocks apps
   ;;       but I've simplified it for now
-  (ensure-gethash key *session* default))
+  (if default-given-p
+      (ensure-gethash key *session* default)
+      (gethash key *session*)))
 
 
 (defun (setf get-value) (value key)
@@ -80,10 +106,13 @@ used to create IDs for html elements, widgets, etc."
 
                    It should return a widget which become a root widget."))
 
-(defun get-session-id ()
-  "Returns current session id or signals an error if no current session."
-  ;; TODO: see if a id can be extracted from sesion
-  *session*)
+
+(defgeneric init-session (app)
+  (:documentation "A method for this generic function should be defined to initialize application for a new user session.
+
+                   On the moment it get called session has-map already exists and you can use GET-VALUE function to set
+                   some values.")
+  (:method ((app t))))
 
 
 (defun expire ()
@@ -99,10 +128,41 @@ used to create IDs for html elements, widgets, etc."
   (values))
 
 
+(defun get-lock (&optional session)
+  (let ((session (or session
+                     *session*)))
+    (unless session
+      (error "There is no current session."))
+    
+    (with-lock-held (*session-lock-table-lock*)
+      (ensure-gethash session
+                      *session-locks*
+                      (make-recursive-lock
+                       (format nil "Session lock for session ~S"
+                               session))))))
+
+(declaim (inline call-with-session-lock))
+
+(defun call-with-session-lock (session thunk)
+  (with-recursive-lock-held ((get-lock session))
+    (funcall thunk)))
+
+
+(defmacro with-session-lock ((&optional session)
+                             &body body)
+  `(flet ((with-session-lock-thunk ()
+            ,@body))
+     (declare (dynamic-extent #'with-session-lock-thunk))
+     (call-with-session-lock ,session
+                             #'with-session-lock-thunk)))
+
+
 (defun call-with-session (lack-env func)
   (let ((*session* (getf lack-env :lack.session))
         (*env* lack-env))
-    (restart-case (funcall func)
+    (restart-case
+        (with-session-lock (*session*)
+          (funcall func))
       (reset-session ()
         :report "Reset current Weblocks session and return 500."
         (log:warn "Resetting current session.")
@@ -122,6 +182,9 @@ used to create IDs for html elements, widgets, etc."
 (defvar !get-number-of-anonymous-sessions nil
   "This variable will contain a function after the session middleware will be created.")
 
+(defvar !map-sessions nil
+  "This variable will contain a function after the session middleware will be created.")
+
 (defun get-number-of-sessions ()
   (unless !get-number-of-sessions
     (error "Please, call make-session-middleware first."))
@@ -129,9 +192,16 @@ used to create IDs for html elements, widgets, etc."
 
 
 (defun get-number-of-anonymous-sessions ()
+  "Returns a number of sessions where :user key is NIL."
   (unless !get-number-of-anonymous-sessions
     (error "Please, call make-session-middleware first."))
   (funcall !get-number-of-anonymous-sessions))
+
+
+(defun map-sessions (thunk &rest keys)
+  (unless !map-sessions
+    (error "Please, call make-session-middleware first."))
+  (apply !map-sessions thunk keys))
 
 
 (defvar *allowed-samesite-policies*
@@ -147,7 +217,8 @@ used to create IDs for html elements, widgets, etc."
         (satisfies allowed-samesite-policy-p)))
 
 
-(defun make-session-middleware (&key (samesite-policy :lax))
+(defun make-session-middleware (&key (samesite-policy :lax) (public-session-keys
+                                                             (list (cons "REBLOCKS/PAGE" "SESSION-PAGES"))))
   ;; We don't want to expose session store as a global variable,
   ;; that is why we use these closures to extract statistics.
   (check-type samesite-policy samesite-policy-type
@@ -161,21 +232,54 @@ used to create IDs for html elements, widgets, etc."
                                                              ;; when SameSite is None.
                                                              :secure (eql samesite-policy
                                                                           :none))))
-
-    (setf !get-number-of-sessions
-          (lambda ()
-            (let ((hash (memory-store-stash store)))
-              (hash-table-count hash))))
+    (flet ((get-number-of-sessions ()
+             (let ((hash (memory-store-stash store)))
+               (hash-table-count hash)))
+           (get-number-of-anonymous-sessions ()
+             (let ((hash (memory-store-stash store)))
+               (loop for session-hash being the hash-values in hash
+                     unless (gethash :user session-hash)
+                     summing 1)))
+           (map-sessions (thunk &rest keys)
+             ;; For security reasons, we allow to access only
+             ;; a few keys inside the session
+             (loop for key in keys
+                   unless (member key public-session-keys
+                                  :key (lambda (pk)
+                                         (intern (cdr pk)
+                                                 (car pk))))
+                   do (error "Unable to access ~A key in the session object."
+                             key))
+             
+             (loop with hash = (memory-store-stash store)
+                   with expired-session-ids = nil
+                   for session-hash being the hash-values in hash using (hash-key session-id)
+                   do (with-session-lock (session-hash)
+                        (restart-case
+                            (let* ((arguments
+                                     (loop for key in keys
+                                           collect (gethash key session-hash)))
+                                   (results (apply thunk arguments)))
+                              (loop for key in keys
+                                    for result in results
+                                    do (setf (gethash key session-hash)
+                                             result)))
+                          (expire-session ()
+                            :report "Remove current session from the session store."
+                            (push session-id expired-session-ids))))
+                   finally (mapc (curry #'remove-session store)
+                                 expired-session-ids)))
+           (session-middleware (app)
+             (funcall (lack.util:find-middleware :session) app
+                      :store store
+                      :state state)))
+      (setf !get-number-of-sessions
+            #'get-number-of-sessions)
     
-    (setf !get-number-of-anonymous-sessions
-          (lambda ()
-            (let ((hash (memory-store-stash store)))
-              (loop for session-hash being the hash-values in hash
-                    unless (gethash :user session-hash)
-                      summing 1))))
+      (setf !get-number-of-anonymous-sessions
+            #'get-number-of-anonymous-sessions)
+      
+      (setf !map-sessions
+            #'map-sessions)
     
-    (lambda (app)
-      (funcall (lack.util:find-middleware :session) app
-               :store store
-               :state state))))
-
+      #'session-middleware)))

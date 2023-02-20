@@ -226,6 +226,8 @@ window.commandHandlers = {
         target.replaceWith(widget);
     },
     'insertWidget': function(params) {
+        console.log('inserting widget' + params);
+        
         var widget = jQuery(params.widget);
         if (params.after) {
             var target = jQuery('#' + params.after);
@@ -250,6 +252,8 @@ function processCommand(command) {
     // TODO: add a documentation on defining a command handler
     // and calling it from the server-side
     var handler = window.commandHandlers[method];
+    console.log('processing command ' + method + 'with params: ');
+    console.log(command);
     if (handler === undefined) {
         console.warn('No handler for ' + method + ' method');
     } else {
@@ -332,13 +336,14 @@ function initiateAction(actionCode, options) {
     
     args.action = actionCode;
 
-    log('Fireing action', actionCode);
-    log('with options', options);
+    // This logging is for debug only
+    // log('Fireing action', actionCode);
+    // log('with options', options);
     
     var ajax_options = {
         type: method,
         success: function(first, second, third) {
-            log('Action was successful', actionCode);
+            // log('Action was successful', actionCode);
             onActionSuccess(first, second, third);
             on_success && on_success();
         },

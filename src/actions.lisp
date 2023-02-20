@@ -1,7 +1,9 @@
 (uiop:define-package #:reblocks/actions
   (:use #:cl)
   (:import-from #:log)
-  (:import-from #:reblocks/app-actions)
+  (:import-from #:reblocks/app
+                #:get-prefix
+                #:get-prefix-actions)
   (:import-from #:reblocks/utils/misc
                 #:safe-apply)
   (:import-from #:reblocks/variables
@@ -19,6 +21,18 @@
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
+  (:import-from #:trivial-garbage
+                #:make-weak-hash-table)
+  (:import-from #:reblocks/page
+                #:page-expired-p
+                #:*current-page*
+                #:page-actions
+                #:extend-expiration-time-impl)
+  (:import-from #:reblocks/response
+                #:make-uri
+                #:redirect)
+  (:import-from #:reblocks/app-actions
+                #:get-action)
   
   (:export #:eval-action
            #:on-missing-action
@@ -49,13 +63,19 @@ situation (e.g. redirect, signal an error, etc.)."))
 
 
 (defmethod eval-action (app action-name arguments)
-  (let ((action (get-request-action app action-name)))
-
+  ;; TODO: decide what to do with application wide actions
+  ;; because GET-REQUEST-ACTION will not return *current-page* for them
+  (multiple-value-bind (action *current-page*)
+      (get-request-action app action-name)
+    
     (unless action
       (on-missing-action app action-name))
     
     (log:debug "Calling" action "with" arguments "and" action-name)
-    (safe-apply action arguments)))
+    (multiple-value-prog1
+        (values (safe-apply action arguments)
+                *current-page*)
+      (extend-expiration-time-impl app *current-page*))))
 
 
 (defun generate-action-code ()
@@ -86,22 +106,37 @@ situation (e.g. redirect, signal an error, etc.)."))
    attacker can attempt to guess a dangerour action id and send the user
    a link to it. Only use guessable action codes for GET actions."
 
-  ;; Here we put into the session two maps:
-  ;; code->action which maps from string code to a function
-  ;; and
-  ;; action->code which maps backward from a function to a code.
-  (let ((code->action 
+  ;; Here we put into the session four maps:
+  ;; - current-page's code-to-action map. When page is expired,
+  ;;   then all actions will be garbage collected and removed from
+  ;;   hash tables bound to a session
+  ;; - session code->action key which maps from string code to a function
+  ;; - session code->page key which maps from string code to a page where action was instantiated
+  ;; - action->code which maps backward from a function to a code.
+  (let ((page-code->action (page-actions *current-page*))
+        (session-code->action
           (reblocks/session:get-value 'code->action
-                                      (make-hash-table :test #'equal))))
-
-    (setf (gethash action-code code->action) action-fn))
-
-  ;; Now, get or create a table for function->code mapping
-  (let ((action->code
+                                      ;; Here we are using weakness to make
+                                      ;; actions automatically disappear when
+                                      ;; old pages expire from the session
+                                      (make-weak-hash-table :test #'equal
+                                                            :weakness :value)))
+        (session-code->page
+          (reblocks/session:get-value 'code->page
+                                      ;; Here we are using weakness to make
+                                      ;; actions automatically disappear when
+                                      ;; old pages expire from the session
+                                      (make-weak-hash-table :test #'equal
+                                                            :weakness :value)))
+        (session-action->code
           (reblocks/session:get-value 'action->code
-                                      (make-hash-table))))
+                                      (make-weak-hash-table :weakness :key))))
 
-    (setf (gethash action-fn action->code) action-code))
+    (setf (gethash action-code page-code->action) action-fn)
+    (setf (gethash action-code session-code->action) action-fn)
+    (setf (gethash action-code session-code->page) *current-page*)
+    ;; Now, get or create a table for function->code mapping
+    (setf (gethash action-fn session-action->code) action-code))
   
   action-code)
 
@@ -117,7 +152,7 @@ situation (e.g. redirect, signal an error, etc.)."))
          (multiple-value-bind (code code-p)
              (gethash function-or-action
                       (reblocks/session:get-value 'action->code
-                                                  (make-hash-table)))
+                                                  (make-weak-hash-table :weakness :key)))
            (if code-p
                code
                (internal-make-action function-or-action))))
@@ -125,14 +160,15 @@ situation (e.g. redirect, signal an error, etc.)."))
         ;; if it is an action code
         (t
          (multiple-value-bind (res presentp)
-             (reblocks/app-actions:get-action *current-app* function-or-action)
+             (get-action *current-app* function-or-action)
            (declare (ignore res))
            (if presentp
                function-or-action
                (multiple-value-bind (res presentp)
                    (gethash function-or-action
                             (reblocks/session:get-value 'code->action
-                                                        (make-hash-table)))
+                                                        (make-weak-hash-table :test 'equal
+                                                                              :weakness :value)))
                  (declare (ignore res))
                  (if presentp
                      function-or-action
@@ -196,10 +232,20 @@ situation (e.g. redirect, signal an error, etc.)."))
 
 (defun get-session-action (action-name)
   "Returns an action bound to the current session."
-  (let ((code->action 
-          (reblocks/session:get-value 'code->action)))
-    (when code->action
-      (gethash action-name code->action))))
+  (let* ((code->action
+           (reblocks/session:get-value 'code->action))
+         (code->page
+           (reblocks/session:get-value 'code->page))
+         (thunk (when code->action
+                  (gethash action-name code->action)))
+         (page (when (and thunk code->page)
+                 (gethash action-name code->page))))
+    ;; We only need to return
+    ;; results when page is known, because session actions
+    ;; are always should be bound to pages.
+    ;; If page was expired
+    (unless (page-expired-p page)
+      (values thunk page))))
 
 
 (defun get-request-action (app action-name)
@@ -207,10 +253,20 @@ situation (e.g. redirect, signal an error, etc.)."))
    a parameter with name equal to *ACTION-STRING* variable, the action
    is looked up in the session and appropriate function is returned.
    If no action is in the parameter, returns NIL. If the action
-   isn't in the session (somehow invalid), raises an assertion."
+   isn't in the session (somehow invalid), raises an assertion.
+
+   Returns two values: an action and the optional page where it was instantiated."
   (when action-name
-    (let* ((app-wide-action (reblocks/app-actions:get-action app action-name))
-           (session-action (unless app-wide-action
-                             (get-session-action action-name)))
-           (request-action (or app-wide-action session-action)))
-      request-action)))
+    (let ((app-wide-action (reblocks/app-actions:get-action app action-name)))
+      (if app-wide-action
+          app-wide-action
+          (get-session-action action-name)))))
+
+
+(defmethod on-missing-action (app action-name)
+  (cond
+    (*ignore-missing-actions*
+     (redirect
+      (make-uri (get-prefix app))))
+    (t
+     (error "Cannot find action: ~A" action-name))))

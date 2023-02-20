@@ -1,4 +1,4 @@
-(defpackage #:reblocks-test/widgets/mop
+(defpackage #:reblocks-tests/widgets/mop
   (:use #:cl
         #:rove)
   (:import-from #:reblocks/widget
@@ -9,7 +9,7 @@
   (:import-from #:reblocks/widgets/mop
                 #:widget-effective-slot-definition
                 #:widget-direct-slot-definition))
-(in-package reblocks-test/widgets/mop)
+(in-package #:reblocks-tests/widgets/mop)
 
 
 (deftest test-direct-slot-definition-class-widget

@@ -14,8 +14,6 @@
                 #:with-html)
   (:import-from #:reblocks/routes
                 #:add-route)
-  (:import-from #:reblocks/response
-                #:send-script)
   ;; Just a dependency
   (:import-from #:dexador)
   
@@ -37,17 +35,9 @@
    #:make-dependency
    #:get-type
    #:render-in-ajax-response
-   #:with-collected-dependencies
-   #:push-dependency
-   #:push-dependencies
-   #:cache-in-memory-p))
+   #:cache-in-memory-p
+   #:dependency-equal))
 (in-package #:reblocks/dependencies)
-
-
-(defvar-unbound *page-dependencies*
-  "A list which contains all page dependencies.
-
-Reblocks fills this list during page rendering.")
 
 
 (defvar *cache-remote-dependencies-in* nil
@@ -202,20 +192,6 @@ as a response to some action.")
        (:link :rel "stylesheet" :type "text/css"
               :href (get-url dependency)
               :media "screen")))))
-
-
-(defmethod render-in-ajax-response ((dependency dependency))
-  (let ((url (get-url dependency)))
-    (case (get-type dependency)
-      (:js
-       (let ((script (parenscript:ps* `(include_dom ,url))))
-         (log:debug "Rendering js dependency in ajax response" dependency)
-         (send-script script :before-load)))
-
-      (:css
-       (let ((script (parenscript:ps* `(include_css ,url))))
-         (log:debug "Rendering css dependency in ajax response" dependency)
-         (send-script script :before-load))))))
 
 
 (defmethod render-in-head ((dependency remote-dependency))
@@ -534,37 +510,9 @@ Automatically adds a prefix depending on current webapp and widget."
               content)))))
 
 
-(defmacro with-collected-dependencies (&body body)
-  "Use this macro to wrap code which may push new dependencies for
-the page or an action."
-  `(let (*page-dependencies*)
-     ,@body))
+(defgeneric dependency-equal (left right)
+  (:documentation "Should return T if two dependencies are considered equal. By default compares their URLs.")
+  (:method ((left t) (right t))
+    (equal (get-url left)
+           (get-url right))))
 
-
-(defun push-dependency (dependency)
-  "Pushes dependency into the currently collected list of dependencies.
-
-Makes deduplication by comparing dependencies' urls."
-  
-  (unless (boundp '*page-dependencies*)
-    (error "Please, use push-dependency in code, wrapped with with-collected-dependencies macro."))
-  (pushnew dependency *page-dependencies*
-           :key #'get-url
-           :test #'string-equal))
-
-
-(defun push-dependencies (list-of-dependencies)
-  "Same as `push-dependency' but for the list."
-  (mapc #'push-dependency
-        list-of-dependencies))
-
-
-(defun get-collected-dependencies ()
-  (unless (boundp '*page-dependencies*)
-    (error "Please, use push-dependency in code, wrapped with with-collected-dependencies macro."))
-
-  ;; Dependencies returned as reversed list because that way
-  ;; they will have same order as they were pushed.
-  (remove-duplicates (reverse *page-dependencies*)
-                     :key #'get-url
-                     :test #'string-equal))

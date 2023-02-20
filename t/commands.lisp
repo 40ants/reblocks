@@ -1,10 +1,10 @@
-(defpackage #:reblocks-test/commands
+(defpackage #:reblocks-tests/commands
   (:use #:cl
         #:hamcrest/rove
         #:rove)
   (:import-from #:reblocks/commands
                 #:create-command))
-(in-package reblocks-test/commands)
+(in-package #:reblocks-tests/commands)
 
 
 (deftest test-create-command

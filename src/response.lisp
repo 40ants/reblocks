@@ -11,8 +11,6 @@
   (:import-from #:reblocks/js/base
                 #:with-javascript-to-string
                 #:with-javascript)
-  (:import-from #:reblocks/actions
-                #:on-missing-action)
   (:import-from #:reblocks/app
                 #:get-prefix)
   (:import-from #:reblocks/commands
@@ -30,6 +28,10 @@
                 #:cookie)
   (:import-from #:lack.response
                 #:response-headers)
+  (:import-from #:reblocks/page
+                #:in-page-context-p
+                #:current-page
+                #:on-page-redirect)
   (:export #:immediate-response
            #:make-response
            #:add-header
@@ -128,8 +130,18 @@
   "Use this function to add Set-Cookie header:
 
    ```lisp
-   (set-cookie (cookie:make-cookie :name \"user_id\" :value \"bob\"))
-   ```"
+   (set-cookie (list :name \"user_id\" :value \"bob\" :samesite :lax))
+   ```
+
+   Cookie might include these properties:
+
+   - domain
+   - path
+   - expires
+   - secure
+   - httponly
+   - samesite
+"
 
   (check-type cookie proper-list)
   
@@ -260,6 +272,10 @@
 
 (defun redirect (uri)
   "Redirects the client to a new URI."
+  
+  (when (in-page-context-p)
+    (on-page-redirect (current-page) uri))
+  
   (if (ajax-request-p)
       (add-command :redirect
                    :to uri)
@@ -269,17 +285,13 @@
                           :code 302)))
 
 
-(defmethod on-missing-action (app action-name)
-  (cond
-    (*ignore-missing-actions*
-     (redirect
-      (make-uri (get-prefix app))))
-    (t
-     (error "Cannot find action: ~A" action-name))))
-
-
 (defun call-with-response (thunk)
-  (let* ((headers (list :content-type (get-default-content-type-for-response)))
+  (let* ((headers (list :content-type (get-default-content-type-for-response)
+                        ;; We don't want content of Reblocks apps was cached
+                        ;; by the browser, because widgets state can be changed
+                        ;; in response to the actions and "Back" button might
+                        ;; show the old state of the page in case of caching.
+                        :cache-control "no-cache, no-store, must-revalidate"))
          (*response* (lack.response:make-response 200 headers ""))
          (result (funcall thunk)))
 
@@ -287,7 +299,6 @@
       ((and result (listp result))
        result)
       ((typep result 'lack.response:response)
-       (log:warn "Headers and cookies from *response* will be ignored.")
        result)
       (result
        (setf (lack.response:response-body *response*)

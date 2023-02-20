@@ -25,6 +25,8 @@
   ;; Just to add dependency
   (:import-from #:reblocks/session)
   (:import-from #:quri)
+  (:import-from #:str
+                #:split)
   
   (:export #:get-parameters
            #:get-parameter
@@ -178,11 +180,15 @@ without given header."
   "Determines if a request is a result of the user invoking a browser
 refresh function. Note that a request will not be considered a refresh
 if there is an action involved (even if the user hits refresh)."
-  (let ((action-name (get-action-name-from-request)))
-    (and
-     (null action-name)
-     (equalp (get-path)
-             (reblocks/session:get-value 'last-request-path)))))
+  ;; This article explains why browsers are using Cache-Control: max-age=0
+  ;; when user refreshes the page:
+  ;; https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#max-age_2
+
+  (let ((cache-control (get-header "cache-control")))
+    (when cache-control
+      (loop for item in (split "," cache-control)
+            for trimmed = (string-trim '(#\Space) item)
+            thereis (string-equal "max-age=0" trimmed)))))
 
 
 (defun pure-request-p ()

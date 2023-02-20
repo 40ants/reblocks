@@ -176,7 +176,7 @@ propagation code."))
                    The most obvious cases are transformation of strings and functions into the widget, but
                    these methods are already supplied by Reblocks.
 
-                   If REBLOCKS/SESSION:INIT returns an object, then CREATE-WIDGET-FROM will be called on it
+                   If REBLOCKS/PAGE:INIT-PAGE returns an object, then CREATE-WIDGET-FROM will be called on it
                    to create the root widget."))
 
 

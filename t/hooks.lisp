@@ -1,14 +1,14 @@
-(defpackage #:reblocks-test/hooks
+(defpackage #:reblocks-tests/hooks
   (:use #:cl
         #:rove
-        #:reblocks-test/utils)
+        #:reblocks-tests/utils)
   (:import-from #:reblocks/hooks
                 #:get-callbacks
                 #:*session-hooks*
                 #:get-callbacks-names
                 #:with-hook
                 #:call-next-hook))
-(in-package reblocks-test/hooks)
+(in-package #:reblocks-tests/hooks)
 
 
 (deftest empty-call-back-list
