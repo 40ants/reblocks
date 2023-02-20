@@ -2,6 +2,88 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E50-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.50.0 (2022-12-03)
+
+<a id="fixed"></a>
+
+### Fixed
+
+Fixed a bug when session lock was written into the session itself instead of into the
+inner hash table.
+
+Fixed error handling when debug-mode is off. Previously, the debugger was invoked before showing 500 error page to the user.
+
+Now every response has \"Cache-Control: no-cache, no-store, must-revalidate\" header to prevent
+caching of dynamic content in the browser. This fixes the issue when you did some changes using actions then went to
+another page and returned using \"Back\" button in the browser. Previously browser was able to show you an old content of the
+page.
+
+<a id="added"></a>
+
+### Added
+
+<a id="current-page-abstraction"></a>
+
+#### Current page abstraction
+
+Added a notion of the current page. Now all actions are bound to some page and
+pages can expire, clearing actions from the memory. This should prevent memory leak
+leading to posible DoS attack. Page expiration is controlled by two values:
+
+* A number of seconds while page should be considered alive. This prevents
+  evil person from filling memory by creation of many separate sessions.
+
+* A maximum number of pages per session. This may be needed to protect from
+  opening too many pages within one session.
+
+Also, you can use [`reblocks/page:extend-expiration-time`][e637] function to extend current page's
+expiration time.
+
+When all pages in the session are expired, session is removed from the memory too.
+
+Generic-function [`reblocks/page:on-page-refresh`][282c] was added.
+
+<a id="cached-widget-dependencies"></a>
+
+#### Cached widget dependencies
+
+Another interesting feature is mixin class [`reblocks/cached-dependencies-mixin:cached-dependencies-mixin`][f706].
+
+<a id="changed"></a>
+
+### Changed
+
+These functions were moved to separate package `REBLOCKS/PAGE-DEPENDENCIES`:
+
+* with-collected-dependencies
+
+* get-collected-dependencies
+
+* push-dependencies
+
+* already-loaded-p
+
+* page-dependencies
+
+New generic-function [`reblocks/session:init-session`][c740] was introduced. Define a method if you
+need to add something into the user's session when it is initialized. This function will
+be called once per user.
+
+Generic function `REBLOCKS/SESSION:INIT` was replaced with [`reblocks/page:init-page`][66f5] and it will
+be called each time a user opens site in a new browser window or tab. When user refreshes
+the page it will not be called.
+
+Function [`reblocks/debug:reset-latest-session`][efb7] now provides a convenient restart to enable debug mode.
+
+<a id="deleted"></a>
+
+### Deleted
+
+Function `reblocks/widgets/root:get` was deleted. Use `(page-root-widget (current-page))` instead.
+Also `root-widget-key` and corresponding package `reblocks/widgets/root` were removed.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E49-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.49.0 (2022-11-26)
@@ -1636,12 +1718,18 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [b988]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29
 [354f]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
 [8ab6]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
+[efb7]: https://40ants.com/reblocks/debug/#x-28REBLOCKS-2FDEBUG-3ARESET-LATEST-SESSION-20FUNCTION-29
+[f706]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FCACHED-DEPENDENCIES-MIXIN-3ACACHED-DEPENDENCIES-MIXIN-20CLASS-29
 [ac86]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
 [631c]: https://40ants.com/reblocks/error-handling/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[e637]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29
+[66f5]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29
+[282c]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[c740]: https://40ants.com/reblocks/session/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
 [91c9]: https://github.com/40ants/lack
 [8f00]: https://github.com/40ants/log4cl-extras
