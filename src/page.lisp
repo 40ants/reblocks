@@ -363,7 +363,7 @@
 (defgeneric extend-page-expiration-by (app page)
   (:documentation "Returns NIL or a number of seconds after which page should be removed from the memory.
 
-                   Default method returns current value of *PAGES-EXPIRE-IN* variable.")
+                   Default method returns current value of *EXTEND-PAGE-EXPIRATION-BY* variable or *PAGES-EXPIRE-IN* variable.")
   (:method ((app t) (page t))
     (if (boundp '*extend-page-expiration-by*)
         *extend-page-expiration-by*

@@ -10,8 +10,7 @@
                 #:delete-value
                 #:gen-id
                 #:in-session-p
-                #:init
-                #:get-session-id
+                #:init-session
                 #:reset
                 #:expire
                 #:get-number-of-sessions
@@ -40,16 +39,16 @@ When a new user opens the site in the browser, Reblocks does these steps:
   data could be stored.
 * Generates an unique id and put's this session object to the hash map of all
   sessions.
-* Calls the INIT generic function to determine what widget should be shown to the user.
+* Calls the INIT-SESSION generic function to determine what widget should be shown to the user.
 * Renders the root widget to HTML and sends it to the browser.
 * Along with this HTML response, sends `Set-Cookie` header to save session id
   in the browser.
 
-The method you define for INIT generic-function should return a root widget.
+The method you define for INIT-SESSION generic-function should return a root widget.
 This widget may include children and render them in it's
 REBLOCKS/WIDGET:RENDER generic-function implementation.
 
-You will find an example of [INIT][generic-function] in the REBLOCKS/DOC/QUICKSTART::@QUICKSTART section.
+You will find an example of [INIT-SESSION][generic-function] in the REBLOCKS/DOC/QUICKSTART::@QUICKSTART section.
 
 # Storing data
 
@@ -68,8 +67,7 @@ For example, you might want to store information about the current user if he lo
   (delete-value function)
   (gen-id function)
   (in-session-p function)
-  (init generic-function)
-  (get-session-id function)
+  (init-session generic-function)
   (reset function)
   (expire function)
   (get-number-of-sessions function)

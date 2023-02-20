@@ -37,6 +37,8 @@
                 #:@contribute)
   (:import-from #:reblocks/doc/session
                 #:@session)
+  (:import-from #:reblocks/doc/page
+                #:@page)
   (:import-from #:reblocks/doc/actions
                 #:@actions)
   (:import-from #:reblocks/doc/app
@@ -47,6 +49,8 @@
                 #:@request)
   (:import-from #:reblocks/doc/changelog
                 #:@changelog)
+  (:import-from #:reblocks/doc/debug
+                #:@debug)
   (:import-from #:docs-config
                 #:docs-config)
   (:export #:@index
@@ -91,7 +95,9 @@
                            @response
                            @error-handling
                            @hooks
+                           @page
                            @session
+                           @debug
                            @removed-features
                            @api
                            @contribute

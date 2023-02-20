@@ -1,12 +1,8 @@
-(defpackage #:reblocks/debug
+(uiop:define-package #:reblocks/debug
   (:use #:cl)
   (:import-from #:log)
   (:import-from #:reblocks/hooks
                 #:on-application-hook-handle-http-request)
-  ;; (:import-from #:reblocks/app
-  ;;               #:*current-app*
-  ;;               #:find-app-by-name
-  ;;               #:get-registered-apps)
   (:import-from #:reblocks/session
                 #:*session*)
   (:import-from #:reblocks/request
@@ -22,7 +18,6 @@
            #:on
            #:off
            #:status
-           #:in-app
            #:get-session-value))
 (in-package #:reblocks/debug)
 
@@ -124,6 +119,7 @@ To clear, use function \(reset-last-session\).")
 
 
 (defun reset-latest-session ()
+  "Resets the latest session when debug mode is on."
   (restart-case
       (progn
         (unless *on*
@@ -132,16 +128,6 @@ To clear, use function \(reset-last-session\).")
     (enable-debugging ()
       :report "Enable debug mode (you'll need to refresh page and call RESET-LATEST-SESSION again)."
       (on))))
-
-
-;; TODO: This function should be rewritten:
-;; (defun in-app (&optional name)
-;;   "Set the current webapp to NAME, or the last webapp registered if NAME is
-;; not supplied. Returns the selected webapp. Convenience function for the REPL."
-;;   (setf *current-app*
-;;         (find-app-by-name
-;;          (or name
-;;              (first (get-registered-apps))))))
 
 
 (defun get-session-value (key)

@@ -28,7 +28,8 @@
                                                    "HTTP"
                                                    "WITH-HANDLED-ERRORS"
                                                    "REBLOCKS/ERROR-HANDLER"
-                                                   "REBLOCKS/PAGE-DEPENDENCIES")
+                                                   "REBLOCKS/PAGE-DEPENDENCIES"
+                                                   "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
   (0.50.0 2022-12-03
@@ -60,7 +61,7 @@ leading to posible DoS attack. Page expiration is controlled by two values:
 - A maximum number of pages per session. This may be needed to protect from
   opening too many pages within one session.
 
-Also, you can use REBLOCKS/PAGE:PROLONG-PAGE function to extend current page's
+Also, you can use REBLOCKS/PAGE:EXTEND-EXPIRATION-TIME function to extend current page's
 expiration time.
 
 When all pages in the session are expired, session is removed from the memory too.
@@ -69,12 +70,12 @@ Generic-function REBLOCKS/PAGE:ON-PAGE-REFRESH was added.
 
 ### Cached widget dependencies
 
-Another interesting feature is mixin class REBLOCKS/CACHED-DEPENDENCIES:CACHED-DEPENDENCIES-MIXIN.
+Another interesting feature is mixin class REBLOCKS/CACHED-DEPENDENCIES-MIXIN:CACHED-DEPENDENCIES-MIXIN.
 
 Changed
 =======
 
-These functions were moved to separate package REBLOCKS/PAGE-DEPENDENCIES:
+These functions were moved to separate package `REBLOCKS/PAGE-DEPENDENCIES`:
 
 - with-collected-dependencies
 - get-collected-dependencies
