@@ -231,8 +231,8 @@ TODO> (defun make-task-list (&rest rest)
                         collect (make-task title))))
           (make-instance 'task-list :tasks tasks)))
 
-TODO> (defmethod reblocks/session:init ((app tasks))
-         (declare (ignorable app))
+TODO> (defmethod reblocks/page:init-page ((app tasks) (url-path string) expire-at)
+         (declare (ignorable app url-path expire-at))
          (make-task-list \"Make my first Reblocks app\"
                          \"Deploy it somewhere\"
                          \"Have a profit\"))
