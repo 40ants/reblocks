@@ -53,7 +53,7 @@
 
 
 (deftest creating-local-js-dependency
-  (let ((dependency (make-dependency #P"t/data/some.js" :system "reblocks-test")))
+  (let ((dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests")))
     (testing "method get-path should return a local pathname"
       (ok (uiop:absolute-pathname-p (get-path dependency)))
       (ok (ends-with-p "/t/data/some.js"
@@ -74,7 +74,7 @@
             "Route should point to a same filename in a special root for static files."))))
 
   (testing "Also, local dependency can be created using a string."
-    (let ((dependency (make-dependency "t/data/some.js" :system "reblocks-test")))
+    (let ((dependency (make-dependency "t/data/some.js" :system "reblocks-tests")))
       (ok (uiop:absolute-pathname-p (get-path dependency)))
       (ok (ends-with-p "/t/data/some.js"
                        (namestring (get-path dependency)))))))
@@ -147,7 +147,7 @@
 
 
 (deftest render-css-dependency
-  (let ((dependency (make-dependency "t/data/some.css" :system "reblocks-test")))
+  (let ((dependency (make-dependency "t/data/some.css" :system "reblocks-tests")))
     (is-html (render-in-head dependency)
              "<link rel=stylesheet type=text/css href=/static/css/some.css media=screen>"
              "Local CSS dependency should be rendered as a link tag."))
@@ -166,7 +166,7 @@
 
 
 (deftest render-js-dependency
-  (let ((dependency (make-dependency "t/data/some.js" :system "reblocks-test")))
+  (let ((dependency (make-dependency "t/data/some.js" :system "reblocks-tests")))
     (is-html (render-in-head dependency)
              "<script src=/static/js/some.js type=text/javascript></script>"
              "JS dependency should be rendered as a script tag.")))
@@ -174,7 +174,7 @@
 
 (deftest dont-render-png-dependency
   (testing "Png dependency should not be rendered"
-    (let ((dependency (make-dependency "t/data/lisp.png" :system "reblocks-test")))
+    (let ((dependency (make-dependency "t/data/lisp.png" :system "reblocks-tests")))
       (is-html (render-in-head dependency)
                ""
                "Methods render-in-header works only for js/css dependencies."))))
@@ -197,8 +197,8 @@
 (deftest deduplication
   (testing "Dependencies should be deduplicated on collection."
     (with-collected-dependencies
-      (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-test"))
-      (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-test"))
+      (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests"))
+      (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests"))
       
       (let ((collected (get-collected-dependencies)))
         (ok (equal (length collected)
