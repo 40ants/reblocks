@@ -98,7 +98,7 @@
 
   ```lisp
   (let ((user "Bob"))
-    (reblocks-test/utils:with-session
+    (reblocks-tests/utils:with-session
       (let ((action-id
               (reblocks/actions:make-action
                (lambda (email)
