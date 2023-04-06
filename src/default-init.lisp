@@ -32,7 +32,7 @@
        (:pre
         (:code
          (format nil "
-CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) (expire-at local-time:timestamp))
+CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) expire-at)
            \"Hello world!\")" (string-downcase
                                (type-of *current-app*)))))
        (:p "And reset current session:")
@@ -42,7 +42,7 @@ CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) (expire-
 CL-USER> (reblocks/debug:reset-latest-session)"))
 
        (:p "Then reload the page.")
-       (:p ("Read more in [documentaion](~A)."
+       (:p ("Read more in [documentation](~A)."
             quickstart-url)))
      :escape-p nil)))
 
