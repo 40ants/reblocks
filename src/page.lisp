@@ -606,6 +606,7 @@
 
 
 (defun register-widget (widget)
-  (setf (gethash (dom-id widget)
-                 (id-to-widget (current-page)))
-        widget))
+  (when (in-page-context-p)
+    (setf (gethash (dom-id widget)
+                   (id-to-widget (current-page)))
+          widget)))

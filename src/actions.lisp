@@ -1,6 +1,7 @@
 (uiop:define-package #:reblocks/actions
   (:use #:cl)
   (:import-from #:log)
+  (:import-from #:yason)
   (:import-from #:reblocks/app
                 #:get-prefix
                 #:get-prefix-actions)
