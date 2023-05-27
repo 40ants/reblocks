@@ -94,7 +94,7 @@ inherits from REBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
   (:documentation "Returns a list of classes for the widget.
                    Classes may be a strings or a keywords.
                    By default, :widget and keyworded class name are returned.
-                   Use (append (list :new-class) (call-next-method))
+                   Use `(list* :new-class (call-next-method))`
                    to add new classes."))
 
 

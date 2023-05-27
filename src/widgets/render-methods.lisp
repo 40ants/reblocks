@@ -5,6 +5,8 @@
                 #:render-in-ajax-response)
   (:import-from #:reblocks/page-dependencies
                 #:push-dependencies)
+  (:import-from #:reblocks/page
+                #:register-widget)
   (:import-from #:reblocks/widget
                 #:get-css-classes-as-string
                 #:get-html-tag
@@ -40,6 +42,8 @@
   (let ((widget-dependencies (get-dependencies widget)))
     ;; Update new-style dependencies
     (push-dependencies widget-dependencies))
+
+  (register-widget widget)
   
   (with-html
     (:tag
