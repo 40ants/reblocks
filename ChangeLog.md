@@ -2,6 +2,24 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E51-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.51.0 (2023-05-27)
+
+<a id="changed"></a>
+
+### Changed
+
+* Function [`reblocks/actions:make-js-action`][e17b] now accepts `ARGS` argument. If given, it will be serialized as a dictionary and embedded into the action calling code. This way you can pass the arguments back into your lisp callback.
+
+<a id="added"></a>
+
+### Added
+
+* Added `includeCSS` and `includeJS` command handlers. This makes it possible to send such kind of commands via a websocket.
+
+* Now all widgets rendered on a page are collected into a hash table and you can find them by dom-id using [`reblocks/page:find-widget-by-id`][3a8d] function.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E50-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.50.0 (2022-12-03)
@@ -1704,6 +1722,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [6a57]: https://40ants.com/log4cl-extras/#x-28LOG4CL-EXTRAS-2FERROR-3APRINT-BACKTRACE-20FUNCTION-29
 [2ce4]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29
 [f521]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29
+[e17b]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
 [7feb]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29
 [f4c7]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
 [6999]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
@@ -1724,6 +1743,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [631c]: https://40ants.com/reblocks/error-handling/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [e637]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29
+[3a8d]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AFIND-WIDGET-BY-ID-20FUNCTION-29
 [66f5]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29
 [282c]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
