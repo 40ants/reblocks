@@ -55,6 +55,11 @@ Makes deduplication by comparing dependencies' urls."
   (cond
     ((in-page-context-p)
      (let* ((page (current-page)))
+       ;; TODO: this check makes hard to update
+       ;; css and js via websocket, because it
+       ;; prevents some files loading. I need
+       ;; to find a way how to disable this when
+       ;; hot CSS/JS reloading is enabled
        (unless (already-loaded-p page dependency)
          (push dependency (page-dependencies (current-page)))
          (pushnew dependency *page-dependencies*

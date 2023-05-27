@@ -385,7 +385,8 @@ If server is already started, then logs a warning and does nothing."
                    (server-type :hunchentoot)
                    (samesite-policy :lax)
                    apps
-                   (server-class 'server))
+                   (server-class 'server)
+                   (disable-welcome-app nil))
   "Starts reblocks framework hooked into Clack server.
 
    Set DEBUG to true in order for error messages and stack traces to be shown
@@ -393,7 +394,10 @@ If server is already started, then logs a warning and does nothing."
    in Hunchentoot 1.0.0).
 
    Server will start all apps declared having `autostart t` in their definition
-   unless APPS argument is provided."
+   unless APPS argument is provided.
+
+   Sometimes you might want your app respond on /some-uri and / return 404.
+   In this case it is useful to set DISABLE-WELCOME-APP argument to T."
 
   (ensure-pages-cleaner-is-running)
 
@@ -439,13 +443,14 @@ If server is already started, then logs a warning and does nothing."
               do (start-app server app-class))
 
         ;; If / prefix is not taken, start Welcome Screen app:
-        (loop with found-root = nil
-              for app in (apps server)
-              for prefix = (get-prefix app)
-              when (string= prefix "/")
-              do (setf found-root t)
-              finally (unless found-root
-                        (start-app server 'welcome-screen-app))))
+        (unless disable-welcome-app
+          (loop with found-root = nil
+                for app in (apps server)
+                for prefix = (get-prefix app)
+                when (string= prefix "/")
+                do (setf found-root t)
+                finally (unless found-root
+                          (start-app server 'welcome-screen-app)))))
       
       (values server))))
 

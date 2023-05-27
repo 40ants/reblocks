@@ -244,7 +244,13 @@ window.commandHandlers = {
     },
     'executeCode': function(params) {
         jQuery(params.code).appendTo('body');
-    }
+    },
+    'includeCSS': function(params) {
+        include_css(params.url);
+    },
+    'includeJS': function(params) {
+        include_dom(params.url);
+    },
 };
 
 function processCommand(command) {
@@ -393,9 +399,7 @@ if(!window.XMLHttpRequest) {
 
 
 function include_css(css_file) {
-  libraryMissingWarning('include_css');
-
-  getStylesNotCached([css_file]);
+    appendStyleSheet(css_file);
 }
 
 function include_dom(script_filename) {

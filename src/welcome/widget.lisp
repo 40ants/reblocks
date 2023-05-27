@@ -14,7 +14,8 @@
   (:import-from #:reblocks/app
                 #:get-prefix
                 #:webapp-name
-                #:*current-app*))
+                #:*current-app*)
+  (:import-from #:local-time))
 (in-package #:reblocks/welcome/widget)
 
 
@@ -22,7 +23,9 @@
   ())
 
 
-(defmethod reblocks/page:init-page ((app welcome-screen-app) path expire-at)
+(defmethod reblocks/page:init-page ((app welcome-screen-app) url-path expire-at)
+  (check-type url-path (or null string))
+  (check-type expire-at (or null local-time:timestamp))
   (make-instance 'welcome-screen-widget))
 
 

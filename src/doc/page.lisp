@@ -3,6 +3,7 @@
   (:import-from #:40ants-doc
                 #:defsection)
   (:import-from #:reblocks/page
+                #:find-widget-by-id
                 #:page
                 #:init-page
                 #:on-page-refresh
@@ -89,6 +90,7 @@ then you should wrap all changing code in WITH-METADATA-LOCK macro.
   (current-page function)
   (get-page-by-id function)
   (in-page-context-p function)
+  (find-widget-by-id function)
   
   (ensure-page-metadata macro)
   (with-metadata-lock macro)

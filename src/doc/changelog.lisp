@@ -32,6 +32,20 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.51.0 2023-05-27
+          """
+Changed
+=======
+
+* Function REBLOCKS/ACTIONS:MAKE-JS-ACTION now accepts ARGS argument. If given, it will be serialized as a dictionary and embedded into the action calling code. This way you can pass the arguments back into your lisp callback.
+
+Added
+=====
+
+* Added `includeCSS` and `includeJS` command handlers. This makes it possible to send such kind of commands via a websocket.
+* Now all widgets rendered on a page are collected into a hash table and you can find them by dom-id using REBLOCKS/PAGE:FIND-WIDGET-BY-ID function.
+
+""")
   (0.50.0 2022-12-03
           """
 Fixed

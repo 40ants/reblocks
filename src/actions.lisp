@@ -1,6 +1,7 @@
 (uiop:define-package #:reblocks/actions
   (:use #:cl)
   (:import-from #:log)
+  (:import-from #:yason)
   (:import-from #:reblocks/app
                 #:get-prefix
                 #:get-prefix-actions)
@@ -33,6 +34,8 @@
                 #:redirect)
   (:import-from #:reblocks/app-actions
                 #:get-action)
+  (:import-from #:serapeum
+                #:dict)
   
   (:export #:eval-action
            #:on-missing-action
@@ -208,14 +211,24 @@ situation (e.g. redirect, signal an error, etc.)."))
                  (quri:url-encode-params params))))
 
 
-(defun make-js-action (action)
+(defun make-js-action (action &key args)
   "Returns JS code which can be inserted into `onclick` attribute and will
    execute given Lisp function on click.
 
    It accepts any function as input and produces a string with JavaScript code."
+  (check-type args (or null hash-table))
+  
   (let* ((action-code (make-action action)))
-    (format nil "initiateAction(\"~A\"); return false;"
-            action-code)))
+    (cond
+      (args
+       (let ((options (dict "args" args)))
+         (format nil "initiateAction(\"~A\", ~A); return false;"
+                 action-code
+                 (yason:with-output-to-string* ()
+                   (yason:encode options)))))
+      (t
+       (format nil "initiateAction(\"~A\"); return false;"
+               action-code)))))
 
 
 (defun make-js-form-action (action)

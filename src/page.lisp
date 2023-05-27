@@ -38,6 +38,7 @@
                 #:timestamp
                 #:now)
   (:import-from #:serapeum
+                #:dict
                 #:maybe-invoke-restart
                 #:fmt
                 #:take
@@ -61,6 +62,8 @@
                 #:make-uuid-from-string
                 #:uuid=
                 #:make-v4-uuid)
+  (:import-from #:reblocks/widgets/dom
+                #:dom-id)
   
   (:export
    #:render
@@ -88,7 +91,8 @@
    #:extend-expiration-time
    #:page-app
    #:with-metadata-lock
-   #:ensure-page-metadata))
+   #:ensure-page-metadata
+   #:find-widget-by-id))
 (in-package #:reblocks/page)
 
 
@@ -124,6 +128,8 @@
    (root-widget :initform nil
                 :initarg :root-widget
                 :accessor page-root-widget)
+   (id-to-widget :initform (dict)
+                 :reader id-to-widget)
    (app :initarg :app
         :initform *current-app*
         :accessor page-app)
@@ -593,3 +599,14 @@
 
                    Default method does nothing.")
   (:method ((from-page t) (to-url t))))
+
+
+(defun find-widget-by-id (widget-id)
+  (gethash widget-id (id-to-widget (current-page))))
+
+
+(defun register-widget (widget)
+  (when (in-page-context-p)
+    (setf (gethash (dom-id widget)
+                   (id-to-widget (current-page)))
+          widget)))

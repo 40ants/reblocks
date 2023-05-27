@@ -33,6 +33,7 @@
         (:code
          (format nil "
 CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) expire-at)
+           (check-type expire-at (or null local-time::timestamp))
            \"Hello world!\")" (string-downcase
                                (type-of *current-app*)))))
        (:p "And reset current session:")
