@@ -84,6 +84,7 @@
           :root-sections '(@index
                            @installation
                            @quickstart
+                           @extensions
                            @components
                            @apps
                            @widgets
@@ -114,3 +115,25 @@
   (@templates section)
   (@forms section)
   (@continuations section))
+
+
+(defsection @extensions (:title "Reblocks Extensions"
+                         :ignore-words ("CSS"
+                                        "LASS"
+                                        "URL"
+                                        "UI"))
+  "There is a number of addons for Reblocks implementing additional widgets and features.
+
+   Here is a list of these addons. If you know other extension, just make a pull request and add it to the list!
+
+   - [reblocks-auth](https://40ants.com/reblocks-auth/) - A system to add authentication. Stores informations about users and let them to log in using different identity providers.
+   - [reblocks-file-server](https://40ants.com/reblocks-file-server/) - A file browser for static.
+   - [reblocks-lass](https://40ants.com/reblocks-lass/) - A helper to define CSS dependencies in LASS syntax.
+   - [reblocks-navigation-widget](https://40ants.com/reblocks-navigation-widget/) - A widget which changes it's children when user goes to another URL.
+   - [reblocks-parenscript](https://40ants.com/reblocks-parenscript/) - An utility to define JavaScript dependencies.
+   - [reblocks-typeahead](https://40ants.com/reblocks-typeahead/) - A Typeahead widget.
+   - [reblocks-ui](https://40ants.com/reblocks-ui/) - A set of UI widgets.
+   - [reblocks-ui2](https://40ants.com/reblocks-ui2/) - The second version of UI toolkit (work in progress).
+   - [reblocks-websocket](https://40ants.com/reblocks-websocket/) - Websocket support for Reblocks.
+
+")
