@@ -67,7 +67,16 @@
   (reblocks/widget:update generic-function)
   (reblocks/widget:get-html-tag generic-function)
   (reblocks/widget:get-css-classes generic-function)
-  (reblocks/widget:create-widget-from generic-function))
+  (reblocks/widget:create-widget-from generic-function)
+
+  "# String widget
+
+   This is a simple type of widget which can be made out of any string."
+
+  (reblocks/widgets/string-widget:string-widget class)
+  (reblocks/widgets/string-widget:make-string-widget function)
+  (reblocks/widgets/string-widget:get-content (accessor reblocks/widgets/string-widget:string-widget))
+  (reblocks/widgets/string-widget:escape-p (accessor reblocks/widgets/string-widget:string-widget)))
 
 
 (defexample hello-world ()

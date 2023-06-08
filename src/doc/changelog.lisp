@@ -32,6 +32,13 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.52.0 2025-06-08
+          """
+Added
+=====
+
+* Documentation on REBLOCKS/WIDGETS/STRING-WIDGET:STRING-WIDGET class and it's methods.q
+""")
   (0.51.0 2023-05-27
           """
 Changed
