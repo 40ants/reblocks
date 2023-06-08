@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E52-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.52.0 (2025-06-08)
+
+<a id="added"></a>
+
+### Added
+
+* Documentation on [`reblocks/widgets/string-widget:string-widget`][33fd] class and it's methods.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E51-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.51.0 (2023-05-27)
@@ -1751,6 +1761,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [c740]: https://40ants.com/reblocks/session/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
+[33fd]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
 [91c9]: https://github.com/40ants/lack
 [8f00]: https://github.com/40ants/log4cl-extras
 [0303]: https://github.com/40ants/log4cl-json
