@@ -10,7 +10,7 @@
 
 ### Added
 
-* Documentation on [`reblocks/widgets/string-widget:string-widget`][33fd] class and it's methods.
+* Documentation on [`reblocks/widgets/string-widget:string-widget`][33fd] class and it's methods.q
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E51-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
