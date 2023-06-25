@@ -13,6 +13,7 @@
                                                    "URL"
                                                    "URI"
                                                    "API"
+                                                   "DOM"
                                                    "AJAX"
                                                    "JSON"
                                                    "JSON-RPC"
@@ -32,7 +33,17 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
-  (0.52.0 2025-06-08
+  (0.53.0 2023-06-20
+          """
+Changed
+=======
+
+Now all commands added using REBLOCKS/RESPONSE:SEND-SCRIPT or REBLOCKS/COMMANDS:ADD-COMMAND
+during the call to REBLOCKS/WIDGET:UPDATE generic-function, are added after the command
+for updating DOM node on the frontend. This fixes a problem happened when you attach
+some JS handlers to the DOM node, but after the update these handlers are deleted.
+""")
+  (0.52.0 2023-06-08
           """
 Added
 =====

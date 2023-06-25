@@ -1,4 +1,4 @@
-(defsystem reblocks-docs
+(defsystem "reblocks-docs"
   :class :package-inferred-system
   :author "Alexander Artemenko"
   :licence "LLGPL"

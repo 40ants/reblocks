@@ -49,6 +49,8 @@
                 #:@request)
   (:import-from #:reblocks/doc/changelog
                 #:@changelog)
+  (:import-from #:reblocks/doc/commands
+                #:@commands)
   (:import-from #:reblocks/doc/debug
                 #:@debug)
   (:import-from #:docs-config
@@ -99,6 +101,7 @@
                            @page
                            @session
                            @debug
+                           @commands
                            @removed-features
                            @api
                            @contribute

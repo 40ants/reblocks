@@ -4,11 +4,11 @@
                 #:on-application-hook-handle-http-request
                 #:call-next-hook)
   (:import-from #:reblocks/commands
-                #:*commands*))
+                #:with-collected-commands))
 (in-package #:reblocks/commands-hook)
 
 
 (on-application-hook-handle-http-request
-  reset-commands-list (env)
-  (let (*commands*)
+    reset-commands-list (env)
+  (with-collected-commands ()
     (call-next-hook)))

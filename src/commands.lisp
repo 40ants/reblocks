@@ -3,7 +3,9 @@
   (:import-from #:alexandria)
   (:import-from #:parenscript)
   (:export #:add-command
-           #:get-collected-commands))
+           #:get-collected-commands
+           #:with-collected-commands
+           #:add-commands))
 (in-package #:reblocks/commands)
 
 
@@ -35,10 +37,18 @@
 (defun add-command (name &rest args)
   "Pushes a new command into the stack.
 
-After action processing these commands will be sent for execution on the client."
+   After action processing these commands will be sent for execution on the client."
   (push
    (apply #'create-command name args)
    *commands*))
+
+
+(defun add-commands (commands)
+  "Pushes all commands from the list into the stack.
+
+   After action processing these commands will be sent for execution on the client."
+  (loop for command in commands
+        do (push command *commands*)))
 
 
 (defun get-collected-commands ()
@@ -47,3 +57,11 @@ After action processing these commands will be sent for execution on the client.
   ;; we need to reverse it now.
   (reverse *commands*))
 
+
+
+(defmacro with-collected-commands (() &body body)
+  "Collects commands added using a call to ADD-COMMANDS during the body execution.
+
+   Commands list can be aquired using GET-COLLECTED-COMMANDS function."
+  `(let (*commands*)
+     ,@body))

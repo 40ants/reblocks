@@ -6,6 +6,9 @@
   (:import-from #:reblocks/widgets/mop
                 #:widget-class)
   (:import-from #:reblocks/commands
+                #:add-commands
+                #:get-collected-commands
+                #:with-collected-commands
                 #:add-command)
   (:import-from #:reblocks/widgets/dom
                 #:dom-id
@@ -151,24 +154,38 @@ propagation code."))
 
 (defmethod update ((w widget) &key inserted-after inserted-before)
   (log:debug "Updating widget" w inserted-after inserted-before)
-  (cond
-    ((and inserted-after inserted-before)
-     (error "Arguments inserted-after and inserted-before can't be used together."))
-    (inserted-after (add-command
-                     :insert-widget
-                     :widget (with-html-string
-                               (render w))
-                     :after (dom-id inserted-after)))
-    (inserted-before (add-command
-                      :insert-widget
-                      :widget (with-html-string
-                                (render w))
-                      :before (dom-id inserted-before)))
-    (t (add-command
-        :update-widget
-        :dom-id (dom-id w)
-        :widget (with-html-string
-                  (render w))))))
+  (when (and inserted-after inserted-before)
+    (error "Arguments inserted-after and inserted-before can't be used together."))
+  
+  (let* ((update-commands nil)
+         (rendered-widget
+           ;; Here we'll save all commands related to the widget
+           ;; into a separate list and will add them to the main
+           ;; commands list after the main command for adding rendered widget.
+           ;; This way if any Javascript will be executed only after the widget update
+           ;; on the frontend.
+           (with-collected-commands ()
+             (prog1
+                 (with-html-string
+                   (render w))
+               (setf update-commands
+                     (get-collected-commands))))))
+    (cond
+      (inserted-after (add-command
+                       :insert-widget
+                       :widget rendered-widget
+                       :after (dom-id inserted-after)))
+      (inserted-before (add-command
+                        :insert-widget
+                        :widget rendered-widget
+                        :before (dom-id inserted-before)))
+      (t (add-command
+          :update-widget
+          :dom-id (dom-id w)
+          :widget rendered-widget)))
+    
+    (add-commands update-commands)
+    (values)))
 
 
 (defgeneric create-widget-from (object)
