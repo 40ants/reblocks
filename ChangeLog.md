@@ -2,9 +2,22 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E53-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.53.0 (2023-06-20)
+
+<a id="changed"></a>
+
+### Changed
+
+Now all commands added using [`reblocks/response:send-script`][3dd1] or [`reblocks/commands:add-command`][d639]
+during the call to [`reblocks/widget:update`][9631] generic-function, are added after the command
+for updating `DOM` node on the frontend. This fixes a problem happened when you attach
+some `JS` handlers to the `DOM` node, but after the update these handlers are deleted.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E52-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
-## 0.52.0 (2025-06-08)
+## 0.52.0 (2023-06-08)
 
 <a id="added"></a>
 
@@ -1737,6 +1750,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [f4c7]: https://40ants.com/reblocks/actions/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
 [6999]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [a82c]: https://40ants.com/reblocks/apps/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
+[d639]: https://40ants.com/reblocks/commands/#x-28REBLOCKS-2FCOMMANDS-3AADD-COMMAND-20FUNCTION-29
 [8415]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
 [6d85]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29
 [8669]: https://40ants.com/reblocks/components/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
@@ -1758,9 +1772,11 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [282c]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
+[3dd1]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [c740]: https://40ants.com/reblocks/session/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
+[9631]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 [33fd]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
 [91c9]: https://github.com/40ants/lack
 [8f00]: https://github.com/40ants/log4cl-extras
