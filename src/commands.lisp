@@ -3,7 +3,9 @@
   (:import-from #:alexandria)
   (:import-from #:parenscript)
   (:export #:add-command
-           #:get-collected-commands))
+           #:get-collected-commands
+           #:with-collected-commands
+           #:add-commands))
 (in-package #:reblocks/commands)
 
 
@@ -58,5 +60,8 @@
 
 
 (defmacro with-collected-commands (() &body body)
+  "Collects commands added using a call to ADD-COMMANDS during the body execution.
+
+   Commands list can be aquired using GET-COLLECTED-COMMANDS function."
   `(let (*commands*)
      ,@body))

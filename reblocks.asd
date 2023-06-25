@@ -5,7 +5,7 @@
 ;;       (subseq line 0 space-pos))))
 
 
-(defsystem reblocks
+(defsystem "reblocks"
   :name "reblocks"
   :class :package-inferred-system
   ;; TODO: Take version from the src/doc/changelog.lisp

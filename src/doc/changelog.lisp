@@ -13,6 +13,7 @@
                                                    "URL"
                                                    "URI"
                                                    "API"
+                                                   "DOM"
                                                    "AJAX"
                                                    "JSON"
                                                    "JSON-RPC"
