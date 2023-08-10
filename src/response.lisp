@@ -111,11 +111,11 @@
   "Use this function to add a HTTP header:
 
    ```lisp
-   (add-header :x-request-id 100500)
+   (add-header :x-request-id \"100500\")
    ```"
 
-  (declare (type symbol name)
-           (type string value))
+  (check-type name symbol)
+  (check-type value string)
   
   (unless (boundp '*response*)
     (error "Call ADD-HEADER function inside WITH-RESPONSE macro."))

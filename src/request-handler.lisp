@@ -171,6 +171,10 @@ customize behavior."))
                         :code 404)))
 
 
+(defgeneric handle-ajax-request (app)
+  (:documentation "This generic function is called when Reblocks processes an action called from Javascript."))
+
+
 (defmethod handle-ajax-request ((app app))
   (log:debug "Handling AJAX request")
   
