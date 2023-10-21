@@ -2,6 +2,27 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E54-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.54.0 (2023-10-22)
+
+<a id="added"></a>
+
+### Added
+
+Function [`reblocks/request:get-remote-ip`][9c23] was added.
+
+<a id="fixed"></a>
+
+### Fixed
+
+Now function [`reblocks/actions:make-action-url`][f521] removed old `action` argument if it is present in the
+current `URL`. This fixes the case when you want to make an action url from the callback processing
+another action.
+
+JavaScript function `initiateFormAction` now does not overwrites whole options.args object,
+but only replaces the keys corresponding to a form data fields.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E53-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.53.0 (2023-06-20)
@@ -1771,6 +1792,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [66f5]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29
 [282c]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
+[9c23]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
 [3dd1]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
