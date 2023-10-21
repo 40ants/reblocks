@@ -204,7 +204,10 @@ situation (e.g. redirect, signal an error, etc.)."))
                        (reblocks/request:get-parameters)))
          (params (list* (cons *action-string*
                               action-code)
-                        old-params)))
+                        (remove *action-string*
+                                old-params
+                                :key #'car
+                                :test #'string-equal))))
     (concatenate 'string
                  (get-path) ;; Current URL path
                  "?"

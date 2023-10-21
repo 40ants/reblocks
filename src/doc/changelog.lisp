@@ -33,6 +33,24 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.54.0 2023-10-22
+          """
+Added
+=====
+
+Function REBLOCKS/REQUEST:GET-REMOTE-IP was added.
+
+Fixed
+=====
+
+Now function REBLOCKS/ACTIONS:MAKE-ACTION-URL removed old `action` argument if it is present in the
+current URL. This fixes the case when you want to make an action url from the callback processing
+another action.
+
+JavaScript function `initiateFormAction` now does not overwrites whole options.args object,
+but only replaces the keys corresponding to a form data fields.
+
+""")
   (0.53.0 2023-06-20
           """
 Changed
