@@ -369,7 +369,7 @@ function initiateFormAction(actionCode, form, options) {
     var action_arguments = form.serializeObjectWithSubmit();
     delete(action_arguments['action']);
 
-    options['args'] = action_arguments;
+    options['args'] = Object.assign({}, options.args || {}, action_arguments);
     options['method'] = options['method'] || form.attr('method');
     initiateAction(actionCode, options);
 }
