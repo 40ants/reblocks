@@ -18,6 +18,7 @@
                                      "HTTP"
                                      "AJAX"
                                      "HTML"
+                                     "IP"
                                      "JSON"
                                      "URL"))
   """
