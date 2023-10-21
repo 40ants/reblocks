@@ -38,6 +38,7 @@
   (reblocks/request:remove-header function)
   (reblocks/request:get-uri function)
   (reblocks/request:get-path function)
+  (reblocks/request:get-remote-ip function)
   (reblocks/request-handler:handle-request generic-function)
   (reblocks/request-handler:handle-ajax-request generic-function)
   (reblocks/request-handler:*request-timeout* variable)

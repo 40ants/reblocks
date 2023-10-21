@@ -35,6 +35,11 @@
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
   (0.54.0 2023-10-22
           """
+Added
+=====
+
+Function REBLOCKS/REQUEST:GET-REMOTE-IP was added.
+
 Changed
 =======
 

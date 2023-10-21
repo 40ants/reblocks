@@ -27,6 +27,8 @@
   (:import-from #:quri)
   (:import-from #:str
                 #:split)
+  (:import-from #:lack.request
+                #:request-remote-addr)
   
   (:export #:get-parameters
            #:get-parameter
@@ -42,7 +44,8 @@
            #:get-path
            #:with-request
            #:pure-request-p
-           #:get-cookie))
+           #:get-cookie
+           #:get-remote-ip))
 (in-package #:reblocks/request)
 
 
@@ -234,3 +237,10 @@ if there is an action involved (even if the user hits refresh)."
        ,result)))
 
 
+(defun get-remote-ip (&key (request *request*))
+  "Returns a possible user's IP.
+
+   Note, it may not be reliable, because user might try to set these headers manually."
+  (or (get-header "x-real-ip" :request request)
+      (get-header "x-forwarded-for" :request request)
+      (request-remote-addr request)))
