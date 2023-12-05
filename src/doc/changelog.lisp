@@ -42,7 +42,7 @@ Added
 * Argument BASE-URI was added to REBLOCKS/RESPONSE:MAKE-URI function.
 * Now Reblocks responds with Server-Timing and this performance information can be
   viewed in the browser. Read more about this header at
-  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
+  [Mozilla's docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing).
 * Generic-function REBLOCKS/WIDGET:UPDATE now has an optional argument REMOVED.
   You can set it to T to remove widget from the DOM tree.
 
