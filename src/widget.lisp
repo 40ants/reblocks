@@ -140,7 +140,7 @@ inherits from REBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
 ;;                       (remove nil (widget-propagate-dirty w)))))))
 
 
-(defgeneric update (w &key inserted-after inserted-before)
+(defgeneric update (w &key inserted-after inserted-before removed)
   (:documentation "This method should be called to update widget on a client.
 
 Usually this required as a result of an action execution.
@@ -149,10 +149,19 @@ In the original Weblocks there was a mark-dirty method. This one replaces it.
 To make everything easier, the new protocol excludes \"propagation\". If you
 need to update other widgets, please define an \"update\" method for your widget.
 You can use :before or :after modifiers, to keep the current behavior and to add
-propagation code."))
+propagation code.
+
+There are a few optional arguments to control the way how does widget should be updated.
+They can be useful to not update the whole parent widget.
+
+- If one of INSERTED-AFTER or INSERTED-BEFORE is given, it should be a widget
+  object to be used as an anchor. This can be useful to not rerender all children
+  of some \"list\" widget when you adding a new element.
+- When REMOVED argument is T the widget will be removed from the DOM tree.
+"))
 
 
-(defmethod update ((w widget) &key inserted-after inserted-before)
+(defmethod update ((w widget) &key inserted-after inserted-before removed)
   (log:debug "Updating widget" w inserted-after inserted-before)
   (when (and inserted-after inserted-before)
     (error "Arguments inserted-after and inserted-before can't be used together."))
@@ -164,13 +173,17 @@ propagation code."))
            ;; commands list after the main command for adding rendered widget.
            ;; This way if any Javascript will be executed only after the widget update
            ;; on the frontend.
-           (with-collected-commands ()
-             (prog1
-                 (with-html-string
-                   (render w))
-               (setf update-commands
-                     (get-collected-commands))))))
+           (unless removed
+             (with-collected-commands ()
+               (prog1
+                   (with-html-string
+                     (render w))
+                 (setf update-commands
+                       (get-collected-commands)))))))
     (cond
+      (removed
+       (add-command :remove-widget
+                    :dom-id (dom-id w)))
       (inserted-after (add-command
                        :insert-widget
                        :widget rendered-widget
