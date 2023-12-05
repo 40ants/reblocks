@@ -40,7 +40,9 @@ Added
 
 * Optional argument :defer was added to javascript dependencies.
 * Argument BASE-URI was added to REBLOCKS/RESPONSE:MAKE-URI function.
-
+* Now Reblocks response with Server-Timing and this performance information can be
+  viewed in the browser. Read more about this header at
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
 
 """)
   (0.54.0 2023-10-22

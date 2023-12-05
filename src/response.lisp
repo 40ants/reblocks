@@ -298,7 +298,16 @@
                         ;; show the old state of the page in case of caching.
                         :cache-control "no-cache, no-store, must-revalidate"))
          (*response* (lack.response:make-response 200 headers ""))
-         (result (funcall thunk)))
+         (started-at (get-internal-real-time))
+         (result (funcall thunk))
+         (ended-at (get-internal-real-time))
+         (duration (float (/ (- ended-at started-at)
+                             internal-time-units-per-second))))
+    
+    ;; Timing header according to
+    ;; https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
+    (add-header :server-timing
+                (format nil "render;dur=~A" duration))
 
     (cond
       ((and result (listp result))
