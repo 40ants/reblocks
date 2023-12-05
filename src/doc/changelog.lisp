@@ -38,7 +38,9 @@
 Added
 =====
 
-Optional argument :defer was added to javascript dependencies.
+* Optional argument :defer was added to javascript dependencies.
+* Argument BASE-URI was added to REBLOCKS/RESPONSE:MAKE-URI function.
+
 
 """)
   (0.54.0 2023-10-22
