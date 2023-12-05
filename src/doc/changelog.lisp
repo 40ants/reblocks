@@ -33,6 +33,14 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.55.0 2023-12-05
+          """
+Added
+=====
+
+Optional argument :defer was added to javascript dependencies.
+
+""")
   (0.54.0 2023-10-22
           """
 Added

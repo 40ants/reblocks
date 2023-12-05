@@ -52,7 +52,11 @@ be stored.")
   ((type :type (member :css :js :png :jpg :gif)
          :initarg :type
          :initform (error ":type argument is required.")
-         :reader get-type))
+         :reader get-type)
+   (defer :type boolean
+          :initarg :defer
+          :initform nil
+          :reader defer))
   (:documentation "This class represents a web-dependency. It could be CSS, JS or an image.
 
                    All dependencies are divided into REMOTE-DEPENDENCY or LOCAL-DEPENDENCY."))
@@ -185,7 +189,9 @@ as a response to some action.")
     (:js
      (with-html
        (:script :src (get-url dependency)
-                :type "text/javascript" "")))
+                :type "text/javascript"
+                :defer (defer dependency)
+                "")))
 
     (:css
      (with-html
@@ -210,7 +216,8 @@ as a response to some action.")
        (:script :src (get-url dependency)
                 :type "text/javascript"
                 :integrity (get-integrity dependency)
-                :crossorigin (get-crossorigin dependency))))
+                :crossorigin (get-crossorigin dependency)
+                :defer (defer dependency))))
     ;; CSS
     (:css
      (with-html
@@ -317,7 +324,8 @@ by infering it from URL or a path"))
                                       type
                                       integrity
                                       crossorigin
-                                      cache-in-memory)
+                                      cache-in-memory
+                                      defer)
   "Creates a JavaScript dependency, served from the disk.
 
 If the system's name is given, then the path is calculated relatively
@@ -348,7 +356,8 @@ to this system's source root."
                       :type type
                       :remote-url path-or-url
                       :integrity integrity
-                      :crossorigin crossorigin))
+                      :crossorigin crossorigin
+                      :defer defer))
       (pathname
        (let ((path path-or-url))
          (when system
