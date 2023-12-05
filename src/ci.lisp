@@ -11,7 +11,8 @@
 (defworkflow linter
   :on-pull-request t
   :cache t
-  :jobs ((40ants-ci/jobs/linter:linter)))
+  :jobs ((40ants-ci/jobs/linter:linter
+          :check-imports t)))
 
 
 (defworkflow ci
