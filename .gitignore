@@ -5,5 +5,4 @@
 /libssl.dylib
 /lispapp
 .DS_Store
-
-
+*.fasl
