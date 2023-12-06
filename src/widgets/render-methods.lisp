@@ -1,6 +1,5 @@
 (defpackage #:reblocks/widgets/render-methods
   (:use #:cl)
-  (:import-from #:log)
   (:import-from #:reblocks/dependencies
                 #:get-dependencies
                 #:render-in-ajax-response)
@@ -15,8 +14,7 @@
   (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:reblocks/widgets/dom
-                #:dom-id)
-  (:import-from #:log))
+                #:dom-id))
 (in-package #:reblocks/widgets/render-methods)
 
 
