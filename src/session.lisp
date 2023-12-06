@@ -17,8 +17,6 @@
                 #:make-weak-hash-table)
   (:import-from #:alexandria
                 #:ensure-gethash)
-  (:import-from #:metatilities
-                #:deprecated)
   (:import-from #:lack.session.store
                 #:remove-session)
 

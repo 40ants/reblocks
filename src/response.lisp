@@ -6,13 +6,9 @@
                 #:get-uri
                 #:ajax-request-p
                 #:get-header)
-  (:import-from #:reblocks/variables
-                #:*ignore-missing-actions*)
   (:import-from #:reblocks/js/base
                 #:with-javascript-to-string
                 #:with-javascript)
-  (:import-from #:reblocks/app
-                #:get-prefix)
   (:import-from #:reblocks/commands
                 #:add-command)
   (:import-from #:quri)
@@ -162,15 +158,20 @@
   (lack.response:response-set-cookies response))
 
 
-(defun make-uri (new-path)
+(defun make-uri (new-path &key base-uri)
   "Makes a new URL, based on the current request's URL.
 
-   If new-path can be absolute, like /logout or relative,
+   Argument NEW-PATH can be absolute, like /logout or relative,
    like ./stories.
 
-   Also, it can contain a query params like /login?code=100500"
-  (let* ((base (get-uri))
-         (parsed-base (quri:uri base))
+   Also, it can contain a query params like /login?code=100500
+
+   By default, function takes a base-uri from the current request,
+   bun in case if you want to call the function in a context where
+   request is not available, you can pass BASE-URI argument explicitly."
+  (let* ((base-uri (or base-uri
+                       (get-uri)))
+         (parsed-base (quri:uri base-uri))
          (parsed-new-path (quri:uri new-path))
          (new-url (quri:merge-uris parsed-new-path
                                    parsed-base)))
@@ -293,7 +294,16 @@
                         ;; show the old state of the page in case of caching.
                         :cache-control "no-cache, no-store, must-revalidate"))
          (*response* (lack.response:make-response 200 headers ""))
-         (result (funcall thunk)))
+         (started-at (get-internal-real-time))
+         (result (funcall thunk))
+         (ended-at (get-internal-real-time))
+         (duration (float (/ (- ended-at started-at)
+                             internal-time-units-per-second))))
+    
+    ;; Timing header according to
+    ;; https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
+    (add-header :server-timing
+                (format nil "render;dur=~A" duration))
 
     (cond
       ((and result (listp result))

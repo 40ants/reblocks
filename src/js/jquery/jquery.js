@@ -225,6 +225,11 @@ window.commandHandlers = {
         var target = jQuery('#' + params.domId);
         target.replaceWith(widget);
     },
+    'removeWidget': function(params) {
+        var widget = jQuery(params.widget);
+        var target = jQuery('#' + params.domId);
+        target.remove();
+    },
     'insertWidget': function(params) {
         console.log('inserting widget' + params);
         

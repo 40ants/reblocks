@@ -16,8 +16,7 @@
   (:import-from #:reblocks/widgets/string-widget
                 #:make-string-widget)
   (:import-from #:reblocks/app
-                #:*current-app*)
-  (:import-from #:spinneret/cl-markdown))
+                #:*current-app*))
 (in-package #:reblocks/default-init)
 
 
@@ -43,8 +42,10 @@ CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) expire-a
 CL-USER> (reblocks/debug:reset-latest-session)"))
 
        (:p "Then reload the page.")
-       (:p ("Read more in [documentation](~A)."
-            quickstart-url)))
+       (:p "Read more in "
+           (:a :href quickstart-url
+               "documentation")
+           "."))
      :escape-p nil)))
 
 

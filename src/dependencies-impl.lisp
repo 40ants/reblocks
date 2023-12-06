@@ -1,5 +1,6 @@
 (uiop:define-package #:reblocks/dependencies-impl
   (:use #:cl)
+  (:import-from #:log)
   (:import-from #:reblocks/response
                 #:send-script)
   (:import-from #:parenscript

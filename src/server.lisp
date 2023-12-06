@@ -13,7 +13,6 @@
                 #:get-route
                 #:add-route
                 #:add-routes)
-  (:import-from #:reblocks/routes-error-handler)
   (:import-from #:reblocks/app
                 #:get-prefix
                 #:app-serves-hostname-p
@@ -29,16 +28,14 @@
   (:import-from #:reblocks/request-handler
                 #:handle-request)
     
-  (:import-from #:lack.request
+  (:import-from #:lack/request
                 #:make-request)
-  (:import-from #:lack
-                #:builder)
+  (:import-from #:lack/response)
   (:import-from #:clack
                 #:clackup)
   (:import-from #:cl-strings
                 #:starts-with)
   ;; Just dependencies
-  (:import-from #:reblocks/dependencies-impl)
   (:import-from #:reblocks/debug)
   (:import-from #:log)
   (:import-from #:reblocks/welcome/app
@@ -213,8 +210,8 @@ Make instance, then start it with ``start`` method."
 
 (defun make-response-for-clack (response)
   (etypecase response
-    (lack.response:response
-     (lack.response:finalize-response response))
+    (lack/response:response
+     (lack/response:finalize-response response))
     (list response)
     (function response)))
 

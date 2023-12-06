@@ -10,8 +10,6 @@
   (:import-from #:reblocks/variables
                 #:*current-app*
                 #:*invoke-debugger-on-error*)
-  (:import-from #:alexandria
-                #:with-gensyms)
   (:import-from #:reblocks/html
                 #:with-html-string)
   (:import-from #:reblocks/page

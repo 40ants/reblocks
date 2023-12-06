@@ -62,12 +62,12 @@
         },
         {
           "name": "Install SBLint wrapper",
-          "run": "qlot exec ros install 40ants-linter",
+          "run": "qlot exec ros install 40ants-asdf-system 40ants-linter",
           "shell": "bash"
         },
         {
           "name": "Run Linter",
-          "run": "qlot exec 40ants-linter --system \"reblocks\"",
+          "run": "qlot exec 40ants-linter --system \"reblocks\" --imports",
           "shell": "bash"
         }
       ]

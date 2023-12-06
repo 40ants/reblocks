@@ -11,13 +11,10 @@
                 #:get-css-classes-as-string
                 #:get-html-tag
                 #:render)
-  (:import-from #:reblocks/request
-                #:ajax-request-p)
   (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:reblocks/widgets/dom
-                #:dom-id)
-  (:import-from #:log))
+                #:dom-id))
 (in-package #:reblocks/widgets/render-methods)
 
 

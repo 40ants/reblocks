@@ -33,6 +33,20 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.55.0 2023-12-05
+          """
+Added
+=====
+
+* Optional argument :defer was added to javascript dependencies.
+* Argument BASE-URI was added to REBLOCKS/RESPONSE:MAKE-URI function.
+* Now Reblocks responds with Server-Timing and this performance information can be
+  viewed in the browser. Read more about this header at
+  [Mozilla's docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing).
+* Generic-function REBLOCKS/WIDGET:UPDATE now has an optional argument REMOVED.
+  You can set it to T to remove widget from the DOM tree.
+
+""")
   (0.54.0 2023-10-22
           """
 Added

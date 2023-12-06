@@ -4,6 +4,7 @@
                 #:app)
   (:import-from #:serapeum
                 #:defvar-unbound)
+  (:import-from #:log)
   (:import-from #:reblocks/dependencies
                 #:dependency-equal
                 #:get-url)

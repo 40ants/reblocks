@@ -12,6 +12,7 @@
 (defsection @widgets (:title "Widgets"
                       :ignore-words ("CSS"
                                      "API"
+                                     "DOM"
                                      "JS"
                                      "HTML"
                                      "DIV"))

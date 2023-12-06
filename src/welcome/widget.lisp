@@ -3,7 +3,6 @@
   (:import-from #:reblocks/server
                 #:get-port
                 #:get-interface)
-  (:import-from #:reblocks/session)
   (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:reblocks/widget
@@ -15,7 +14,8 @@
                 #:get-prefix
                 #:webapp-name
                 #:*current-app*)
-  (:import-from #:local-time))
+  (:import-from #:local-time)
+  (:import-from #:reblocks/page))
 (in-package #:reblocks/welcome/widget)
 
 
