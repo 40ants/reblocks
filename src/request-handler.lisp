@@ -46,8 +46,6 @@
                 #:*timing-level*
                 #:*timing-report-fn*
                 #:timing)
-  (:import-from #:bordeaux-threads
-                #:with-lock-held)
   (:import-from #:jonathan
                 #:to-json)
   (:import-from #:trivial-timeout

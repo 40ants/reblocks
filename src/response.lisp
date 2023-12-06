@@ -6,13 +6,9 @@
                 #:get-uri
                 #:ajax-request-p
                 #:get-header)
-  (:import-from #:reblocks/variables
-                #:*ignore-missing-actions*)
   (:import-from #:reblocks/js/base
                 #:with-javascript-to-string
                 #:with-javascript)
-  (:import-from #:reblocks/app
-                #:get-prefix)
   (:import-from #:reblocks/commands
                 #:add-command)
   (:import-from #:quri)

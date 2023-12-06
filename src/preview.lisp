@@ -5,12 +5,12 @@
   (:import-from #:log)
   (:import-from #:reblocks/app)
   (:import-from #:reblocks/server)
-  (:import-from #:reblocks/session)
   (:import-from #:trivial-open-browser
                 #:open-browser)
   (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:defwidget)
+  (:import-from #:reblocks/page)
   (:export #:preview
            #:stop))
 (in-package #:reblocks/preview)

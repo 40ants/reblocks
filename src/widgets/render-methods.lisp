@@ -1,5 +1,6 @@
 (defpackage #:reblocks/widgets/render-methods
   (:use #:cl)
+  (:import-from #:log)
   (:import-from #:reblocks/dependencies
                 #:get-dependencies
                 #:render-in-ajax-response)
@@ -11,8 +12,6 @@
                 #:get-css-classes-as-string
                 #:get-html-tag
                 #:render)
-  (:import-from #:reblocks/request
-                #:ajax-request-p)
   (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:reblocks/widgets/dom

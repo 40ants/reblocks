@@ -29,10 +29,8 @@
   (:import-from #:reblocks/request-handler
                 #:handle-request)
     
-  (:import-from #:lack.request
+  (:import-from #:lack/request
                 #:make-request)
-  (:import-from #:lack
-                #:builder)
   (:import-from #:clack
                 #:clackup)
   (:import-from #:cl-strings
@@ -213,8 +211,8 @@ Make instance, then start it with ``start`` method."
 
 (defun make-response-for-clack (response)
   (etypecase response
-    (lack.response:response
-     (lack.response:finalize-response response))
+    (lack/response:response
+     (lack/response:finalize-response response))
     (list response)
     (function response)))
 

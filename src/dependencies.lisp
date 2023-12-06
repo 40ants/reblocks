@@ -2,7 +2,6 @@
   (:use #:cl)
   (:import-from #:cl-ppcre)
   (:import-from #:cl-fad)
-  (:import-from #:parenscript)
   (:import-from #:routes)
   (:import-from #:puri)
   (:import-from #:serapeum

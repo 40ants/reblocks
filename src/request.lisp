@@ -23,7 +23,6 @@
                 #:query-string->alist)
 
   ;; Just to add dependency
-  (:import-from #:reblocks/session)
   (:import-from #:quri)
   (:import-from #:str
                 #:split)
