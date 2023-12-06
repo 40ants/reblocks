@@ -2,6 +2,22 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E55-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.55.0 (2023-12-05)
+
+<a id="added"></a>
+
+### Added
+
+* Optional argument :defer was added to javascript dependencies.
+* Argument `BASE-URI` was added to [`reblocks/response:make-uri`][2d94] function.
+* Now Reblocks responds with Server-Timing and this performance information can be
+  viewed in the browser. Read more about this header at
+  [Mozilla's docs][587f].
+* Generic-function [`reblocks/widget:update`][9631] now has an optional argument `REMOVED`.
+  You can set it to T to remove widget from the `DOM` tree.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E54-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.54.0 (2023-10-22)
@@ -61,7 +77,6 @@ some `JS` handlers to the `DOM` node, but after the update these handlers are de
 ### Added
 
 * Added `includeCSS` and `includeJS` command handlers. This makes it possible to send such kind of commands via a websocket.
-
 * Now all widgets rendered on a page are collected into a hash table and you can find them by dom-id using [`reblocks/page:find-widget-by-id`][3a8d] function.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E50-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -96,7 +111,6 @@ leading to posible DoS attack. Page expiration is controlled by two values:
 
 * A number of seconds while page should be considered alive. This prevents
   evil person from filling memory by creation of many separate sessions.
-
 * A maximum number of pages per session. This may be needed to protect from
   opening too many pages within one session.
 
@@ -120,13 +134,9 @@ Another interesting feature is mixin class [`reblocks/cached-dependencies-mixin:
 These functions were moved to separate package `REBLOCKS/PAGE-DEPENDENCIES`:
 
 * with-collected-dependencies
-
 * get-collected-dependencies
-
 * push-dependencies
-
 * already-loaded-p
-
 * page-dependencies
 
 New generic-function [`reblocks/session:init-session`][c740] was introduced. Define a method if you
@@ -213,10 +223,8 @@ Here is an example how to expire a cookie right now:
 * Generic-function [`reblocks/error-handler:on-error`][631c] now accepts `BACKTRACE` argument which may
   contain a string with a backtrace. Previously, default method of this generic-function
   has rendered wrong backtrace when you aborted request in debugger.
-
 * Also, a function [`log4cl-extras/error:print-backtrace`][6a57] is used now to format a backtrace
   for error page and now it looks the same as backtrace in logs.
-
 * Plus, a backtrace now logged only once when unhandled error happens.
 
 <a id="removed"></a>
@@ -245,7 +253,6 @@ Here is an example how to expire a cookie right now:
 ### Fixed
 
 * Fixed loading of `CSS` styles for new widgets appearing on a page.
-
 * Fixed starting server in debug mode.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -265,7 +272,6 @@ Here is an example how to expire a cookie right now:
 * Fixed the way how dependencies are rendered in `AJAX` action response. Previously,
   when many widgets of the same class were updated on one user action Reblocks sent
   a duplicate css/js dependencies.
-
 * Function [`reblocks/request:refresh-request-p`][71db] was fixed and now works as expected.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -290,13 +296,10 @@ Here is an example how to expire a cookie right now:
 
 * Fixed the way how welcome page app is started. Now it always started unless some
   other application does not use "/" prefix.
-
 * Also, fixed the way how application is choosen depending on request url path.
-
 * Function [`reblocks/server:stop`][8ab6] now removes all application and routes from the
   server instance. This way when you'll start it again, server might serve another
   set of the applications.
-
 * Now if you redefine your app using [`reblocks/app:defapp`][6999] macro and change
   `AUTOSTART` argument from `T` to `NIL`, this app will be removed from the list
   of applications to autostart.
@@ -319,7 +322,6 @@ Here is an example how to expire a cookie right now:
 * Argument `CACHE-IN-MEMORY` was added to [`reblocks/dependencies:make-dependency`][ac86] function.
   It allows to compile local dependency into the memory. This way you can build a standalone
   executable webserver without `JS` and `CSS` dependencies!
-
 * jQuery and some other dependencies now are cached in memory at compilation time.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E42-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -333,10 +335,8 @@ Here is an example how to expire a cookie right now:
 * Now each app set's its own root widget. Root widgets is choosen depending on current application.
   and current application depends on the url path prefix. Previously site with multiple apps
   always shown the same root widget.
-
 * Fixed the error occured after you stopped the webserver and started it again using the same port.
   Previously Reblocks complained that the server is already running on this port.
-
 * Fixed the way how Reblocks signal an error on missing action. Now it does this by default
   from the default implementation of the [`reblocks/actions:on-missing-action`][7feb] generic-function.
   But if variable [`reblocks/variables:*ignore-missing-actions*`][f4c7] is `t`, then error will not be signaled
@@ -348,7 +348,6 @@ Here is an example how to expire a cookie right now:
 
 * Documentation examples server was changed to render a list of `ASDF` systems for which documentation
   was built.
-
 * [`reblocks/preview:preview`][8415] is able to accept a widget's class as a symbol.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E41-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -370,34 +369,24 @@ Here is an example how to expire a cookie right now:
 ### Added
 
 * Added a welcome screen app on "/" that lists the active apps.
-
 * Generic-function [`reblocks/widget:create-widget-from`][f598] now returns a more user-friendly error
   message, explaining that the widget is not of a good type, instead
   of "no applicable generic method".
-
 * A new function [`reblocks/preview:preview`][8415] was added. Give it a widget and it will setup
   a server on a random port and show the widget in a browser!
-
 * Ability to run many web servers each on it's own `HTTP` port. Each server can have
   it's own set of applications.
-
 * Added a log in `weblocks/app:start` to show the prefix of the app
   that is started.
-
 * Changed `(weblocks/debug:on)` and `off` so they set the log
   level to `debug` and `warn`, respectively.
-
 * Changed a library used to log unhandled errors.
   Now [log4cl-extras][8f00] is used,
   because it is a successor of [log4cl-json][0303].
-
 * Function [`reblocks/server:stop`][8ab6] now accepts optional `interface` and `port` arguments.
-
 * Function `reblocks/action::function-or-action->action` was renamed to [`reblocks/actions:make-action`][2ce4] and made public.
   Old `reblocks/action:make-action` was renamed to `reblocks/action::internal-make-action`.
-
 * `JS` function initiateActionWithArgs now uses `POST` method by default.
-
 * Function [`reblocks/actions:make-action-url`][f521] is exported now and it keeps query params by default.
 
 <a id="new-functions"></a>
@@ -405,7 +394,6 @@ Here is an example how to expire a cookie right now:
 ### New Functions
 
 * [`reblocks/server:servers`][b988]
-
 * [`reblocks/server:running-p`][bb0a]
 
 <a id="removals"></a>
@@ -414,44 +402,28 @@ Here is an example how to expire a cookie right now:
 
 * Package `reblocks/widgets/base` was removed. All code now is in the `reblocks/widget` package,
   which was a nickname previously.
-
 * `reblocks/app:get-active-apps`
-
 * `reblocks/app:finalize-webapp`
-
 * `reblocks/app:app-active-p`
-
 * `reblocks/app:start`
-
 * `reblocks/app:stop`
-
 * `reblocks/app:restart`
-
 * `JS` function `initiateActionWithArgsAndDeferredCallback` was removed because of leaky
   abstraction of a single deferred object per page.
-
 * `JS` functions `initiateActionWithArgs` and `initiateActionWithArgsAndCallback` were combined
   into a single `initiateAction` function.
-
 * `JS` functions `initiateFormAction` and `initiateFormActionWithCallback` were combined
   into a `initiateFormAction` function.
 
 Also removed:
 
 * A variable `*current-page-headers*`, define an `:AFTER` method for [`reblocks/page:render-headers`][a82c] instead.
-
 * `*approved-return-codes*`
-
 * `*current-page-keywords*`
-
 * `*current-page-title*`
-
 * `*style-warn-on-circular-dirtying*`
-
 * `*style-warn-on-late-propagation*`
-
 * `*rewrite-for-session-urls*`
-
 * Functions `reblocks/routes:add-route` and `reblocks/routes:add-routes` were made internal.
 
 <a id="other-changes"></a>
@@ -527,11 +499,8 @@ each route is associate with application class and these routes
 ## 0.38.0 (2019-07-07)
 
 * Unhandled error processing was fixed. There were numerous problems with error processing:
-
 * Previosly server stopped to work because clack tried to write into a closed stream.
-
 * Also, before this fix, error page didn't showed propertly.
-
 * Any error in the route lead to a server stop because there wasn't any handler at all.
 Now they are handled with `on-error` method as errors in block/page rendering.
 
@@ -550,20 +519,15 @@ All of them are fixed now.
 
 * Added function `weblocks/session:expire`, which can be used to tell Weblocks to delete current session
   after request processing.
-
 * Also, now session middleware is created explicitly along with memory store. This made possible to add
   another two functions to gather some statistics about number of sessions:
-
 * `weblocks/session:get-number-of-sessions`;
-
 * `weblocks/session:get-number-of-anonymous-sessions`;
-
 * The function `weblocks/widgets/base:get-html-tag` was fixed to
   render tables correctly. If the widget's parent is a `:table`
   element, then this function returns `:tr` (instead of a
   `:div`). If it is `:tr`, it returns `:td`, and `:div`
   otherwise.
-
 * A new setting `weblocks/html:*pretty-html*` was created, to further control pretty printing of html
   both in code and in tests.
 
@@ -626,7 +590,6 @@ Here is a list of changes:
 
 * Macro `weblocks/hooks:on-application-hook-handle-request` was
   renamed to `weblocks/hooks:on-application-hook-handle-http-request`.
-
 * Generic-function `weblocks/request-handler:handle-client-request`
   was renamed to `weblocks/request-handler:handle-request` and now
   this function should return either `string` or an object of type
@@ -637,14 +600,12 @@ Here is a list of changes:
   `weblocks/response:immediate-response` will be catched inside a
   `:around weblocks/request-handler:handle-request` method and
   returned as usual `response` object.
-
 * Function `weblocks/response:abort-processing` was renamed to
   `weblocks/response:immediate-return`, symbols `*code*`,
   `*headers*` and `*content-type` are not exported anymore. Instead
   of these global variables, use newly exported functions
   `get-content`, `get-code`, `get-headers`, `get-custom-headers`
   and `get-content-type` to extract information from the `response` object.
-
 * Package `weblocks/response` does not export symbols `*code*` and
   `*content-type*` anymore, but exports a function `make-response`
   which can be used by a `weblocks/request-handler:handle-reqiest` to
@@ -667,7 +628,6 @@ Here is a list of changes:
 
 * Function `weblocks/request:get-port` now will use `X-Forwarded-Port`
   header if it is available.
-
 * Function `weblocks/request:get-host` now will use `X-Forwarded-Host`
   header if it is available.
 
@@ -678,9 +638,7 @@ Here is a list of changes:
 * Fixed issue introduced in `0.33.2` release - system
   `lack-middleware-session` was loaded successfully, but `SBCL` was
   unable to find `lack-middleware-session` package.
-
 * Now `HTML` is pretty-printed by default on all implementations.
-
 * Function `weblocks/request:get-uri` was fixed to work correctly when
   server is behind a reverse proxy which provides `X-Forwarded-*` headers.
 
@@ -715,7 +673,6 @@ Here is a list of changes:
 
 * Function `response:redirect` and it's `JS` counterpart was fixed
   and now work as expected.
-
 * Request processing was streamlined and now
   `weblocks/server:handle-request` does not contain non-local
   exits. This fixes usage of the `handle-request` hook, because
@@ -1045,7 +1002,6 @@ intercept unhandled conditions, but calls an interactive debugger.
 * `session-name-string-pair` this function was removed in previous
   releases, but didn't find it's way to the changelog, still used in
   some older tests not ported to the Rove.
-
 * Macro `defrender` was removed.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E24-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -1136,13 +1092,9 @@ Slot `init-user-session` was completely removed and replace with a generic
 These dependency related slots and accessors were removed:
 
 * `application-dependencies`
-
 * `weblocks-webapp-application-dependencies`
-
 * `bundle-dependency-types`
-
 * `version-dependency-types`
-
 * `gzip-dependency-types`
 
 And macro for defining a special readers for them was removed as well:
@@ -1249,15 +1201,10 @@ These variables were moved from `weblocks` package to
 `weblocks/variables`:
 
 * `*current-page-title*`
-
 * `*current-page-keywords*`
-
 * `*current-page-headers*`
-
 * `*rewrite-for-session-urls*`
-
 * `*default-content-type*`
-
 * `*ignore-missing-actions*`
 
 <a id="symbols-moved-from-weblocks-to-other-packages"></a>
@@ -1269,7 +1216,6 @@ These variables were moved from `weblocks` package to
 #### To :weblocks/widgets/dom
 
 * `dom-object-mixin`
-
 * `dom-id`
 
 <a id="to-weblocks-utils-uri"></a>
@@ -1277,9 +1223,7 @@ These variables were moved from `weblocks` package to
 #### To :weblocks/utils/uri
 
 * `request-uri-path`
-
 * `add-get-param-to-url`
-
 * `remove-parameter-from-uri`
 
 <a id="to-weblocks-linguistic-grammar"></a>
@@ -1287,31 +1231,18 @@ These variables were moved from `weblocks` package to
 #### To :weblocks/linguistic/grammar
 
 * `pluralize`
-
 * `singularize`
-
 * `proper-number-form`
-
 * `vowelp`
-
 * `consonantp`
-
 * `proper-indefinite-article`
-
 * `articlize`
-
 * `*current-locale*`
-
 * `current-locale`
-
 * `russian-proper-number-form`
-
 * `noun-vocative-to-genitive`
-
 * `*debug-words-forms*`
-
 * `*debug-words-genders*`
-
 * `determine-gender`
 
 <a id="to-weblocks-utils-warn"></a>
@@ -1319,11 +1250,8 @@ These variables were moved from `weblocks` package to
 #### To weblocks/utils/warn
 
 * `style-warn`
-
 * `webapp-style-warning` renamed to `style-warning`.
-
 * `non-idempotent-rendering`
-
 * `misunderstood-action`
 
 <a id="to-weblocks-actions"></a>
@@ -1331,9 +1259,7 @@ These variables were moved from `weblocks` package to
 #### To weblocks/actions
 
 * `function-or-action->action`
-
 * `make-action`
-
 * `generate-action-code`
 
 <a id="removals"></a>
@@ -1366,11 +1292,9 @@ Rendering of remote (non cached) dependencies was fixed.
 * Symbol `weblocks.routes:*routes*` is not external anymore.
   Use `weblocks.routes:add-route` and `weblocks.routes:get-route`
   to add new routes and to search a route matched on a path.
-
 * Fixed getting the rendered widgets in `weblocks.widget:update`
   method when making `:update-widget` or `:insert-widget (before)`
   commands.
-
 * Temporary added method `weblocks::child-of-p` for new type of
   widget. This should fix some issues, with widgets updating.
 
@@ -1394,24 +1318,16 @@ Rendering of remote (non cached) dependencies was fixed.
 Most functions from `weblocks.request` were refactored and renamed:
 
 * `request-parameters` -> `get-parameters`;
-
 * `request-parameter` -> `get-parameter`;
-
 * `request-header` -> `get-header`;
-
 * `remove-request-header` -> `remove-header`;
-
 * `request-server-name` -> `get-host`;
-
 * `request-server-port` -> `get-port`;
-
 * `request-uri` -> `get-uri` (and now it returns full `URI` with
   scheme, host and port;
-
 * `request-path-info` -> `get-path` (and now it has keyword argument
   `with-params` to copy behaviour of old `request-uri` and return
   strings like `/some/path?with=parameters`;
-
 * `request-method` -> `get-method`.
 
 All these function now accept keyword argument `:request`. Previously
@@ -1435,7 +1351,6 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
 
 * Macro `weblocks.session:get-value` was replaced with a regular
   function.
-
 * Function `weblocks.session:set-value` was removed and replaced with
   a setter `(setf get-value)`.
 
@@ -1444,15 +1359,10 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
 ## 0.20.1 (2017-12-20)
 
 * Removed debug these debug messages from client-side `JS`:
-
 * `LOADED`;
-
 * Starting `AJAX`;
-
 * Stopping `AJAX` progress;
-
 * Some `AJAX` error;
-
 * Action success.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E20-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -1461,7 +1371,6 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
 
 * Package `weblocks.debug` now does not export `*on` variable,
   but provides three functions `on`, `off` and `status`.
-
 * New method `weblocks.server:serve-static-file` was introduced.
   It can be used to create static routes which will respond with
   file's content. For example, you could add this to your app's
@@ -1494,9 +1403,7 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
   `expired-action-handler` and function
   `default-expired-action-handler` were replaced with method
   `weblocks.actions:on-missing-action`.
-
 * Now we are trying to call action only if action's name was given.
-
 * Old method `weblocks:handle-client-request ((app weblocks-webapp))`
   was removed. Look at it's newer version in `weblocks.request-handler`.
 
@@ -1513,7 +1420,6 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
 
 * Backtrace printing code was replaced with direct usage of
   `trivial-backtrace:print-backtrace`.
-
 * Call to `prepare-hooks` was moved from `weblocks.request-handler:handle-client-request`
   to the the weblocks.server:handler-request, to fix session hooks processing when
   `:process-request` hook is called.
@@ -1537,7 +1443,6 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
 ## 0.17.0 (2017-11-11)
 
 * Added a `weblocks.actions` package.
-
 * Also, a `commands` were introduced. Commands describe remote calls
   which have to be applied on a client as a result of action's
   execution. Previously, weblocks used similar technic to replace dirty
@@ -1545,13 +1450,10 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
   replacement. The new mechanism of "commands" is more generic and uses
   the `JSON-RPC` to pass function name and parameters from backend to
   client-side.
-
 * Added `weblocks.session:in-session-p` function which returns `t`
   if session data can be retrived or stored without error.
-
 * Now function `initiateActionWithArgsAndCallback` send arguments as
   `JSON` payload. This allows to send any datastructures as action's params.
-
 * Function `weblocks.response:send-script` was changed to use new
   mechanizm with commands. When you send script from the action, it will
   add a command `:execute-code` to the stack. All commands are
@@ -1566,18 +1468,14 @@ I've made a pull request [https://github.com/fukamachi/lack/pull/31][c009]
 * New package was introduced - `weblocks.widget` it contains a new
   `widget` class with simplified rendering based on `spinneret`
   templating library.
-
 * Now class `route` is exported from `weblocks.routes` and should be
   used instead of `routes:route`.
-
 * New package `weblocks.error-handler` was introduced. It contains a
   `on-error` generic method which is called when some unhandled error
   raise by application.
-
 * Fixed issue of adding multuple routes mapped to the same path. Now if
   url mapper already have a route all subsequent attempts to add a route
   with same path are ignored.
-
 * Fixed error:
 
 `
@@ -1598,7 +1496,6 @@ Now `Content-Type` is `text/plain`.
 * Now weblocks does not checks if all tokens from `URL` were consumed by
   app during root widget rendering. Previously it returned 404 if some
   token weren't consumed. Implement this logic in your app if needed.
-
 * Macro `assert-hooks-called` was changed to return hooks in the order
   they were called. Also, now it waits hooks description as a `DSL`,
   like:
@@ -1624,7 +1521,6 @@ Also, a new macro `catch-hooks` was added to check if some
 
 * No more `declaim optimize` in different places. These
   declarations changed compiler's settings at unexpected moments.
-
 * Fixed error happened when "File not found", and now
   `with-hook` macro returns the value of the last form's evaluation.
 
@@ -1634,10 +1530,8 @@ Also, a new macro `catch-hooks` was added to check if some
 
 * Default method of `render-page` was fixed to really wrap
   page with `<html>...` block.
-
 * Fixed a way how weblocks.debug:*latest-session* is
   processed.
-
 * Function `weblocks.request:remove-request-header` now
   returns a new instance of request object and does not modify the
   original request. This fixes issue in `weblocks-websocket`.
@@ -1654,7 +1548,6 @@ Also, a new macro `catch-hooks` was added to check if some
 ## 0.14.1 (2017-09-22)
 
 * Added function `weblocks.request:remove-request-header`.
-
 * Added a hook `(:reset-session session)`, which is
   called around a code for clearing given session. Right now it is
   called only from `weblocks.sessions:reset-latest-session`.
@@ -1665,40 +1558,26 @@ Also, a new macro `catch-hooks` was added to check if some
 
 * `html`, `menu`, `suggest` and `repl` utilities
   were excluded.
-
 * Code which was in `request-handler.lisp`, was excluded
   from build and partly moved to `request-handler2.lisp`.
-
 * Added `:stop-weblocks` hook.
-
 * Misc helper for repl were removed: `sessions`,
   `in-session` and `pt`. May be the will be restored in separate
   package.
-
 * Page boilerplate rendering method `render-page` now
   does not use complex templating with contextes.
-
 * Symbols refactoring:
-
 * `*style-warn-on-circular-dirtying*` variable ->
 `weblocks.variables`;
-
 * `*style-warn-on-late-propagation*` variable ->
 `weblocks.variables`;
-
 * `gen-id` function -> `weblocks.session`;
-
 * `send-script` function -> `weblocks.response`;
-
 * `with-html-form` macro -> `weblocks-ui`;
-
 * `*approved-return-codes*` variable -> `weblocks.variables`;
-
 * `handle-ajax-request` method -> `weblocks.request-handler`;
-
 * `update-location-hash-dependents` function ->
 `weblocks.request-handler`.
-
 * `render-link` function was moved to `weblocks-ui.form` in
 separate system.
 
@@ -1707,7 +1586,6 @@ separate system.
 ## 0.13.11 (2017-09-12)
 
 * Added `weblocks.hooks:call-hook` helper.
-
 * Now `call-next-hook` is called automatically if it
   wasn't called explicitly.
 
@@ -1741,18 +1619,14 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 ## 0.13.8 (2017-09-02)
 
 * Fixed error on `(weblocks:redirect...)` call.
-
 * Fixed dependency handling in ajax requests.
-
 * Now if unhandled exception occure, Woo's handler remains
   working. Previously, handler's thread shut down on any unhandled exception.
-
 * Ajax progress now does not inserted into the document,
   but if element with id `ajax-progress` is present, it will be shown
   and hidden by jQuery's `.show` and `.hide` methods. Also, they
   take optional speed parameters from `data-*` attributes
   `data-show-speed` and `data-hide-speed`.
-
 * Reformatted documentation. Started to [keep a changelog][eeaa].
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E13-2E7-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -1794,12 +1668,14 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
 [9c23]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
+[2d94]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3AMAKE-URI-20FUNCTION-29
 [3dd1]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [c740]: https://40ants.com/reblocks/session/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
 [9631]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 [33fd]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
+[587f]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
 [91c9]: https://github.com/40ants/lack
 [8f00]: https://github.com/40ants/log4cl-extras
 [0303]: https://github.com/40ants/log4cl-json

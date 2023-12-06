@@ -21,11 +21,8 @@ the Quicklisp under this name.
 ## Core Features of Reblocks
 
 * Application pages are built from "widgets".
-
 * All business logic could be implemented in Common Lisp in server-side.
-
 * Framework's code is separated by functionality into a separate packages.
-
 * Project now has a [hyperlinked documentation][22e2]
   with code snippets and embedded interactive demos.
 
@@ -42,11 +39,8 @@ from the core of the Reblocks. Some of them might be implemented as a separate `
 systems.
 
 * Views
-
 * Templates
-
 * Forms
-
 * Continuation based dialogs
 
 You can read about these tools in the [`Removed Features`][1505] section.
