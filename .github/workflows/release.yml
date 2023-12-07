@@ -1,0 +1,39 @@
+{
+  "name": "RELEASE",
+  "on": {
+    "push": {
+      "branches": [
+        "master"
+      ]
+    }
+  },
+  "jobs": {
+    "autotag": {
+      "permissions": {
+        "contents": "write"
+      },
+      "runs-on": "ubuntu-latest",
+      "env": {
+        "OS": "ubuntu-latest"
+      },
+      "steps": [
+        {
+          "name": "Checkout Code",
+          "uses": "actions/checkout@v3"
+        },
+        {
+          "name": "Create release tag",
+          "uses": "butlerlogic/action-autotag@8bc1ad456dcdee34e8c6ffbce991cc31793578c2",
+          "with": {
+            "root": "ChangeLog.md",
+            "regex_pattern": "^## (?<version>\\d+\\.\\d+\\.\\d+.*?)( |\\n).*$",
+            "tag_prefix": "v"
+          },
+          "env": {
+            "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          }
+        }
+      ]
+    }
+  }
+}

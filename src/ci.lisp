@@ -4,9 +4,15 @@
                 #:defworkflow)
   (:import-from #:40ants-ci/jobs/linter)
   (:import-from #:40ants-ci/jobs/run-tests)
-  (:import-from #:40ants-ci/jobs/docs))
+  (:import-from #:40ants-ci/jobs/docs)
+  (:import-from #:40ants-ci/jobs/autotag
+                #:autotag))
 (in-package #:reblocks/ci)
 
+
+(defworkflow release
+  :on-push-to "master"
+  :jobs ((autotag)))
 
 (defworkflow linter
   :on-pull-request t
