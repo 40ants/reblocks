@@ -3,6 +3,7 @@
   (:import-from #:40ants-doc
                 #:defsection)
   (:import-from #:reblocks/page
+                #:body-classes
                 #:find-widget-by-id
                 #:page
                 #:init-page
@@ -35,6 +36,7 @@
 (defsection @page (:title "Pages"
                    :ignore-words ("REBLOCKS"
                                   "REBLOCKS/PAGE"
+                                  "CSS"
                                   "HTML"
                                   "HTTP"))
 
@@ -84,7 +86,8 @@ then you should wrap all changing code in WITH-METADATA-LOCK macro.
   (extend-page-expiration-by generic-function)
   (max-pages-per-session generic-function)
   (page-expire-in generic-function)
-  
+
+  (body-classes generic-function)
   (page-metadata function)
   (extend-expiration-time function)
   (current-page function)

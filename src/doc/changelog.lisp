@@ -27,12 +27,21 @@
                                                    "HTML"
                                                    "CSS"
                                                    "HTTP"
+                                                   "TailwindCSS"
                                                    "WITH-HANDLED-ERRORS"
                                                    "REBLOCKS/ERROR-HANDLER"
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.56.0 2024-01-01
+          """
+Added
+=====
+
+* Generic-function REBLOCKS/PAGE:BODY-CLASSES was added and can be used to specify classes
+  for HTML body. This can be helpful when making a site using frameworks like `TailwindCSS`.
+""")
   (0.55.0 2023-12-05
           """
 Added
