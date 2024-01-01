@@ -92,7 +92,8 @@
    #:page-app
    #:with-metadata-lock
    #:ensure-page-metadata
-   #:find-widget-by-id))
+   #:find-widget-by-id
+   #:body-classes))
 (in-package #:reblocks/page)
 
 
@@ -229,6 +230,11 @@
                    * HTML <body> where RENDER-BODY generic-function is called
                      with APP and INNER-HTML arguments."))
 
+(defgeneric body-classes (app)
+  (:documentation "Should return a string of CSS classes for the body HTML element or NIL.")
+  (:method ((app t))
+    nil))
+
 
 (defmethod render ((app app)
                    inner-html
@@ -261,6 +267,7 @@
                   (ps:ps* `(setf (ps:@ window loaded-dependencies)
                                  (list ,@deps-urls))))))
        (:body
+        :class (body-classes app)
         (render-body app inner-html)
         ;; (:script :type "text/javascript"
         ;;          "updateWidgetStateFromHash();")
