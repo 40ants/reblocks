@@ -36,6 +36,7 @@
 (defsection @page (:title "Pages"
                    :ignore-words ("REBLOCKS"
                                   "REBLOCKS/PAGE"
+                                  "CSS"
                                   "HTML"
                                   "HTTP"))
 
