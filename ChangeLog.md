@@ -2,6 +2,17 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E56-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.56.0 (2024-01-01)
+
+<a id="added"></a>
+
+### Added
+
+* Generic-function [`reblocks/page:body-classes`][3cef] was added and can be used to specify classes
+  for `HTML` body. This can be helpful when making a site using frameworks like `TailwindCSS`.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E55-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.55.0 (2023-12-05)
@@ -1661,6 +1672,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [ac86]: https://40ants.com/reblocks/dependencies/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
 [631c]: https://40ants.com/reblocks/error-handling/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29
 [4249]: https://40ants.com/reblocks/hooks/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[3cef]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3ABODY-CLASSES-20GENERIC-FUNCTION-29
 [e637]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29
 [3a8d]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AFIND-WIDGET-BY-ID-20FUNCTION-29
 [66f5]: https://40ants.com/reblocks/page/#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29
