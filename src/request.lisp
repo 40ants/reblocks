@@ -19,9 +19,7 @@
                 #:assoc-value)
   (:import-from #:reblocks/variables
                 #:*action-string*)
-  (:import-from #:reblocks/utils/uri
-                #:query-string->alist)
-
+  
   ;; Just to add dependency
   (:import-from #:quri)
   (:import-from #:str
@@ -211,7 +209,7 @@ if there is an action involved (even if the user hits refresh)."
 (defun parse-location-hash ()
   (let ((raw-hash (get-parameter "reblocks-internal-location-hash")))
     (when raw-hash
-      (query-string->alist (cl-ppcre:regex-replace "^#" raw-hash "")))))
+      (quri:url-decode-params (cl-ppcre:regex-replace "^#" raw-hash "")))))
 
 
 ;; (defmacro with-path ((path) &body body)

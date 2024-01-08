@@ -2,9 +2,6 @@
   (:use #:cl)
   (:import-from #:log)
   (:import-from #:yason)
-  (:import-from #:reblocks/app
-                #:get-prefix
-                #:get-prefix-actions)
   (:import-from #:reblocks/utils/misc
                 #:safe-apply)
   (:import-from #:reblocks/variables
@@ -36,6 +33,8 @@
                 #:get-action)
   (:import-from #:serapeum
                 #:dict)
+  (:import-from #:reblocks/utils/uri
+                #:remove-parameter-from-uri)
   
   (:export #:eval-action
            #:on-missing-action
@@ -149,7 +148,10 @@ situation (e.g. redirect, signal an error, etc.)."))
    function, adds it to the session actions and returns its unique code as a string.
    Otherwise, checks if the action already exists. If it does, returns the argument as is.
    If it does not, signals an error."
-  (cond ((functionp function-or-action)
+  (cond ((or (functionp function-or-action)
+             (and (typep function-or-action
+                         'symbol)
+                  (fboundp function-or-action)))
          ;; If it is a function, first we'll try to find
          ;; a code for it in the session.
          (multiple-value-bind (code code-p)
@@ -279,10 +281,19 @@ situation (e.g. redirect, signal an error, etc.)."))
           (get-session-action action-name)))))
 
 
+(defun remove-action-from-uri (uri)
+  "Removes the action info from a URI."
+  (remove-parameter-from-uri uri *action-string*))
+
+
 (defmethod on-missing-action (app action-name)
-  (cond
-    (*ignore-missing-actions*
-     (redirect
-      (make-uri (get-prefix app))))
-    (t
-     (error "Cannot find action: ~A" action-name))))
+  (flet ((refresh ()
+           (redirect (remove-action-from-uri
+                      (reblocks/request:get-uri)))))
+    (cond
+      (*ignore-missing-actions*
+       (refresh))
+      (t
+       (cerror "Refresh page."
+               "Cannot find action: ~A" action-name)
+       (refresh)))))

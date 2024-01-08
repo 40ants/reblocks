@@ -9,8 +9,6 @@
                 #:ajax-request-p)
   (:import-from #:reblocks/utils/list
                 #:alist->plist)
-  (:import-from #:reblocks/utils/uri
-                #:remove-parameter-from-uri)
   (:import-from #:reblocks/page
                 #:in-page-context-p
                 #:*current-page*
@@ -33,6 +31,7 @@
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:reblocks/actions
+                #:remove-action-from-uri
                 #:eval-action)
   (:import-from #:reblocks/commands
                 #:get-collected-commands)
@@ -210,11 +209,6 @@ customize behavior."))
       ;; Here we are using internal symbol, because we don't want to expose
       ;; this method for usage outside of the reblocks.
       (render-page-with-widgets app))))
-
-
-(defun remove-action-from-uri (uri)
-  "Removes the action info from a URI."
-  (remove-parameter-from-uri uri *action-string*))
 
 
 (defun handle-action-if-needed (app)

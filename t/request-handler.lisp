@@ -50,7 +50,7 @@
                    302)
             "And response code should be 302")
 
-        (testing "And user should be redirected to the app's prefix uri."
+        (testing "And user should be redirected to the same page, but without action parameter."
           (assert-that (get-custom-headers response)
-                       (has-plist-entries :location "http://localhost/test/my-app")))))))
+                       (has-plist-entries :location "http://localhost/foo/bar?")))))))
 
