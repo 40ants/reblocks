@@ -19,9 +19,7 @@
                 #:assoc-value)
   (:import-from #:reblocks/variables
                 #:*action-string*)
-  (:import-from #:reblocks/utils/uri
-                #:query-string->alist)
-
+  
   ;; Just to add dependency
   (:import-from #:quri)
   (:import-from #:str
