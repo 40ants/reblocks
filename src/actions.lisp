@@ -151,7 +151,10 @@ situation (e.g. redirect, signal an error, etc.)."))
    function, adds it to the session actions and returns its unique code as a string.
    Otherwise, checks if the action already exists. If it does, returns the argument as is.
    If it does not, signals an error."
-  (cond ((functionp function-or-action)
+  (cond ((or (functionp function-or-action)
+             (and (typep function-or-action
+                         'symbol)
+                  (fboundp function-or-action)))
          ;; If it is a function, first we'll try to find
          ;; a code for it in the session.
          (multiple-value-bind (code code-p)

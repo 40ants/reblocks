@@ -39,8 +39,9 @@
 Added
 =====
 
-Error about missing action now is continuable. In case if \"continue\" restart was selected,
-page is refreshed to update actions in the session.
+* Error about missing action now is continuable. In case if \"continue\" restart was selected,
+  page is refreshed to update actions in the session.
+* Now it is possible to use symbol as an action and it will be funcalled to handle an action.
 
 """)
   (0.56.0 2024-01-01
