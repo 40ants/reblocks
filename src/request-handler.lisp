@@ -9,8 +9,6 @@
                 #:ajax-request-p)
   (:import-from #:reblocks/utils/list
                 #:alist->plist)
-  (:import-from #:reblocks/utils/uri
-                #:remove-parameter-from-uri)
   (:import-from #:reblocks/page
                 #:in-page-context-p
                 #:*current-page*
