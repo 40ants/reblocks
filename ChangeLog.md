@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E57-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.57.0 (2024-01-08)
+
+<a id="added"></a>
+
+### Added
+
+* Error about missing action now is continuable. In case if \"continue\" restart was selected,
+  page is refreshed to update actions in the session.
+* Now it is possible to use symbol as an action and it will be funcalled to handle an action.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E56-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.56.0 (2024-01-01)
