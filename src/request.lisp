@@ -211,7 +211,7 @@ if there is an action involved (even if the user hits refresh)."
 (defun parse-location-hash ()
   (let ((raw-hash (get-parameter "reblocks-internal-location-hash")))
     (when raw-hash
-      (query-string->alist (cl-ppcre:regex-replace "^#" raw-hash "")))))
+      (quri:url-decode-params (cl-ppcre:regex-replace "^#" raw-hash "")))))
 
 
 ;; (defmacro with-path ((path) &body body)

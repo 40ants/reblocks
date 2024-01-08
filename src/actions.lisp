@@ -36,6 +36,8 @@
                 #:get-action)
   (:import-from #:serapeum
                 #:dict)
+  (:import-from #:reblocks/utils/uri
+                #:remove-parameter-from-uri)
   
   (:export #:eval-action
            #:on-missing-action
@@ -279,10 +281,19 @@ situation (e.g. redirect, signal an error, etc.)."))
           (get-session-action action-name)))))
 
 
+(defun remove-action-from-uri (uri)
+  "Removes the action info from a URI."
+  (remove-parameter-from-uri uri *action-string*))
+
+
 (defmethod on-missing-action (app action-name)
-  (cond
-    (*ignore-missing-actions*
-     (redirect
-      (make-uri (get-prefix app))))
-    (t
-     (error "Cannot find action: ~A" action-name))))
+  (flet ((refresh ()
+           (redirect (remove-action-from-uri
+                      (reblocks/request:get-uri)))))
+    (cond
+      (*ignore-missing-actions*
+       (refresh))
+      (t
+       (cerror "Refresh page."
+               "Cannot find action: ~A" action-name)
+       (refresh)))))

@@ -33,6 +33,7 @@
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:reblocks/actions
+                #:remove-action-from-uri
                 #:eval-action)
   (:import-from #:reblocks/commands
                 #:get-collected-commands)
@@ -210,11 +211,6 @@ customize behavior."))
       ;; Here we are using internal symbol, because we don't want to expose
       ;; this method for usage outside of the reblocks.
       (render-page-with-widgets app))))
-
-
-(defun remove-action-from-uri (uri)
-  "Removes the action info from a URI."
-  (remove-parameter-from-uri uri *action-string*))
 
 
 (defun handle-action-if-needed (app)

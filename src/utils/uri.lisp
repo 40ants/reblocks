@@ -44,14 +44,3 @@
 
 (defun remove-url-query-string (str)
   (cl-ppcre:regex-replace "\\?.*" str ""))
-
-(defun query-string->alist (query-string)
-  ;; stolen from cl-oauth -- does one of ours deps already offer this?
-  ;; TODO: doesn't handle leading ? or #
-  (check-type query-string string)
-  (let* ((kv-pairs (remove "" (cl-ppcre:split "&" query-string) :test #'equal))
-         (alist (mapcar (lambda (kv-pair)
-                          (let ((kv (cl-ppcre:split "=" kv-pair)))
-                            (cons (first kv) (second kv))))
-                        kv-pairs)))
-    alist))

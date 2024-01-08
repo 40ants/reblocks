@@ -34,6 +34,15 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.57.0 2024-01-08
+          """
+Added
+=====
+
+Error about missing action now is continuable. In case if \"continue\" restart was selected,
+page is refreshed to update actions in the session.
+
+""")
   (0.56.0 2024-01-01
           """
 Added
