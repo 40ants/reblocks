@@ -16,6 +16,7 @@
 
 (defsection @response (:title "Response"
                        :ignore-words ("URL"
+                                      "SETF"
                                       "AJAX"
                                       "HTTP"))
   (@best-practice section)
@@ -47,10 +48,10 @@
 (defsection @api (:title "API")
   (reblocks/response:add-header function)
   (reblocks/response:add-retpath-to function)
-  (reblocks/response:get-code function)
+
+  (reblocks/response:status-code function)
   (reblocks/response:get-content function)
   (reblocks/response:get-content-type function)
-  (reblocks/response:get-custom-headers function)
   (reblocks/response:get-headers function)
   (reblocks/response:set-cookie function)
   (reblocks/response:cookies-to-set function)
@@ -60,4 +61,8 @@
   (reblocks/response:immediate-response condition)
   (reblocks/response:make-response function)
   (reblocks/response:make-uri function)
-  (reblocks/response:send-script function))
+  (reblocks/response:send-script function)
+
+  "# Deprecated"
+  (reblocks/response:get-code function)
+  (reblocks/response:get-custom-headers function))

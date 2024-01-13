@@ -34,6 +34,15 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.58.0 2024-01-13
+          """
+Added
+=====
+
+A new function REBLOCKS/RESPONSE:STATUS-CODE was added as a replacement to REBLOCKS/RESPONSE:GET-CODE.
+The new function is setfable. Now you can change HTTP status code of the currently rendered page.
+This is especially helpful when rendering \"Not found\" or error pages.
+""")
   (0.57.0 2024-01-08
           """
 Added
