@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E58-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.58.0 (2024-01-13)
+
+<a id="added"></a>
+
+### Added
+
+A new function [`reblocks/response:status-code`][d521] was added as a replacement to [`reblocks/response:get-code`][b032].
+The new function is setfable. Now you can change `HTTP` status code of the currently rendered page.
+This is especially helpful when rendering \"Not found\" or error pages.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E57-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.57.0 (2024-01-08)
@@ -1692,8 +1704,10 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [34a6]: https://40ants.com/reblocks/rendering/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
 [9c23]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29
 [71db]: https://40ants.com/reblocks/request/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
+[b032]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3AGET-CODE-20FUNCTION-29
 [2d94]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3AMAKE-URI-20FUNCTION-29
 [3dd1]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
+[d521]: https://40ants.com/reblocks/response/#x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [c740]: https://40ants.com/reblocks/session/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
