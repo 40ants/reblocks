@@ -42,7 +42,8 @@
            #:get-content-type
            #:add-retpath-to
            #:set-cookie
-           #:cookies-to-set))
+           #:cookies-to-set
+           #:status-code))
 (in-package #:reblocks/response)
 
 
@@ -62,13 +63,35 @@
 
 
 (defun get-custom-headers (&optional (response *response*))
+  "Function GET-CUSTOM-HEADERS is deprecated. Use GET-HEADERS instead."
   (check-type response lack.response:response)
+  ;; TODO: remove this function after "2023-05-01"
   (log:warn "Function GET-CUSTOM-HEADERS is deprecated. Use GET-HEADERS instead.")
   (lack.response:response-headers response))
 
 
 (defun get-code (&optional (response *response*))
+  "Function GET-CODE is deprecated. Use STATUS-CODE instead."
+  ;; TODO: remove this function after "2023-05-01"
+  (log:warn "Function GET-CODE is deprecated. Use STATUS-CODE instead.")
   (lack.response:response-status response))
+
+
+(defun status-code (&optional (response *response*))
+  "Returns a status code to be returned in response to the current request.
+
+   You can use SETF to change the status code:
+
+   ```lisp
+   (setf (reblocks/response:status-code)
+         404)
+   ```"
+  (lack.response:response-status response))
+
+
+(defun (setf status-code) (value &optional (response *response*))
+  (setf (lack.response:response-status response)
+        value))
 
 
 (defun get-content (&optional (response *response*))
