@@ -14,7 +14,10 @@
   (:import-from #:reblocks/html
                 #:with-html)
   (:import-from #:reblocks/widgets/dom
-                #:dom-id))
+                #:dom-id)
+  (:import-from #:reblocks/utils/list
+		#:safe-first
+		#:safe-rest))
 (in-package #:reblocks/widgets/render-methods)
 
 
@@ -44,9 +47,10 @@
   
   (with-html
     (:tag
-     :name (get-html-tag widget)
+     :name (safe-first (get-html-tag widget))
      :class (get-css-classes-as-string widget)
      :id (dom-id widget)
+     :attrs (safe-rest (get-html-tag widget))
      (call-next-method))))
 
 
