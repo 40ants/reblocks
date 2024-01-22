@@ -92,10 +92,10 @@ For example:
 - :div  -- generates <div ...> widget content </div>
 - (:div :display \"flex\") -- generates (<div ... :display \"flex\">widget content</div>
 
-NOTE on attributes, in the attribute list the following attributes can
+Note on attributes: in the attribute list the following attributes can
 not be specified, they will be ignored:
 
-- :class  -- Use the GET-CSS-CLASSES method to specify these
+- :class  -- Use the get-css-classes method to specify these
 - :id     -- This is the value of the dom-id slot of the widget,
              normally automatically managed by reblocks.
 
