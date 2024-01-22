@@ -16,9 +16,7 @@
            #:ninsert
            #:find-all
            #:remove-keyword-parameter
-           #:remove-keyword-parameters
-	   #:safe-first
-	   #:safe-rest))
+           #:remove-keyword-parameters))
 (in-package #:reblocks/utils/list)
 
 
@@ -30,26 +28,6 @@
     (when (and end (> end length))
       (setf end length))
     (subseq sequence start end)))
-
-(defun safe-first (item)
-  "Returns first element of ITEM.
-There are two cases:
-- ITEM is a list, in which case it returns (first ITEM)
-- ITEM is not a list, in which case it retuns ITEM.
-The effect is the same as (first (alexandria:ensure-list item))"
-  (typecase item
-    (list (first item))
-    (t item)))
-
-(defun safe-rest (item)
-  "Returns rest of ITEM
-There are two cases:
-- ITEM is a list, in which case it returns (rest ITEM)
-- ITEM is not a list, in whch case it returns nil.
-The effect is the same as (rest (alexandria:ensure-list item))"
-  (typecase item
-    (list (rest item))
-    (t nil)))
 
 ;; TODO: replace with alexandria:alist-plist
 (defun alist->plist (alist)

@@ -15,9 +15,8 @@
                 #:with-html)
   (:import-from #:reblocks/widgets/dom
                 #:dom-id)
-  (:import-from #:reblocks/utils/list
-		#:safe-first
-		#:safe-rest))
+  (:import-from #:uiop
+		#:ensure-list))
 (in-package #:reblocks/widgets/render-methods)
 
 
@@ -44,13 +43,15 @@
     (push-dependencies widget-dependencies))
 
   (register-widget widget)
-  
-  (with-html
-    (:tag
-     :name (safe-first (get-html-tag widget))
-     :class (get-css-classes-as-string widget)
-     :id (dom-id widget)
-     :attrs (safe-rest (get-html-tag widget))
-     (call-next-method))))
+
+  (destructuring-bind (tag-name . attributes)
+      (ensure-list (get-html-tag widget))
+    (with-html
+      (:tag
+       :name tag-name
+       :class (get-css-classes-as-string widget)
+       :id (dom-id widget)
+       :attrs attributes
+       (call-next-method)))))
 
 

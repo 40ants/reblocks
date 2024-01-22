@@ -73,26 +73,29 @@ inherits from REBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
                    You can use any other templating engine, just ensure
                    it writes output to REBLOCKS/HTML:*STREAM*
 
-                   Outer DIV wrapper will be added automaticall. It will
-                   have CSS tags returned by GET-CSS-CLASSES."))
+                   Outer DIV wrapper will be added automaticall, see GET-HTML-TAG.
+                   It will have CSS tags returned by GET-CSS-CLASSES."))
 
 
 (defgeneric get-html-tag (widget)
   (:documentation "This method determines the enclosing tag of the widget.
-The return value should either be a keyword like :div, which will be the enclosing tag,
-or a list of the form (:tag . attributes), where :tag is the enclosing tag (like :div)
-and attributes is a property list, where the keys are keywords, corresponding to the attribute name
-and the values are the values of the attribute.
+
+The return value should either be a keyword like :div,
+which will be the enclosing tag, or a list of the form (:tag . attributes),
+where :tag is the enclosing tag (like :div) and attributes is a property list.
+
+The attributes property list has keywords for keys, corresponding to
+the attribute name and the values are the values of the attribute.
 
 For example:
 
-- :div  -- generates a <div ...> WIDGET CONTENT </div>
-- (:div :display \"flex\") -- generates (<div ... :display \"flex\">WIDGET CONTENT</div>
+- :div  -- generates <div ...> widget content </div>
+- (:div :display \"flex\") -- generates (<div ... :display \"flex\">widget content</div>
 
 NOTE on attributes, in the attribute list the following attributes can
 not be specified, they will be ignored:
 
-- :class  -- Use the get-css-classes method to specify these
+- :class  -- Use the GET-CSS-CLASSES method to specify these
 - :id     -- This is the value of the dom-id slot of the widget,
              normally automatically managed by reblocks.
 
