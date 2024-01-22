@@ -73,8 +73,8 @@ inherits from REBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
                    You can use any other templating engine, just ensure
                    it writes output to REBLOCKS/HTML:*STREAM*
 
-                   Outer DIV wrapper will be added automaticall, see GET-HTML-TAG.
-                   It will have CSS tags returned by GET-CSS-CLASSES."))
+                   Outer DIV wrapper will be added automaticall, see GET-HTML-TAG generic-function.
+                   It will have CSS tags returned by GET-CSS-CLASSES generic-function."))
 
 
 (defgeneric get-html-tag (widget)
@@ -95,7 +95,7 @@ For example:
 Note on attributes: in the attribute list the following attributes can
 not be specified, they will be ignored:
 
-- :class  -- Use the get-css-classes method to specify these
+- :class  -- Use the GET-CSS-CLASSES generic-function to specify these
 - :id     -- This is the value of the dom-id slot of the widget,
              normally automatically managed by reblocks.
 
