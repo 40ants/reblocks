@@ -92,6 +92,15 @@
    (defroute (app /api/data :content-type \"application/xml\")
        \"<my-data><item>1</item><item>2</item></my-data>\")
    ```
+
+   or to serve `robots.txt`:
+
+   ```lisp
+   (defroute (app /robots.txt :content-type \"text/plain\")
+     (alexandria:read-file-into-string
+      (asdf:system-relative-pathname \"frontend\"
+                                     \"robots.txt\")))
+   ```
    "
   (let* ((uri (string-downcase (symbol-name route)))
          (route-var (gensym "ROUTE")))
