@@ -34,6 +34,13 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.59.0 2024-01-26
+          """
+Changed
+=======
+
+* Generic-function REBLOCKS/WIDGET:GET-HTML-TAG now can return a list like `(list :input :onchange \"somevalue\")` to change not only HTML tag of the widget node, but also to add some arguments to it.
+""")
   (0.58.0 2024-01-13
           """
 Added
