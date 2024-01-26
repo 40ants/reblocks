@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E59-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.59.0 (2024-01-26)
+
+<a id="changed"></a>
+
+### Changed
+
+* Generic-function [`reblocks/widget:get-html-tag`][a9e8] now can return a list like `(list :input :onchange \"somevalue\")` to change not only `HTML` tag of the widget node, but also to add some arguments to it.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E58-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.58.0 (2024-01-13)
@@ -1711,6 +1721,7 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [b933]: https://40ants.com/reblocks/routing/#x-28REBLOCKS-2FROUTES-3ADEFROUTE-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
 [c740]: https://40ants.com/reblocks/session/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
 [f598]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
+[a9e8]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29
 [9631]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 [33fd]: https://40ants.com/reblocks/widgets/#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
 [587f]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
