@@ -80,29 +80,29 @@ inherits from REBLOCKS/WIDGET:WIDGET if no DIRECT-SUPERCLASSES are provided."
 (defgeneric get-html-tag (widget)
   (:documentation "This method determines the enclosing tag of the widget.
 
-The return value should either be a keyword like :div,
-which will be the enclosing tag, or a list of the form (:tag . attributes),
-where :tag is the enclosing tag (like :div) and attributes is a property list.
+The return value should either be a keyword like `:div`,
+which will be the enclosing tag, or a list of the form `(:tag . attributes)`,
+where `:tag` is the enclosing tag (like `:div`) and attributes is a property list.
 
 The attributes property list has keywords for keys, corresponding to
 the attribute name and the values are the values of the attribute.
 
 For example:
 
-- :div  -- generates <div ...> widget content </div>
-- (:div :display \"flex\") -- generates (<div ... :display \"flex\">widget content</div>
+- `:div` - generates `<div ...> widget content </div>`;
+- `(:div :display \"flex\")` - generates `(<div ... :display \"flex\">widget content</div>`.
 
 Note on attributes: in the attribute list the following attributes can
 not be specified, they will be ignored:
 
-- :class  -- Use the GET-CSS-CLASSES generic-function to specify these
-- :id     -- This is the value of the dom-id slot of the widget,
+- `:class` - Use the GET-CSS-CLASSES generic-function to specify these;
+- `:id`    - This is the value of the dom-id slot of the widget,
              normally automatically managed by reblocks.
 
 The default implementation returns
-- :td  -- inside a table row
-- :tr  -- inside a table
-- :div -- by default"))
+- `:td`  - inside a table row;
+- `:tr`  - inside a table;
+- `:div` - by default."))
 
 
 (defmethod get-html-tag ((widget t))
