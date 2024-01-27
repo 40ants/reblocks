@@ -27,6 +27,11 @@
   :on-pull-request t
   :cache t
   :jobs ((40ants-ci/jobs/run-tests:run-tests
+          :lisp ("sbcl-bin"
+                 "ccl-bin"
+                 "allegro"
+                 "ecl"
+                 "abcl")
           :coverage t)))
 
 (defworkflow docs

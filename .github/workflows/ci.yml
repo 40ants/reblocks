@@ -15,11 +15,23 @@
   },
   "jobs": {
     "run-tests": {
+      "strategy": {
+        "fail-fast": false,
+        "matrix": {
+          "lisp": [
+            "sbcl-bin",
+            "ccl-bin",
+            "allegro",
+            "ecl",
+            "abcl"
+          ]
+        }
+      },
       "runs-on": "ubuntu-latest",
       "env": {
         "OS": "ubuntu-latest",
         "QUICKLISP_DIST": "quicklisp",
-        "LISP": "sbcl-bin"
+        "LISP": "${{ matrix.lisp }}"
       },
       "steps": [
         {
@@ -43,7 +55,7 @@
           "uses": "actions/cache@v3",
           "with": {
             "path": "qlfile\nqlfile.lock\n~/.cache/common-lisp/\n~/.roswell\n/usr/local/etc/roswell\n/usr/local/bin/ros\n/usr/local/Cellar/roswell\n.qlot",
-            "key": "a-${{ steps.current-month.outputs.value }}-${{ env.cache-name }}-ubuntu-latest-quicklisp-sbcl-bin-${{ hashFiles('qlfile.lock', '*.asd') }}"
+            "key": "a-${{ steps.current-month.outputs.value }}-${{ env.cache-name }}-ubuntu-latest-quicklisp-${{ matrix.lisp }}-${{ hashFiles('qlfile.lock', '*.asd') }}"
           }
         },
         {
@@ -54,7 +66,7 @@
         },
         {
           "name": "Setup Common Lisp Environment",
-          "uses": "40ants/setup-lisp@v3.1.0",
+          "uses": "40ants/setup-lisp@v3",
           "with": {
             "asdf-system": "reblocks"
           },
@@ -65,7 +77,7 @@
           "uses": "40ants/run-tests@v2",
           "with": {
             "asdf-system": "reblocks",
-            "coveralls-token": "${{ secrets.github_token }}"
+            "coveralls-token": "\n${{ matrix.lisp == 'sbcl-bin' &&\n    matrix.os == 'ubuntu-latest' &&\n    matrix.quicklisp == 'ultralisp' &&\n    secrets.github_token }}"
           }
         }
       ]
