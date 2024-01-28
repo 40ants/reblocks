@@ -49,8 +49,12 @@
         "run": "env | sort"
         },
         {
+        "name": "Show dir 0_0",
+        "run": "ls -l C:/Users/runneradmin/"
+        },
+        {
         "name": "Show dir 0",
-        "run": "ls -l /mingw64/bin/ros"
+        "run": "ls -l C:/Users/runneradmin/.roswell/lisp/quicklisp/bin"
         },
         {
         "name": "Show dir 1",
