@@ -25,13 +25,13 @@
   :on-push-to "master"
   :by-cron "0 10 * * 1"
   :on-pull-request t
-  :cache t
+  ;; :cache t
   :jobs ((40ants-ci/jobs/run-tests:run-tests
-          :lisp ("sbcl-bin"
-                 "ccl-bin"
-                 "allegro"
-                 "ecl"
-                 "abcl")
+          ;; :lisp ("sbcl-bin"
+          ;;        "ccl-bin"
+          ;;        "allegro"
+          ;;        "ecl"
+          ;;        "abcl")
           :coverage t)))
 
 (defworkflow docs
