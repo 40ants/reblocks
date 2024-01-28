@@ -19,12 +19,10 @@
         "fail-fast": false,
         "matrix": {
           "os": [
-            "ubuntu-latest",
             "windows-latest"
           ],
           "lisp": [
-            "sbcl-bin",
-            "ccl-bin"
+            "sbcl-bin"
           ]
         }
       },
@@ -45,6 +43,10 @@
           "with": {
             "asdf-system": "reblocks"
           }
+        },
+        {
+        "name": "Show path",
+        "run": "env | sort"
         },
         {
           "name": "Run Tests",
