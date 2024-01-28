@@ -61,10 +61,6 @@
         "run": "ls -l C:/Users/runneradmin/.roswell/"
         },
         {
-        "name": "Show dir 0_2",
-        "run": "ls -l C:/Users/runneradmin/.roswell/bin"
-        },
-        {
         "name": "Show dir 0_3",
         "run": "which qlot"
         },
