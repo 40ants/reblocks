@@ -28,7 +28,7 @@
   ;; :cache t
   :jobs ((40ants-ci/jobs/run-tests:run-tests
           :os ("ubuntu-latest"
-               "windoes-latest")
+               "windows-latest")
           :lisp ("sbcl-bin"
                  "ccl-bin"
                  ;; "allegro"

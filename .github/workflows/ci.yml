@@ -20,7 +20,7 @@
         "matrix": {
           "os": [
             "ubuntu-latest",
-            "windoes-latest"
+            "windows-latest"
           ],
           "lisp": [
             "sbcl-bin",
