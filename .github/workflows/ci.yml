@@ -49,6 +49,10 @@
         "run": "env | sort"
         },
         {
+        "name": "Show dir",
+        "run": "ls -l ~/.roswell/bin"
+        },
+        {
           "name": "Run Tests",
           "uses": "40ants/run-tests@v2",
           "with": {
