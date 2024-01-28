@@ -49,8 +49,16 @@
         "run": "env | sort"
         },
         {
-        "name": "Show dir",
-        "run": "ls -l ~/.roswell/bin"
+        "name": "Show dir 1",
+        "run": "ls -l /d/a/_temp/roswell"
+        },
+        {
+        "name": "Show dir 2",
+        "run": "ls -l ~/.qlot/bin"
+        },
+        {
+        "name": "Show dir 3",
+        "run": "ls -l .qlot/bin"
         },
         {
           "name": "Run Tests",
