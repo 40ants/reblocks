@@ -49,6 +49,10 @@
         "run": "env | sort"
         },
         {
+        "name": "Show dir 0",
+        "run": "ls -l /mingw64/bin/ros"
+        },
+        {
         "name": "Show dir 1",
         "run": "ls -l /d/a/_temp/roswell"
         },
