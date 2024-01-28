@@ -64,14 +64,6 @@
         "name": "Show dir 0_3",
         "run": "which qlot || true"
         },
-        {
-        "name": "Show dir 0_3 2",
-        "run": "ls - /mingw64/bin/ros || true"
-        },
-        {
-        "name": "Show dir 0_4",
-        "run": "which ros || true"
-        },
 
         {
         "name": "Show dir 0_3 lispsh",
@@ -81,6 +73,16 @@
         {
         "name": "Show dir 0_4 lispsh",
         "shell": "lispsh -eo pipefail {0}",
+        "run": "which ros || true"
+        },
+
+
+        {
+        "name": "Show dir 0_3 2",
+        "run": "ls - /mingw64/bin/ros || true"
+        },
+        {
+        "name": "Show dir 0_4",
         "run": "which ros || true"
         },
 
