@@ -15,11 +15,24 @@
   },
   "jobs": {
     "run-tests": {
-      "runs-on": "ubuntu-latest",
+      "strategy": {
+        "fail-fast": false,
+        "matrix": {
+          "os": [
+            "ubuntu-latest",
+            "windoes-latest"
+          ],
+          "lisp": [
+            "sbcl-bin",
+            "ccl-bin"
+          ]
+        }
+      },
+      "runs-on": "${{ matrix.os }}",
       "env": {
-        "OS": "ubuntu-latest",
+        "OS": "${{ matrix.os }}",
         "QUICKLISP_DIST": "quicklisp",
-        "LISP": "sbcl-bin"
+        "LISP": "${{ matrix.lisp }}"
       },
       "steps": [
         {
@@ -38,7 +51,7 @@
           "uses": "40ants/run-tests@v2",
           "with": {
             "asdf-system": "reblocks",
-            "coveralls-token": "${{ secrets.github_token }}"
+            "coveralls-token": "\n${{ matrix.lisp == 'sbcl-bin' &&\n    matrix.os == 'ubuntu-latest' &&\n    matrix.quicklisp == 'ultralisp' &&\n    secrets.github_token }}"
           }
         }
       ]
