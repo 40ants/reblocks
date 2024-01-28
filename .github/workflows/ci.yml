@@ -50,35 +50,52 @@
         },
         {
         "name": "Show dir 0_0",
-        "run": "ls -l C:/Users/runneradmin/"
+        "run": "ls -l C:/Users/runneradmin/ || true"
         },
         {
         "name": "Show dir 0",
-        "run": "ls -l C:/Users/runneradmin/.roswell/lisp/quicklisp/bin"
+        "run": "ls -l C:/Users/runneradmin/.roswell/lisp/quicklisp/bin || true"
         },
         {
         "name": "Show dir 0_1",
-        "run": "ls -l C:/Users/runneradmin/.roswell/"
+        "run": "ls -l C:/Users/runneradmin/.roswell/ || true"
         },
         {
         "name": "Show dir 0_3",
-        "run": "which qlot"
+        "run": "which qlot || true"
+        },
+        {
+        "name": "Show dir 0_3 2",
+        "run": "ls - /mingw64/bin/ros || true"
         },
         {
         "name": "Show dir 0_4",
-        "run": "which ros"
+        "run": "which ros || true"
+        },
+
+        {
+        "name": "Show dir 0_3 lispsh",
+        "shell": "lispsh -eo pipefail {0}",
+        "run": "ls - /mingw64/bin/ros || true"
         },
         {
+        "name": "Show dir 0_4 lispsh",
+        "shell": "lispsh -eo pipefail {0}",
+        "run": "which ros || true"
+        },
+
+
+        {
         "name": "Show dir 1 1 1 1",
-        "run": "ls -l /d/a/_temp/roswell"
+        "run": "ls -l /d/a/_temp/roswell || true"
         },
         {
         "name": "Show dir 2",
-        "run": "ls -l ~/.qlot/bin"
+        "run": "ls -l ~/.qlot/bin || true"
         },
         {
         "name": "Show dir 3",
-        "run": "ls -l .qlot/bin"
+        "run": "ls -l .qlot/bin || true"
         },
         {
           "name": "Run Tests",
