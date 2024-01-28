@@ -69,7 +69,7 @@
         "run": "which ros"
         },
         {
-        "name": "Show dir 1 1",
+        "name": "Show dir 1 1 1",
         "run": "ls -l /d/a/_temp/roswell"
         },
         {
