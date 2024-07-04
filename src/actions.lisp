@@ -46,6 +46,9 @@
 
 (in-readtable pythonic-string-syntax)
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defvar *js-default-action* "return initiateAction(\"~A\"~@[, ~A~])")
+  (defvar *js-default-form-action* "return initiateFormAction(\"~A\", event, this)"))
 
 (defgeneric on-missing-action (app action-name)
   (:documentation "Must be overridden by application to prevent default
@@ -227,13 +230,12 @@ situation (e.g. redirect, signal an error, etc.)."))
     (cond
       (args
        (let ((options (dict "args" args)))
-         (format nil "initiateAction(\"~A\", ~A); return false;"
+         (format nil *js-default-action*
                  action-code
                  (yason:with-output-to-string* ()
                    (yason:encode options)))))
       (t
-       (format nil "initiateAction(\"~A\"); return false;"
-               action-code)))))
+       (format nil *js-default-action* action-code)))))
 
 
 (defun make-js-form-action (action)
@@ -244,8 +246,7 @@ situation (e.g. redirect, signal an error, etc.)."))
    On form submit given action will be executed and all input values
    will be passed as arguments."
   (let* ((action-code (make-action action)))
-    (format nil "initiateFormAction(\"~A\", $(this)); return false;"
-            action-code)))
+    (format nil *js-default-form-action* action-code)))
 
 
 (defun get-session-action (action-name)
