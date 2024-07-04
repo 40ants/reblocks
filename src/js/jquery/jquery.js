@@ -40,15 +40,6 @@ jQuery.fn.focusFirstElement = function(){
   }
 };
 
-jQuery.fn.serializeObjectWithSubmit = function(){
-  var ret = this.serializeObject();
-  var submitElement = jQuery(this).find('input[type=submit][clicked=true]');
-  ret[submitElement.attr('name')] = submitElement.val();
-  submitElement.attr('clicked', null);
-
-  return ret;
-};
-
 // Utilities
 function updateElementBody(element, newBody) {
   element.update(newBody);
@@ -57,15 +48,6 @@ function updateElementBody(element, newBody) {
 function updateElement(element, newElement) {
   var $newElement = jQuery(newElement);
   element.replaceWith($newElement);
-}
-
-function applySubmitClickEvent() {
-  jQuery("form input[type=submit]")
-    .unbind('click.reblocks-submit-event')
-    .bind('click.reblocks-submit-event', function() {
-      $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
-      $(this).attr("clicked", "true");
-    });
 }
 
 function selectionEmpty() {
@@ -295,7 +277,6 @@ function onActionSuccess(json){
   commands.forEach(processCommand);
 
   execJsonCalls(json['on-load']);
-  applySubmitClickEvent();
 }
 
 function execJsonCalls (calls) {
@@ -344,13 +325,13 @@ function initiateAction(actionCode, options) {
     var url = options.url || getActionUrl(actionCode);
     var on_success = options.on_success;
     var on_failure = options.on_failure || onActionFailure;
-    
+
     args.action = actionCode;
 
     // This logging is for debug only
     // log('Fireing action', actionCode);
     // log('with options', options);
-    
+
     var ajax_options = {
         type: method,
         success: function(first, second, third) {
@@ -366,17 +347,24 @@ function initiateAction(actionCode, options) {
         ajax_options.data = JSON.stringify(args)
     }
     jQuery.ajax(url, ajax_options);
+
+    return false;
 }
 
-function initiateFormAction(actionCode, form, options) {
-    // Hidden "action" field should not be serialized on AJAX
+function initiateFormAction(actionCode, event, eventThis, options) {
+    const form = $(eventThis);
     var options = options || {};
-    var action_arguments = form.serializeObjectWithSubmit();
+    var action_arguments = form.serializeObject();
+    if (["BUTTON", "INPUT"].includes(event.submitter && event.submitter.tagName)) {
+        action_arguments[event.submitter.name] = event.submitter.value;
+    }
     delete(action_arguments['action']);
 
     options['args'] = Object.assign({}, options.args || {}, action_arguments);
     options['method'] = options['method'] || form.attr('method');
     initiateAction(actionCode, options);
+
+    return false;
 }
 
 function disableIrrelevantButtons(currentButton) {
@@ -511,11 +499,6 @@ $ = function(id){
     return jQuery(id);
   }
 };
-
-jQuery(function(){
-  applySubmitClickEvent();
-});
-
 
 window.Event.observe = function(obj, evtType, func){
   if(obj == window && evtType == 'load'){
