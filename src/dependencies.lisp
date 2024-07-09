@@ -38,7 +38,7 @@
 (in-package #:reblocks/dependencies)
 
 
-(defvar *cache-remote-dependencies-in* ni
+(defvar *cache-remote-dependencies-in* nil
   "If this variable is set to a pathname, then
 remote dependencies will be cached and served as local dependencies.
 
