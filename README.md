@@ -61,17 +61,17 @@ inspect [Ultralisp's][2a0d] code:
 
 ## Getting Support
 
-You can get support in our Gitter Chat:
-
-[https://gitter.im/40ants/weblocks][1886]
+* In case any bugs, please, [create an issue][f11d] on the GitHub.
+* If you have some ideas to share or want to discuss a feature request, use [GitHub Discussions][562e].
 
 
 [22e2]: https://40ants.com/reblocks/
 [c52e]: https://40ants.com/reblocks/changelog/#x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
 [4851]: https://40ants.com/reblocks/quickstart/#x-28REBLOCKS-2FDOC-2FQUICKSTART-3A-40QUICKSTART-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
 [1505]: https://40ants.com/reblocks/removed-features/#x-28REBLOCKS-2FDOC-2FINDEX-3A-3A-40REMOVED-FEATURES-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+[562e]: https://github.com/40ants/reblocks/discussions
+[f11d]: https://github.com/40ants/reblocks/issues
 [8e2a]: https://github.com/ultralisp/ultralisp
-[1886]: https://gitter.im/40ants/weblocks
 [2a0d]: https://ultralisp.org
 
 * * *
