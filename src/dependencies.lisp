@@ -4,8 +4,7 @@
   (:import-from #:cl-fad)
   (:import-from #:routes)
   (:import-from #:puri)
-  (:import-from #:serapeum
-                #:defvar-unbound)
+  (:import-from #:alexandria)
   (:import-from #:log)
   (:import-from #:reblocks/utils/misc
                 #:md5)
@@ -39,7 +38,7 @@
 (in-package #:reblocks/dependencies)
 
 
-(defvar *cache-remote-dependencies-in* nil
+(defvar *cache-remote-dependencies-in* ni
   "If this variable is set to a pathname, then
 remote dependencies will be cached and served as local dependencies.
 
