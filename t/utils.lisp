@@ -74,7 +74,11 @@
               (*current-app* (make-instance ',app)))
          (reblocks/request:with-request ((make-request env))
            (reblocks/response::with-response ()
-             ,@body))))))
+             ,@body
+             ;; Returned value will be set as
+             ;; the body of the *response* object.
+             ;; But in tests we have no body to return.
+             (values)))))))
 
 
 (defmacro is-html (form expected &optional message)
