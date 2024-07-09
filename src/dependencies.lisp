@@ -4,8 +4,7 @@
   (:import-from #:cl-fad)
   (:import-from #:routes)
   (:import-from #:puri)
-  (:import-from #:serapeum
-                #:defvar-unbound)
+  (:import-from #:alexandria)
   (:import-from #:log)
   (:import-from #:reblocks/utils/misc
                 #:md5)

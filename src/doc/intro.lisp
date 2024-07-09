@@ -8,13 +8,13 @@
 
 
 (defsection @intro (:title "Introduction"
-                    :ignore-words ("ASDF"
-                                   "API"
-                                   "HTTP"
-                                   "URL"
-                                   "HTTP"
-                                   "LAYER"
-                                   "RSS"))
+                           :ignore-words ("ASDF"
+                                          "API"
+                                          "HTTP"
+                                          "URL"
+                                          "HTTP"
+                                          "LAYER"
+                                          "RSS"))
   "
 Reblocks is the fork of the Weblocks web frameworks written by Slava Akhmechet
 and maintained by Scott L. Burson and Olexiy Zamkoviy.
@@ -71,7 +71,7 @@ inspect [Ultralisp's](https://ultralisp.org) code:
 Getting Support
 ===============
 
-You can get support in our Gitter Chat:
+* In case any bugs, please, [create an issue](https://github.com/40ants/reblocks/issues) on the GitHub.
+* If you have some ideas to share or want to discuss a feature request, use [GitHub Discussions](https://github.com/40ants/reblocks/discussions).
 
-<https://gitter.im/40ants/weblocks>
 ")
