@@ -21,6 +21,7 @@
                                                    "ASDF"
                                                    "MOP"
                                                    "JS"
+                                                   "UI"
                                                    "GET"
                                                    "POST"
                                                    "LOADED"
@@ -34,6 +35,22 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.60.0 2024-07-28
+          """
+Incompatible Changed
+====================
+
+* JS function initiateFormAction now accepts four arguments instead of three.
+  Second argument should be an event, third - the form object and fourth an options object.
+
+  This change allows to submit form using different buttons having their values passed to a
+  lisp callback.
+
+  An `examples/simple-form.lisp` file was added to demonstrate how this feature works when
+  form has Submit and Cancel buttons.
+
+  **Note:** if you've used Reblocks-UI system, then you'll need to update it to the newest version.
+""")
   (0.59.0 2024-01-26
           """
 Changed
