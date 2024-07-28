@@ -46,9 +46,9 @@
 
 (in-readtable pythonic-string-syntax)
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defvar *js-default-action* "return initiateAction(\"~A\"~@[, ~A~])")
-  (defvar *js-default-form-action* "return initiateFormAction(\"~A\", event, this)"))
+(defvar *js-default-action* "return initiateAction(\"~A\"~@[, ~A~])")
+(defvar *js-default-form-action* "return initiateFormAction(\"~A\", event, this)")
+
 
 (defgeneric on-missing-action (app action-name)
   (:documentation "Must be overridden by application to prevent default
