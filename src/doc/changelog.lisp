@@ -21,6 +21,7 @@
                                                    "ASDF"
                                                    "MOP"
                                                    "JS"
+                                                   "UI"
                                                    "GET"
                                                    "POST"
                                                    "LOADED"
