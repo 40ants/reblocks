@@ -235,7 +235,7 @@ situation (e.g. redirect, signal an error, etc.)."))
                  (yason:with-output-to-string* ()
                    (yason:encode options)))))
       (t
-       (format nil *js-default-action* action-code)))))
+       (format nil *js-default-action* action-code nil)))))
 
 
 (defun make-js-form-action (action)
