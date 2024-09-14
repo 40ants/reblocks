@@ -36,6 +36,14 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.61.1 2024-09-14
+          """
+Fixes
+=====
+
+* Now local dependencies also could be created with :DEFER argument. (Thanks for the PR to Breinstew@github)
+
+""")
   (0.61.0 2024-09-14
           """
 Fixes

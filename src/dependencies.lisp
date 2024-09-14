@@ -375,7 +375,8 @@ to this system's source root."
          (make-instance 'local-dependency
                         :type type
                         :path path
-                        :cache-in-memory cache-in-memory))))))
+                        :cache-in-memory cache-in-memory
+                        :defer defer))))))
 
 
 (defmethod serve ((dependency local-dependency))
