@@ -4,6 +4,8 @@
         #:hamcrest/rove
         #:reblocks-tests/utils)
   (:import-from #:reblocks/actions
+                #:generate-action-code
+                #:make-js-action
                 #:make-action
                 #:eval-action
                 #:on-missing-action
@@ -19,7 +21,11 @@
   (:import-from #:reblocks/variables
                 #:*current-app*)
   (:import-from #:serapeum
-                #:fmt))
+                #:dict
+                #:fmt)
+  (:import-from #:cl-mock
+                #:with-mocks
+                #:answer))
 (in-package #:reblocks-tests/actions)
 
 
@@ -123,18 +129,17 @@
 
 
 (deftest make-action-success
-  (reblocks/app:with-app (make-instance 'test-app)
-    (with-test-session ()
-      (with-test-request ("/")
-        (internal-make-action #'identity "abc123")
+  (with-test-session ()
+    (with-test-request ("/")
+      (internal-make-action #'identity "abc123")
      
-        (ok (equal (make-action "abc123")
-                   "abc123")
-            "When action is defined make-action should return it's name")
+      (ok (equal (make-action "abc123")
+                 "abc123")
+          "When action is defined make-action should return it's name")
 
-        (ok (equal (make-action #'identity)
-                   "abc123")
-            "This also should work if a function was given as an argument")))))
+      (ok (equal (make-action #'identity)
+                 "abc123")
+          "This also should work if a function was given as an argument"))))
 
 
 (defun test-action ()
@@ -149,3 +154,19 @@
       
           (ok (equal (make-action-url "test-action")
                      "/foo/bar?action=test-action"))))))
+
+
+(deftest make-js-action-test ()
+  (with-test-session ()
+    (with-test-request ("/")
+      (with-mocks ()
+        (answer generate-action-code "action:code")
+        
+        (ok (equal (make-js-action 'identity)
+                   "return initiateAction(\"action:code\")"))
+
+        (ok (equal (make-js-action 'identity
+                                   :args (dict
+                                          "some" "argument"
+                                          "another" 100500))
+                   "return initiateAction(\"action:code\", {\"args\":{\"some\":\"argument\",\"another\":100500}})"))))))

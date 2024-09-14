@@ -226,16 +226,14 @@ situation (e.g. redirect, signal an error, etc.)."))
    It accepts any function as input and produces a string with JavaScript code."
   (check-type args (or null hash-table))
   
-  (let* ((action-code (make-action action)))
-    (cond
-      (args
-       (let ((options (dict "args" args)))
-         (format nil *js-default-action*
-                 action-code
-                 (yason:with-output-to-string* ()
-                   (yason:encode options)))))
-      (t
-       (format nil *js-default-action* action-code nil)))))
+  (let* ((action-code (make-action action))
+         (serialized-args
+           (when args
+             (yason:with-output-to-string* ()
+               (yason:encode (dict "args" args))))))
+    (format nil *js-default-action*
+            action-code
+            serialized-args)))
 
 
 (defun make-js-form-action (action)
