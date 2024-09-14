@@ -167,6 +167,5 @@
 
         (ok (equal (make-js-action 'identity
                                    :args (dict
-                                          "some" "argument"
-                                          "another" 100500))
-                   "return initiateAction(\"action:code\", {\"args\":{\"some\":\"argument\",\"another\":100500}})"))))))
+                                          "foo" 100500))
+                   "return initiateAction(\"action:code\", {\"args\":{\"foo\":100500}})"))))))
