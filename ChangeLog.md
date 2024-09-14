@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E61-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.61.0 (2024-09-14)
+
+<a id="fixes"></a>
+
+### Fixes
+
+* Fixed an error inside [`reblocks/actions:make-js-action`][e17b] function when called without `:ARGS`. (Thanks to olivercsr@github for the `PR`)
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E60-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.60.0 (2024-07-28)
