@@ -25,12 +25,16 @@
   :on-push-to "master"
   :by-cron "0 10 * * 1"
   :on-pull-request t
-  ;; :cache t
+  :cache t
   :jobs ((40ants-ci/jobs/run-tests:run-tests
           :os ("ubuntu-latest"
                "windows-latest")
           :lisp ("sbcl-bin"
                  "ccl-bin")
+          :exclude ((:os "windows-latest"
+                         ;; CCL-BIN 1.13 has issues on Windows
+                         ;; https://github.com/40ants/reblocks/actions/runs/10862718561/job/30146062047?pr=66
+                     :lisp "ccl-bin"))
           :coverage t)))
 
 (defworkflow docs

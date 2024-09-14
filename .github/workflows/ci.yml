@@ -22,6 +22,12 @@
             "ubuntu-latest",
             "windows-latest"
           ],
+          "exclude": [
+            {
+              "os": "windows-latest",
+              "lisp": "ccl-bin"
+            }
+          ],
           "lisp": [
             "sbcl-bin",
             "ccl-bin"
@@ -37,13 +43,14 @@
       "steps": [
         {
           "name": "Checkout Code",
-          "uses": "actions/checkout@v3"
+          "uses": "actions/checkout@v4"
         },
         {
           "name": "Setup Common Lisp Environment",
-          "uses": "40ants/setup-lisp@v3",
+          "uses": "40ants/setup-lisp@v4",
           "with": {
-            "asdf-system": "reblocks"
+            "asdf-system": "reblocks",
+            "cache": "true"
           }
         },
         {
