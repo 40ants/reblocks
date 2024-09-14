@@ -13,6 +13,7 @@
                                                    "URL"
                                                    "URI"
                                                    "API"
+                                                   "PR"
                                                    "DOM"
                                                    "AJAX"
                                                    "JSON"
@@ -35,6 +36,14 @@
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
                                     :external-docs ("https://40ants.com/log4cl-extras/"))
+  (0.61.0 2024-09-14
+          """
+Fixes
+=====
+
+* Fixed an error inside REBLOCKS/ACTIONS:MAKE-JS-ACTION function when called without :ARGS. (Thanks to olivercsr@github for the PR)
+
+""")
   (0.60.0 2024-07-28
           """
 Incompatible Changed
