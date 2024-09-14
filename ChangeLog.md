@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E61-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.61.1 (2024-09-14)
+
+<a id="fixes"></a>
+
+### Fixes
+
+* Now local dependencies also could be created with `:DEFER` argument. (Thanks for the `PR` to Breinstew@github)
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E61-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.61.0 (2024-09-14)
