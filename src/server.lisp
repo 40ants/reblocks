@@ -228,7 +228,7 @@ Make instance, then start it with ``start`` method."
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
     (let ((*server* server)
-          (url-path (getf env :request-uri)))
+          (url-path (getf env :path-info)))
       (with-url ((object-routes server)
                  url-path)
         (call-next-method)))))
