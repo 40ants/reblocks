@@ -101,26 +101,15 @@ ex:
           do (setf last-char c))
     s))
 
-(defun strip-trailing-slashes (str)
-  "Relentlessly strip all trailing slashes from STR.
-A string solely consisting of slashes is no special case.
-
-Returns the number of stripped slashes as second value."
-  ;; we just count them and return an appropriate subsequence
-  (let ((n 0))
-    (loop for c across (reverse str)
-          while (eql c #\/)
-          do (incf n))
-    (values (subseq str 0 (- (length str) n)) n)))
 
 (defun maybe-add-trailing-slash (s)
   "Supply a trailing slash if needed."
   (typecase s
     (pathname (pathname-as-directory s))
     (otherwise
-       (if (equal (subseq s (1- (length s))) "/")
-           s
-           (concatenate 'string s "/")))))
+     (if (equal (subseq s (1- (length s))) "/")
+         s
+         (concatenate 'string s "/")))))
 
 
 (defun ensure-starts-with-slash (s)

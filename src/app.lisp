@@ -2,6 +2,11 @@
   (:use #:cl
         #:f-underscore)
   (:import-from #:cl-ppcre)
+  (:import-from #:reblocks/widgets/default-page
+                #:make-default-init-page-widget)
+  (:import-from #:40ants-routes/routes)
+  (:import-from #:reblocks/routes)
+  (:import-from #:40ants-routes/defroutes)
   (:import-from #:reblocks/app-mop
                 #:get-autostarting-apps
                 #:get-registered-apps
@@ -12,12 +17,17 @@
   (:import-from #:reblocks/utils/string
                 #:attributize-name
                 #:remove-spurious-slashes
-                #:strip-trailing-slashes
                 #:ensure-starts-with-slash)
   (:import-from #:reblocks/utils/list
                 #:remove-keyword-parameters)
   (:import-from #:reblocks/variables
                 #:*current-app*)
+  (:import-from #:alexandria
+                #:symbolicate
+                #:remove-from-plist)
+  (:import-from #:str
+                #:ensure-prefix
+                #:ensure-suffix)
   (:export #:defapp
            #:app
            #:get-autostarting-apps
@@ -27,6 +37,13 @@
            #:with-app
            #:initialize-webapp))
 (in-package #:reblocks/app)
+
+
+(defclass app-routes (40ants-routes/routes:routes)
+  ((app :initform nil
+        :type (or null reblocks/app:app)
+        :documentation "App instance will be set during server initialization."
+        :accessor routes-app)))
 
 
 (defclass app ()
@@ -63,6 +80,11 @@
            :initarg :prefix
            :documentation "The subtree of the URI space at this site that belongs to
            the webapp.")
+   (routes :type (or null
+                     app-routes)
+     :initarg :routes
+     :initform nil
+     :reader app-routes)
    (session-key :type symbol :accessor reblocks-webapp-session-key :initarg :session-key)
    (debug :accessor reblocks-webapp-debug :initarg :debug :initform nil 
           :documentation "Responsible for debug mode, use WEBAPP-DEBUG function for getting slot value"))
@@ -78,27 +100,12 @@ instance, have different sites (e.g. mobile vs. desktop) with vastly different
 layout and dependencies running on the same server."))
 
 
-;; Slash-normalizing accessors
-;;
-;; We use a "transform on write" approach for two reasons:
-;;
-;; 1. Sane values in slots all the time (except when someone messes around
-;;    with SLOT-VALUE)
-;;
-;; 2. Increased performance
-;;
-(defmethod (setf get-prefix) (prefix (app app))
-  "Set the prefix of the webapp. Ensures normalization by removing trailing slash."
-  (unless (string= prefix "/") ;; XXX multiple slashes?
-    (setf (slot-value app 'prefix)
-          (strip-trailing-slashes prefix))))
-
-
 ;; abstraction macro
 (defmacro defapp (name
                   &rest initargs
                   &key
                     prefix
+                    routes
                     subclasses
                     slots
                     description
@@ -112,6 +119,9 @@ to be the primary way a web application is defined.
 
 PREFIX - an URI from where this app should be available on the server. Read more
 about this in the REBLOCKS/DOC/ROUTING:@ROUTING section.
+
+ROUTES - a 40ANTS-ROUTES/ROUTES:ROUTES object holding routes relative to the given
+prefix.
 
 SUBCLASSES - if you want to inherit subclass behavior from other webapps, you
 can.  It's not likely to be needed much
@@ -135,20 +145,34 @@ AUTOSTART - Whether this webapp is started automatically when start-reblocks is
 called (primarily for backward compatibility"
   (declare (ignore prefix description))
   
-  (let ((default-initargs
-          (remove-keyword-parameters initargs
-                                     :subclasses
-                                     :slots
-                                     :autostart
-                                     :documentation))
-        (documentation (when documentation
-                         (list (list :documentation documentation)))))
+  (let* ((routes-var-name
+           (symbolicate "*" name "-ROUTES*"))
+         (routes-namespace (string-downcase name))
+         (default-initargs
+           (remove-from-plist initargs
+                              :routes
+                              :subclasses
+                              :slots
+                              :autostart
+                              :documentation))
+         (routes (or
+                  routes
+                  '((40ants-routes/defroutes:get ("/")
+                      (make-default-init-page-widget)))))
+         (documentation (when documentation
+                          (list (list :documentation documentation)))))
     `(progn
+       (40ants-routes/defroutes:defroutes (,routes-var-name
+                                           :namespace ,routes-namespace
+                                           :routes-class app-routes)
+         ,@routes)
+       
        (defclass ,name (,@subclasses app)
          ,slots
          ,@documentation
          (:autostart . ,autostart)
-         (:default-initargs ,@default-initargs)
+         (:default-initargs :routes ,routes-var-name
+                            ,@default-initargs)
          (:metaclass app-class)))))
 
 
@@ -168,20 +192,25 @@ called (primarily for backward compatibility"
   (macrolet ((slot-default (name initform)
                `(unless (slot-boundp self ',name)
                   (setf (slot-value self ',name) ,initform))))
-    ;; special handling for prefix slots since initargs
-    ;; bypass the normalizing axr
-    (when (slot-boundp self 'prefix)
-      (setf (get-prefix self)
-            (slot-value self 'prefix)))
-
     (let ((class-name (class-name (class-of self))))
       (slot-default session-key class-name)
       (slot-default name (attributize-name class-name))
       (slot-default prefix
-                    (concatenate 'string "/" (attributize-name class-name))))
+                    (attributize-name class-name)))
 
-    (setf (get-prefix self)
-          (ensure-starts-with-slash (get-prefix self)))))
+    ;; Normalizing prefix path, to make it work well
+    ;; when app's routes are included into other routes.
+    (setf (slot-value self 'prefix)
+          (ensure-prefix "/"
+                         (ensure-suffix "/"
+                                        (get-prefix self))))
+
+    ;; This way we'll be able to figure out to which application
+    ;; current route belongs to:
+    (setf (routes-app
+           (slot-value self 'routes))
+          self))
+  (values))
 
 
 (defun find-app-by-name (active-apps name &key (signal-error t))

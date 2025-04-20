@@ -330,10 +330,13 @@
 
     (cond
       ((and result (listp result))
+       ;; (break)
        result)
       ((typep result 'lack.response:response)
+       ;; (break)
        result)
       (result
+       ;; (break)
        (setf (lack.response:response-body *response*)
              result)
        *response*)

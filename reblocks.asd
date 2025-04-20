@@ -18,8 +18,10 @@
   :source-control (:git "https://github.com/40ants/reblocks")
   :pathname "src"
   :depends-on ("40ants-doc"
+               "40ants-routes"
                "reblocks/app"
                "reblocks/server"
+               "reblocks/request-handler"
                "reblocks/debug"
                "reblocks/default-init"
                "reblocks/commands-hook"

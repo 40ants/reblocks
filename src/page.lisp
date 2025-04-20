@@ -14,8 +14,9 @@
                 #:get-rendered-chunk)
   (:import-from #:reblocks/dependencies
                 #:render-in-head
-                #:get-dependencies
-                #:register-dependencies)
+                #:get-dependencies)
+  ;; (:import-from #:reblocks/routes/server
+  ;;               #:register-dependencies)
   (:import-from #:reblocks/app
                 #:app)
   (:import-from #:alexandria
@@ -244,7 +245,7 @@
   (unless (boundp '*title*)
     (error "Method REBLOCKS/PAGE:RENDER should be called inside WITH-PAGE-DEFAULTS block."))
 
-  (register-dependencies dependencies)
+  ;; (register-dependencies dependencies)
 
   (let ((*lang* (get-language))
         (deps-urls (when (typep dependencies 'list)

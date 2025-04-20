@@ -46,7 +46,10 @@
                for prefix = (get-prefix app)
                for app-name = (webapp-name app)
                do (:li
-                   (:a :href prefix (format nil "~A" app-name))
+                   ;; After routes refactoring, all apps urls should end with a slash
+                   (:a :href (str:ensure-suffix "/"
+                                                prefix)
+                       (format nil "~A" app-name))
                    (:span (format nil " on \"~A\"" prefix)))))
         
         (:h3)

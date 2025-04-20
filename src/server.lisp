@@ -1,6 +1,8 @@
 (uiop:define-package #:reblocks/server
   (:use #:cl)
-  (:import-from #:routes)
+  (:import-from #:40ants-routes/with-url
+                #:with-url)
+  (:import-from #:40ants-routes/handler)
   (:import-from #:reblocks/app
                 #:with-app)
   (:import-from #:reblocks/session
@@ -9,6 +11,8 @@
   (:import-from #:reblocks/hooks
                 #:prepare-hooks)
   (:import-from #:reblocks/routes
+                #:object-routes
+                #:server-routes
                 #:route
                 #:get-route
                 #:add-route
@@ -25,9 +29,6 @@
                 #:get-code
                 #:get-headers
                 #:get-content)
-  (:import-from #:reblocks/request-handler
-                #:handle-request)
-    
   (:import-from #:lack/request
                 #:make-request)
   (:import-from #:lack/response)
@@ -47,6 +48,13 @@
                 #:insert-at)
   (:import-from #:reblocks/page
                 #:ensure-pages-cleaner-is-running)
+  (:import-from #:40ants-routes/routes)
+  (:import-from #:reblocks/variables
+                #:*current-app*
+                #:*server*)
+  (:import-from #:40ants-routes/matched-route
+                #:original-route
+                #:matched-route-p)
   
   (:export ;; #:get-server-type
    ;; #:get-port
@@ -64,15 +72,15 @@
 (in-package #:reblocks/server)
 
 
-(defvar *server*)
-(setf (documentation '*server* 'variable)
-      "Will be bound to a server currently processing the request.")
-
 (defvar *servers* (make-hash-table :test 'equal))
 
 
 (defvar *clack-output* nil
   "Here we'll store all output from the Clack, because we don't want it to mix with reblocks own output.")
+
+
+(defun make-initial-server-routes ()
+  (40ants-routes/routes:routes ("server" :routes-class server-routes)))
 
 
 (defclass server ()
@@ -86,8 +94,8 @@
                 :reader get-server-type)
    (handler :initform nil
             :accessor get-handler)
-   (routes :initform (reblocks/routes::make-routes)
-           :accessor routes)
+   (routes :initform (make-initial-server-routes)
+     :accessor object-routes)
    (apps :initform nil
          :accessor apps))
   (:documentation "Base class for all Reblocks servers. Redefine it if you want to add additional HTTP midlewares, etc."))
@@ -194,6 +202,7 @@ Make instance, then start it with ``start`` method."
                  :server-type server-type))
 
 
+;; TODO: rewrite this somehow using 40ants-routes:
 (defun search-app-for-request-handling (path-info hostname)
   (dolist (app (apps *server*))
     (let ((app-prefix (get-prefix app))
@@ -219,8 +228,10 @@ Make instance, then start it with ``start`` method."
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
     (let ((*server* server)
-          (reblocks/routes::*routes* (routes server)))
-      (call-next-method))))
+          (url-path (getf env :request-uri)))
+      (with-url ((object-routes server)
+                 url-path)
+        (call-next-method)))))
 
 
 (defmethod handle-http-request ((server server) env)
@@ -248,31 +259,42 @@ This function serves all started applications and their static files."
                                     ;; Hope, this change will not break other
                                     ;; places where PATH-INFO is used.
                                     :request-uri))
-                   (hostname (getf env :server-name))
-                   (route (get-route path-info))
-                   (app (search-app-for-request-handling path-info hostname)))
+                   ;; TODO: write into the docs about hostname deprecation,
+                   ;; and remove it from the application
+                   ;; (hostname (getf env :server-name))
+                   ;; (handler-result (40ants-routes/handler:call-handler))
+                   ;; (route (get-route path-info))
+                   ;; TODO: replace with a function
+                   (route (when 40ants-routes/vars::*current-routes*
+                            (unless (matched-route-p
+                                     40ants-routes/vars::*current-routes*)
+                              (error "Unexpected class of route was found: ~S"
+                                     (class-of 40ants-routes/vars::*current-routes*)))
+                            (original-route 40ants-routes/vars::*current-routes*)))
+                   (app-route (reblocks/routes::find-route-by-class 'reblocks/app::app-routes))
+                   (app (when app-route
+                          (reblocks/app::routes-app app-route))
+                        ;; (search-app-for-request-handling path-info hostname)
+                        ))
 
+              ;; (break (list app app-route))
               (log:debug "Processing request to" path-info)
-
+              
               ;; If dependency found, then return it's content along with content-type
               (with-app app
                 (make-response-for-clack
-                 (cond
-                   (route
-                    (log:debug "Route was found" route)
-                    (reblocks/routes:serve route env))
-                   (app
-                    (log:debug "App was found" app)
-                    (with-response ()
-                      (let ((response (handle-request app)))
-                        response)))
-                   (t
-                    (log:error "Application dispatch failed for" path-info)
+                 (with-response ()
+                   (cond
+                     (route
+                      (log:debug "Route was found" route)
+                      (reblocks/routes:serve route env))
+                     (t
+                      (log:error "No route for" path-info)
 
-                    (list 404
-                          (list :content-type "text/html")
-                          (list (format nil "File \"~A\" was not found.~%"
-                                        path-info))))))))))))))
+                      (list 404
+                            (list :content-type "text/html")
+                            (list (format nil "File \"~A\" was not found.~%"
+                                          path-info)))))))))))))))
 
 
 (defun start-server (server &key debug
@@ -408,8 +430,10 @@ If server is already started, then logs a warning and does nothing."
            (continue ()
              :report "Stop the old server and start a new one."
              (stop)
-             (setf (routes server)
-                   (reblocks/routes::make-routes)))))
+             (setf (object-routes server)
+                   (make-initial-server-routes)
+                   ;; (reblocks/routes::make-routes)
+                   ))))
         (t
          (setf server
                (make-server :interface interface
@@ -433,7 +457,9 @@ If server is already started, then logs a warning and does nothing."
       ;; We need to set this bindings to allow apps to use
       ;; REBLOCKS/ROUTES:ADD-ROUTE without given a current
       ;; routes mapping.
-      (let* ((reblocks/routes::*routes* (routes server))
+      ;; 
+      ;; TODO: Not sure if we need this *routes* var:
+      (let* (;; (reblocks/routes::*routes* (object-routes server))
              (apps (or (uiop:ensure-list apps)
                        (get-autostarting-apps))))
         (loop for app-class in apps
@@ -445,7 +471,7 @@ If server is already started, then logs a warning and does nothing."
                 for app in (apps server)
                 for prefix = (get-prefix app)
                 when (string= prefix "/")
-                do (setf found-root t)
+                  do (setf found-root t)
                 finally (unless found-root
                           (start-app server 'welcome-screen-app)))))
       
@@ -457,16 +483,22 @@ If server is already started, then logs a warning and does nothing."
    is only one!"
   (log:debug "Registering" app "routes for" server)
   
-  (loop with seen = (make-hash-table :test 'equal)
-        for app in (cons app (apps server))
-        for prefix = (get-prefix app)
-        when (gethash prefix seen)
-          do (error "Cannot have two defaults dispatchers with prefix \"~A\""
-                    prefix)
-        do (setf (gethash prefix seen)
-                 t))
+  ;; (loop with seen = (make-hash-table :test 'equal)
+  ;;       for app in (cons app (apps server))
+  ;;       for prefix = (get-prefix app)
+  ;;       when (gethash prefix seen)
+  ;;         do (error "Cannot have two defaults dispatchers with prefix \"~A\""
+  ;;                   prefix)
+  ;;       do (setf (gethash prefix seen)
+  ;;                t))
   ;; Also, we should add app's routes to the mapper:
-  (add-routes app :routes (routes server)))
+  (when (reblocks/app::app-routes app)
+    (40ants-routes/generics:add-route (object-routes server)
+                                      (40ants-routes/defroutes:include
+                                       (reblocks/app::app-routes app)
+                                       :path (get-prefix app))))
+  ;; (add-routes app :routes (routes server))
+  )
 
 
 (defun start-app (server app-class &rest app-args)
@@ -522,7 +554,8 @@ If server is already started, then logs a warning and does nothing."
             ;;       do (reblocks/app:stop (reblocks-webapp-name app)))
 
             (setf (apps server) nil
-                  (routes server) (reblocks/routes::make-routes))
+                  ;; (routes server) (reblocks/routes::make-routes)
+                  )
             
             (stop-server server)
             (values server))))
@@ -550,7 +583,7 @@ If server is already started, then logs a warning and does nothing."
 
 (defmethod serve-static-file (uri (path pathname) &key (content-type "text/plain"))
   (let* ((route (make-instance 'static-route-from-file
-                               :template (routes:parse-template uri)
+                               :template nil ;; (routes:parse-template uri)
                                :path path
                                :content-type content-type)))
     (add-route route)))

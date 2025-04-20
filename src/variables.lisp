@@ -14,6 +14,10 @@
            #:*delay-between-pages-cleanup*))
 (in-package #:reblocks/variables)
 
+
+(defvar-unbound *server*
+  "Will be bound to a server currently processing the request.")
+
 (defvar-unbound *current-app*
   "A currently active web application.")
 

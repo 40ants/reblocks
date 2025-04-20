@@ -26,10 +26,10 @@
 (defsection @best-practice (:title "Best Practice")
   "To simplify debugging, it is better to use structured logging and include a request id into all log messages and HTTP server response.
 
-   Adding such request id  is as simple as adding a method for REBLOCKS/REQUEST-HANDLER:HANDLE-REQUEST generic-function:
+   Adding such request id is as simple as adding a method for REBLOCKS/SERVER:HANDLE-HTTP-REQUEST generic-function:
 
    ```lisp
-   (defmethod reblocks/request-handler:handle-request ((app app))
+   (defmethod reblocks/server:handle-http-request :around ((server t) env)
      (let ((*request-id* (make-request-id)))
        (reblocks/response:add-header :x-request-id
                                      *request-id*)

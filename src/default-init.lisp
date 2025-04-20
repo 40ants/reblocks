@@ -1,9 +1,5 @@
-(defpackage #:reblocks/default-init
+(uiop:define-package #:reblocks/default-init
   (:use #:cl)
-  (:import-from #:reblocks/app
-                #:get-prefix
-                #:webapp-name
-                #:defapp)
   (:import-from #:reblocks/page
                 #:page-root-widget
                 #:page)
@@ -15,41 +11,21 @@
                 #:with-html-string)
   (:import-from #:reblocks/widgets/string-widget
                 #:make-string-widget)
-  (:import-from #:reblocks/app
-                #:*current-app*))
+  (:import-from #:reblocks/variables
+                #:*current-app*)
+  (:import-from #:reblocks/widgets/default-page
+                #:make-default-init-page-widget))
 (in-package #:reblocks/default-init)
+
 
 
 (defun %common-init (app)
   (declare (ignore app))
-  (let ((quickstart-url "http://40ants.com/reblocks/quickstart/"))
-    (make-string-widget
-     (with-html-string
-       (:h1 "No reblocks/page:init-page method defined.")
-       (:p "Please define a method reblocks/page:init-page to initialize a new page.")
-       (:p "It could be something simple, like this one:")
-       (:pre
-        (:code
-         (format nil "
-CL-USER> (defmethod reblocks/page:init-page ((app ~A) (url-path string) expire-at)
-           (check-type expire-at (or null local-time::timestamp))
-           \"Hello world!\")" (string-downcase
-                               (type-of *current-app*)))))
-       (:p "And reset current session:")
-       (:pre
-        (:code
-         "
-CL-USER> (reblocks/debug:reset-latest-session)"))
-
-       (:p "Then reload the page.")
-       (:p "Read more in "
-           (:a :href quickstart-url
-               "documentation")
-           "."))
-     :escape-p nil)))
+  (make-default-init-page-widget))
 
 
 ;; TODO: this generic function is deprecated, remove after 2023-07-01
+;; TODO: really remove
 (defmethod reblocks/session:init ((app t))
   (warn "Use REBLOCKS/PAGE:INIT instead of REBLOCKS/SESSION:INIT. This method will be removed after 2023-07-01.")
   (%common-init app))
@@ -57,7 +33,20 @@ CL-USER> (reblocks/debug:reset-latest-session)"))
 
 (defmethod reblocks/page:init-page ((app t) (path string) expire-at)
   ;; TODO: replace with content of %common-init after deprecation
-  (%common-init app))
+  (let ((page-widget (40ants-routes/handler:call-handler)))
+    (cond
+      (page-widget
+       (unless (typep page-widget
+                      'reblocks/widget:widget)
+         (error "Handler for ~S URL returned non widget object of type ~S."
+                path
+                (type-of page-widget)))
+       (values page-widget))
+      ;; If no handler were found for current path,
+      ;; then show an example how to define a custom INIT-PAGE
+      ;; method or to define routes for application.
+      (t
+       (%common-init app)))))
 
 
 (defmethod reblocks/page:init-page :around ((app t) (path string) expire-at)

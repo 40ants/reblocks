@@ -10,10 +10,14 @@
                 #:md5)
   (:import-from #:reblocks/html
                 #:with-html)
-  (:import-from #:reblocks/routes
-                #:add-route)
+  ;; (:import-from #:reblocks/routes
+  ;;               #:add-route)
   ;; Just a dependency
   (:import-from #:dexador)
+  (:import-from #:40ants-routes/url-pattern
+                #:parse-url-pattern)
+  (:import-from #:40ants-routes/generics
+                #:add-route)
   
   (:export
    #:dependency
@@ -61,7 +65,7 @@ be stored.")
 
 
 (defgeneric get-route (dependency)
-  (:documentation "This method should return a routes:route object
+  (:documentation "This method should return a REBLOCKS/ROUTES:STATIC-ROUTE object
 if dependency should ber served from local server.")
   (:method (dependency)
     "By default dependencies aren't served by Lisp."
@@ -464,29 +468,23 @@ For local-dependency it is :local."
 ;;;; Routes related part ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: rename to register-routes or may be move this code to push-dependency?
-(defun register-dependencies (dependencies)
-  "Adds dependencies to the router to make HTTP server handle them."
-  (dolist (dependency dependencies)
-    (let ((route (get-route dependency)))
-      (when route
-        (add-route route)))))
 
-
-(defclass dependency-route (routes:route)
+(defclass dependency-route (reblocks/routes:static-route)
   ((dependency :initform nil
                :initarg :dependency
                :reader get-dependency)))
 
 
 (defun make-route (uri dependency)
-  "Makes a route for dependency.
-
-Automatically adds a prefix depending on current webapp and widget."
+  "Makes a route for dependency."
 
   (make-instance 'dependency-route
-                 :template (routes:parse-template uri)
-                 :dependency dependency))
+                 :name (string-downcase
+                        (gensym "STATIC-ROUTE-"))
+                 :pattern (parse-url-pattern uri)
+                 :dependency dependency
+                 :handler (lambda ()
+                            dependency)))
 
 
 ;; We need to override this internal method, to merge

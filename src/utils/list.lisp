@@ -144,13 +144,6 @@ all."
             do (setf remove nil)
           else collect i)))
 
-(defun remove-keyword-parameters (parameter-list &rest keywords)
-  "Removes all parameters with keys in 'keywords' from
-'parameter-list'."
-  (loop for argument in keywords
-        with i = parameter-list
-        do (setf i (remove-keyword-parameter i argument))
-        finally (return i)))
 
 (defun list->assoc (lst &key (map #'identity))
   "Nondestructively convert a list of elements to an association
