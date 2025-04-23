@@ -8,7 +8,8 @@
            #:get-route
            #:defroute
            #:server-routes
-           #:static-route))
+           #:static-route
+           #:page))
 (in-package #:reblocks/routes)
 
 
@@ -55,6 +56,15 @@
 ;; (defun add-route (route &key (routes *routes*))
 ;;   "Inserts a new route into the routing table."
 ;;   (routes:connect routes route))
+
+
+(defclass page-route (40ants-routes/route:route)
+  ())
+
+
+(defmacro page ((path &key name title) &body handler-body)
+  `(40ants-routes/defroutes:get (,path :name ,name :title ,title :route-class page-route)
+     ,@handler-body))
 
 
 (defgeneric object-routes (obj)

@@ -250,14 +250,14 @@
       (redirect url))))
 
 
-(defmethod reblocks/routes:serve ((route t) env)
+(defmethod reblocks/routes:serve :around ((route t) env)
   "This wrapper calls an interactive debugger if it is available or shows an error page."
   (with-handled-errors
     (call-next-method)))
 
 
-(defmethod reblocks/routes:serve ((route 40ants-routes/route:route) env)
-  "If a generic route was found, then it's handler should return a page widget.
+(defmethod reblocks/routes:serve ((route reblocks/routes::page-route) env)
+  "If a page route was found, then it's handler should return a page widget.
 
    It initializes the session if needed and if no page is matched to the current
    path in the session' cache, calls route's handler to create a page widget.
@@ -319,3 +319,8 @@
                              dependencies)
 
                   (register-dependencies dependencies))))))))))
+
+
+(defmethod reblocks/routes:serve ((route 40ants-routes/route:route) env)
+  "If a generic route was found, then it's handler should return a response of the Clack application."
+  (40ants-routes/handler:call-handler))
