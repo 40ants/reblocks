@@ -1,5 +1,6 @@
 (uiop:define-package #:reblocks/routes
   (:use #:cl)
+  (:import-from #:40ants-routes/defroutes)
   (:import-from #:40ants-routes/routes)
   (:import-from #:40ants-routes/vars)
   (:import-from #:40ants-routes/included-routes)

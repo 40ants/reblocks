@@ -298,7 +298,9 @@
                                              (universal-to-timestamp
                                               (+ (get-universal-time)
                                                  expire-in)))))
-                           (or (find-page-by-path session-pages path)
+                           ;; Session-pages can be NIL for some routes
+                           (or (when session-pages
+                                 (find-page-by-path session-pages path))
                                (progn (log:debug "Initializing a new page for path ~A" path)
                                       (init-page *current-app* path expire-at)))))
          (max-pages (max-pages-per-session *current-app*))
