@@ -39,7 +39,6 @@
                ;; This package defines an :around method for reblocks/widgets:render
                ;; which adds a wrapper around widget body
                "reblocks/widgets/render-methods"
-               "reblocks/routes-error-handler"
                "reblocks/dependencies-impl"
                ;; we need to depend on this package, because
                ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`

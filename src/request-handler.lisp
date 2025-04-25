@@ -36,9 +36,6 @@
                 #:eval-action)
   (:import-from #:reblocks/commands
                 #:get-collected-commands)
-  (:import-from #:reblocks/error-handler
-                #:with-handled-errors
-                #:on-error)
   (:import-from #:reblocks/variables
                 #:*current-app*
                 #:*backtrace-on-session-init-error*
@@ -77,84 +74,6 @@
   This prevents threads from hogging the CPU indefinitely.
 
   You can set this to NIL to disable timeouts (not recommended).")
-
-
-;; (defgeneric handle-request (app)
-;;   (:documentation
-;;    "This method handles each request as it comes in from the
-;; server. It is a hunchentoot handler and has access to all hunchentoot
-;; dynamic variables. The default implementation executes a user
-;; action (if any) and renders the root widget wrapped in HTML
-;; provided by 'render-page'. If the request is an AJAX request, only the
-;; dirty widgets are rendered into a JSON data structure. It also invokes
-;; user supplied 'reblocks/session:init' method on the first request that has no
-;; session setup.
-
-;; 'handle-request' immediately returns '+http-not-found+' if it
-;; sees a mime type on the script name (it doesn't handle what could be
-;; files because these mess with callback functions and break some
-;; widgets that depend on them).
-
-;; Additionally, on the first request a session is created and a client
-;; is forced to redirect. At this point if the cookie is sent, session
-;; information is removed from the URL, otherwise the URL is left in
-;; tact. This is done so that session information appears on the URL for
-;; clients that don't support cookies (this way AJAX requests followed by
-;; a refresh will work).
-
-;; This function also manages lists of callback functions and calls them
-;; at different points before and after request. See 'request-hook'.
-
-;; Override this method (along with :before and :after specifiers) to
-;; customize behavior."))
-
-
-;; (defmethod handle-request :around ((app app))
-;;   "This wrapper sets current application and suppresses error output from Hunchentoot."
-;;   (with-handled-errors
-;;     (let ((*print-pretty* t)
-;;           ;; Hunchentoot already displays warnings into log file, we just suppress output
-;;           (*error-output* (make-string-output-stream)))
-;;       (with-log-unhandled ()
-;;         (call-next-method)))))
-
-
-;; TODO: make-this method an optional application mixin
-;; (defmethod handle-request :around (app)
-;;   "This wrapper sets a timeout on the request and reports response timings."
-
-;;   (log:debug "Handling client request for" app)
-
-
-;;   ;; TODO: understand how to use it and write a doc.
-
-;;   (handler-bind ((timeout-error
-;;                    (lambda (c)
-;;                      (declare (ignorable c))
-;;                      ;; TODO: let the user customize this
-;;                      (error "Your request timed out."))))
-;;     ;; TRIVIAL-TIMEOUT seems to be broken on CCL and in yet another way on
-;;     ;; Lispworks. For now let's only enable it on SBCL.
-;;     (#-sbcl progn
-;;      #+sbcl with-timeout #+sbcl (*request-timeout*)
-;;      (unwind-protect
-;;           (let* ((timings nil)
-;;                  (*timing-level* 0)
-;;                  (*timing-report-fn*
-;;                    (lambda (name real cpu)
-;;                      (setf timings (acons name
-;;                                           (list real cpu
-;;                                                 *timing-level*)
-;;                                           timings))))
-;;                  (result (timing "handle-request"
-;;                            (call-next-method))))
-;;             (dolist (timing timings)
-;;               (dotimes (i (cadddr timing))
-;;                 (write "  " :escape nil))
-;;               (finish-output)
-;;               (format t "~A time (real/cpu): ~F/~F~%" (car timing)
-;;                       (cadr timing) (caddr timing)))
-;;             result)))))
 
 
 (defgeneric page-not-found-handler (app)
@@ -248,12 +167,6 @@
                 (get-path :with-params t))))
       (log:debug "Redirecting to an URL without action parameter" url)
       (redirect url))))
-
-
-(defmethod reblocks/routes:serve :around ((route t) env)
-  "This wrapper calls an interactive debugger if it is available or shows an error page."
-  (with-handled-errors
-    (call-next-method)))
 
 
 (defmethod reblocks/routes:serve ((route reblocks/routes::page-route) env)

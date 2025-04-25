@@ -30,10 +30,11 @@
 
    ```lisp
    (defmethod reblocks/server:handle-http-request :around ((server t) env)
-     (let ((*request-id* (make-request-id)))
+     (let ((request-id (princ-to-string
+                        (uuid:make-v4-uuid))))
        (reblocks/response:add-header :x-request-id
-                                     *request-id*)
-       (with-fields (:request-id *request-id*)
+                                     request-id)
+       (log4cl-extras/context:with-fields (:request-id request-id)
          (call-next-method))))
    ```
 

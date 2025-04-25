@@ -55,11 +55,11 @@
   (:import-from #:40ants-routes/matched-route
                 #:original-route
                 #:matched-route-p)
+  (:import-from #:reblocks/error-handler
+                #:with-handled-errors)
   
-  (:export ;; #:get-server-type
-   ;; #:get-port
-   ;; #:make-server
-   ;; #:handle-http-request
+  (:export
+   #:handle-http-request
    #:stop
    #:start
    #:serve-static-file
@@ -217,84 +217,61 @@ Make instance, then start it with ``start`` method."
           app)))))
 
 
-(defun make-response-for-clack (response)
-  (etypecase response
-    (lack/response:response
-     (lack/response:finalize-response response))
-    (list response)
-    (function response)))
-
-
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
-    (let ((*server* server)
-          (url-path (getf env :path-info)))
-      (with-url ((object-routes server)
-                 url-path)
-        (call-next-method)))))
+    (let ((*server* server))
+      (let ((result 
+              (with-session (env)
+                (with-request ((make-request env))
+                  (with-response ()
+                    (call-next-method))))))
+        result))))
 
 
 (defmethod handle-http-request ((server server) env)
   "Reblocks HTTP dispatcher.
 This function serves all started applications and their static files."
 
-  (let (;; This "hack" is needed to allow widgets to change *random-state*
+  (let ((url-path (getf env :path-info))
+        ;; This "hack" is needed to allow widgets to change *random-state*
         ;; and don't interfere with other threads and requests
         (*random-state* *random-state*))
-    (with-session (env)
-      (with-request ((make-request env))
-        ;; Dynamic hook :handle-http-request makes possible to write
-        ;; some sort of middlewares, which change *request* and *session*
-        ;; variables.
-        (prepare-hooks
-          (reblocks/hooks:with-handle-http-request-hook (env)
+    ;; Dynamic hook :handle-http-request makes possible to write
+    ;; some sort of middlewares, which change *request* and *session*
+    ;; variables.
+    (prepare-hooks
+      (reblocks/hooks:with-handle-http-request-hook (env)
+        (with-url ((object-routes server)
+                   url-path)
+          (let* ((route (when 40ants-routes/vars::*current-routes*
+                          (unless (matched-route-p
+                                   40ants-routes/vars::*current-routes*)
+                            (error "Unexpected class of route was found: ~S"
+                                   (class-of 40ants-routes/vars::*current-routes*)))
+                          (original-route 40ants-routes/vars::*current-routes*)))
+                 (app-route (reblocks/routes::find-route-by-class 'reblocks/app::app-routes))
+                 (app (when app-route
+                        (reblocks/app::routes-app app-route))))
+          
+            (log:debug "Processing request to" url-path)
+          
+            ;; If dependency found, then return it's content along with content-type
+            (with-app app
+              (cond
+                (route
+                 (log:debug "Route was found" route)
 
-            (let* ((path-info (getf env
-                                    ;; Previously, we used :path-info
-                                    ;; attribute here, but it has %20 replaced
-                                    ;; with white-spaces and get-route breaks
-                                    ;; on URIs having spaces, because it calls
-                                    ;; cl-routes and it calls puri:parse-uri
-                                    ;; which requires URI to be url-encoded.
-                                    ;; Hope, this change will not break other
-                                    ;; places where PATH-INFO is used.
-                                    :request-uri))
-                   ;; TODO: write into the docs about hostname deprecation,
-                   ;; and remove it from the application
-                   ;; (hostname (getf env :server-name))
-                   ;; (handler-result (40ants-routes/handler:call-handler))
-                   ;; (route (get-route path-info))
-                   ;; TODO: replace with a function
-                   (route (when 40ants-routes/vars::*current-routes*
-                            (unless (matched-route-p
-                                     40ants-routes/vars::*current-routes*)
-                              (error "Unexpected class of route was found: ~S"
-                                     (class-of 40ants-routes/vars::*current-routes*)))
-                            (original-route 40ants-routes/vars::*current-routes*)))
-                   (app-route (reblocks/routes::find-route-by-class 'reblocks/app::app-routes))
-                   (app (when app-route
-                          (reblocks/app::routes-app app-route))
-                        ;; (search-app-for-request-handling path-info hostname)
-                        ))
+                 ;; This wrapper calls an interactive debugger
+                 ;; if it is available or shows an error page.
+                 (with-handled-errors ()
+                   (reblocks/routes:serve route env)))
+                (t
+                 (log:error "No route for" url-path)
 
-              ;; (break (list app app-route))
-              (log:debug "Processing request to" path-info)
-              
-              ;; If dependency found, then return it's content along with content-type
-              (with-app app
-                (make-response-for-clack
-                 (with-response ()
-                   (cond
-                     (route
-                      (log:debug "Route was found" route)
-                      (reblocks/routes:serve route env))
-                     (t
-                      (log:error "No route for" path-info)
-
-                      (list 404
-                            (list :content-type "text/html")
-                            (list (format nil "File \"~A\" was not found.~%"
-                                          path-info)))))))))))))))
+                 (list 404
+                       (list :content-type "text/html")
+                       (list (format nil "File \"~A\" was not found.~%"
+                                     url-path))))))))))))
 
 
 (defun start-server (server &key debug
@@ -575,15 +552,3 @@ If server is already started, then logs a warning and does nothing."
   (list 200
         (list :content-type (get-content-type route))
         (get-path route)))
-
-
-(defgeneric serve-static-file (uri object &key content-type)
-  (:documentation "Adds a route to serve given object by static URI."))
-
-
-(defmethod serve-static-file (uri (path pathname) &key (content-type "text/plain"))
-  (let* ((route (make-instance 'static-route-from-file
-                               :template nil ;; (routes:parse-template uri)
-                               :path path
-                               :content-type content-type)))
-    (add-route route)))

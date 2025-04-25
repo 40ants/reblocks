@@ -81,6 +81,6 @@
                           :backtrace backtrace))))))))
 
 
-(defmacro with-handled-errors (&body body)
+(defmacro with-handled-errors (() &body body)
   `(call-with-handled-errors (lambda ()
                                ,@body)))
