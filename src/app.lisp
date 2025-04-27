@@ -35,7 +35,8 @@
            #:get-prefix
            #:get-current
            #:with-app
-           #:initialize-webapp))
+           #:initialize-webapp
+           #:page-constructor))
 (in-package #:reblocks/app)
 
 
@@ -85,6 +86,10 @@
      :initarg :routes
      :initform nil
      :reader app-routes)
+   (page-constructor :initarg :page-constructor
+                     :initform #'identity
+                     :type function
+                     :reader page-constructor)
    (session-key :type symbol :accessor reblocks-webapp-session-key :initarg :session-key)
    (debug :accessor reblocks-webapp-debug :initarg :debug :initform nil 
           :documentation "Responsible for debug mode, use WEBAPP-DEBUG function for getting slot value"))
@@ -106,6 +111,7 @@ layout and dependencies running on the same server."))
                   &key
                     prefix
                     routes
+                    page-constructor
                     subclasses
                     slots
                     description
@@ -122,6 +128,9 @@ about this in the REBLOCKS/DOC/ROUTING:@ROUTING section.
 
 ROUTES - a 40ANTS-ROUTES/ROUTES:ROUTES object holding routes relative to the given
 prefix.
+
+PAGE-CONSTRUCTOR - a callable of one argument which accepts a widget bound to a route
+and returns a root widget for the page.
 
 SUBCLASSES - if you want to inherit subclass behavior from other webapps, you
 can.  It's not likely to be needed much

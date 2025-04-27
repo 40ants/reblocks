@@ -218,7 +218,7 @@
 
 
             (reblocks/hooks:with-render-hook (app)
-              (with-html-string 
+              (with-html-string ()
                 (if (ajax-request-p)
                     (handle-ajax-request app)
                     (handle-normal-request app))

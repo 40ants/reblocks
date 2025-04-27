@@ -14,7 +14,9 @@
   (:import-from #:reblocks/variables
                 #:*current-app*)
   (:import-from #:reblocks/widgets/default-page
-                #:make-default-init-page-widget))
+                #:make-default-init-page-widget)
+  (:import-from #:reblocks/app
+                #:page-constructor))
 (in-package #:reblocks/default-init)
 
 
@@ -41,7 +43,13 @@
          (error "Handler for ~S URL returned non widget object of type ~S."
                 path
                 (type-of page-widget)))
-       (values page-widget))
+       
+       ;; This way it is possible to apply a unified header, footer and sidebar to
+       ;; all pages of the web application:
+       (let ((wrapped-page-widget
+               (funcall (page-constructor app)
+                        page-widget)))
+         (values wrapped-page-widget)))
       ;; If no handler were found for current path,
       ;; then show an example how to define a custom INIT-PAGE
       ;; method or to define routes for application.

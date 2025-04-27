@@ -255,7 +255,7 @@ Make instance, then start it with ``start`` method."
 
 
 (defun return-404-page (server app url-path)
-  (let* ((result (page-not-found-handler server app)))
+  (let ((result (page-not-found-handler server app)))
     ;; Page-not-found handler can signal immediate response
     ;; or just return a widget to be rendered.
     (typecase result
@@ -268,13 +268,20 @@ Make instance, then start it with ``start`` method."
                 (with-html-string ()
                   (handle-normal-request app
                                          :page
-                                         (make-instance 'page
-                                                        :root-widget result
-                                                        :path url-path
-                                                        :expire-at (adjust-timestamp!
-                                                                       (now)
-                                                                     ;; It is no make sence to cache 404 pages
-                                                                     (:offset :sec 5))))
+                                         ;; Application might define a common constructor
+                                         ;; for all pages, to add such common elements like
+                                         ;; header and footer. Here we need to apply this
+                                         ;; application's handler:
+                                         (let ((wrapped-result
+                                                 (funcall (reblocks/app::page-constructor app)
+                                                          result)))
+                                           (make-instance 'page
+                                                          :root-widget wrapped-result
+                                                          :path url-path
+                                                          :expire-at (adjust-timestamp!
+                                                                         (now)
+                                                                       ;; It is no make sence to cache 404 pages
+                                                                       (:offset :sec 5)))))
                   
                   (register-dependencies
                    (append (get-dependencies app)
