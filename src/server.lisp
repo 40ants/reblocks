@@ -275,6 +275,8 @@ Make instance, then start it with ``start`` method."
                                          (let ((wrapped-result
                                                  (funcall (reblocks/app::page-constructor app)
                                                           result)))
+                                           ;; TODO: probably extract common error page
+                                           ;; making code with error-handler.lisp:
                                            (make-instance 'page
                                                           :root-widget wrapped-result
                                                           :path url-path
@@ -328,8 +330,9 @@ This function serves all started applications and their static files."
 
                          ;; This wrapper calls an interactive debugger
                          ;; if it is available or shows an error page.
-                         (with-handled-errors ()
-                           (reblocks/routes:serve route env)))))
+                         (let ((resp (with-handled-errors ()
+                                       (reblocks/routes:serve route env))))
+                           (values resp)))))
                     ;; No page was found matching the route
                     (t
                      (list 404
