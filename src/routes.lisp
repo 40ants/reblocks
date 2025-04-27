@@ -10,7 +10,8 @@
            #:defroute
            #:server-routes
            #:static-route
-           #:page))
+           #:page
+           #:find-route-by-class))
 (in-package #:reblocks/routes)
 
 
@@ -163,8 +164,8 @@
 ;;          ))))
 
 
-(defun find-route-by-class (route-class)
-  (loop for node in 40ants-routes/vars::*routes-path*
+(defun find-route-by-class (route-class &key (routes-path 40ants-routes/vars::*routes-path*))
+  (loop for node in routes-path
         when (and (typep node '40ants-routes/included-routes:included-routes)
                   (typep (40ants-routes/included-routes:original-routes node)
                          route-class))

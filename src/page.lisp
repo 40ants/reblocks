@@ -284,7 +284,7 @@
         do (return page)))
 
 
-(defun call-with-page-defaults (body-func)
+(defun call-with-page-defaults (body-func &key page)
   (let* ((*title* nil)
          (*description* nil)
          (*keywords* nil)
@@ -299,7 +299,8 @@
                                               (+ (get-universal-time)
                                                  expire-in)))))
                            ;; Session-pages can be NIL for some routes
-                           (or (when session-pages
+                           (or page
+                               (when session-pages
                                  (find-page-by-path session-pages path))
                                (progn (log:debug "Initializing a new page for path ~A" path)
                                       (init-page *current-app* path expire-at)))))
@@ -308,8 +309,9 @@
                      (+ (get-universal-time)
                         (* 365 24 60 60)))))
     ;; Here we are adding a new session object to the map of known sessions
-    (setf (gethash *current-page* session-pages)
-          t)
+    (when session-pages
+      (setf (gethash *current-page* session-pages)
+            t))
 
     (unless (ajax-request-p)
       (log:debug "Calling ON-PAGE-LOAD generic-function")
@@ -328,35 +330,39 @@
     ;; expire-at slot of pages).
     ;; The first element in this list will be the oldest
     ;; in terms of expiration time or creation order
-    (let* ((current-pages-count (hash-table-count session-pages))
-           (num-pages-to-expire (if max-pages
-                                    (- current-pages-count
-                                       max-pages)
-                                    0)))
-      (when (< 0 num-pages-to-expire)
-        ;; Probably some sort of priority heap with limited length whould work
-        ;; faster here. But right now I'm not sure it deserve an optimization,
-        ;; because typically a number of pages within one session should not be
-        ;; to large
-        (let* ((sorted-pages (sort (hash-table-keys session-pages)
-                                   #'timestamp<
-                                   :key (lambda (page)
-                                          (or (page-expire-at page)
-                                              next-year))))
-               (pages-to-expire (take num-pages-to-expire sorted-pages )))
-          (loop for page in pages-to-expire
-                do (log:debug "Expiring page ~A because only ~A pages is allowed for one session but we already have ~A."
-                              page
-                              max-pages
-                              current-pages-count)
-                   (remhash page session-pages)))))
+    (when session-pages
+      (let* ((current-pages-count (hash-table-count session-pages))
+             (num-pages-to-expire (if max-pages
+                                      (- current-pages-count
+                                         max-pages)
+                                      0)))
+        (when (< 0 num-pages-to-expire)
+          ;; Probably some sort of priority heap with limited length whould work
+          ;; faster here. But right now I'm not sure it deserve an optimization,
+          ;; because typically a number of pages within one session should not be
+          ;; to large
+          (let* ((sorted-pages (sort (hash-table-keys session-pages)
+                                     #'timestamp<
+                                     :key (lambda (page)
+                                            (or (page-expire-at page)
+                                                next-year))))
+                 (pages-to-expire (take num-pages-to-expire sorted-pages )))
+            (loop for page in pages-to-expire
+                  do (log:debug "Expiring page ~A because only ~A pages is allowed for one session but we already have ~A."
+                                page
+                                max-pages
+                                current-pages-count)
+                     (remhash page session-pages))))))
     
     (funcall body-func)))
 
 
-(defmacro with-page-defaults (&body body)
-  `(call-with-page-defaults
-    (lambda () ,@body)))
+(defmacro with-page-defaults ((&key page) &body body)
+  `(flet ((with-page-defaults-thunk ()
+            ,@body))
+     (declare (dynamic-extent #'with-page-defaults-thunk))
+     (call-with-page-defaults #'with-page-defaults-thunk
+                              :page ,page)))
 
 
 (defgeneric render-page-with-widgets (app)

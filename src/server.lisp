@@ -1,16 +1,25 @@
 (uiop:define-package #:reblocks/server
   (:use #:cl)
   (:import-from #:40ants-routes/with-url
+                #:with-partially-matched-url
                 #:with-url)
   (:import-from #:40ants-routes/handler)
   (:import-from #:reblocks/app
+                #:routes-app
+                #:app-routes
                 #:with-app)
+  (:import-from #:reblocks/widget)
+  (:import-from #:reblocks/page-dependencies
+                #:get-collected-dependencies
+                #:with-collected-dependencies)
   (:import-from #:reblocks/session
                 #:make-session-middleware
                 #:with-session)
   (:import-from #:reblocks/hooks
+                #:with-render-hook
                 #:prepare-hooks)
   (:import-from #:reblocks/routes
+                #:find-route-by-class
                 #:object-routes
                 #:server-routes
                 #:route
@@ -34,6 +43,9 @@
   (:import-from #:lack/response)
   (:import-from #:clack
                 #:clackup)
+  (:import-from #:reblocks/request-handler
+                #:page-not-found-handler
+                #:handle-normal-request)
   (:import-from #:cl-strings
                 #:starts-with)
   ;; Just dependencies
@@ -47,6 +59,7 @@
                 #:insert-after
                 #:insert-at)
   (:import-from #:reblocks/page
+                #:page
                 #:ensure-pages-cleaner-is-running)
   (:import-from #:40ants-routes/routes)
   (:import-from #:reblocks/variables
@@ -56,7 +69,20 @@
                 #:original-route
                 #:matched-route-p)
   (:import-from #:reblocks/error-handler
+                #:with-immediate-response-handler
                 #:with-handled-errors)
+  (:import-from #:40ants-routes/route
+                #:current-route-p
+                #:current-route)
+  (:import-from #:reblocks/html
+                #:with-html-string)
+  (:import-from #:reblocks/routes/server
+                #:register-dependencies)
+  (:import-from #:reblocks/dependencies
+                #:get-dependencies)
+  (:import-from #:local-time
+                #:adjust-timestamp!
+                #:now)
   
   (:export
    #:handle-http-request
@@ -228,6 +254,37 @@ Make instance, then start it with ``start`` method."
         result))))
 
 
+(defun return-404-page (server app url-path)
+  (let* ((result (page-not-found-handler server app)))
+    ;; Page-not-found handler can signal immediate response
+    ;; or just return a widget to be rendered.
+    (typecase result
+      (reblocks/widget:widget
+       (cond
+         (app
+          (with-app (app)
+            (with-collected-dependencies ()
+              (with-render-hook (app)
+                (with-html-string ()
+                  (handle-normal-request app
+                                         :page
+                                         (make-instance 'page
+                                                        :root-widget result
+                                                        :path url-path
+                                                        :expire-at (adjust-timestamp!
+                                                                       (now)
+                                                                     ;; It is no make sence to cache 404 pages
+                                                                     (:offset :sec 5))))
+                  
+                  (register-dependencies
+                   (append (get-dependencies app)
+                           (get-collected-dependencies))))))))
+         (t
+          (error "No app during 404 error handling"))))
+      (t
+       result))))
+
+
 (defmethod handle-http-request ((server server) env)
   "Reblocks HTTP dispatcher.
 This function serves all started applications and their static files."
@@ -241,41 +298,41 @@ This function serves all started applications and their static files."
     ;; variables.
     (prepare-hooks
       (reblocks/hooks:with-handle-http-request-hook (env)
-        (with-url ((object-routes server)
-                   url-path)
-          (let* ((route (when 40ants-routes/vars::*current-routes*
-                          (unless (matched-route-p
-                                   40ants-routes/vars::*current-routes*)
-                            (error "Unexpected class of route was found: ~S"
-                                   (class-of 40ants-routes/vars::*current-routes*)))
-                          (original-route 40ants-routes/vars::*current-routes*)))
-                 (app-route (reblocks/routes::find-route-by-class 'reblocks/app::app-routes))
-                 (app (when app-route
-                        (reblocks/app::routes-app app-route))))
-          
-            (log:debug "Processing request to" url-path)
-          
-            ;; If dependency found, then return it's content along with content-type
-            (with-app app
-              (cond
-                (route
-                 (log:debug "Route was found" route)
+        (with-immediate-response-handler () 
+          (handler-case
+              (with-partially-matched-url ((object-routes server)
+                                           url-path)
+                (let* ((app-route (find-route-by-class 'reblocks/app::app-routes))
+                       (app (when app-route
+                              (routes-app app-route))))
+                  (cond
+                    ((current-route-p)
+                     (let* ((route (progn
+                                     (unless (matched-route-p (current-route))
+                                       (error "Unexpected class of route was found: ~S"
+                                              (class-of (current-route))))
+                                     (original-route (current-route)))))
+                 
+                       (log:debug "Processing request to" url-path)
+                 
+                       ;; If dependency found, then return it's content along with content-type
+                       (with-app (app)
+                         (log:debug "Route was found" route)
 
-                 ;; This wrapper calls an interactive debugger
-                 ;; if it is available or shows an error page.
-                 (with-handled-errors ()
-                   (reblocks/routes:serve route env)))
-                (t
-                 (log:error "No route for" url-path)
-
-                 (list 404
-                       (list :content-type "text/html")
-                       (list (format nil "File \"~A\" was not found.~%"
-                                     url-path))))))))))))
+                         ;; This wrapper calls an interactive debugger
+                         ;; if it is available or shows an error page.
+                         (with-handled-errors ()
+                           (reblocks/routes:serve route env)))))
+                    ;; No page was found matching the route
+                    (t
+                     (list 404
+                           (list :content-type "text/html")
+                           (list
+                            (return-404-page server app url-path)))))))))))))
 
 
 (defun start-server (server &key debug
-                                 (samesite-policy *default-samesite-policy*))
+                              (samesite-policy *default-samesite-policy*))
   "Starts a Clack webserver, returns this server as result.
 
 If server is already started, then logs a warning and does nothing."

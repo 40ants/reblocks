@@ -38,7 +38,7 @@
 Reblocks fills this list during page rendering.")
 
 
-(defmacro with-collected-dependencies (&body body)
+(defmacro with-collected-dependencies (()  &body body)
   "Use this macro to wrap code which may push new dependencies for
 the page or an action."
   `(let (*page-dependencies*)

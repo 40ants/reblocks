@@ -198,7 +198,7 @@ They can be useful to not update the whole parent widget.
            (unless removed
              (with-collected-commands ()
                (prog1
-                   (with-html-string
+                   (with-html-string ()
                      (render w))
                  (setf update-commands
                        (get-collected-commands)))))))

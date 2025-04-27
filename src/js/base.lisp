@@ -53,5 +53,6 @@ having to worry about special characters in JavaScript code."
 (defmacro with-javascript-to-string (source &rest args)
   "Places 'source' between script and CDATA elements. Used to avoid
 having to worry about special characters in JavaScript code."
-  `(with-html-string ,(apply #'%js source args)))
+  `(with-html-string ()
+     ,(apply #'%js source args)))
 

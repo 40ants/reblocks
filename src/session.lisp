@@ -162,7 +162,7 @@ used to create IDs for html elements, widgets, etc."
         (with-session-lock (*session*)
           (funcall func))
       (reset-session ()
-        :report "Reset current Weblocks session and return 500."
+        :report "Reset current Reblocks session and return 500."
         (log:warn "Resetting current session.")
         (clrhash *session*)
         (list 500 nil (list "Please, reload page to start a new session."))))))

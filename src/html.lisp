@@ -40,7 +40,7 @@
        ,@body)))
 
 
-(defmacro with-html-string (&body body)
+(defmacro with-html-string (() &body body)
   "Like WITH-HTML, but capture the output as a string."
   `(with-output-to-string (*stream*)
      (with-html

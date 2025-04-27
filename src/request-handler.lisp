@@ -76,13 +76,12 @@
   You can set this to NIL to disable timeouts (not recommended).")
 
 
-(defgeneric page-not-found-handler (app)
+(defgeneric page-not-found-handler (server app)
   (:documentation "This function is called when the current widget 
    heirarchy fails to parse a URL.  The default behavior simply sets the 
    404 return code")
-  (:method ((app t))
-    (declare (ignore app))
-    
+  (:method ((server t)
+            (app t))
     (immediate-response "Not found"
                         :code 404)))
 
@@ -110,13 +109,13 @@
      :escape nil)))
 
 
-(defun handle-normal-request (app)
+(defun handle-normal-request (app &key page)
   ;; we need to render widgets before the boilerplate HTML
   ;; that wraps them in order to collect a list of script and
   ;; stylesheet dependencies.
   (log:debug "Handling normal request")
 
-  (reblocks/page::with-page-defaults
+  (reblocks/page::with-page-defaults (:page page)
     ;; TODO: make a macro reblocks/session-lock:with-lock
     (timing "widget tree rendering"
       (render (reblocks/page:page-root-widget
@@ -194,7 +193,7 @@
         (reblocks/session:init-session app)
         (setf (reblocks/session:get-value 'initialized) t)))
 
-    (with-collected-dependencies
+    (with-collected-dependencies ()
       ;; This variable will be set to HTML string after rendering
       (multiple-value-bind (_ page-action-bound-to)
           (handle-action-if-needed app)
@@ -219,7 +218,7 @@
 
 
             (reblocks/hooks:with-render-hook (app)
-              (with-html-string
+              (with-html-string 
                 (if (ajax-request-p)
                     (handle-ajax-request app)
                     (handle-normal-request app))

@@ -139,7 +139,7 @@ window.addEventListener('message', function(e) {
   }
 } , false);
 ")
-         (html (reblocks/html:with-html-string
+         (html (reblocks/html:with-html-string ()
                  (:div :class "demo"
                        (:iframe :id iframe-id
                                 :src full-url

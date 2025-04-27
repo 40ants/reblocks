@@ -57,7 +57,7 @@ Sometimes you might want to get a HTML string instead. In this case you might us
 REBLOCKS/HTML:WITH-HTML-STRING:
 
 ```cl-transcript
-(reblocks/html:with-html-string
+(reblocks/html:with-html-string ()
    (:ul
     (:li "One")
     (:li "Two")

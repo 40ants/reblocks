@@ -260,7 +260,7 @@ called (primarily for backward compatibility"
     (funcall proc)))
 
 
-(defmacro with-app (app &body forms)
+(defmacro with-app ((app) &body forms)
   "Bind variables that are both webapp-specific, or applicable to just
 this app, and webapp-general, or not particular to some request to
 this app, with regard to WEBAPP."

@@ -12,7 +12,7 @@
 (defun make-default-init-page-widget ()
   (let ((quickstart-url "http://40ants.com/reblocks/quickstart/"))
     (make-string-widget
-     (with-html-string
+     (with-html-string ()
        (:h1 "No reblocks/page:init-page method defined.")
        (:p "Please define a method reblocks/page:init-page to initialize a new page.")
        (:p "It could be something simple, like this one:")

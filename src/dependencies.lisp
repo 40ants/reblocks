@@ -10,8 +10,7 @@
                 #:md5)
   (:import-from #:reblocks/html
                 #:with-html)
-  ;; (:import-from #:reblocks/routes
-  ;;               #:add-route)
+  (:import-from #:reblocks/routes)
   ;; Just a dependency
   (:import-from #:dexador)
   (:import-from #:40ants-routes/url-pattern

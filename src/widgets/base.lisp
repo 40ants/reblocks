@@ -152,18 +152,18 @@ propagation code."))
      (error "Arguments inserted-after and inserted-before can't be used together."))
     (inserted-after (add-command
                      :insert-widget
-                     :widget (with-html-string
+                     :widget (with-html-string ()
                                (render w))
                      :after (dom-id inserted-after)))
     (inserted-before (add-command
                       :insert-widget
-                      :widget (with-html-string
+                      :widget (with-html-string ()
                                 (render w))
                       :before (dom-id inserted-before)))
     (t (add-command
         :update-widget
         :dom-id (dom-id w)
-        :widget (with-html-string
+        :widget (with-html-string ()
                   (render w))))))
 
 

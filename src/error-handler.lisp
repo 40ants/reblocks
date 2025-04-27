@@ -34,7 +34,7 @@
   "Default implementation returns a plain text page and 500 status code."
   (declare (ignorable app))
 
-  (let ((page (with-html-string
+  (let ((page (with-html-string ()
                 (:h1 "Unhandled exception")
                 (:h2 ("~A" condition))
                 (when (and (reblocks/debug:status)
@@ -59,14 +59,15 @@
                            (setf backtrace
                                  (print-backtrace :condition condition
                                                   :stream nil))
-                           (cond (*invoke-debugger-on-error*
+                           (cond ((and *invoke-debugger-on-error*
+                                       *debugger-hook*)
                                   (log:warn "Invoking interactive debugger because Reblocks is in the debug mode")
                                   (setf debugger-was-invoked-on-cond
                                         condition)
                                   (invoke-debugger condition))
                                  (t
                                   (log:warn "Returning error because Reblocks is not in the debug mode")
-                                  (with-page-defaults
+                                  (with-page-defaults ()
                                     (on-error *current-app*
                                               condition
                                               :backtrace backtrace)))))))
@@ -75,12 +76,31 @@
             (abort ()
               :report "Abort request processing and return 500."
               (log:warn "Aborting request processing")
-              (with-page-defaults
+              (with-page-defaults ()
                 (on-error *current-app*
                           debugger-was-invoked-on-cond
                           :backtrace backtrace))))))))
 
 
+
 (defmacro with-handled-errors (() &body body)
   `(call-with-handled-errors (lambda ()
                                ,@body)))
+
+
+(defun call-with-immediate-response-handler (body-func)
+  ;; We need to have this handler-bind block a separate from the inner one,
+  ;; because when (on-error) call happens, bindings from the inner handler-bind
+  ;; aren't available, but we need to catch an immediate-response condition
+  (handler-bind ((immediate-response
+                   (lambda (condition)
+                     (return-from call-with-immediate-response-handler
+                       (get-response condition)))))
+    (funcall body-func)))
+
+
+(defmacro with-immediate-response-handler (() &body body)
+  `(flet ((immediate-response-handler-thunk ()
+            ,@body))
+     (declare (dynamic-extent #'immediate-response-handler-thunk))
+     (call-with-immediate-response-handler #'immediate-response-handler-thunk)))
