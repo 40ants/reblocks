@@ -15,8 +15,6 @@
   (:import-from #:dexador)
   (:import-from #:40ants-routes/url-pattern
                 #:parse-url-pattern)
-  (:import-from #:40ants-routes/generics
-                #:add-route)
   
   (:export
    #:dependency

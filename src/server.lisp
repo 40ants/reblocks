@@ -3,7 +3,6 @@
   (:import-from #:40ants-routes/with-url
                 #:with-partially-matched-url
                 #:with-url)
-  (:import-from #:40ants-routes/handler)
   (:import-from #:reblocks/app
                 #:routes-app
                 #:app-routes
@@ -40,7 +39,6 @@
                 #:get-content)
   (:import-from #:lack/request
                 #:make-request)
-  (:import-from #:lack/response)
   (:import-from #:clack
                 #:clackup)
   (:import-from #:reblocks/request-handler
@@ -83,6 +81,8 @@
   (:import-from #:local-time
                 #:adjust-timestamp!
                 #:now)
+  (:import-from #:40ants-routes/defroutes
+                #:include)
   
   (:export
    #:handle-http-request
@@ -538,7 +538,7 @@ If server is already started, then logs a warning and does nothing."
   ;; Also, we should add app's routes to the mapper:
   (when (reblocks/app::app-routes app)
     (40ants-routes/generics:add-route (object-routes server)
-                                      (40ants-routes/defroutes:include
+                                      (include
                                        (reblocks/app::app-routes app)
                                        :path (get-prefix app))))
   ;; (add-routes app :routes (routes server))

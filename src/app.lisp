@@ -5,7 +5,6 @@
   (:import-from #:reblocks/widgets/default-page
                 #:make-default-init-page-widget)
   (:import-from #:40ants-routes/routes)
-  (:import-from #:reblocks/routes)
   (:import-from #:40ants-routes/defroutes)
   (:import-from #:reblocks/app-mop
                 #:get-autostarting-apps
@@ -18,8 +17,6 @@
                 #:attributize-name
                 #:remove-spurious-slashes
                 #:ensure-starts-with-slash)
-  (:import-from #:reblocks/utils/list
-                #:remove-keyword-parameters)
   (:import-from #:reblocks/variables
                 #:*current-app*)
   (:import-from #:alexandria

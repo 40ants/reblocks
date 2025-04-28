@@ -15,6 +15,8 @@
                 #:current-page
                 #:render-page-with-widgets)
   (:import-from #:reblocks/session)
+  (:import-from #:40ants-routes/route)
+  (:import-from #:reblocks/routes)
   (:import-from #:reblocks/widget
                 #:render)
   (:import-from #:reblocks/html
@@ -46,9 +48,6 @@
                 #:timing)
   (:import-from #:jonathan
                 #:to-json)
-  (:import-from #:trivial-timeout
-                #:timeout-error
-                #:with-timeout)
   (:import-from #:reblocks/response
                 #:get-response
                 #:response
@@ -60,8 +59,8 @@
   (:import-from #:alexandria
                 #:curry
                 #:make-keyword)
-  (:import-from #:log4cl-extras/error
-                #:with-log-unhandled)
+  (:import-from #:40ants-routes/handler
+                #:call-handler)
   
   (:export #:page-not-found-handler
            #:*request-timeout*
@@ -235,4 +234,4 @@
 
 (defmethod reblocks/routes:serve ((route 40ants-routes/route:route) env)
   "If a generic route was found, then it's handler should return a response of the Clack application."
-  (40ants-routes/handler:call-handler))
+  (call-handler))

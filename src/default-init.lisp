@@ -7,16 +7,12 @@
   (:import-from #:reblocks/widget
                 #:create-widget-from
                 #:widget)
-  (:import-from #:reblocks/html
-                #:with-html-string)
-  (:import-from #:reblocks/widgets/string-widget
-                #:make-string-widget)
-  (:import-from #:reblocks/variables
-                #:*current-app*)
   (:import-from #:reblocks/widgets/default-page
                 #:make-default-init-page-widget)
   (:import-from #:reblocks/app
-                #:page-constructor))
+                #:page-constructor)
+  (:import-from #:40ants-routes/handler
+                #:call-handler))
 (in-package #:reblocks/default-init)
 
 
@@ -35,7 +31,7 @@
 
 (defmethod reblocks/page:init-page ((app t) (path string) expire-at)
   ;; TODO: replace with content of %common-init after deprecation
-  (let ((page-widget (40ants-routes/handler:call-handler)))
+  (let ((page-widget (call-handler)))
     (cond
       (page-widget
        (unless (typep page-widget

@@ -19,6 +19,17 @@
                 #:render
                 #:defwidget
                 #:widget)
+  (:import-from #:local-time
+                #:now
+                #:adjust-timestamp!)
+  (:import-from #:reblocks/app
+                #:page-constructor)
+  (:import-from #:reblocks/hooks
+                #:with-render-hook)
+  (:import-from #:reblocks/page-dependencies
+                #:with-collected-dependencies)
+  (:import-from #:reblocks/request-handler
+                #:handle-normal-request)
   
   (:export #:on-error))
 (in-package #:reblocks/error-handler)
@@ -79,22 +90,22 @@
                         (etypecase error-response
                           (string error-response)
                           (widget
-                           (reblocks/page-dependencies:with-collected-dependencies ()
-                             (reblocks/hooks:with-render-hook (reblocks/variables:*current-app*)
+                           (with-collected-dependencies ()
+                             (with-render-hook (*current-app*)
                                (with-html-string ()
-                                 (reblocks/request-handler::handle-normal-request
-                                  reblocks/variables:*current-app*
+                                 (handle-normal-request
+                                  *current-app*
                                   :page
                                   ;; TODO: probably extract common error page
                                   ;; making code with server.lisp:
                                   (let ((wrapped-result
-                                          (funcall (reblocks/app::page-constructor reblocks/variables:*current-app*)
+                                          (funcall (page-constructor *current-app*)
                                                    error-response)))
                                     (make-instance 'reblocks/page::page
                                                    :root-widget wrapped-result
                                                    :path (reblocks/request:get-path)
-                                                   :expire-at (local-time:adjust-timestamp!
-                                                                  (local-time:now)
+                                                   :expire-at (adjust-timestamp!
+                                                                  (now)
                                                                 ;; It is no make sence to cache 404 pages
                                                                 (:offset :sec 5))))))))))))
                  (list 500
