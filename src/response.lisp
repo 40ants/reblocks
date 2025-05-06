@@ -18,6 +18,7 @@
                 #:removef
                 #:assoc-value)
   (:import-from #:serapeum
+                #:->
                 #:soft-list-of
                 #:defvar-unbound)
   (:import-from #:cl-cookie
@@ -28,6 +29,15 @@
                 #:in-page-context-p
                 #:current-page
                 #:on-page-redirect)
+  (:import-from #:reblocks/widget
+                #:create-widget-from
+                #:widget)
+  (:import-from #:reblocks/widgets/string-widget
+                #:make-string-widget)
+  (:import-from #:reblocks/app
+                #:app)
+  (:import-from #:reblocks/variables
+                #:*current-app*)
   (:export #:immediate-response
            #:make-response
            #:add-header
@@ -43,7 +53,10 @@
            #:add-retpath-to
            #:set-cookie
            #:cookies-to-set
-           #:status-code))
+           #:status-code
+           #:not-found-error
+           #:not-found-error-widget
+           #:not-found-error-app))
 (in-package #:reblocks/response)
 
 
@@ -115,6 +128,32 @@
 
 (define-condition redirect (immediate-response)
   ())
+
+
+(define-condition not-found-error (error)
+  ((app :initarg :app
+        :type (or null app)
+        :reader not-found-error-app)
+   (widget :initarg :widget
+           :type widget
+           :reader not-found-error-widget)))
+
+
+(-> not-found-error ((or widget string))
+    (values &optional))
+
+(defun not-found-error (widget-or-string)
+  "Signals an error about not found page or object.
+
+   As the first argument you should pass a widget which will be shown
+   as the error page's content. Also you migth pass a string, in this
+   case content widget will be created automatically."
+  (error 'not-found-error
+         :app (when (boundp '*current-app*)
+                *current-app*)
+         :widget (etypecase widget-or-string
+                   (widget widget-or-string)
+                   (string (make-string-widget widget-or-string)))))
 
 
 (defun make-response (content &key

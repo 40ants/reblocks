@@ -4,6 +4,7 @@
   (:import-from #:log4cl-extras/error
                 #:print-backtrace)
   (:import-from #:reblocks/response
+                #:not-found-error
                 #:get-response
                 #:immediate-response)
   (:import-from #:log)
@@ -119,22 +120,24 @@
                            (get-response condition)))))
         (handler-bind ((error
                          (lambda (condition)
-                           (setf backtrace
-                                 (print-backtrace :condition condition
-                                                  :stream nil))
-                           (setf catched-condition
-                                 condition)
-                           (cond ((and *invoke-debugger-on-error*
-                                       *debugger-hook*)
-                                  (log:warn "Invoking interactive debugger because Reblocks is in the debug mode")
+                           ;; We don't want to open debugger on 404 errors
+                           (unless (typep condition 'not-found-error)
+                             (setf backtrace
+                                   (print-backtrace :condition condition
+                                                    :stream nil))
+                             (setf catched-condition
+                                   condition)
+                             (cond ((and *invoke-debugger-on-error*
+                                         *debugger-hook*)
+                                    (log:warn "Invoking interactive debugger because Reblocks is in the debug mode")
 
-                                  (invoke-debugger condition))
-                                 (t
-                                  (log:warn "Returning error because Reblocks is not in the debug mode")
-                                  (return-from call-with-handled-errors
-                                    (return-error-response condition
-                                                           (print-backtrace :condition condition
-                                                                            :stream nil))))))))
+                                    (invoke-debugger condition))
+                                   (t
+                                    (log:warn "Returning error because Reblocks is not in the debug mode")
+                                    (return-from call-with-handled-errors
+                                      (return-error-response condition
+                                                             (print-backtrace :condition condition
+                                                                              :stream nil)))))))))
           (restart-case
               (funcall body-func)
             (abort ()

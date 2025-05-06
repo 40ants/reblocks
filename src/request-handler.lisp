@@ -75,14 +75,14 @@
   You can set this to NIL to disable timeouts (not recommended).")
 
 
-(defgeneric page-not-found-handler (server app)
-  (:documentation "This function is called when the current widget 
-   heirarchy fails to parse a URL.  The default behavior simply sets the 
-   404 return code")
-  (:method ((server t)
-            (app t))
-    (immediate-response "Not found"
-                        :code 404)))
+;; (defgeneric page-not-found-handler (server app)
+;;   (:documentation "This function is called when the current widget 
+;;    heirarchy fails to parse a URL.  The default behavior simply sets the 
+;;    404 return code")
+;;   (:method ((server t)
+;;             (app t))
+;;     (immediate-response "Not found"
+;;                         :code 404)))
 
 
 (defgeneric handle-ajax-request (app)

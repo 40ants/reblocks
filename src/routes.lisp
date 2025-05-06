@@ -11,7 +11,8 @@
            #:server-routes
            #:static-route
            #:page
-           #:find-route-by-class))
+           #:find-route-by-class
+           #:page-route))
 (in-package #:reblocks/routes)
 
 

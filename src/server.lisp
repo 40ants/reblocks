@@ -4,10 +4,12 @@
                 #:with-partially-matched-url
                 #:with-url)
   (:import-from #:reblocks/app
+                #:app
                 #:routes-app
                 #:app-routes
                 #:with-app)
-  (:import-from #:reblocks/widget)
+  (:import-from #:reblocks/widget
+                #:widget)
   (:import-from #:reblocks/page-dependencies
                 #:get-collected-dependencies
                 #:with-collected-dependencies)
@@ -33,6 +35,9 @@
   (:import-from #:reblocks/request
                 #:with-request)
   (:import-from #:reblocks/response
+                #:not-found-error-app
+                #:not-found-error-widget
+                #:not-found-error
                 #:with-response
                 #:get-code
                 #:get-headers
@@ -83,6 +88,9 @@
                 #:now)
   (:import-from #:40ants-routes/defroutes
                 #:include)
+  (:import-from #:serapeum
+                #:->
+                #:fmt)
   
   (:export
    #:handle-http-request
@@ -254,44 +262,42 @@ Make instance, then start it with ``start`` method."
         result))))
 
 
-(defun return-404-page (server app url-path)
-  (let ((result (page-not-found-handler server app)))
-    ;; Page-not-found handler can signal immediate response
-    ;; or just return a widget to be rendered.
-    (typecase result
-      (reblocks/widget:widget
-       (cond
-         (app
-          (with-app (app)
-            (with-collected-dependencies ()
-              (with-render-hook (app)
-                (with-html-string ()
-                  (handle-normal-request app
-                                         :page
-                                         ;; Application might define a common constructor
-                                         ;; for all pages, to add such common elements like
-                                         ;; header and footer. Here we need to apply this
-                                         ;; application's handler:
-                                         (let ((wrapped-result
-                                                 (funcall (reblocks/app::page-constructor app)
-                                                          result)))
-                                           ;; TODO: probably extract common error page
-                                           ;; making code with error-handler.lisp:
-                                           (make-instance 'page
-                                                          :root-widget wrapped-result
-                                                          :path url-path
-                                                          :expire-at (adjust-timestamp!
-                                                                         (now)
-                                                                       ;; It is no make sence to cache 404 pages
-                                                                       (:offset :sec 5)))))
+(-> make-404-page ((or null app)
+                   string
+                   widget)
+    (values string &optional))
+
+(defun make-404-page (app url-path error-widget)
+  (cond
+    (app
+     (with-app (app)
+       (with-collected-dependencies ()
+         (with-render-hook (app)
+           (with-html-string ()
+             (handle-normal-request app
+                                    :page
+                                    ;; Application might define a common constructor
+                                    ;; for all pages, to add such common elements like
+                                    ;; header and footer. Here we need to apply this
+                                    ;; application's handler:
+                                    (let ((wrapped-result
+                                            (funcall (reblocks/app::page-constructor app)
+                                                     error-widget)))
+                                      ;; TODO: probably extract common error page
+                                      ;; making code with error-handler.lisp:
+                                      (make-instance 'page
+                                                     :root-widget wrapped-result
+                                                     :path url-path
+                                                     :expire-at (adjust-timestamp!
+                                                                    (now)
+                                                                  ;; It is no make sence to cache 404 pages
+                                                                  (:offset :sec 5)))))
                   
-                  (register-dependencies
-                   (append (get-dependencies app)
-                           (get-collected-dependencies))))))))
-         (t
-          (error "No app during 404 error handling"))))
-      (t
-       result))))
+             (register-dependencies
+              (append (get-dependencies app)
+                      (get-collected-dependencies))))))))
+    (t
+     (error "No app during 404 error handling"))))
 
 
 (defmethod handle-http-request ((server server) env)
@@ -308,37 +314,52 @@ This function serves all started applications and their static files."
     (prepare-hooks
       (reblocks/hooks:with-handle-http-request-hook (env)
         (with-immediate-response-handler () 
-          (handler-case
-              (with-partially-matched-url ((object-routes server)
-                                           url-path)
+          (with-partially-matched-url ((object-routes server)
+                                       url-path)
+            (handler-case 
                 (let* ((app-route (find-route-by-class 'reblocks/app::app-routes))
                        (app (when app-route
                               (routes-app app-route))))
-                  (cond
-                    ((current-route-p)
-                     (let* ((route (progn
-                                     (unless (matched-route-p (current-route))
-                                       (error "Unexpected class of route was found: ~S"
-                                              (class-of (current-route))))
-                                     (original-route (current-route)))))
-                 
-                       (log:debug "Processing request to" url-path)
-                 
-                       ;; If dependency found, then return it's content along with content-type
-                       (with-app (app)
-                         (log:debug "Route was found" route)
-
-                         ;; This wrapper calls an interactive debugger
-                         ;; if it is available or shows an error page.
-                         (let ((resp (with-handled-errors ()
-                                       (reblocks/routes:serve route env))))
-                           (values resp)))))
-                    ;; No page was found matching the route
-                    (t
-                     (list 404
-                           (list :content-type "text/html")
-                           (list
-                            (return-404-page server app url-path)))))))))))))
+                  ;; In some cases app route might be not found and
+                  ;; we need to handle this case. This might be if all
+                  ;; apps are included into the server's routes using prefixes
+                  ;; instead of /. In this case if route does not start with
+                  ;; any app's prefix, APP will be NIL.
+                  (macrolet ((with-optional-app ((app) &body body)
+                               `(flet ((with-optional-app-thunk ()
+                                         ,@body))
+                                  (declare (dynamic-extent #'with-optional-app-thunk))
+                                  (cond
+                                    (,app (with-app (,app)
+                                            (funcall #'with-optional-app-thunk)))
+                                    (t
+                                     (funcall #'with-optional-app-thunk))))))
+                    (with-optional-app (app)
+                      (cond
+                        ((current-route-p)
+                         (let* ((route (progn
+                                         (unless (matched-route-p (current-route))
+                                           (error "Unexpected class of route was found: ~S"
+                                                  (class-of (current-route))))
+                                         (original-route (current-route)))))
+                           (log:debug "Processing request to" url-path)
+                           
+                           ;; This wrapper calls an interactive debugger
+                           ;; if it is available or shows an error page.
+                           (let ((resp (with-handled-errors ()
+                                         (reblocks/routes:serve route env))))
+                             (values resp))))
+                        ;; No page was found matching the route
+                        (t
+                         (not-found-error (fmt "Route ~S not found."
+                                               url-path)))))))
+              (not-found-error (c)
+                (list 404
+                      (list :content-type "text/html")
+                      (list
+                       (make-404-page (not-found-error-app c)
+                                      url-path
+                                      (not-found-error-widget c))))))))))))
 
 
 (defun start-server (server &key debug
