@@ -241,7 +241,7 @@
                    inner-html
                    &key (dependencies (get-dependencies app)))
   "Default page rendering template and protocol."
-  (log:debug "Rendering page for" app)
+  (log:debug "Rendering page for app ~A" app)
   (unless (boundp '*title*)
     (error "Method REBLOCKS/PAGE:RENDER should be called inside WITH-PAGE-DEFAULTS block."))
 

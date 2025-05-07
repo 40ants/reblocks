@@ -118,7 +118,7 @@
                        (lambda (condition)
                          (return-from call-with-handled-errors
                            (get-response condition)))))
-        (handler-bind ((error
+        (handler-bind ((serious-condition
                          (lambda (condition)
                            ;; We don't want to open debugger on 404 errors
                            (unless (typep condition 'not-found-error)

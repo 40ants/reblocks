@@ -11,7 +11,8 @@
            #:*max-pages-per-session*
            #:*pages-expire-in*
            #:*extend-page-expiration-by*
-           #:*delay-between-pages-cleanup*))
+           #:*delay-between-pages-cleanup*
+           #:*default-request-timeout*))
 (in-package #:reblocks/variables)
 
 
@@ -58,3 +59,7 @@
 
 (defvar *delay-between-pages-cleanup* 15
   "A number of seconds between expired pages cleanup.")
+
+
+(defvar *default-request-timeout* 180
+  "A number of seconds before request processing will be interrupted.")

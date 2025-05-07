@@ -42,7 +42,6 @@
   (reblocks/request:get-remote-ip function)
   (reblocks/request-handler:handle-request generic-function)
   (reblocks/request-handler:handle-ajax-request generic-function)
-  (reblocks/request-handler:*request-timeout* variable)
   (reblocks/request-handler:page-not-found-handler generic-function)
   (reblocks/request:with-request macro)
   (reblocks/request:pure-request-p function))

@@ -63,16 +63,9 @@
                 #:call-handler)
   
   (:export #:page-not-found-handler
-           #:*request-timeout*
            #:handle-ajax-request))
 (in-package #:reblocks/request-handler)
 
-
-(defvar *request-timeout* 180
-  "Seconds until we abort a request because it took too long.
-  This prevents threads from hogging the CPU indefinitely.
-
-  You can set this to NIL to disable timeouts (not recommended).")
 
 
 ;; (defgeneric page-not-found-handler (server app)
@@ -226,7 +219,7 @@
                 ;; This way, a dependency for widgets, created by action
                 ;; can be served when browser will follow up with next request.
                 (let ((dependencies (get-collected-dependencies)))
-                  (log:debug "Collected dependencies"
+                  (log:debug "Collected dependencies: ~A"
                              dependencies)
 
                   (register-dependencies dependencies))))))))))

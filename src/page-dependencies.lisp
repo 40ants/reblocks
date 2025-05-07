@@ -111,7 +111,7 @@ Makes deduplication by comparing dependencies' urls."
 
 
 (defmethod render-page-with-widgets ((app app))
-  (log:debug "Special Rendering page for" app)
+  (log:debug "Rendering page with widgets for app ~A" app)
 
   ;; At the moment when this method is called, there is already
   ;; rendered page's content in the reblocks/html::*stream*.

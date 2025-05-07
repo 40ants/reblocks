@@ -66,6 +66,7 @@
                 #:ensure-pages-cleaner-is-running)
   (:import-from #:40ants-routes/routes)
   (:import-from #:reblocks/variables
+                #:*default-request-timeout*
                 #:*current-app*
                 #:*server*)
   (:import-from #:40ants-routes/matched-route
@@ -91,6 +92,8 @@
   (:import-from #:serapeum
                 #:->
                 #:fmt)
+  (:import-from #:reblocks/deadline
+                #:with-deadline)
   
   (:export
    #:handle-http-request
@@ -131,7 +134,17 @@
    (routes :initform (make-initial-server-routes)
      :accessor object-routes)
    (apps :initform nil
-         :accessor apps))
+         :accessor apps)
+   (request-timeout
+    :initarg :request-timeout
+    :type (or null integer)
+    :initform *default-request-timeout*
+    :reader request-timeout
+    :documentation
+    "Seconds until we abort a request because it took too long.
+     This prevents threads from hogging the CPU indefinitely.
+
+     You can set this to NIL to disable timeouts (not recommended)."))
   (:documentation "Base class for all Reblocks servers. Redefine it if you want to add additional HTTP midlewares, etc."))
 
 
@@ -227,13 +240,15 @@
                     (port 8080)
                     (interface "localhost")
                     (server-type :hunchentoot)
-                    (server-class 'server))
+                    (server-class 'server)
+                    (request-timeout *default-request-timeout*))
   "Makes a webserver instance.
 Make instance, then start it with ``start`` method."
   (make-instance server-class
                  :port port
                  :interface interface
-                 :server-type server-type))
+                 :server-type server-type
+                 :request-timeout request-timeout))
 
 
 ;; TODO: rewrite this somehow using 40ants-routes:
@@ -347,7 +362,8 @@ This function serves all started applications and their static files."
                            ;; This wrapper calls an interactive debugger
                            ;; if it is available or shows an error page.
                            (let ((resp (with-handled-errors ()
-                                         (reblocks/routes:serve route env))))
+                                         (with-deadline (:seconds (request-timeout server))
+                                           (reblocks/routes:serve route env)))))
                              (values resp))))
                         ;; No page was found matching the route
                         (t
@@ -463,14 +479,16 @@ If server is already started, then logs a warning and does nothing."
           collect server))
 
 
-(defun start (&key (debug t)
-                   (port 8080)
-                   (interface "localhost")
-                   (server-type :hunchentoot)
-                   (samesite-policy :lax)
-                   apps
-                   (server-class 'server)
-                   (disable-welcome-app nil))
+(defun start (&key
+              (debug t)
+              (port 8080)
+              (interface "localhost")
+              (server-type :hunchentoot)
+              (samesite-policy :lax)
+              apps
+              (server-class 'server)
+              (request-timeout *default-request-timeout*)
+              (disable-welcome-app nil))
   "Starts reblocks framework hooked into Clack server.
 
    Set DEBUG to true in order for error messages and stack traces to be shown
@@ -487,33 +505,30 @@ If server is already started, then logs a warning and does nothing."
 
   (let ((server (find-server interface port)))
     (reblocks/hooks:with-start-reblocks-hook ()
-      (cond
-        ((and server
-              (running-p server))
-         (restart-case
-             (error "Server already running on port ~A" port)
-           (continue ()
-             :report "Stop the old server and start a new one."
-             (stop)
-             (setf (object-routes server)
-                   (make-initial-server-routes)
-                   ;; (reblocks/routes::make-routes)
-                   ))))
-        (t
-         (setf server
-               (make-server :interface interface
-                            :port port
-                            :server-type server-type
-                            :server-class server-class))
-         (setf (gethash (cons interface port) *servers*)
-               server)))
+      (when (and server
+                 (running-p server))
+        (restart-case
+            (error "Server already running on port ~A" port)
+          (continue ()
+            :report "Stop the old server and start a new one."
+            (stop)
+            (setf server nil))))
+      
+      (setf server
+            (make-server :interface interface
+                         :port port
+                         :server-type server-type
+                         :server-class server-class
+                         :request-timeout request-timeout))
+      (setf (gethash (cons interface port) *servers*)
+            server)
       
       (log:info "Starting reblocks" port server-type debug)
 
       ;; TODO: move these settings to the server level
       (if debug
-          (reblocks/debug:on)
-          (reblocks/debug:off))
+        (reblocks/debug:on)
+        (reblocks/debug:off))
 
       (start-server server
                     :samesite-policy samesite-policy
