@@ -4,8 +4,6 @@
                 #:defsection)
   (:import-from #:reblocks/routes
                 #:route
-                #:get-route
-                #:defroute
                 #:serve)
   (:export #:@routing))
 (in-package #:reblocks/doc/routing)
@@ -13,9 +11,11 @@
 
 (defsection @routing (:title "Routing")
   (@quickstart section)
-  (@lowlevel-api section))
+  ;; (@lowlevel-api section)
+  )
 
 
+;; TODO: Rewrite this section using new routing
 (defsection @quickstart (:title "Quickstart"
                          :ignore-words ("URL"
                                         "DEFROUTES"
@@ -287,10 +287,8 @@ And access the app at <http://localhost:40000/tasks/>.
 ")
 
 
-(defsection @lowlevel-api (:title "Lowlevel API"
-                           :ignore-words ("JSON"
-                                          "URL"))
-  (route class)
-  (defroute macro)
-  (get-route function)
-  (serve generic-function))
+;; (defsection @lowlevel-api (:title "Lowlevel API"
+;;                            :ignore-words ("JSON"
+;;                                           "URL"))
+;;   (route class)
+;;   (serve generic-function))

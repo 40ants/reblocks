@@ -29,8 +29,7 @@
                 #:add-routes)
   (:import-from #:reblocks/app
                 #:get-prefix
-                #:app-serves-hostname-p
-                #:reblocks-webapp-name
+                #:%reblocks-webapp-name
                 #:get-autostarting-apps)
   (:import-from #:reblocks/request
                 #:with-request)
@@ -47,7 +46,6 @@
   (:import-from #:clack
                 #:clackup)
   (:import-from #:reblocks/request-handler
-                #:page-not-found-handler
                 #:handle-normal-request)
   (:import-from #:cl-strings
                 #:starts-with)
@@ -105,7 +103,12 @@
    #:*default-samesite-policy*
    #:server
    #:insert-middleware
-   #:make-middlewares))
+   #:make-middlewares
+   #:get-interface
+   #:get-port
+   #:get-server-type
+   #:request-timeout
+   #:server-apps))
 (in-package #:reblocks/server)
 
 
@@ -130,11 +133,11 @@
    (server-type :initarg :server-type
                 :reader get-server-type)
    (handler :initform nil
-            :accessor get-handler)
+            :accessor %get-handler)
    (routes :initform (make-initial-server-routes)
-     :accessor object-routes)
+     :reader object-routes)
    (apps :initform nil
-         :accessor apps)
+         :reader server-apps)
    (request-timeout
     :initarg :request-timeout
     :type (or null integer)
@@ -201,9 +204,9 @@
 
 
 (defun insert-middleware (layers new-layer &key before after)
-  "Returns a new stack of layers inserting LAYER before or after a layer with given name.
+  "Returns a new stack of layers inserting NEW-LAYER before or after a layer with given name.
 
-   You should not give both BEFORE and AFTER arguments. If given layer not found,
+   You should not give both BEFORE and AFTER arguments. If layer with given name was not found,
    the function will signal error.
 
    Original alist LAYERS is not modified."
@@ -249,21 +252,6 @@ Make instance, then start it with ``start`` method."
                  :interface interface
                  :server-type server-type
                  :request-timeout request-timeout))
-
-
-;; TODO: rewrite this somehow using 40ants-routes:
-(defun search-app-for-request-handling (path-info hostname)
-  (dolist (app (apps *server*))
-    (let ((app-prefix (get-prefix app))
-          (app-works-for-this-hostname
-            (app-serves-hostname-p app hostname)))
-      (log:debug "Searching handler in" app app-prefix)
-
-      (when (and app-works-for-this-hostname
-                 (starts-with path-info
-                              app-prefix))
-        (return-from search-app-for-request-handling
-          app)))))
 
 
 (defmethod handle-http-request :around ((server server) env)
@@ -386,7 +374,7 @@ If server is already started, then logs a warning and does nothing."
 
   (check-type server server)
   
-  (cond ((get-handler server)
+  (cond ((%get-handler server)
          (log:warn "Webserver already started"))
 
         ;; Otherwise, starting a server
@@ -408,7 +396,7 @@ If server is already started, then logs a warning and does nothing."
            ;; about started server and we want to write into a log instead.
            (setf *clack-output* (make-string-output-stream))
            (let ((*standard-output* *clack-output*))
-             (setf (get-handler server)
+             (setf (%get-handler server)
                    (clackup app
                             :address interface
                             :server (get-server-type server)
@@ -425,10 +413,10 @@ If server is already started, then logs a warning and does nothing."
   "Stops a Clack server, but does not deactivates active applications,
    use `stop' function for that."
 
-  (if (get-handler server)
+  (if (%get-handler server)
       (progn (log:info "Stopping server" server)
-             (clack:stop (get-handler server))
-             (setf (get-handler server)
+             (clack:stop (%get-handler server))
+             (setf (%get-handler server)
                    nil))
       (log:warn "Server wasn't started"))
 
@@ -437,7 +425,7 @@ If server is already started, then logs a warning and does nothing."
 
 (defun running-p (server)
   "Returns T if server is running and NIL otherwise."
-  (when (get-handler server)
+  (when (%get-handler server)
     t))
 
 
@@ -446,9 +434,9 @@ If server is already started, then logs a warning and does nothing."
     (format stream "~A:~A "
             (get-interface server)
             (get-port server))
-    (if (apps server)
+    (if (server-apps server)
         (format stream "(~{~A~^, ~})"
-                (apps server))
+                (server-apps server))
         (format stream "(no apps)"))
     (format stream "~A"
             (if (running-p server)
@@ -548,7 +536,7 @@ If server is already started, then logs a warning and does nothing."
         ;; If / prefix is not taken, start Welcome Screen app:
         (unless disable-welcome-app
           (loop with found-root = nil
-                for app in (apps server)
+                for app in (server-apps server)
                 for prefix = (get-prefix app)
                 when (string= prefix "/")
                   do (setf found-root t)
@@ -564,7 +552,7 @@ If server is already started, then logs a warning and does nothing."
   (log:debug "Registering" app "routes for" server)
   
   ;; (loop with seen = (make-hash-table :test 'equal)
-  ;;       for app in (cons app (apps server))
+  ;;       for app in (cons app (server-apps server))
   ;;       for prefix = (get-prefix app)
   ;;       when (gethash prefix seen)
   ;;         do (error "Cannot have two defaults dispatchers with prefix \"~A\""
@@ -583,15 +571,15 @@ If server is already started, then logs a warning and does nothing."
 
 (defun start-app (server app-class &rest app-args)
   (cond
-    ((member app-class (mapcar #'reblocks/app::webapp-name (apps server)))
+    ((member app-class (mapcar #'reblocks/app::webapp-name (server-apps server)))
      (log:warn "App ~A already started" app-class))
     (t
      (let* ((app (apply #'make-instance app-class app-args))
             (prefix (get-prefix app)))
        (cond
-         ((member prefix (mapcar #'get-prefix (apps server))
+         ((member prefix (mapcar #'get-prefix (server-apps server))
                   :test #'string-equal)
-          (loop for other-app in (apps server)
+          (loop for other-app in (server-apps server)
                 for other-prefix = (get-prefix other-app)
                 when (string-equal prefix other-prefix)
                   do (error "Unable to start app ~S because app ~S already uses prefix \"~A\""
@@ -603,9 +591,9 @@ If server is already started, then logs a warning and does nothing."
           (register-app-routes server app)
           ;; We need to keep apps sorted from longest prefix to shorters,
           ;; to find a correct app to serve the request:
-          (setf (apps server)
+          (setf (slot-value server 'apps)
                 (sort (list* app
-                             (apps server))
+                             (server-apps server))
                       #'>
                       :key (compose #'length
                                     #'get-prefix)))
@@ -630,10 +618,10 @@ If server is already started, then logs a warning and does nothing."
           collect
           (reblocks/hooks:with-stop-reblocks-hook ()
             ;; TODO: maybe implement stop app generic function again?
-            ;; (loop for app in (apps server)
-            ;;       do (reblocks/app:stop (reblocks-webapp-name app)))
+            ;; (loop for app in (server-apps server)
+            ;;       do (reblocks/app:stop (%reblocks-webapp-name app)))
 
-            (setf (apps server) nil
+            (setf (slot-value server 'app) nil
                   ;; (routes server) (reblocks/routes::make-routes)
                   )
             

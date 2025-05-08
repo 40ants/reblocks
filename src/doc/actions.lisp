@@ -189,18 +189,19 @@
   
   (form-example reblocks-example)
 
-  """
-  ## API
-  """
+  ;; """
+  ;; ## API
+  ;; """
   
-  (eval-action generic-function)
-  (on-missing-action generic-function)
-  (make-action function)
-  (make-js-action function)
-  (make-js-form-action function)
-  (make-action-url function)
-  (*action-string* variable)
-  (*ignore-missing-actions* variable))
+  ;; (eval-action generic-function)
+  ;; (on-missing-action generic-function)
+  ;; (make-action function)
+  ;; (make-js-action function)
+  ;; (make-js-form-action function)
+  ;; (make-action-url function)
+  ;; (*action-string* variable)
+  ;; (*ignore-missing-actions* variable)
+  )
 
 
 (defexample button-click ()

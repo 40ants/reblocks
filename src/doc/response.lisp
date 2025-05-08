@@ -20,7 +20,8 @@
                                       "AJAX"
                                       "HTTP"))
   (@best-practice section)
-  (@api section))
+  ;; (@api section)
+  )
 
 
 (defsection @best-practice (:title "Best Practice")
@@ -46,24 +47,24 @@
 ")
 
 
-(defsection @api (:title "API")
-  (reblocks/response:add-header function)
-  (reblocks/response:add-retpath-to function)
+;; (defsection @api (:title "API")
+;;   (reblocks/response:add-header function)
+;;   (reblocks/response:add-retpath-to function)
 
-  (reblocks/response:status-code function)
-  (reblocks/response:get-content function)
-  (reblocks/response:get-content-type function)
-  (reblocks/response:get-headers function)
-  (reblocks/response:set-cookie function)
-  (reblocks/response:cookies-to-set function)
-  ;; (reblocks/response:get-response generic-function)
-  (reblocks/response:get-response (reader reblocks/response:immediate-response))
-  (reblocks/response:immediate-response function)
-  (reblocks/response:immediate-response condition)
-  (reblocks/response:make-response function)
-  (reblocks/response:make-uri function)
-  (reblocks/response:send-script function)
+;;   (reblocks/response:status-code function)
+;;   (reblocks/response:get-content function)
+;;   (reblocks/response:get-content-type function)
+;;   (reblocks/response:get-headers function)
+;;   (reblocks/response:set-cookie function)
+;;   (reblocks/response:cookies-to-set function)
+;;   ;; (reblocks/response:get-response generic-function)
+;;   (reblocks/response:get-response (reader reblocks/response:immediate-response))
+;;   (reblocks/response:immediate-response function)
+;;   (reblocks/response:immediate-response condition)
+;;   (reblocks/response:make-response function)
+;;   (reblocks/response:make-uri function)
+;;   (reblocks/response:send-script function)
 
-  "# Deprecated"
-  (reblocks/response:get-code function)
-  (reblocks/response:get-custom-headers function))
+;;   "# Deprecated"
+;;   (reblocks/response:get-code function)
+;;   (reblocks/response:get-custom-headers function))

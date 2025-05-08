@@ -94,7 +94,12 @@
    #:with-metadata-lock
    #:ensure-page-metadata
    #:find-widget-by-id
-   #:body-classes))
+   #:body-classes
+   #:page-path
+   #:page-created-at
+   #:page-expire-at
+   #:page-actions
+   #:id-to-widget))
 (in-package #:reblocks/page)
 
 

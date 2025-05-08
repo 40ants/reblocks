@@ -191,11 +191,12 @@ situation (e.g. redirect, signal an error, etc.)."))
   ```cl-transcript
   (reblocks/app:defapp test-app :autostart nil)
 
-  (let ((reblocks/request::*request*
-          (lack.request:make-request
-           (list :path-info "/blah/minor"
-                 :headers (make-hash-table)))))
-    (reblocks/app:with-app (make-instance 'test-app)
+  (let* ((reblocks/request::*request*
+           (lack.request:make-request
+            (list :path-info "/blah/minor"
+                  :headers (make-hash-table))))
+         (app (make-instance 'test-app)))
+    (reblocks/app:with-app (app)
       (reblocks/app-actions:define-action test-action test-app ())
       (reblocks/actions:make-action-url "test-action")))
   => "/blah/minor?action=test-action"

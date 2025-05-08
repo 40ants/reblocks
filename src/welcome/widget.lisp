@@ -33,7 +33,7 @@
   ;; I have to comment out this code because app activity was refactored in the
   ;; latest version. We need to rethink this idea of a welcome screen.
   ;; 
-  (let ((apps (reblocks/server::apps reblocks/server::*server*)))
+  (let ((apps (reblocks/server:server-apps reblocks/server::*server*)))
     (with-html
       (:h1 "Welcome to Reblocks!")
       (:p ("To learn more about Reblocks, head over its [documentation](http://40ants.com/reblocks/)."))

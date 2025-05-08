@@ -18,4 +18,5 @@ error page contains a backtrace.
 If you want to customize how does error page look like, define a method for
 ON-ERROR generic-function.
 "
-  (on-error generic-function))
+  ;; (on-error generic-function)
+  )

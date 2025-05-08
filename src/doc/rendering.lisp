@@ -79,35 +79,40 @@ For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
   
 """
 
-  (reblocks/html:with-html macro)
-  (reblocks/html:with-html-string macro)
-  (reblocks/html:*stream* variable)
-  (reblocks/html:*lang* variable)
-  (reblocks/html:*pretty-html* variable))
+  ;; (reblocks/html:with-html macro)
+  ;; (reblocks/html:with-html-string macro)
+  ;; (reblocks/html:*stream* variable)
+  ;; (reblocks/html:*lang* variable)
+  ;; (reblocks/html:*pretty-html* variable)
+)
 
 
 (defsection @page (:title "Page Rendering"
                    :ignore-words ("HTML"
                                   "CSS"
                                   "JS"))
-  (reblocks/page:render generic-function)
-  (reblocks/page:render-body generic-function)
-  (reblocks/page:render-dependencies generic-function)
+  ;; (reblocks/page:render generic-function)
+  ;; (reblocks/page:render-body generic-function)
+  ;; (reblocks/page:render-dependencies generic-function)
 
   """
   These functions can be used during rendering
-  to retrieve an information about the page.
+  to retrieve an information about the page:
 
+  - REBLOCKS/PAGE:RENDER generic-function
+  - REBLOCKS/PAGE:RENDER-BODY generic-function
+  - REBLOCKS/PAGE:RENDER-DEPENDENCIES generic-function
+  
   Render protocol first renders the widget tree and
   only after that renders page HTML headers.
   Thus you might use `setf` on these functions during
   widget rendering to change the title, description
   or keywords.
   """
-  (reblocks/page:get-title function)
-  (reblocks/page:get-description function)
-  (reblocks/page:get-keywords function)
-  (reblocks/page:get-language function)
+  ;; (reblocks/page:get-title function)
+  ;; (reblocks/page:get-description function)
+  ;; (reblocks/page:get-keywords function)
+  ;; (reblocks/page:get-language function)
 
   """
   If you want to change these variables globally for the whole

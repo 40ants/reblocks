@@ -33,7 +33,9 @@
            #:get-current
            #:with-app
            #:initialize-webapp
-           #:page-constructor))
+           #:page-constructor
+           #:app-routes
+           #:routes-app))
 (in-package #:reblocks/app)
 
 
@@ -46,33 +48,19 @@
 
 (defclass app ()
   ((name :type (or symbol string)
-         :accessor reblocks-webapp-name
+         :accessor %reblocks-webapp-name
          :initarg :name)
    (description :type (or null string)
-                :accessor reblocks-webapp-description
+                :accessor %reblocks-webapp-description
                 :initarg :description 
                 :initform nil 
                 :documentation "The name of the application.  This slot will be used 
                    by 'application-page-title' to generate the default title for each page.")
-   (js-backend :accessor get-js-backend 
+   (js-backend :accessor %get-js-backend
                :initarg :js-backend
                :initform :jquery
                :documentation "Specify a javascript backend for
                framework (default is :jquery)")
-   (hostnames :type list
-              :reader reblocks-webapp-hostnames
-              :initarg :hostnames
-              :initform nil
-              :documentation "The hostnames (a list of strings) reserved for this webapp.
-              See section 14.32 of RFC 2616.
-         
-              Example: '(\"foo.com\" \"www.foo.com\" \"shoo.bar.org\")
-         
-              Wildcard patterns are also allowed. Example: '(\"foo.*.com\")
-         
-              If NIL (the default), don't care about the hostname at all.
-         
-              TODO: support regex matching here.")
    (prefix :type string
            :reader get-prefix
            :initarg :prefix
@@ -87,8 +75,12 @@
                      :initform #'identity
                      :type function
                      :reader page-constructor)
-   (session-key :type symbol :accessor reblocks-webapp-session-key :initarg :session-key)
-   (debug :accessor reblocks-webapp-debug :initarg :debug :initform nil 
+   (session-key :initarg :session-key
+                :type symbol
+                :accessor %reblocks-webapp-session-key)
+   (debug :initarg :debug
+          :accessor %reblocks-webapp-debug
+          :initform nil 
           :documentation "Responsible for debug mode, use WEBAPP-DEBUG function for getting slot value"))
   (:metaclass app-class)
   (:documentation 
@@ -123,7 +115,7 @@ to be the primary way a web application is defined.
 PREFIX - an URI from where this app should be available on the server. Read more
 about this in the REBLOCKS/DOC/ROUTING:@ROUTING section.
 
-ROUTES - a 40ANTS-ROUTES/ROUTES:ROUTES object holding routes relative to the given
+ROUTES - an object of 40ANTS-ROUTES/ROUTES:ROUTES class holding routes relative to the given
 prefix.
 
 PAGE-CONSTRUCTOR - a callable of one argument which accepts a widget bound to a route
@@ -189,9 +181,9 @@ called (primarily for backward compatibility"
 
   ;; Make an instance of js backend class from
   ;; a keyword name
-  (setf (get-js-backend self)
+  (setf (%get-js-backend self)
         (make-js-backend
-         (get-js-backend self)))
+         (%get-js-backend self)))
   
   
   ;; TODO: refactor this mess
@@ -223,7 +215,7 @@ called (primarily for backward compatibility"
   "Get a running web application"
   (let ((app (find (if (symbolp name) (attributize-name name) name)
                    active-apps
-                   :key #'reblocks-webapp-name :test #'equal)))
+                   :key #'%reblocks-webapp-name :test #'equal)))
     (when (and (null app)
                signal-error)
       (error "Argument ~a is not a running reblocks application." name))
@@ -234,15 +226,6 @@ called (primarily for backward compatibility"
   "Ensure that the we have a valid webapp class"
   (unless (find-class name nil)
     (error "~a is not a valid reblocks application class." name)))
-
-(defun sort-webapps (webapps) 
-  (let* ((webapps-sorted-by-prefix (sort webapps #'string> :key #'get-prefix))
-         (webapps-sorted-by-hostname-and-prefix (stable-sort
-                                                  webapps-sorted-by-prefix
-                                                  (lambda (x y)
-                                                    (and x (null y)))
-                                                  :key #'reblocks-webapp-hostnames)))
-    webapps-sorted-by-hostname-and-prefix))
 
 
 (defgeneric initialize-webapp (app)
@@ -267,9 +250,7 @@ called (primarily for backward compatibility"
 
 
 (defmacro with-app ((app) &body forms)
-  "Bind variables that are both webapp-specific, or applicable to just
-this app, and webapp-general, or not particular to some request to
-this app, with regard to WEBAPP."
+  "Bind variable *CURRENT-APP* to the given APP argument."
   `(call-in-webapp ,app (f0 . ,forms)))
 
 
@@ -277,36 +258,18 @@ this app, with regard to WEBAPP."
   "Returns the name of the web application (also see 'defwebapp'). Please
    note, this name will be used for the composition of the page title
    displayed to the user. See 'application-page-title' for details."
-  (reblocks-webapp-name app))
+  (%reblocks-webapp-name app))
 
 (defun webapp-description (&optional (app *current-app*))
   "Returns the description of the web application. Please note, this
    description will be used for the composition of the page title
    displayed to the user. See 'application-page-title' for details."
-  (reblocks-webapp-description app))
-
-(defun webapp-hostnames (&optional (app *current-app*))
-  "Returns the hostnames this application will serve requests for."
-  (reblocks-webapp-hostnames app))
-
-
-(defun hostname-match-p (pattern hostname)
-  (values (cl-ppcre:scan-to-strings
-           (cl-ppcre:regex-replace-all "\\*" pattern ".*")
-           hostname)))
-
-(defun app-serves-hostname-p (app hostname)
-  "Does APP serve requests for HOSTNAME?"
-  (let ((hostname (car (cl-ppcre:split ":" hostname)))) ; ignore port
-  (or (null (webapp-hostnames app))
-        (member hostname (webapp-hostnames app) :test #'equalp)
-        (loop for pattern in (webapp-hostnames app)
-              thereis (hostname-match-p pattern hostname)))))
+  (%reblocks-webapp-description app))
 
 
 (defun webapp-debug (&optional (app *current-app*))
   "Whether APP is in debug mode."
-  (reblocks-webapp-debug app))
+  (%reblocks-webapp-debug app))
 
 
 (defun get-current ()

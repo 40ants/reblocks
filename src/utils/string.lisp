@@ -22,8 +22,13 @@ for presentation. Default implementations beautify strings and
 symbols.
 
 Ex:
-\(humanize-name 'hello-world) => \"Hello World\"
-\(humanize-name \"HELLO-WORLD\") => \"Hello World\"")
+
+```
+(humanize-name 'hello-world) => \"Hello World\"
+
+(humanize-name \"HELLO-WORLD\") => \"Hello World\"
+```
+")
   (:method ((name string))
     (string-capitalize (substitute #\Space #\- name)))
   (:method ((name symbol))
@@ -91,8 +96,12 @@ into a single slash.
 
 ex:
 
+```
 (remove-spurious-slashes \"/ab/////c///\")
-=> \"/ab/c/\""
+=> \"/ab/c/\"
+
+```
+"
   (with-output-to-string (s)
     (loop for c across str
           with last-char

@@ -35,7 +35,49 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org"))
-                                    :external-docs ("https://40ants.com/log4cl-extras/"))
+                                    :external-docs ("https://40ants.com/log4cl-extras/"
+                                                    "https://40ants.com/routes/"
+                                                    "https://40ants.com/reblocks-navigation-widget/"))
+  (0.62.0 2025-05-08
+        """
+This release contains many changes, but the main one is that now Reblocks uses 40ANTS-ROUTES system to provide a native way to define routes for multipage applications. Previously you have to process routes manually or use REBLOCKS-NAVIGATION-WIDGET system.
+
+Here are changes made in this release:
+
+- Class `reblocks/routes:route` was removed.
+- Macro `reblocks/routes:defroute` was removed.
+- Function `reblocks/routes:get-route` was removed.
+- Generic-function `reblocks/request-handler:page-not-found-handler` was removed. Now REBLOCKS/RESPONSE:NOT-FOUND-ERROR function should be used to show a widget for 404 page and this widget will be wraped by funcallable application's slot REBLOCKS/APP:PAGE-CONSTRUCTOR.
+- App's get-prefix is not setfable anymore.
+- Slash / is added to the app prefix, this might break if you use apps with prefix like /foo, because now it will become /foo/. This change is required because.
+- Handle-request generic-function was removed from reblocks/request-handler package.
+- Timing reporting was removed from request handling code.
+- Timeout handling was removed from request handling code for a while. Previously there was 180s timeout. It only worked for SBCL and used unsafe with-timeout function. We need to support deadline propagation instead.
+- A macro reblocks/routes:page was added. It can be used to define a route returning a page's root widget.
+- Among other app routes you can define a non page routes such as routes for serving static files.
+
+  Examples of routes for serving favicon and robots.txt:
+
+ #+begin_src lisp
+  ;; static
+  (get ("/favicon.ico")
+    (list 200
+          (list :content-type "image/x-icon")
+          (asdf:system-relative-pathname :reblocks-ui2-demo "demo/favicons/favicon.ico")))
+  (get ("/robots.txt")
+    "User-agent: *")
+  #+end_src
+
+- Generic function reblocks/server:serve-static-file was removed
+- App can't be bound to the particular hostname anymore. Just start a different servers on a few ports and route traffic using some kind of reverse proxy.
+- Lambda list of these macros was changed to accept arguments beside a BODY argument: with-html-string, with-app, with-collected-dependencies, with-page-defaults
+- REBLOCKS/APP:PAGE-CONSTRUCTOR slot was added to REBLOCKS/APP:APP class. This way such common elements as header and footer can be added to all application's pages including error pages.
+
+- Previously Reblocks server catched only ERROR conditions, now it will do this for any SERIOUS-CONDITION,
+  because SBCL's timeouts are inherited from the SERIOUS-CONDITION.
+- Variable `reblocks/request-handler:*request-timeout*` was removed. Now request-timeout can be specified as an argument to REBLOCKS/SERVER:START function and it's default value is available as REBLOCKS/VARIABLES:*DEFAULT-REQUEST-TIMEOUT*.
+"""
+        )
   (0.61.1 2024-09-14
           """
 Fixes
@@ -497,7 +539,7 @@ Fixed
 Changes
 -------
 
-* A new macro REBLOCKS/ROUTES:DEFROUTE was added.
+* A new macro `reblocks/routes:defroute` was added.
 
   It defines a handler for a given route. By default route should return
   a serialized JSON:

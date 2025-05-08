@@ -25,7 +25,8 @@
 ;;; Set outgoing encoding to utf-8
 (defvar *default-content-type* "text/html; charset=utf-8")
 
-(defvar *ignore-missing-actions* t)
+(defvar *ignore-missing-actions* t
+  "If this variable is T (default), then Reblocks will just refresh the page when an action is called but the page was already expired.")
 
 (defvar *invoke-debugger-on-error* nil
   "If this variable is t, then Weblocks will start lisp's debugger on unhandled conditions.")

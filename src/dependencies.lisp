@@ -35,7 +35,9 @@
    #:get-type
    #:render-in-ajax-response
    #:cache-in-memory-p
-   #:dependency-equal))
+   #:dependency-equal
+   #:defer
+   #:is-binary))
 (in-package #:reblocks/dependencies)
 
 

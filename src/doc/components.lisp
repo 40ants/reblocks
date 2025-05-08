@@ -108,16 +108,16 @@ and a list os Reblocks apps to serve.
 
 You might define your own server class and inherit it from REBLOCKS/SERVER:SERVER class.
 This will allow to customize a list of HTTP middlewares.
-
-Here is the list of functions useful when working with Reblocks servers:
 "
-  (reblocks/server:server class)
-  (reblocks/server:start function)
-  (reblocks/server:stop function)
-  (reblocks/server:servers function)
-  (reblocks/server:running-p function)
-  (reblocks/preview:preview function)
-  (reblocks/preview:stop function)
-  (reblocks/server:insert-middleware function)
-  (reblocks/server:make-middlewares generic-function)
-  (reblocks/server:*default-samesite-policy* variable))
+  ;; Here is the list of functions useful when working with Reblocks servers:
+  ;; (reblocks/server:server class)
+  ;; (reblocks/server:start function)
+  ;; (reblocks/server:stop function)
+  ;; (reblocks/server:servers function)
+  ;; (reblocks/server:running-p function)
+  ;; (reblocks/preview:preview function)
+  ;; (reblocks/preview:stop function)
+  ;; (reblocks/server:insert-middleware function)
+  ;; (reblocks/server:make-middlewares generic-function)
+  ;; (reblocks/server:*default-samesite-policy* variable)
+  )

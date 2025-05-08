@@ -30,11 +30,12 @@
   custom commands handler on the frontend. But in the future such facility may be added.
   """
   
-  (@commands-api section))
+  ;; (@commands-api section)
+  )
 
 
-(defsection @commands-api (:title "API")
-  (with-collected-commands macro)
-  (get-collected-commands function)
-  (add-command function)
-  (add-commands function))
+;; (defsection @commands-api (:title "API")
+;;   (with-collected-commands macro)
+;;   (get-collected-commands function)
+;;   (add-command function)
+;;   (add-commands function))

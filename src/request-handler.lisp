@@ -62,20 +62,8 @@
   (:import-from #:40ants-routes/handler
                 #:call-handler)
   
-  (:export #:page-not-found-handler
-           #:handle-ajax-request))
+  (:export #:handle-ajax-request))
 (in-package #:reblocks/request-handler)
-
-
-
-;; (defgeneric page-not-found-handler (server app)
-;;   (:documentation "This function is called when the current widget 
-;;    heirarchy fails to parse a URL.  The default behavior simply sets the 
-;;    404 return code")
-;;   (:method ((server t)
-;;             (app t))
-;;     (immediate-response "Not found"
-;;                         :code 404)))
 
 
 (defgeneric handle-ajax-request (app)

@@ -4,7 +4,7 @@
   (:import-from #:reblocks/dependencies
                 #:get-dependencies)
   (:import-from #:reblocks/app
-                #:get-js-backend
+                #:%get-js-backend
                 #:app))
 (in-package #:reblocks/app-dependencies)
 
@@ -13,6 +13,6 @@
   (log:debug "Returning new-style dependencies for base application class.")
   
   (get-dependencies
-   (get-js-backend self)))
+   (%get-js-backend self)))
 
 
