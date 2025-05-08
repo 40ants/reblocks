@@ -42,7 +42,7 @@
    #<REBLOCKS/WIDGETS/MOP:WIDGET-CLASS COMMON-LISP-USER::HELLO>
 
    CL-USER> (defmethod reblocks/widget:render ((widget hello))
-              (reblocks/html:with-html
+              (reblocks/html:with-html ()
                 (:span (\"Hello ~A\" (get-name widget)))))
    #<STANDARD-METHOD REBLOCKS/WIDGET:RENDER (HELLO) {1004E27BC3}>
    ```
@@ -89,7 +89,7 @@
            :reader get-name)))
 
   (defmethod reblocks/widget:render ((widget hello))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (:h1 ("Hello ~A" (get-name widget)))
       (:ul (:li "Just a list.")
            (:li "To demonstrate templating.")

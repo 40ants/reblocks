@@ -47,7 +47,8 @@ Name should be a keyword like a :jquery or a :prototype."))
 (defmacro with-javascript (source &rest args)
   "Places 'source' between script and CDATA elements. Used to avoid
 having to worry about special characters in JavaScript code."
-  `(with-html ,(apply #'%js source args)))
+  `(with-html ()
+     ,(apply #'%js source args)))
 
 
 (defmacro with-javascript-to-string (source &rest args)

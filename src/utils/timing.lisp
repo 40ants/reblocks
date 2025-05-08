@@ -14,12 +14,14 @@
 ;;       Add a macro lile with-collected-timings
 ;;       and use it in the request-handler.lisp
 
-(defvar *enable-timings* nil)
+(defvar *enable-timings* nil
+  "When this var is T then some parts of request will log timings.")
 
 (defvar *timing-report-fn*
   (lambda (name real cpu)
-    (log:debug (format nil "time spent for ~S (real/cpu): ~F/~F~%"
-                       name real cpu))))
+    (log:debug (format nil "Time spent for ~S, real: ~F, cpu: ~F"
+                       name real cpu)))
+  "A function of (name real and cpu) to log timing results. By defaults, logs with debug level using log4cl.")
 
 (defun report-timing (name real cpu)
   (funcall *timing-report-fn* name real cpu))

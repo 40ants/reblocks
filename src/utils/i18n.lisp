@@ -1,8 +1,7 @@
 (defpackage #:reblocks/utils/i18n
   (:use #:cl)
   (:export #:*translation-function*
-           #:translate
-           #:default-translation-function))
+           #:translate))
 (in-package #:reblocks/utils/i18n)
 
 
@@ -10,7 +9,8 @@
 ;;       it more pluggable, probably by making translate a
 ;;       a generic function. Or may be to remove i18n at all?
 
-(defvar *translation-function* nil)
+(defvar *translation-function* nil
+  "A function of two arguments: string and scope.")
 
 
 (defun translate (string &rest scope)

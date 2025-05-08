@@ -40,7 +40,7 @@ similary to Spinneret's one, but binds a few special variables to a stream
 to write output to and how to write it:
 
 ```cl-transcript
-(reblocks/html:with-html
+(reblocks/html:with-html ()
    (:ul
     (:li "One")
     (:li "Two")

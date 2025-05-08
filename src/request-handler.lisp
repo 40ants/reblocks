@@ -61,6 +61,8 @@
                 #:make-keyword)
   (:import-from #:40ants-routes/handler
                 #:call-handler)
+  (:import-from #:log4cl-extras/error
+                #:print-backtrace)
   
   (:export #:handle-ajax-request))
 (in-package #:reblocks/request-handler)
@@ -167,9 +169,11 @@
       (log:debug "Initializing a new session")
       (handler-bind ((error (lambda (c) 
                               (when *backtrace-on-session-init-error*
-                                (let ((traceback))
-                                  (log:error "Error during session initialization" traceback)))
-                              (signal c))))
+                                (let ((backtrace
+                                        (print-backtrace :condition c
+                                                         :stream nil)))
+                                  (log:error "Error during session initialization: ~A"
+                                             backtrace))))))
         (reblocks/session:init-session app)
         (setf (reblocks/session:get-value 'initialized) t)))
 

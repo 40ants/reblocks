@@ -149,14 +149,14 @@ When we render the tasks list, we add an href on the task, so we can go to `/tas
 
 ```
 TODO> (defmethod render ((task task))
-        (with-html
+        (with-html ()
           (:p (:input :type \"checkbox\"
                       :checked (done task)
                       :onclick (make-js-action
                                 (lambda (&key &allow-other-keys)
                                   (toggle task))))
               (:span (if (done task)
-                         (with-html
+                         (with-html ()
                            (:s (title task)))
                          (:a :href (format nil \"/tasks/~a\" (id task)) ;; <-- only addition.
                              (title task)))))))
@@ -177,7 +177,7 @@ TODO> (defwidget task-page ()
 
 TODO> (defmethod render ((task-page task-page))
         (let ((task (task task-page)))
-          (with-html
+          (with-html ()
             (:div \"Task \" (id task))
             (:h1 (title task))
             (:div (if (done task) \"Done!\" \"To Do.\"))
@@ -219,7 +219,7 @@ TODO> (defun make-task-page ()
               (not-found))))
 TODO> (defun not-found ()
         \"Show a 404 not found page.\"
-        (with-html
+        (with-html ()
           (:div \"Task not found.\")))
 ```
 

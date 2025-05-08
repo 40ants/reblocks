@@ -81,7 +81,7 @@ For example, you might want to store information about the current user if he lo
     ())
 
   (defmethod reblocks/widget:render ((widget login-example))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (flet ((login-callback (&key login &allow-other-keys)
                (setf (reblocks/session:get-value :user) login)
                (reblocks/widget:update widget))

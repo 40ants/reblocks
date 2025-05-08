@@ -5,13 +5,12 @@
   (:import-from #:40ants-routes/vars)
   (:import-from #:40ants-routes/included-routes)
   (:export #:serve
-           #:get-route
-           #:defroute
            #:server-routes
            #:static-route
            #:page
            #:find-route-by-class
-           #:page-route))
+           #:page-route
+           #:object-routes))
 (in-package #:reblocks/routes)
 
 

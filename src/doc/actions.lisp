@@ -215,7 +215,7 @@
                      (declare (ignore args))
                      (incf (counter widget))
                      (reblocks/widget:update widget)))))
-      (reblocks/html:with-html
+      (reblocks/html:with-html ()
         (:a :class "button"
             :onclick action
             (format nil "Clicked ~A time~:P"
@@ -236,7 +236,7 @@
                             (0 (incf (first-counter widget)))
                             (1 (incf (second-counter widget))))
                           (reblocks/widget:update widget)))))
-      (reblocks/html:with-html
+      (reblocks/html:with-html ()
         (:a :class "button"
             :onclick (format nil "initiateAction(\"~A\", {\"args\": {\"button-id\": 0}}) ; return false;"
   action-code)
@@ -259,7 +259,7 @@
            :accessor sent)))
 
   (defmethod reblocks/widget:render ((widget registration-form))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (cond
         ((sent widget)
          (let ((action (reblocks/actions:make-js-action
@@ -267,7 +267,7 @@
                           (declare (ignore args))
                           (setf (sent widget) nil)
                           (reblocks/widget:update widget)))))
-           (reblocks/html:with-html
+           (reblocks/html:with-html ()
              (:p (format nil "Congratulations, ~A!"
                          (name widget)))
              (:p (:a :class "button" :onclick action "Reset")))))
@@ -302,7 +302,7 @@
                          (declare (ignore args))
                          (incf (counter widget))
                          (reblocks/widget:update widget)))))
-      (reblocks/html:with-html
+      (reblocks/html:with-html ()
         (:a :href action-url
             (format nil "Clicked ~A time~:P"
                     (counter widget)))))))

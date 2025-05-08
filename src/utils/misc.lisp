@@ -16,18 +16,14 @@
   (:import-from #:closer-mop
                 #:funcallable-standard-object
                 #:required-args)
-  (:export #:gen-id
-           #:safe-apply
+  (:export #:safe-apply
            #:safe-funcall
-           #:request-parameter
-           #:request-parameters
            #:public-file-relative-path
            #:public-files-relative-paths
            #:symbol-status
            #:hash-keys
            #:append-custom-fields
            #:function-designator-p
-           #:defrender 
            #:find-own-symbol 
            #:relative-path 
            #:read-from-file 
@@ -51,28 +47,6 @@
   (when fn
     (apply #'funcall fn args)))
 
-;; (defun request-parameter (name)
-;;   "Get parameter 'name' from the request. If the request was
-;; submitted via GET method, the parameter is obtained from the
-;; query string. If the request was submitted via POST, the
-;; parameter is obtained from the body of the request. Otherwise, an
-;; error is signalled."
-;;   (when (eq (request-method*) :head)
-;;     (warn "User agent ~S sent a HEAD request" (hunchentoot:user-agent)))
-;;   (ecase (request-method*)
-;;     (:get (get-parameter name))
-;;     (:post (post-parameter name))))
-
-;; (defun request-parameters ()
-;;   "Get parameters alist from the request. If the request was submitted
-;; via GET method, the parameters are obtained from the query string. If
-;; the request was submitted via POST, the parameters are obtained from
-;; the body of the request. Otherwise, an error is signalled."
-;;   ;; TODO: remove this
-  
-;;   (ecase (request-method*)
-;;     (:get (get-parameters*))
-;;     (:post (post-parameters*))))
 
 (defun public-file-relative-path (type filename)
   "Infer FILENAME's relative path and extension from TYPE.

@@ -39,7 +39,7 @@
                                                     "https://40ants.com/routes/"
                                                     "https://40ants.com/reblocks-navigation-widget/"))
   (0.62.0 2025-05-08
-        """
+          """
 This release contains many changes, but the main one is that now Reblocks uses 40ANTS-ROUTES system to provide a native way to define routes for multipage applications. Previously you have to process routes manually or use REBLOCKS-NAVIGATION-WIDGET system.
 
 Here are changes made in this release:
@@ -70,14 +70,16 @@ Here are changes made in this release:
 
 - Generic function reblocks/server:serve-static-file was removed
 - App can't be bound to the particular hostname anymore. Just start a different servers on a few ports and route traffic using some kind of reverse proxy.
-- Lambda list of these macros was changed to accept arguments beside a BODY argument: with-html-string, with-app, with-collected-dependencies, with-page-defaults
+- Lambda list of these macros was changed to accept arguments beside a BODY argument: with-html, with-html-string, with-app, with-collected-dependencies, with-page-defaults
 - REBLOCKS/APP:PAGE-CONSTRUCTOR slot was added to REBLOCKS/APP:APP class. This way such common elements as header and footer can be added to all application's pages including error pages.
 
 - Previously Reblocks server catched only ERROR conditions, now it will do this for any SERIOUS-CONDITION,
   because SBCL's timeouts are inherited from the SERIOUS-CONDITION.
 - Variable `reblocks/request-handler:*request-timeout*` was removed. Now request-timeout can be specified as an argument to REBLOCKS/SERVER:START function and it's default value is available as REBLOCKS/VARIABLES:*DEFAULT-REQUEST-TIMEOUT*.
+- Slot `propagate-dirty` was removed from REBLOCKS/WIDGET:WIDGET class.
+- Slot `continuation` was moved from REBLOCKS/WIDGET:WIDGET class to REBLOCKS/WIDGETS/FUNCALL-WIDGET:FUNCALL-WIDGET class.
 """
-        )
+          )
   (0.61.1 2024-09-14
           """
 Fixes

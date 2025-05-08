@@ -30,10 +30,13 @@
                 #:is-external)
   (:export #:defexample
            #:reblocks-example
-           #:start-server
-           #:update-examples
            #:*server-url*
-           #:start-doc-server))
+           #:example-name
+           #:example-width
+           #:example-height
+           #:example-package
+           #:example-original-body
+           #:example-body))
 (in-package #:reblocks/doc/example)
 
 

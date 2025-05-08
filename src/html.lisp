@@ -28,22 +28,28 @@
   ;; pretty html, but allow to disable in tests.
   "We want an HTML nice to read by default.")
 
-(defmacro with-html (&body body)
+(defmacro with-html ((&key
+                      (pretty *pretty-html*)
+                      (lang *lang*))
+                     &body body)
   "Renders body using [Spinneret](https://github.com/ruricolist/spinneret) HTML generator.
 
    "
-  `(let ((spinneret:*html-lang* *lang*)
-         (spinneret:*html* *stream*)
+  `(let ((spinneret:*html* *stream*)
+         (spinneret:*html-lang* ,lang)
          ;; We want to an HTML which is nice to read, by default
-         (*print-pretty* *pretty-html*))
-     (spinneret:with-html
+         (*print-pretty* ,pretty))
+     (spinneret:with-html 
        ,@body)))
 
 
-(defmacro with-html-string (() &body body)
+(defmacro with-html-string ((&key
+                             (pretty *pretty-html*)
+                             (lang *lang*))
+                            &body body)
   "Like WITH-HTML, but capture the output as a string."
   `(with-output-to-string (*stream*)
-     (with-html
+     (with-html (:pretty ,pretty :lang ,lang)
        ,@body)))
 
 

@@ -23,7 +23,8 @@
   "A currently active web application.")
 
 ;;; Set outgoing encoding to utf-8
-(defvar *default-content-type* "text/html; charset=utf-8")
+(defvar *default-content-type* "text/html; charset=utf-8"
+  "Content type of the pages.")
 
 (defvar *ignore-missing-actions* t
   "If this variable is T (default), then Reblocks will just refresh the page when an action is called but the page was already expired.")
@@ -31,7 +32,8 @@
 (defvar *invoke-debugger-on-error* nil
   "If this variable is t, then Weblocks will start lisp's debugger on unhandled conditions.")
 
-(defvar *backtrace-on-session-init-error* t)
+(defvar *backtrace-on-session-init-error* t
+  "When this variable is T then a backtrace will be logged if there is an error in session initialization.")
 
 (defvar *action-string* "action"
   "A string used to pass actions from a client to the server. See

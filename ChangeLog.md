@@ -36,11 +36,13 @@ Examples of routes for serving favicon and robots.txt:
 
 * Generic function reblocks/server:serve-static-file was removed
 * App can't be bound to the particular hostname anymore. Just start a different servers on a few ports and route traffic using some kind of reverse proxy.
-* Lambda list of these macros was changed to accept arguments beside a `BODY` argument: with-html-string, with-app, with-collected-dependencies, with-page-defaults
+* Lambda list of these macros was changed to accept arguments beside a `BODY` argument: with-html, with-html-string, with-app, with-collected-dependencies, with-page-defaults
 * [`reblocks/app:page-constructor`][fcfd] slot was added to [`reblocks/app:app`][0b77] class. This way such common elements as header and footer can be added to all application's pages including error pages.
 * Previously Reblocks server catched only `ERROR` conditions, now it will do this for any `SERIOUS-CONDITION`,
   because `SBCL`'s timeouts are inherited from the `SERIOUS-CONDITION`.
 * Variable `reblocks/request-handler:*request-timeout*` was removed. Now request-timeout can be specified as an argument to [`reblocks/server:start`][290d] function and it's default value is available as [`reblocks/variables:*default-request-timeout*`][6810].
+* Slot `propagate-dirty` was removed from [`reblocks/widget:widget`][bb4e] class.
+* Slot `continuation` was moved from [`reblocks/widget:widget`][bb4e] class to [`reblocks/widgets/funcall-widget:funcall-widget`][e6c0] class.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E61-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -1804,6 +1806,8 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [997d]: api.html#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
 [e48d]: api.html#x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29
 [efa4]: api.html#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
+[bb4e]: api.html#x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29
+[e6c0]: api.html#x-28REBLOCKS-2FWIDGETS-2FFUNCALL-WIDGET-3AFUNCALL-WIDGET-20CLASS-29
 [293a]: api.html#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
 [eeaa]: http://keepachangelog.com/
 [6a57]: https://40ants.com/log4cl-extras/#x-28LOG4CL-EXTRAS-2FERROR-3APRINT-BACKTRACE-20FUNCTION-29

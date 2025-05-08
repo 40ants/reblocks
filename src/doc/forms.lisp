@@ -128,7 +128,7 @@ Let's dive right into it:
     (:caption \"A Quickform\" :type form :persistp nil)
     (some-text  :present-as input))
   :on-success (lambda (form data)
-    (with-html 
+    (with-html ()
       \"Submitted data - \"
       (str (slot-value data 'some-text)))))
 ```

@@ -192,15 +192,15 @@ TODO> (defwidget task-list ()
 
 TODO> (defmethod render ((task task))
         \"Render a task.\"
-        (with-html
+        (with-html ()
               (:span (if (done task)
-                         (with-html
+                         (with-html ()
                                (:s (title task)))
                        (title task)))))
 
 TODO> (defmethod render ((widget task-list))
         \"Render a list of tasks.\"
-        (with-html
+        (with-html ()
               (:h1 \"Tasks\")
               (:ul
                 (loop for task in (tasks widget) do
@@ -275,7 +275,7 @@ TODO> (defmethod add-task ((task-list task-list) title)
         (update task-list))
             
 TODO> (defmethod render ((task-list task-list))
-        (with-html
+        (with-html ()
           (:h1 \"Tasks\")
           (loop for task in (tasks task-list) do
             (render task))
@@ -348,14 +348,14 @@ TODO> (defmethod toggle ((task task))
         (update task))
 
 TODO> (defmethod render ((task task))
-        (with-html
+        (with-html ()
           (:p (:input :type \"checkbox\"
             :checked (done task)
             :onclick (make-js-action
                       (lambda (&key &allow-other-keys)
                         (toggle task))))
               (:span (if (done task)
-                   (with-html
+                   (with-html ()
                          ;; strike
                          (:s (title task)))
                  (title task))))))
@@ -405,14 +405,14 @@ As a homework:
 
   (defmethod reblocks/widget:render ((task task))
     "Render a task."
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (:span (if (done task)
                  (:s (title task))
                  (title task)))))
 
   (defmethod reblocks/widget:render ((widget task-list))
     "Render a list of tasks."
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (:h1 "Tasks")
       (:ul
        (loop for task in (tasks widget) do
@@ -435,7 +435,7 @@ As a homework:
     (reblocks/widget:update task-list))
   
   (defmethod reblocks/widget:render ((task-list task-list))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (:h1 "Tasks")
       (loop for task in (tasks task-list) do
         (reblocks/widget:render task))
@@ -458,7 +458,7 @@ As a homework:
     (reblocks/widget:update task))
 
   (defmethod reblocks/widget:render ((task task))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       ;; (:a :href "http://localhost:40000/examples/reblocks/doc/quickstart/example3?some=arg"
       ;;     "Click me to test POST cookies")
       (:p (:input :type "checkbox"
@@ -467,7 +467,7 @@ As a homework:
                             (lambda (&key &allow-other-keys)
                               (toggle task))))
           (:span (if (done task)
-                     (reblocks/html:with-html
+                     (reblocks/html:with-html ()
                        ;; strike
                        (:s (title task)))
                      (title task)))))))

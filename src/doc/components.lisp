@@ -78,7 +78,7 @@ Example of typical action usage:
   ((count :accessor count-of :initform 0)))
 
 (defmethod reblocks/widget:render ((widget counter))
-  (with-html
+  (with-html ()
     (:p (format nil \"The counter is at ~D.\" (count-of widget)))
     (:p (:button :onclick (reblocks/actions:make-js-action
                             (lambda (&rest args)

@@ -34,7 +34,7 @@
   ;; latest version. We need to rethink this idea of a welcome screen.
   ;; 
   (let ((apps (reblocks/server:server-apps reblocks/server::*server*)))
-    (with-html
+    (with-html ()
       (:h1 "Welcome to Reblocks!")
       (:p ("To learn more about Reblocks, head over its [documentation](http://40ants.com/reblocks/)."))
       (:p ("To learn how to create apps and widgets, see the [quickstart guide](http://40ants.com/reblocks/quickstart/)."))

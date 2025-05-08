@@ -58,7 +58,7 @@
   (let ((title "Unhandled exception"))
     (setf (reblocks/page:get-title)
           title)
-    (with-html
+    (with-html ()
       (:h1 title)
       (:h2 ("~A" (error-page-condition widget)))
       (when (and (reblocks/debug:status)

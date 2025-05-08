@@ -185,7 +185,7 @@
    By default, adds <meta> entries with Content-Type, description and keywords to the app's page."))
 
 (defmethod render-headers ((app app))
-  (with-html
+  (with-html ()
     (:meta :http-equiv "Content-type"
            :content *default-content-type*)
     
@@ -206,7 +206,7 @@
 (defmethod render-body ((app app) body-html-string)
   "Default page-body rendering method"
   
-  (with-html
+  (with-html ()
     (:raw body-html-string)))
 
 
@@ -221,7 +221,7 @@
   (etypecase dependencies
     (list (mapc #'render-in-head
                 dependencies))
-    (string (with-html
+    (string (with-html ()
               (:raw dependencies)))))
 
 
@@ -256,7 +256,7 @@
         (deps-urls (when (typep dependencies 'list)
                      (mapcar #'reblocks/dependencies:get-url
                              dependencies))))
-    (with-html
+    (with-html ()
       (:doctype)
       (:html
        (:head

@@ -93,22 +93,20 @@
   (:import-from #:reblocks/deadline
                 #:with-deadline)
   
-  (:export
-   #:handle-http-request
-   #:stop
-   #:start
-   #:serve-static-file
-   #:servers
-   #:running-p
-   #:*default-samesite-policy*
-   #:server
-   #:insert-middleware
-   #:make-middlewares
-   #:get-interface
-   #:get-port
-   #:get-server-type
-   #:request-timeout
-   #:server-apps))
+  (:export #:handle-http-request
+           #:stop
+           #:start
+           #:servers
+           #:running-p
+           #:*default-samesite-policy*
+           #:server
+           #:insert-middleware
+           #:make-middlewares
+           #:get-interface
+           #:get-port
+           #:get-server-type
+           #:request-timeout
+           #:server-apps))
 (in-package #:reblocks/server)
 
 

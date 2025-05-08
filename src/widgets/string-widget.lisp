@@ -28,9 +28,9 @@
 (defmethod render ((widget string-widget))
   (let ((content (get-content widget)))
     (if (escape-p widget)
-        (with-html
+        (with-html ()
           (:p content))
-        (with-html
+        (with-html ()
           (:p (:raw content))))))
 
 
