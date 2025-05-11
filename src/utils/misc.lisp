@@ -10,9 +10,6 @@
   (:import-from #:anaphora
                 #:it
                 #:aand)
-  (:import-from #:f-underscore
-                #:_
-                #:f_)
   (:import-from #:closer-mop
                 #:funcallable-standard-object
                 #:required-args)
@@ -124,7 +121,8 @@ answering its result."
                                            (or (third llelt) (gensym "OPTP")))
                            else collect (list llelt nil (gensym "OPTP")))))
          (keys? (member '&key lambda-list))
-         (more (and (or keys? (position-if (f_ (member _ '(&body &rest)))
+         (more (and (or keys? (position-if (lambda (item)
+                                             (member item '(&body &rest)))
                                            lambda-list))
                     (gensym "MORE"))))
     `(lambda (,@reqs

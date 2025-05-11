@@ -1,7 +1,5 @@
 (uiop:define-package #:reblocks/app
-  (:use #:cl
-        #:f-underscore)
-  (:import-from #:cl-ppcre)
+  (:use #:cl)
   (:import-from #:reblocks/widgets/default-page
                 #:make-default-init-page-widget)
   (:import-from #:40ants-routes/routes)
@@ -251,7 +249,10 @@ called (primarily for backward compatibility"
 
 (defmacro with-app ((app) &body forms)
   "Bind variable *CURRENT-APP* to the given APP argument."
-  `(call-in-webapp ,app (f0 . ,forms)))
+  ` (flet ((with-app-thunk ()
+             ,@forms))
+      (declare (dynamic-extent #'with-app-thunk))
+      (call-in-webapp ,app #'with-app-thunk)))
 
 
 (defun webapp-name (&optional (app *current-app*))

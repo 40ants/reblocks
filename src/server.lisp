@@ -47,8 +47,6 @@
                 #:clackup)
   (:import-from #:reblocks/request-handler
                 #:handle-normal-request)
-  (:import-from #:cl-strings
-                #:starts-with)
   ;; Just dependencies
   (:import-from #:reblocks/debug)
   (:import-from #:log)

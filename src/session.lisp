@@ -19,6 +19,8 @@
                 #:ensure-gethash)
   (:import-from #:lack.session.store
                 #:remove-session)
+  (:import-from #:str
+                #:starts-with-p)
 
   (:export
    #:with-session
@@ -136,8 +138,8 @@ used to create IDs for html elements, widgets, etc."
   
   (with-output-to-string (stream)
     (loop for s being the external-symbol of (find-package :common-lisp)
-          when (str:starts-with-p "*PRINT"
-                                  (symbol-name s))
+          when (starts-with-p "*PRINT"
+                              (symbol-name s))
             collect (list s
                           (if (boundp s)
                               (symbol-value s)

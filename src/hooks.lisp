@@ -1,6 +1,5 @@
 (uiop:define-package #:reblocks/hooks
-  (:use #:cl
-        #:f-underscore)
+  (:use #:cl)
   ;; Just dependencies
   (:import-from #:reblocks/session)
   (:import-from #:log)
