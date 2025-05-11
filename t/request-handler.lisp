@@ -31,7 +31,7 @@
 
 
 (deftest process-first-request
-  (with-test-session ()
+  (with-test-session () `
     (with-request ("/foo/bar" :app app-with-init)
       ;; TODO: replace handle-request
       (let* ((content (handle-request *current-app*)))

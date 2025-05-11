@@ -29,28 +29,42 @@
   "We want an HTML nice to read by default.")
 
 (defmacro with-html ((&key
-                      (pretty *pretty-html*)
-                      (lang *lang*))
+                      (pretty nil pretty-given-p)
+                      (lang nil lang-given-p))
                      &body body)
   "Renders body using [Spinneret](https://github.com/ruricolist/spinneret) HTML generator.
 
    "
-  `(let ((spinneret:*html* *stream*)
-         (spinneret:*html-lang* ,lang)
-         ;; We want to an HTML which is nice to read, by default
-         (*print-pretty* ,pretty))
+  `(let* ((spinneret:*html* *stream*)
+          (spinneret:*html-lang* ,(if lang-given-p
+                                    lang
+                                    '*lang*))
+          ;; We want to an HTML which is nice to read, by default
+          (*print-pretty* ,(if pretty-given-p
+                             pretty
+                             '*print-pretty*))
+          ;; To make nested with-html and with-html-string work as expected,
+          ;; we need to bind this variable, because it is used as default
+          ;; for these macro:
+          (*pretty-html* *print-pretty*))
      (spinneret:with-html 
        ,@body)))
 
 
 (defmacro with-html-string ((&key
-                             (pretty *pretty-html*)
-                             (lang *lang*))
+                             (pretty nil pretty-given-p)
+                             (lang nil lang-given-p))
                             &body body)
   "Like WITH-HTML, but capture the output as a string."
-  `(with-output-to-string (*stream*)
-     (with-html (:pretty ,pretty :lang ,lang)
-       ,@body)))
+  (let ((with-html-args
+            (append
+             (when pretty-given-p
+               (list :pretty pretty))
+             (when lang-given-p
+               (list :lang lang)))))
+    `(with-output-to-string (*stream*)
+       (with-html (,@with-html-args)
+         ,@body))))
 
 
 (defun get-rendered-chunk ()

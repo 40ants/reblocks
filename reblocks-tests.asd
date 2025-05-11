@@ -5,6 +5,7 @@
                "hamcrest"
                "reblocks-tests/dependencies"
                "reblocks-tests/hooks"
+               "reblocks-tests/html"
                "reblocks-tests/reblocks"
                "reblocks-tests/request"
                "reblocks-tests/response"

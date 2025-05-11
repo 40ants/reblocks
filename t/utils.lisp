@@ -79,8 +79,8 @@
 
 
 (defmacro is-html (form expected &optional message)
-  `(let* ((reblocks/html:*pretty-html* nil)
-          (result (with-html-string ()
+  `(let* (;; (reblocks/html:*pretty-html* nil)
+          (result (with-html-string (:pretty nil)
                     ,form)))
      (ok (all-matches ,expected result)
          ;;(string= result ,expected)
