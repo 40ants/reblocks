@@ -194,11 +194,14 @@ list bound to a current request."
 
 (defun log-hooks (name)
   "A helper function to log all known hooks with given name."
-  (mapc (f_ (log:debug "Application hook" _))
+  (mapc (lambda (hook)
+          (log:debug "Application hook: ~A" hook))
         (get-callbacks *application-hooks* name))
-  (mapc (f_ (log:debug "Session hook" _))
+  (mapc (lambda (hook)
+          (log:debug "Session hook: ~A" hook))
         (get-callbacks *session-hooks* name))
-  (mapc (f_ (log:debug "Request hook" _))
+  (mapc (lambda (hook)
+          (log:debug "Request hook: ~A" hook))
         (get-callbacks *request-hooks* name)))
 
 

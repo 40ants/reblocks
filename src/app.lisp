@@ -139,7 +139,7 @@ to the class definition.
 
 AUTOSTART - Whether this webapp is started automatically when start-reblocks is
 called (primarily for backward compatibility"
-  (declare (ignore prefix description))
+  (declare (ignore prefix description page-constructor))
   
   (let* ((routes-var-name
            (symbolicate "*" name "-ROUTES*"))
