@@ -8,8 +8,8 @@
                 #:*current-app*)
   (:import-from #:reblocks/widgets/string-widget
                 #:make-string-widget)
-  (:import-from #:reblocks/request-handler
-                #:handle-request)
+  ;; (:import-from #:reblocks/request-handler
+  ;;               #:handle-request)
   (:import-from #:reblocks/response
                 #:get-code
                 #:get-content
@@ -31,15 +31,16 @@
 
 
 (deftest process-first-request
-  (with-session
+  (with-test-session ()
     (with-request ("/foo/bar" :app app-with-init)
+      ;; TODO: replace handle-request
       (let* ((content (handle-request *current-app*)))
         (ok (search "Hello world" content)
             "Result should have a greeting.")))))
 
 
 (deftest process-request-with-missing-action
-  (with-session
+  (with-test-session ()
     (with-request ("/foo/bar?action=store-data" :app app-with-init)
       (let* ((reblocks/variables:*ignore-missing-actions* t)
              (response (handle-request *current-app*)))

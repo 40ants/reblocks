@@ -9,7 +9,7 @@
 
 
 (deftest make-uri-test
-  (with-session
+  (with-test-session ()
     (with-request ("http://example.com:10050/foo/bar")
       (ok (equal (make-uri "/login")
                  "http://example.com:10050/login")
@@ -21,19 +21,19 @@
 
 
 (deftest relative-make-uri
-  (with-session
+  (with-test-session ()
     (with-request ("http://example.com:10050/foo/bar")
       (ok (equal (make-uri "minor")
                  "http://example.com:10050/foo/minor")
           "Relative path substitutes top level path component if it is not ended with slash")))
 
-  (with-session
+  (with-test-session ()
     (with-request ("http://example.com:10050/foo/bar/")
       (ok (equal (make-uri "minor")
                  "http://example.com:10050/foo/bar/minor")
           "Relative path added to the base path if it is ended with slash")))
 
-  (with-session
+  (with-test-session ()
     (with-request ("http://example.com:10050/foo/bar/")
       (ok (equal (make-uri "../minor")
                  "http://example.com:10050/foo/minor")
@@ -41,7 +41,7 @@
 
 
 (deftest add-retpath-to-test
-  (with-session
+  (with-test-session ()
     (with-request ("http://example.com:10050/foo/bar")
       (ok (equal (add-retpath-to "/login")
                  "/login?retpath=http%3A%2F%2Fexample.com%3A10050%2Ffoo%2Fbar")

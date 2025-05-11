@@ -411,12 +411,14 @@ If server is already started, then logs a warning and does nothing."
   "Stops a Clack server, but does not deactivates active applications,
    use `stop' function for that."
 
-  (if (%get-handler server)
-      (progn (log:info "Stopping server" server)
-             (clack:stop (%get-handler server))
-             (setf (%get-handler server)
-                   nil))
-      (log:warn "Server wasn't started"))
+  (cond
+    ((%get-handler server)
+     (progn (log:info "Stopping server" server)
+            (clack:stop (%get-handler server))
+            (setf (%get-handler server)
+                  nil)))
+    (t
+     (log:warn "Server wasn't running")))
 
   server)
 
@@ -619,7 +621,7 @@ If server is already started, then logs a warning and does nothing."
             ;; (loop for app in (server-apps server)
             ;;       do (reblocks/app:stop (%reblocks-webapp-name app)))
 
-            (setf (slot-value server 'app) nil
+            (setf (slot-value server 'apps) nil
                   ;; (routes server) (reblocks/routes::make-routes)
                   )
             

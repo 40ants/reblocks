@@ -14,7 +14,7 @@
 
 
 (deftest refresh-request-p-1
-  (with-session
+  (with-test-session ()
     (with-request ("/foo/bar")
       (ok (null (refresh-request-p))
           "When there is no Cache-Control header, function returns NIL"))
@@ -43,7 +43,7 @@
 
 
 (deftest with-request-returns-value-of-last-body-expression
-  (with-session
+  (with-test-session ()
     (let* ((env (generate-env "/" :method :get))
            (request (make-request env)))
       (ok (equal (reblocks/request:with-request (request)

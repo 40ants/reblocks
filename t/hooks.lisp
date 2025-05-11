@@ -13,7 +13,7 @@
 
 (deftest empty-call-back-list
   (testing "Callbacks list for unknown name is empty"
-    (with-session
+    (with-test-session ()
       (with-request ("/")
         (ng (get-callbacks
              *session-hooks*
@@ -26,7 +26,7 @@
 
 
 (deftest on-session-hook-test
-  (with-session
+  (with-test-session ()
       (with-request ("/")
         (reblocks/hooks:on-session-hook-test-action 
           foo ())
@@ -44,7 +44,7 @@
 
 (deftest hooks-evaluation
   (testing "Without params"
-    (with-session
+    (with-test-session ()
       (with-request ("/")
         (let (call-result)
           
@@ -61,7 +61,7 @@
                      'callback-was-called))))))
 
   (testing "With params"
-    (with-session
+    (with-test-session ()
       (with-request ("/")
         (let (call-result)
           (reblocks/hooks:on-session-hook-some-hook
@@ -76,7 +76,7 @@
 
 
   (testing "Hook should return last form's value"
-    (with-session
+    (with-test-session ()
       (with-request ("/")
         (let ((result (reblocks/hooks:with-test-action-hook ()
                         'foo
@@ -88,7 +88,7 @@
 
 (deftest nested-evaluation
   ;; Here we check if hooks are propertly chained
-  (with-session
+  (with-test-session ()
     (with-request ("/")
       (reblocks/hooks:on-session-hook-some-hook 
         inner-value (param)
@@ -120,7 +120,7 @@
 
 (deftest rewritting-callback
   (testing "If a callback with same name already exists, it is rewritten"
-    (with-session
+    (with-test-session ()
       (with-request ("/")
         (let (result)
           (reblocks/hooks:on-session-hook-test-action foo ()
@@ -143,7 +143,7 @@
 
 (deftest automatic-call-next-hook
   (testing "Call-next-hook will be called automatically if it wasn't used in a callback body."
-    (with-session
+    (with-test-session ()
       (with-request ("/")
         (let (result)
           ;; First callback will push :foo

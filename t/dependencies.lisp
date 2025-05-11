@@ -196,7 +196,7 @@
 
 (deftest deduplication
   (testing "Dependencies should be deduplicated on collection."
-    (with-collected-dependencies
+    (with-collected-dependencies ()
       (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests"))
       (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests"))
       

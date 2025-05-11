@@ -26,19 +26,16 @@
   (:import-from #:hamcrest/rove
                 #:assert-that
                 #:contains)
-  (:import-from #:reblocks/routes
-                #:*routes*)
   
-  (:export
-   #:with-request
-   #:with-session
-   #:is-html
-   #:catch-hooks
-   #:assert-hooks-called))
+  (:export #:with-request
+           #:with-test-session
+           #:is-html
+           #:catch-hooks
+           #:assert-hooks-called))
 (in-package #:reblocks-tests/utils)
 
 
-(defmacro with-session (&body body)
+(defmacro with-test-session (() &body body)
   `(let ((*session* (make-hash-table :test 'equal)))
      ,@body))
 
@@ -70,7 +67,7 @@
                                  :headers ',lowercased-headers))
               ;; we need to setup a current webapp, because
               ;; uri tokenizer needs to know app's uri prefix
-              (*routes* (reblocks/routes::make-routes))
+              ;; (*routes* (reblocks/routes::make-routes))
               (*current-app* (make-instance ',app)))
          (reblocks/request:with-request ((make-request env))
            (reblocks/response::with-response ()

@@ -1,4 +1,4 @@
-(defpackage #:reblocks/doc/quickstart
+(uiop:define-package #:reblocks/doc/quickstart
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
@@ -6,14 +6,20 @@
                 #:@routing)
   (:import-from #:reblocks/doc/example
                 #:defexample)
-  (:import-from #:reblocks-ui/form)
+  (:import-from #:named-readtables
+                #:in-readtable)
+  (:import-from #:pythonic-string-reader
+                #:pythonic-string-syntax)
   (:import-from #:reblocks/html)
   (:export #:@quickstart))
 (in-package #:reblocks/doc/quickstart)
 
 
+(in-readtable pythonic-string-syntax)
+
 (defsection @quickstart (:title "Quickstart"
                          :ignore-words ("ASDF"
+                                        "API"
                                         "TODO"
                                         "CLOS"
                                         "REPL"
@@ -21,6 +27,7 @@
                                         "HTML"
                                         "DOM"
                                         "UI"
+                                        "URL"
                                         "DONE"
                                         "ADD-TASK"
                                         "ONCLICK"
@@ -28,6 +35,7 @@
                                         "TASK-LIST"
                                         "RENDER"
                                         "AJAX")
+                         :external-docs ("https://40ants.com/reblocks-ui")
                          :external-links (("Webinspector" . "https://developers.google.com/web/tools/chrome-devtools/inspect-styles/")
                                           ("Ultralisp" . "https://ultralisp.org/")
                                           ("Reblocks-ui" . "https://github.com/40ants/reblocks-ui/")
@@ -35,176 +43,182 @@
                                           ("CLOS-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/clos.html")
                                           ("DB-Cookbook" . "https://lispcookbook.github.io/cl-cookbook/databases.html")
                                           ("Spinneret" . "https://github.com/ruricolist/spinneret/")))
-  "
-> This version of Reblocks is not in Quicklisp yet. To
-> install it you need to clone the repository somewhere where
-> ASDF will find it, for example, to the `~/common-lisp/` directory.
-> You also need to clone [reblocks-ui][reblocks-ui].
+  """
 
-> You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Reblocks-related libraries are present and up to date.
+# Initial Setup
+
+> It is better to use the latest Reblocks because version from Quicklisp can be outdated.
+> You can install the [Ultralisp][Ultralisp] Quicklisp distribution where all Reblocks-related libraries are present and up to date.
 
 
-Load reblocks and create a package for a sandbox:
-
-```
-CL-USER> (ql-dist:install-dist \"http://dist.ultralisp.org/\"
-                               :prompt nil)
-CL-USER> (ql:quickload '(:reblocks :reblocks-ui :find-port))
-CL-USER> (defpackage todo
-           (:use #:cl
-                 #:reblocks-ui/form
-                 #:reblocks/html)
-           (:import-from #:reblocks/widget
-                    #:render
-                    #:update
-                    #:defwidget)
-           (:import-from #:reblocks/actions
-                    #:make-js-action)
-           (:import-from #:reblocks/app
-                    #:defapp))
-#<PACKAGE \"TODO\">
-CL-USER> (in-package todo)
-#<PACKAGE \"TODO\">
-```
-
-Now, create an application:
+Before we start, quickload `reblocks` and create a package for our todo application:
 
 ```
-TODO> (defapp tasks)
+(defpackage #:todo
+  (:use #:cl)
+  (:import-from #:reblocks/widget
+                #:render
+                #:update
+                #:defwidget)
+  (:import-from #:reblocks/actions
+                #:make-js-form-action
+                #:make-js-action)
+  (:import-from #:reblocks/app
+                #:defapp)
+  (:import-from #:reblocks/routes
+                #:page)
+  (:import-from #:serapeum
+                #:soft-list-of)
+  (:import-from #:40ants-routes/route-url
+                #:route-url)
+  (:import-from #:reblocks/html
+                #:with-html)
+  (:import-from #:reblocks/widgets/string-widget
+                #:make-string-widget)
+  (:shadowing-import-from #:40ants-routes/defroutes
+                          #:get))
+(in-package #:todo)
 ```
 
-By default, the name of the app defines the url where it is
-accessible. Here, the \"tasks\" app will be accessible under
-<http://localhost:40000/tasks>. We can change it with the
-PREFIX argument of REBLOCKS/APP:DEFAPP:
+# Basic App
+
+Full source of this step is in [here](https://github.com/40ants/reblocks/tree/master/examples/todo/step1.lisp).
+
+At this stage, we will create a simple Reblocks application:
 
 ```
-TODO> (defapp tasks
-         :prefix \"/\")
+(defapp tasks
+  :prefix "/"
+  :routes ((page ("/" :name "tasks-list")
+             (make-string-widget "Hello World!"))))
+
+
+
+(defun start (&key (port 8080))
+  (reblocks/server:start :port port
+                         :apps '(tasks)))
+
 ```
 
-Now our app runs under the root url.
+By default, the name of the app defines the url where it will
+accessible. If we omit PREFIX argument here, then the application
+will be accessable at <http://localhost:8080/tasks>. But we want
+to make it work at the site's root.
 
-```
-TODO> (reblocks/debug:on)
-TODO> (defvar *port* (find-port:find-port))
-TODO> (reblocks/server:start :port *port*)
- <INFO> [19:41:00] reblocks/server server.lisp (start) -
-  Starting reblocks REBLOCKS/SERVER::PORT: 40000
-  REBLOCKS/SERVER::SERVER-TYPE: :HUNCHENTOOT DEBUG: T
- <INFO> [19:41:00] reblocks/server server.lisp (start-server) -
-  Starting webserver on REBLOCKS/SERVER::INTERFACE: \"localhost\"
-  REBLOCKS/SERVER::PORT: 40000 DEBUG: T
- #<SERVER port=40000 running>
- (NIL)
-```
+Also pay attention to the ROUTES argument. This is how we can
+define a set of application's pages. Previously for the same effect
+we have to use a separate ASDF system `reblocks-navigation-widget`,
+but now this kind of routing is embedded into the Reblocks.
 
-Open <http://localhost:40000/tasks/> in your browser (double check the port) and you'll see a
+Run `start` function from the REPL to make our webserver running on port 8080.
+
+Open <http://localhost:8080/> in your browser (double check the port) and you'll see a
 text like that:
 
 ```
-No reblocks/page:init-page method defined.
-Please define a method reblocks/page:init-page to initialize a page.
-
-It could be something simple, like this one:
-
-(defmethod reblocks/page:init-page ((app tasks) url-path expire-at)
-            \"Hello world!\")
-
-Read more in the documentaion.
+Hello World!
 ```
 
-It means that you didn't write any code for your application. Let's do
-it now and make an application which outputs a list of tasks.
+During this tutorial we will add features to this simple web application
+and finally we'll build the mandatory TODO-list app:
 
-In the end, we'll build the mandatory TODO-list app:
+![The TODO-list app in Reblocks](docs/images/quickstart/final.gif)
 
-![The TODO-list app in Reblocks](docs/images/quickstart-check-task.gif)
 
-# The Task widget
+# Tasks List Page
+
+Full source of this step is in [here](https://github.com/40ants/reblocks/tree/master/examples/todo/step2.lisp).
+
+## Task Model
+
+First of all, we need to define a data-model for keeping information about tasks.
+For simplicity of our toy project, we will keep data in the `*store*` hash-table:
 
 ```
-TODO> (defwidget task ()
-        ((title
-          :initarg :title
+(defclass task ()
+  ((id :initarg :id
+       :initform (error "Field ID is required")
+       :accessor id
+       :type integer)
+   (title :initarg :title
+          :initform ""
           :accessor title)
-         (done
-          :initarg :done
-          :initform nil
-          :accessor done)))
+   (description :initarg :description
+                :initform ""
+                :accessor description)
+   (done :initarg :done
+         :initform nil
+         :accessor done)))
+
+
+(defvar *store* (make-hash-table)
+  "Dummy store for tasks: id -> task.")
+
+
+(defvar *counter* 0
+  "Simple counter for the hash table store.")
+
+
+(defun make-task (title &key done)
+  "Create a task and store it by its id."
+  (let* ((id (incf *counter*))
+         (task (make-instance 'task :title title :done done :id id)))
+    (setf (gethash id *store*) task)
+    task))
+
+
+(defun get-task (id)
+  (gethash id *store*))
 ```
 
-This code defines a task widget, the building block of our
-application. REBLOCKS/WIDGET:DEFWIDGET is similar to Common Lisp's DEFCLASS,
-in fact it is only a wrapper around it. It takes a name, a list of
-super-classes (here `()`) and a list of slot definitions.
-
-We can create a task with MAKE-INSTANCE:
-
-```
-TODO> (defvar *task-1* (make-instance 'task :title \"Make my first Reblocks app\"))
-TODO> *task-1*
-#<TASK {1005406F33}>
-```
-
-Above, we provide only a TITLE argument, and since we didn't give a DONE argument,
-it will be instanciated to its initform, which is NIL.
-
-We defined accessors for both slots, so we can read and set them easily:
-
-```
-TODO> (title *task-1*)
-\"Make my first Reblocks app\"
-TODO> (done *TASK-1*)
-NIL
-TODO> (setf (done *TASK-1*) t)
-T
-```
-
-We define a constructor for our task:
-
-```
-TODO> (defun make-task (title &key done)
-        (make-instance 'task :title title :done done))
-```
-
-It isn't mandatory, but it is good practice to do so.
-
+Here we've defined the `task` class and the `make-task` function for creating
+instances. It isn't mandatory, but it is good practice to do so. Beside of that,
+our constructor selects an autoincremented id for a new task.
 
 If you are not familiar with the Common Lisp Object System (CLOS), you
 can have a look at [Practical Common Lisp][PCL]
 and the [Common Lisp Cookbook][CLOS-Cookbook].
 
-Now let's carry on with our application.
 
+## Task List Item
 
-# The Tasks-list widget
+Now we will create a widget to display the list of tasks.
 
-Below we define a more general widget that contains a list of tasks,
-and we tell Reblocks how to display them by *specializing* the
-REBLOCKS/WIDGET:RENDER generic-function for our newly defined classes:
+Each item in the list will be a widget itself. It will allow use
+to update only the changed piece of data. Here is the code which defines
+a list item widget holding the reference to the task object:
 
 ```
-TODO> (defwidget task-list ()
-        ((tasks
-          :initarg :tasks
-          :accessor tasks)))
+(defwidget list-item ()
+  ((task :initarg :task
+         :type task
+         :reader task)))
 
-TODO> (defmethod render ((task task))
-        \"Render a task.\"
-        (with-html ()
-              (:span (if (done task)
-                         (with-html ()
-                               (:s (title task)))
-                       (title task)))))
 
-TODO> (defmethod render ((widget task-list))
-        \"Render a list of tasks.\"
-        (with-html ()
-              (:h1 \"Tasks\")
-              (:ul
-                (loop for task in (tasks widget) do
-                      (:li (render task))))))
+(defun make-list-item (task)
+  (make-instance 'list-item
+                 :task task))
+```
+
+This code defines a `list-item` widget, the building block of our
+application. REBLOCKS/WIDGET:DEFWIDGET macro is similar to Common Lisp's DEFCLASS,
+in fact it is only a wrapper around it. It takes a name, a list of
+super-classes (here `()`) and a list of slot definitions.
+
+We can create a list-item with `make-list-item` function.
+
+Now we need to define a method for REBLOCKS/WIDGET:RENDER generic-function to render
+this widget:
+
+```
+(defmethod reblocks/widget:render ((list-item list-item))
+  (let ((task (task list-item)))
+    (with-html ()
+      (:p (:input :type "checkbox"
+                  :checked (done task))
+          (if (done task)
+              (:s (title task))
+              (title task))))))
 ```
 
 The REBLOCKS/HTML:WITH-HTML macro uses
@@ -216,166 +230,419 @@ REBLOCKS/WIDGET:RENDER generic-function in the REPL:
 
 
 ```
-TODO> (render *task-1*)
-<div class=\"widget task\"><span>Make my first Reblocks app</span>
+TODO> (ql:quickload :reblocks-tests)
+
+TODO> (reblocks-tests/utils:with-test-session ()
+          (render
+           (make-list-item
+            (make-task "Make my first Reblocks app"))))
+<div class="widget list-item" id=dom0><p>
+  <input type=checkbox>Make my first Reblocks app
 </div>
-NIL
 ```
 
-But we still don't get anything in the browser.
 
+## Toggling Task State
 
-```
-TODO> (defun make-task-list (&rest rest)
-        (let ((tasks (loop for title in rest
-                        collect (make-task title))))
-          (make-instance 'task-list :tasks tasks)))
-
-TODO> (defmethod reblocks/page:init-page ((app tasks) (url-path string) expire-at)
-         (declare (ignorable app url-path expire-at))
-         (make-task-list \"Make my first Reblocks app\"
-                         \"Deploy it somewhere\"
-                         \"Have a profit\"))
-```
-
-This defines a list of tasks (for simplicity, they are defined as a
-list in memory) and returns what will be our session's root widget..
-
-Restart the application:
+To make our task list more useful, we need to allow a user to interact with it.
+Let's add an onclick handler which will change task's state from `todo` to `done` and vice versa:
 
 ```
-TODO> (reblocks/debug:reset-latest-session)
+(defun toggle (list-item)
+  (let ((task (task list-item)))
+    (setf (done task)
+          (if (done task)
+              nil
+              t))
+    (update list-item)))
+
+
+(defmethod reblocks/widget:render ((list-item list-item))
+  (let ((task (task list-item)))
+    (with-html ()
+      (:p (:input :type "checkbox"
+                  :checked (done task)
+                  :onclick (make-js-action
+                            (lambda (&key &allow-other-keys)
+                              (toggle list-item))))
+          (if (done task)
+              (:s (title task))
+              (title task))))))
 ```
 
-Right now it should look like this:"
+Here we've defined the `toggle` function which will be called
+when user clicks the task list item. Also, we've added `on-click` argument
+to the `:input` element. Function REBLOCKS/ACTIONS:MAKE-JS-ACTION
+accepts a lisp function and returns a string with JavaScript code which
+calls this lisp function from the frontend side.
 
-  (example1 reblocks-example)
+After changing a task state, `toggle` function calls
+REBLOCKS/WIDGET:UPDATE generic-function to send updated widget HTML code
+from the backend to the frontend. This mechanism is close to the [HTMX](https://htmx.org/),
+but with Reblocks you don't need to define a special API handler for each action
+or to embed something into the HTML attributes - Reblocks does this for you and
+keeps in the session a closure, created by lambda form.
 
-  "# Adding tasks
-
-Now, we'll add some ability to interact with a list – to add some tasks
-into it, like so:
-
-![Adding tasks in our TODO-list interactively.](docs/images/quickstart-add-task.gif)
-
-Import a new module, [reblocks-ui][reblocks-ui] to help in creating forms and other UI elements:
-
-```
-TODO> (ql:quickload \"reblocks-ui\")
-TODO> (use-package :reblocks-ui/form)
-```
-
-Write a new ADD-TASK method and modify the RENDER method of a
-task-list to call ADD-TASK in response to POST method:
-
-```
-TODO> (defmethod add-task ((task-list task-list) title)
-        (push (make-task title)
-              (tasks task-list))
-        (update task-list))
-            
-TODO> (defmethod render ((task-list task-list))
-        (with-html ()
-          (:h1 \"Tasks\")
-          (loop for task in (tasks task-list) do
-            (render task))
-          (with-html-form (:POST (lambda (&key title &allow-other-keys)
-                                         (add-task task-list title)))
-            (:input :type \"text\"
-                    :name \"title\"
-                    :placeholder \"Task's title\")
-            (:input :type \"submit\"
-                    :value \"Add\"))))
-
-TODO> (reblocks/debug:reset-latest-session)
-```
-
-The method ADD-TASK does only two simple things:
-
-- it adds a task into a list;
-- it tells Reblocks that our task list should be redrawn.
-
-This second point is really important because it allows Reblocks to render
-necessary parts of the page on the server and to inject it into the HTML DOM
-in the browser. Here it rerenders the task-list widget, but we can as well [REBLOCKS/WIDGET:UPDATE][generic-function]
-a specific task widget, as we'll do soon.
-
-We are calling ADD-TASK from a lambda function to catch a
-TASK-LIST in a closure and make it availabe when reblocks will
-process AJAX request with POST parameters later.
-
-Another block in our new version of RENDER of a TASK-LIST is the form:
-
-```
-(with-html-form (:POST #'add-task)
-   (:input :type \"text\"
-    :name \"task\"
-    :placeholder \"Task's title\")
-   (:input :type \"submit\"
-    :value \"Add\"))
-```
-
-It defines a text field, a submit button and an action to perform on
-form submit.
-
-Go, try it! This demo is interative:"
-
-  (example2 reblocks-example)
-
-  
-  "
 > **This is really amazing!**
 > 
-> With Reblocks, you can handle all the business logic
+> With Reblocks, you can handle all the business logic on
 > server-side, because an action can be any lisp function, even an
 > anonymous lambda, closuring all necessary variables.
+
+
+Here is how our widget will be rendered now:
+
+```
+TODO> (reblocks-tests/utils:with-test-session ()
+          (render
+           (make-list-item
+            (make-task "Make my first Reblocks app"))))
+<div class="widget list-item" id=dom0><p>
+  <input type=checkbox
+         onclick="return initiateAction(706:877a48a20059e989576b9c560935aa2588524bab)">
+  Make my first Reblocks app
+</div>
+```
+
+
+## Rendering a List of Tasks
+
+Now we will created a widget for displaying the list of tasks.
+
+First, we will define a widget and a constructor function:
+
+```
+(defwidget task-list ()
+  ((items :initarg :items
+          :type (soft-list-of list-item)
+          :accessor list-items)))
+
+
+(defun make-task-list (&rest task-titles)
+  (let ((items
+          (loop for title in task-titles
+                for task = (make-task title)
+                collect (make-list-item task))))
+    (make-instance 'task-list
+                   :items items)))
+
+```
+
+The constructor allows to create a bunch of test tasks by giving their titles.
+
+Now let's define a render function for the `task-list` widget:
+
+```
+(defmethod reblocks/widget:render ((task-list task-list))
+  (with-html ()
+    (:h1 "Tasks")
+    
+    (loop for item in (list-items task-list) do
+      (reblocks/widget:render item))))
+```
+
+
+To check how this works, redefine our application like this:
+
+```
+(defapp tasks
+  :prefix "/"
+  :routes ((page ("/" :name "tasks-list")
+             (make-task-list "First"
+                             "Second"
+                             "Third"))))
+```
 
 Restart the application and reload the page. Test your form now and see in a
 [Webinspector][Webinspector] how Reblocks sends requests to the server and receives
 HTML code with rendered HTML block.
 
-Now we'll make our application really useful – we'll add code to toggle the tasks' status.
+
+At this stage you should see something like that:
+
+![](docs/images/quickstart/step2-1.gif)
 
 
-# Toggle tasks
+## Adding a New Task
+
+To make our application even more usable, we need to create a form for adding new tasks.
+Update the method for REBLOCKS/WIDGET:RENDER generic-function like this:
 
 ```
-TODO> (defmethod toggle ((task task))
-        (setf (done task)
+(defun add-task (task-list  title)
+  (serapeum:push-end (make-list-item (make-task title))
+                     (list-items task-list))
+  (update task-list))
+
+
+(defmethod reblocks/widget:render ((task-list task-list))
+  (with-html ()
+    (:h1 "Tasks")
+    
+    (loop for item in (list-items task-list) do
+      (reblocks/widget:render item))
+
+    ;; Form for adding a new task
+    (flet ((on-submit (&key title &allow-other-keys)
+             (add-task task-list title)))
+      (:form :onsubmit (make-js-form-action #'on-submit)
+             (:input :type "text"
+                     :name "title"
+                     :placeholder "Task's title")
+             (:input :type "submit"
+                     :class "button"
+                     :value "Add")))))
+```
+
+Here we've used REBLOCKS/ACTIONS:MAKE-JS-FORM-ACTION function to create a JavaScript code
+for calling the `on-submit` function on the backend.
+This callback just calls `add-task` function which created a new list item and calls REBLOCKS/WIDGET:UPDATE
+generic-function to update the whole list of tasks.
+
+If you need to work with large lists or complex data, then it is better to update not the whole collection
+widget but only insert a new item into the DOM. To accomplish this, you can provide an INSERTED-AFTER argument
+to REBLOCKS/WIDGET:UPDATE generic-function:
+
+
+```
+(defun add-task (task-list  title)
+  (let ((last-item (alexandria:last-elt
+                    (list-items task-list)))
+        (new-item (make-list-item (make-task title))))
+    (serapeum:push-end new-item
+                       (list-items task-list))
+
+    ;; This time we are calling update on a new list item:
+    (update new-item
+            ;; And providing to the frontend
+            ;; a hint that we've inserted this new-item
+            ;; after the some other item:
+            :inserted-after last-item)))
+```
+
+
+Right now it should look like this:
+
+![](docs/images/quickstart/step2-2.gif)
+
+or for interactive demo see:
+
+"""
+
+  (step2-example reblocks-example)
+
+  """
+# Adding Details Page
+
+Full source of this step is in [here](https://github.com/40ants/reblocks/tree/master/examples/todo/step3.lisp).
+
+Now, we'll add an ability to open the task details page. There are few possibilities to accomplish this task in the Reblocks:
+
+1. We can make a \"single page application\" and when user clicks on a list item, the whole list widget will be replaced with a widget showing details about the task. This is good if we are building a widget to be embedded into some other page where we don't want to change the URL. But in this scenario we also need to implement controls for returning back to the tasks list or hook into browser's API for managing history state. Also, in this mode all states of the application will have the same URL and it will be impossible for user to share a link to a single task.
+2. We can implement a classical web-app where task details page will have it's own URL. This makes history and sharing works as user expects. For this reason and also to show you how routing works in Reblocks, we'll go by this way.
+
+
+## Task Details Widget
+
+For showing task details we need yet another widget. You see, a widget is a representation of some data and there could be a multiple kinds of representation for the same data! In our example, the same task might be rendered as a list item or as a whole page's content.
+
+To render task with all details, define a `task-page` widget like this:
+
+```
+(defwidget task-page ()
+  ((task :initarg :task
+         :type task
+         :accessor task)
+   (edit-mode-p :initform nil
+                :type boolean
+                :accessor edit-mode-p)))
+
+
+(defun make-task-page (task-id)
+  (let ((task (get-task task-id)))
+    (cond
+      (task (make-instance 'task-page
+                           :task task))
+      (t
+       (reblocks/response:not-found-error
+        (format nil "Task with id ~A not found."
+                task-id))))))
+
+```
+
+Note, the constructor calls to REBLOCKS/RESPONSE:NOT-FOUND-ERROR function which will
+interrupt request processing and show an 404 error page to the user. This function
+accepts a text or a widget, so you might define a widget to render 404 page as you like!
+
+Now we need to write a render method for the `task-page` widget:
+
+```
+(defmethod render ((task-page task-page))
+  (let ((task (task task-page))
+        ;; This is the way how we can get URL path
+        ;; pointing to another page without hardcoding it.
+        (list-url (route-url "tasks-list")))
+    (with-html ()
+      (:div :style "display: flex; flex-direction: column; gap: 1rem"
+            (:h1 :style "display: flex; gap: 1rem; margin-bottom: 0"
+                 (:b (if (done task)
+                         "[DONE]"
+                         "[TODO]"))
+                 (:span :style "font-weight: normal"
+                        (title task)))
+            (:div (if (string= (description task) "")
+                      "No defails on this task."
+                      (description task)))
+            (:div :style "display: flex; gap: 1rem"
+                  (:a :href list-url
+                      "Back to task list."))))))
+```
+
+Pay attention how we did use ROUTE-URL to get URL of the page with tasks list. If we would hardcode here
+something like `/`, then our applications URL become incorrect in case if this application will be
+mounted to the server using some prefix like `/tasks/`, but ROUTE-URL function will always give a correct path.
+
+## New Route
+
+Talking about the routing, now we need to redefine routes of our application and add a new page:
+
+```
+(defapp tasks
+  :prefix "/"
+  :routes ((page ("/<int:task-id>" :name "task-details")
+             (make-task-page task-id))
+           (page ("/" :name "tasks-list")
+             (make-task-list "First"
+                             "Second"
+                             "Third"))))
+```
+
+Here we've defined a new page like this:
+
+```
+(page ("/<int:task-id>" :name "task-details")
+  (make-task-page task-id))
+```
+
+Path `"/<int:task-id>"` tell Reblocks to extract an argument TASK-ID if URL matches to the route, and
+this variable will be bound during handler body `(make-task-page task-id)` execution.
+
+Also, note that this route has a NAME argument with `"task-details"` value. Now we can use this name
+to get an URL of this new page using ROUTE-URL function.
+
+## Referring to a New Page
+
+Let's adjust render method of tasks-list widget to make it use ROUTE-URL for linking to the task's page:
+
+```
+(defmethod reblocks/widget:render ((list-item list-item))
+  (let* ((task (task list-item))
+         ;; Here we are referring to the new task page:
+         (details-url
+           (route-url "task-details"
+                      :task-id (id task))))
+    (with-html ()
+      (:p (:input :type "checkbox"
+                  :checked (done task)
+                  :onclick (make-js-action
+                            (lambda (&key &allow-other-keys)
+                              (toggle list-item))))
+          (:a :href details-url
               (if (done task)
-                  nil
-                  t))
-        (update task))
-
-TODO> (defmethod render ((task task))
-        (with-html ()
-          (:p (:input :type \"checkbox\"
-            :checked (done task)
-            :onclick (make-js-action
-                      (lambda (&key &allow-other-keys)
-                        (toggle task))))
-              (:span (if (done task)
-                   (with-html ()
-                         ;; strike
-                         (:s (title task)))
-                 (title task))))))
+                  (:s (title task))
+                  (title task)))))))
 ```
 
-We defined a small helper to toggle the DONE attribute, and we've
-modified our task rendering function by adding a code to render a
-checkbox with an anonymous lisp function, attached to its
-ONCLICK attribute.
+Now our web application should work like this:
 
-The REBLOCKS/ACTIONS:MAKE-JS-ACTION function returns a Javascript code,
-which calls back a lisp lambda function when evaluated in the browser.
-And because TOGGLE updates a Task widget, Reblocks returns on this
-callback a new prerendered HTML for this one task only.
+![](docs/images/quickstart/step3.gif)
 
-Here is how our app will work now:"
 
-  (example3 reblocks-example)
+Go, try it! This demo is interative:
+"""
 
-  "# What is next?
+  (step3-example reblocks-example)
+
+  
+  """
+
+
+# Editing Task
+
+Now our app almost functional. The only thing we are lacking is an ability to edit
+task's title and description. Let's modify task details page to include an edit mode!
+
+What we will do is add a state flag to the task details widget. When the flag is true, we
+will show a editable form instead of usual representation of the task:
+
+```
+(defmethod render ((task-page task-page))
+  (cond
+    ;; Edit mode
+    ((edit-mode-p task-page)
+     (let ((task (task task-page)))
+       (flet ((on-submit (&key title description cancel-button &allow-other-keys)
+                (unless cancel-button
+                  (setf (title task) title
+                        (description task) description))
+                ;; Switch back to read-only mode
+                (setf (edit-mode-p task-page) nil)
+                (update task-page)))
+
+         (with-html ()
+           (:form :onsubmit (make-js-form-action #'on-submit)
+                  :style "display: flex; flex-direction: column; gap: 1rem"
+                  (:input :type "text"
+                          :name "title"
+                          :value (title task))
+                  (:textarea :name "description"
+                             (description task))
+                  (:div :style "display: flex; gap: 1rem"
+                        (:input :type "submit"
+                                :name "cancel-button"
+                                :value "Cancel")
+                        (:input :type "submit"
+                                :name "save-button"
+                                :value "Save")))))))
+    ;; View mode
+    (t
+     (let ((task (task task-page))
+           (list-url (route-url "tasks-list")))
+       (with-html ()
+         (:div :style "display: flex; flex-direction: column; gap: 1rem"
+               (:h1 :style "display: flex; gap: 1rem; margin-bottom: 0"
+                    (:b (if (done task)
+                            "[DONE]"
+                            "[TODO]"))
+                    (:span :style "font-weight: normal"
+                           (title task)))
+               (:div (if (string= (description task) "")
+                         "No defails on this task."
+                         (description task)))
+               (:div :style "display: flex; gap: 1rem"
+                     (:a :href list-url
+                         "Back to task list.")
+                     (flet ((on-edit (&key &allow-other-keys)
+                              (setf (edit-mode-p task-page) t)
+                              (update task-page)))
+       
+                       (:form :onsubmit (make-js-form-action #'on-edit)
+                         (:input :type "submit"
+                                 :value "Edit"))))))))))
+```
+
+
+Here is how our app will work now:
+
+![](docs/images/quickstart/step4.gif)
+
+And interactive version is here:
+"""
+
+  (step4-example reblocks-example)
+
+  """
+# What is next?
 
 As a homework:
 
@@ -385,41 +652,139 @@ As a homework:
 3. Save tasks in a database (this [Cookbook chapter][DB-Cookbook] might help).
 4. Read the REBLOCKS/DOC/ROUTING:@ROUTING section.
 5. Read the rest of the documentation and make a real application, using the full
-   power of Common Lisp.")
+   power of Common Lisp.
+""")
 
 
-(defexample example1 ()
-  (reblocks/widget:defwidget task ()
-    ((title
-      :initarg :title
-      :accessor title)
-     (done
-      :initarg :done
-      :initform nil
-      :accessor done)))
-  
-  (reblocks/widget:defwidget task-list ()
-    ((tasks
-      :initarg :tasks
-      :accessor tasks)))
+(defexample step2-example ()
 
-  (defmethod reblocks/widget:render ((task task))
-    "Render a task."
-    (reblocks/html:with-html ()
-      (:span (if (done task)
-                 (:s (title task))
-                 (title task)))))
+(defclass task ()
+  ((id :initarg :id
+       :initform (error "Field ID is required")
+       :accessor id
+       :type integer)
+   (title :initarg :title
+          :initform ""
+          :accessor title)
+   (description :initarg :description
+                :initform ""
+                :accessor description)
+   (done :initarg :done
+         :initform nil
+         :accessor done)))
 
-  (defmethod reblocks/widget:render ((widget task-list))
-    "Render a list of tasks."
-    (reblocks/html:with-html ()
-      (:h1 "Tasks")
-      (:ul
-       (loop for task in (tasks widget) do
-         (:li (reblocks/widget:render task))))))
 
-  (defun make-task (title &key done)
-    (make-instance 'task :title title :done done))
+(defvar *store* (make-hash-table)
+  "Dummy store for tasks: id -> task.")
+
+
+(defvar *counter* 0
+  "Simple counter for the hash table store.")
+
+
+(defun make-task (title &key done)
+  "Create a task and store it by its id."
+  (let* ((id (incf *counter*))
+         (task (make-instance 'task :title title :done done :id id)))
+    (setf (gethash id *store*) task)
+    task))
+
+
+(defun get-task (id)
+  (gethash id *store*))
+
+
+;;;;;; Task list item
+
+(defwidget list-item ()
+  ((task :initarg :task
+         :type task
+         :reader task)))
+
+
+(defun make-list-item (task)
+  (make-instance 'list-item
+                 :task task))
+
+
+(defun toggle (list-item)
+  (let ((task (task list-item)))
+    (setf (done task)
+          (if (done task)
+              nil
+              t))
+    (update list-item)))
+
+
+(defmethod reblocks/widget:render ((list-item list-item))
+  (let ((task (task list-item)))
+    (with-html ()
+      (:p (:input :type "checkbox"
+                  :checked (done task)
+                  :onclick (make-js-action
+                            (lambda (&key &allow-other-keys)
+                              (toggle list-item))))
+          (if (done task)
+              (:s (title task))
+              (title task))))))
+
+
+;;;;;; Index page
+
+(defwidget task-list ()
+  ((items :initarg :items
+          :type (soft-list-of list-item)
+          :accessor list-items)))
+
+
+(defun make-task-list (&rest task-titles)
+  (let ((items
+          (loop for title in task-titles
+                for task = (make-task title)
+                collect (make-list-item task))))
+    (make-instance 'task-list
+                   :items items)))
+
+
+(defun add-task (task-list  title)
+  (serapeum:push-end (make-list-item (make-task title))
+                     (list-items task-list))
+  (update task-list))
+
+
+;; Alternative version for sending only a new item's HTML to the frontend
+;; (defun add-task (task-list  title)
+;;   (let ((last-item (alexandria:last-elt
+;;                     (list-items task-list)))
+;;         (new-item (make-list-item (make-task title))))
+;;     (serapeum:push-end new-item
+;;                        (list-items task-list))
+
+;;     ;; This time we are calling update on a new list item:
+;;     (update new-item
+;;             ;; And providing to the frontend
+;;             ;; a hint that we've inserted this new-item
+;;             ;; after the some other item:
+;;             :inserted-after last-item)))
+
+
+(defmethod reblocks/widget:render ((task-list task-list))
+  (with-html ()
+    (:h1 "Tasks")
+    
+    (loop for item in (list-items task-list) do
+      (reblocks/widget:render item))
+
+    ;; Form for adding a new task
+    (flet ((on-submit (&key title &allow-other-keys)
+             (add-task task-list title)))
+      (:form :onsubmit (make-js-form-action #'on-submit)
+             (:input :type "text"
+                     :name "title"
+                     :placeholder "Task's title")
+             (:input :type "submit"
+                     :class "button"
+                     :value "Add")))))
 
   (defun make-example ()
     (make-instance 'task-list
@@ -428,46 +793,128 @@ As a homework:
                                 (make-task "Have a profit")))))
 
 
-(defexample example2 (:inherits example1 :height "15em")
-  (defmethod add-task ((task-list task-list) title)
-    (push (make-task title)
-          (tasks task-list))
-    (reblocks/widget:update task-list))
-  
-  (defmethod reblocks/widget:render ((task-list task-list))
-    (reblocks/html:with-html ()
-      (:h1 "Tasks")
-      (loop for task in (tasks task-list) do
-        (reblocks/widget:render task))
-      (reblocks-ui/form:with-html-form (:POST (lambda (&key title &allow-other-keys)
-                                                (add-task task-list title)))
-        (:input :type "text"
-                :name "title"
-                :placeholder "Task's title")
-        (:input :type "submit"
-                :class "button"
-                :value "Add")))))
+(defexample step3-example (:inherits step2-example :height "15em")
+
+(defwidget task-page ()
+  ((task :initarg :task
+         :type task
+         :accessor task)
+   (edit-mode-p :initform nil
+                :type boolean
+                :accessor edit-mode-p)))
 
 
-(defexample example3 (:inherits example2 :height "15em")
-  (defmethod toggle ((task task))
-    (setf (done task)
-          (if (done task)
-              nil
-              t))
-    (reblocks/widget:update task))
+(defun make-task-page (task-id)
+  (let ((task (get-task task-id)))
+    (cond
+      (task (make-instance 'task-page
+                           :task task))
+      (t
+       (reblocks/response:not-found-error
+        (format nil "Task with id ~A not found."
+                task-id))))))
 
-  (defmethod reblocks/widget:render ((task task))
-    (reblocks/html:with-html ()
-      ;; (:a :href "http://localhost:40000/examples/reblocks/doc/quickstart/example3?some=arg"
-      ;;     "Click me to test POST cookies")
+
+(defmethod render ((task-page task-page))
+  (let ((task (task task-page))
+        ;; This is the way how we can get URL path
+        ;; pointing to another page without hardcoding it.
+        (list-url (route-url "tasks-list")))
+    (with-html ()
+      (:div :style "display: flex; flex-direction: column; gap: 1rem"
+            (:h1 :style "display: flex; gap: 1rem; margin-bottom: 0"
+                 (:b (if (done task)
+                         "[DONE]"
+                         "[TODO]"))
+                 (:span :style "font-weight: normal"
+                        (title task)))
+            (:div (if (string= (description task) "")
+                      "No defails on this task."
+                      (description task)))
+            (:div :style "display: flex; gap: 1rem"
+                  (:a :href list-url
+                      "Back to task list."))))))
+
+(defapp tasks
+  :prefix "/"
+  :routes ((page ("/<int:task-id>" :name "task-details")
+             (make-task-page task-id))
+           (page ("/" :name "tasks-list")
+             (make-task-list "First"
+                             "Second"
+                             "Third"))))
+
+
+(defmethod reblocks/widget:render ((list-item list-item))
+  (let* ((task (task list-item))
+         ;; Here we are referring to the new task page:
+         (details-url
+           (route-url "task-details"
+                      :task-id (id task))))
+    (with-html ()
       (:p (:input :type "checkbox"
                   :checked (done task)
-                  :onclick (reblocks/actions:make-js-action
+                  :onclick (make-js-action
                             (lambda (&key &allow-other-keys)
-                              (toggle task))))
-          (:span (if (done task)
-                     (reblocks/html:with-html ()
-                       ;; strike
-                       (:s (title task)))
-                     (title task)))))))
+                              (toggle list-item))))
+          (:a :href details-url
+              (if (done task)
+                  (:s (title task))
+                  (title task))))))))
+
+
+(defexample step4-example (:inherits step2-example :height "15em")
+
+(defmethod render ((task-page task-page))
+  (cond
+    ;; Edit mode
+    ((edit-mode-p task-page)
+     (let ((task (task task-page)))
+       (flet ((on-submit (&key title description cancel-button &allow-other-keys)
+                (unless cancel-button
+                  (setf (title task) title
+                        (description task) description))
+                ;; Switch back to read-only mode
+                (setf (edit-mode-p task-page) nil)
+                (update task-page)))
+
+         (with-html ()
+           (:form :onsubmit (make-js-form-action #'on-submit)
+                  :style "display: flex; flex-direction: column; gap: 1rem"
+                  (:input :type "text"
+                          :name "title"
+                          :value (title task))
+                  (:textarea :name "description"
+                             (description task))
+                  (:div :style "display: flex; gap: 1rem"
+                        (:input :type "submit"
+                                :name "cancel-button"
+                                :value "Cancel")
+                        (:input :type "submit"
+                                :name "save-button"
+                                :value "Save")))))))
+    ;; View mode
+    (t
+     (let ((task (task task-page))
+           (list-url (route-url "tasks-list")))
+       (with-html ()
+         (:div :style "display: flex; flex-direction: column; gap: 1rem"
+               (:h1 :style "display: flex; gap: 1rem; margin-bottom: 0"
+                    (:b (if (done task)
+                            "[DONE]"
+                            "[TODO]"))
+                    (:span :style "font-weight: normal"
+                           (title task)))
+               (:div (if (string= (description task) "")
+                         "No defails on this task."
+                         (description task)))
+               (:div :style "display: flex; gap: 1rem"
+                     (:a :href list-url
+                         "Back to task list.")
+                     (flet ((on-edit (&key &allow-other-keys)
+                              (setf (edit-mode-p task-page) t)
+                              (update task-page)))
+       
+                       (:form :onsubmit (make-js-form-action #'on-edit)
+                         (:input :type "submit"
+                                 :value "Edit")))))))))))
