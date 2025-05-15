@@ -25,7 +25,9 @@
                 #:fmt)
   (:import-from #:cl-mock
                 #:with-mocks
-                #:answer))
+                #:answer)
+  (:import-from #:40ants-routes/with-url
+                #:with-partially-matched-url))
 (in-package #:reblocks-tests/actions)
 
 
@@ -65,8 +67,19 @@
                      `(with-page-defaults ()
                         ,@body)
                      `(progn ,@body))))
+    ;; `(let ((uri (etypecase ,uri
+    ;;               (cons (eval ,uri))
+    ;;               (string ,uri)))))
     `(with-request (,uri :method ,method :data ,data :headers ,headers)
-       ,content)))
+       (with-partially-matched-url ((40ants-routes/routes:routes ("empty-routes")
+                                      (reblocks/routes::page ("/")
+                                        ;; Handler is empty
+                                        )
+                                      (reblocks/routes::page ("/foo/bar")
+                                        ;; Handler is empty
+                                        ))
+                                    ,uri)
+         ,content))))
 
 
 (deftest action-evaluation
@@ -151,7 +164,7 @@
 (deftest make-action-url-test
   (with-test-session ()
       (initialize-session-pages)
-      (with-request ("/foo/bar" :method :get)
+      (with-test-request ("/foo/bar" :method :get)
         (with-page-defaults ()
           (internal-make-action 'test-action "test-action")
       

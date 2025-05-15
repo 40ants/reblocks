@@ -16,7 +16,9 @@
                 #:get-custom-headers)
   
   ;; Just dependencies
-  (:import-from #:reblocks/session))
+  (:import-from #:reblocks/session)
+  (:import-from #:reblocks-tests/utils
+                #:*current-env*))
 (in-package #:reblocks-tests/request-handler)
 
 
@@ -34,7 +36,8 @@
   (with-test-session () `
     (with-request ("/foo/bar" :app app-with-init)
       ;; TODO: replace handle-request
-      (let* ((content (handle-request *current-app*)))
+      (let* ((route (make-instance 'reblocks/routes::page-route))
+             (content (reblocks/routes:serve route *current-env*)))
         (ok (search "Hello world" content)
             "Result should have a greeting.")))))
 
@@ -43,15 +46,24 @@
   (with-test-session ()
     (with-request ("/foo/bar?action=store-data" :app app-with-init)
       (let* ((reblocks/variables:*ignore-missing-actions* t)
-             (response (handle-request *current-app*)))
-        (ok (equal (get-content response)
-                   "")
-            "Result should have an error message.")
-        (ok (equal (get-code response)
-                   302)
-            "And response code should be 302")
+             (route (make-instance 'reblocks/routes::page-route)))
 
-        (testing "And user should be redirected to the same page, but without action parameter."
-          (assert-that (get-custom-headers response)
-                       (has-plist-entries :location "http://localhost/foo/bar?")))))))
+        (handler-case
+            (progn
+              (reblocks/routes:serve route *current-env*)
+              (rove:ok NIL
+                       "REDIRECT condition was not signalled"))
+          
+          (reblocks/response:redirect (err)
+            (let ((response (reblocks/response:get-response err)))
+              (ok (equal (get-content response)
+                         "")
+                  "Result should have an error message.")
+              (ok (equal (get-code response)
+                         302)
+                  "And response code should be 302")
+
+              (testing "And user should be redirected to the same page, but without action parameter."
+                (assert-that (get-custom-headers response)
+                             (has-plist-entries :location "http://localhost/foo/bar?"))))))))))
 

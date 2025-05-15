@@ -45,6 +45,8 @@
   :autostart nil)
 
 
+(defvar *current-env*)
+
 (defmacro with-request ((uri &key
                                data
                                (method :get)
@@ -61,21 +63,27 @@
                 collect (cons (string-downcase key)
                               value))))
     `(prepare-hooks
-       (let* ((env (generate-env ,uri
-                                 :method ,method
-                                 :content ,data
-                                 :headers ',lowercased-headers))
+       (let* ((*current-env* (generate-env
+                              ,uri
+                              :method ,method
+                              :content ,data
+                              :headers ',lowercased-headers))
               ;; we need to setup a current webapp, because
               ;; uri tokenizer needs to know app's uri prefix
               ;; (*routes* (reblocks/routes::make-routes))
               (*current-app* (make-instance ',app)))
-         (reblocks/request:with-request ((make-request env))
-           (reblocks/response::with-response ()
+         (reblocks/request:with-request
+             ((make-request *current-env*))
+           (reblocks/response::with-response
+               ()
              ,@body
              ;; Returned value will be set as
              ;; the body of the *response* object.
              ;; But in tests we have no body to return.
-             (values)))))))
+             (values))))
+       ;; This way we make Rove test will not return response
+       ;; structure as a result of test running:
+       (values))))
 
 
 (defmacro is-html (form expected &optional message)

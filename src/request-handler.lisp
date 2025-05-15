@@ -215,8 +215,3 @@
                              dependencies)
 
                   (register-dependencies dependencies))))))))))
-
-
-(defmethod reblocks/routes:serve ((route 40ants-routes/route:route) env)
-  "If a generic route was found, then it's handler should return a response of the Clack application."
-  (call-handler))
