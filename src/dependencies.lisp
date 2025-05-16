@@ -10,31 +10,34 @@
                 #:md5)
   (:import-from #:reblocks/html
                 #:with-html)
-  (:import-from #:reblocks/routes
-                #:add-route)
+  (:import-from #:reblocks/routes)
   ;; Just a dependency
   (:import-from #:dexador)
+  (:import-from #:40ants-routes/url-pattern
+                #:parse-url-pattern)
   
-  (:export
-   #:dependency
-   #:local-dependency
-   #:get-content-type
-   #:get-path
-   #:serve
-   #:get-route
-   #:get-dependencies
-   #:render-in-head
-   #:remote-dependency
-   #:get-integrity
-   #:get-crossorigin
-   #:*cache-remote-dependencies-in*
-   #:get-url
-   #:infer-type-from
-   #:make-dependency
-   #:get-type
-   #:render-in-ajax-response
-   #:cache-in-memory-p
-   #:dependency-equal))
+  (:export #:dependency
+           #:local-dependency
+           #:get-content-type
+           #:get-path
+           #:serve
+           #:get-route
+           #:get-dependencies
+           #:render-in-head
+           #:remote-dependency
+           #:get-integrity
+           #:get-crossorigin
+           #:*cache-remote-dependencies-in*
+           #:get-url
+           #:infer-type-from
+           #:make-dependency
+           #:get-type
+           #:render-in-ajax-response
+           #:cache-in-memory-p
+           #:dependency-equal
+           #:defer
+           #:is-binary
+           #:dependency-url))
 (in-package #:reblocks/dependencies)
 
 
@@ -61,7 +64,7 @@ be stored.")
 
 
 (defgeneric get-route (dependency)
-  (:documentation "This method should return a routes:route object
+  (:documentation "This method should return a REBLOCKS/ROUTES:STATIC-ROUTE object
 if dependency should ber served from local server.")
   (:method (dependency)
     "By default dependencies aren't served by Lisp."
@@ -77,7 +80,7 @@ if dependency should ber served from local server.")
 (defclass remote-dependency (dependency)
   ((remote-url :type string
                :initarg :remote-url
-               :reader get-remote-url)
+               :reader dependency-url)
    (integrity :type (or string null)
               :initarg :integrity
               :initform nil
@@ -147,7 +150,7 @@ should have only path part, like /local/css/bootstrap.css."))
 
 (defmethod print-object ((object remote-dependency) stream)
   (print-unreadable-object (object stream :type t)
-    (format stream "url: ~S" (get-remote-url object))))
+    (format stream "url: ~S" (dependency-url object))))
 
 
 (defun get-content-type (dependency)
@@ -166,7 +169,7 @@ It is used when dependency is served locally."
 (defgeneric render-in-head (dependency)
   (:documentation "Renders a piece of html.")
   (:method (dependency)
-    (with-html
+    (with-html ()
       (:comment (format nil "Dependency ~S" dependency)))))
 
 
@@ -185,14 +188,14 @@ as a response to some action.")
   (case (get-type dependency)
 
     (:js
-     (with-html
+     (with-html ()
        (:script :src (get-url dependency)
                 :type "text/javascript"
                 :defer (defer dependency)
                 "")))
 
     (:css
-     (with-html
+     (with-html ()
        (:link :rel "stylesheet" :type "text/css"
               :href (get-url dependency)
               :media "screen")))))
@@ -203,14 +206,14 @@ as a response to some action.")
   ;; to make life easier, we'll render a comment with original
   ;; dependency's URL.
   (unless (string-equal (get-url dependency)
-                        (get-remote-url dependency))
-    (with-html
-      (:comment (get-remote-url dependency))))
+                        (dependency-url dependency))
+    (with-html ()
+      (:comment (dependency-url dependency))))
 
   (case (get-type dependency)
     ;; Javascript
     (:js
-     (with-html
+     (with-html ()
        (:script :src (get-url dependency)
                 :type "text/javascript"
                 :integrity (get-integrity dependency)
@@ -218,7 +221,7 @@ as a response to some action.")
                 :defer (defer dependency))))
     ;; CSS
     (:css
-     (with-html
+     (with-html ()
        (:link :rel "stylesheet" :type "text/css"
               :href (get-url dependency)
               :media "screen"
@@ -394,7 +397,7 @@ to this system's source root."
   (let ((local-path (pathname (get-path dependency))))
     
     (unless (cl-fad:file-exists-p local-path)
-      (let* ((url (get-remote-url dependency))
+      (let* ((url (dependency-url dependency))
              ;; игнорируем ошибки пока в самолёте
              (input (handler-case
                         (progn
@@ -440,11 +443,11 @@ For local-dependency it is :local."
 
 
 (defmethod get-url ((dependency remote-dependency))
-  (get-remote-url dependency))
+  (dependency-url dependency))
 
 
 (defmethod get-url ((dependency cached-remote-dependency))
-  (let* ((remote-url (get-remote-url dependency)))
+  (let* ((remote-url (dependency-url dependency)))
     (concatenate 'string "/remote-deps-cache/"
                  (md5 remote-url))))
 
@@ -455,7 +458,7 @@ For local-dependency it is :local."
   (assert (cl-fad:directory-pathname-p
            *cache-remote-dependencies-in*))
 
-  (let* ((url (get-remote-url dependency))
+  (let* ((url (dependency-url dependency))
          (hash (md5 url)))
     (merge-pathnames hash *cache-remote-dependencies-in*)))
 
@@ -464,29 +467,23 @@ For local-dependency it is :local."
 ;;;; Routes related part ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: rename to register-routes or may be move this code to push-dependency?
-(defun register-dependencies (dependencies)
-  "Adds dependencies to the router to make HTTP server handle them."
-  (dolist (dependency dependencies)
-    (let ((route (get-route dependency)))
-      (when route
-        (add-route route)))))
 
-
-(defclass dependency-route (routes:route)
+(defclass dependency-route (reblocks/routes:static-route)
   ((dependency :initform nil
                :initarg :dependency
                :reader get-dependency)))
 
 
 (defun make-route (uri dependency)
-  "Makes a route for dependency.
-
-Automatically adds a prefix depending on current webapp and widget."
+  "Makes a route for dependency."
 
   (make-instance 'dependency-route
-                 :template (routes:parse-template uri)
-                 :dependency dependency))
+                 :name (string-downcase
+                        (gensym "STATIC-ROUTE-"))
+                 :pattern (parse-url-pattern uri)
+                 :dependency dependency
+                 :handler (lambda ()
+                            dependency)))
 
 
 ;; We need to override this internal method, to merge

@@ -1,6 +1,5 @@
 (defpackage #:reblocks/utils/uri
-  (:use #:cl
-        #:f-underscore)
+  (:use #:cl)
   (:import-from #:puri
                 #:uri
                 #:parse-uri
@@ -10,9 +9,7 @@
                 #:url-encode-params
                 #:url-decode-params)
   (:import-from #:cl-ppcre)
-  (:export #:request-uri-path
-           #:add-get-param-to-url
-           #:remove-parameter-from-uri))
+  (:export #:remove-parameter-from-uri))
 (in-package #:reblocks/utils/uri)
 
 
@@ -33,9 +30,9 @@
          (query (or (uri-query parsed-uri)
                     ""))
          (params (url-decode-params query))
-         (final-params (remove-if (m ((name . value))
-                                    (declare (ignorable value))
-                                    (equal name parameter))
+         (final-params (remove-if (lambda (item)
+                                    (let ((name (first item)))
+                                      (equal name parameter)))
                                   params)))
 
     (setf (uri-query parsed-uri)

@@ -35,17 +35,19 @@ The simplest way to define a new app is to use DEFAPP macro like this:
 And then to define a method for REBLOCKS/SESSION:INIT generic-function. It will be called if
 user will open https://yoursite.com/blog/ in his browser.
 
-## API"
+"
+  ;; ## API
 
-  (defapp macro)
-  (app class)
-  (get-registered-apps function)
-  (get-autostarting-apps function)
-  (get-current function)
-  (get-prefix (reader app))
-  (initialize-webapp generic-function)
-  (with-app macro)
+  ;; (defapp macro)
+  ;; (app class)
+  ;; (get-registered-apps function)
+  ;; (get-autostarting-apps function)
+  ;; (get-current function)
+  ;; (get-prefix (reader app))
+  ;; (initialize-webapp generic-function)
+  ;; (with-app macro)
 
-  ;; TODO: probably, we should move these to a separate documentation chapter
-  ;; about the "rendering flow".
-  (reblocks/page:render-headers generic-function))
+  ;; ;; TODO: probably, we should move these to a separate documentation chapter
+  ;; ;; about the "rendering flow".
+  ;; (reblocks/page:render-headers generic-function)
+  )

@@ -209,8 +209,8 @@
    Checking age of a new user
    (:AGE 9 :NAME \"Ilia\" :EMAIL \"ilia@40ants.com\")
    ```
-
-   # Hooks API
 "
-  (defhook macro)
-  (call-next-hook function))
+  ;;    # Hooks API
+  ;; (defhook macro)
+  ;; (call-next-hook function)
+  )

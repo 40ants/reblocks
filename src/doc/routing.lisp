@@ -4,293 +4,139 @@
                 #:defsection)
   (:import-from #:reblocks/routes
                 #:route
-                #:get-route
-                #:defroute
-                #:serve)
+                #:serve
+                #:page)
+  (:import-from #:named-readtables
+                #:in-readtable)
+  (:import-from #:pythonic-string-reader
+                #:pythonic-string-syntax)
+  (:shadowing-import-from #:40ants-routes/defroutes
+                          #:get)
   (:export #:@routing))
 (in-package #:reblocks/doc/routing)
 
 
-(defsection @routing (:title "Routing")
-  (@quickstart section)
-  (@lowlevel-api section))
+(in-readtable pythonic-string-syntax)
 
 
-(defsection @quickstart (:title "Quickstart"
-                         :ignore-words ("URL"
-                                        "DEFROUTES"
-                                        "MAKE-TASKS-ROUTES"
-                                        "ASDF"
-                                        "HTML"
-                                        "TASK-PAGE"
-                                        "MAKE"
-                                        "CL-PPCRE"
-                                        ;; TODO: make an external-link
-                                        "REBLOCKS-NAVIGATION-WIDGET"
-                                        "REBLOCKS-NAVIGATION-WIDGET:DEFROUTES")
-                         ;; :external-docs ("https://40ants.com/reblocks-navigation-widget/") 
-                         )
-  "
-In the quickstart tutorial, we saw how to create and render widgets,
-and how to react to user events. We also learned that by default the
-app name defined its base url, and how to change it.
-
-Here, we will extend the example and make each task accessible under
-`/tasks/<task id>`.
-
-Before we start, here's the summary on how to handle routing in
-Reblocks:
-
-* use REBLOCKS-NAVIGATION-WIDGET:DEFROUTES.
-
-* DEFROUTES associates URLs (as strings) to a widget:
+(defsection @routing (:title "Routing"
+                      :ignore-words ("URL"
+                                     "DEFAPP"
+                                     "ASDF"
+                                     "TODO"
+                                     "HTML"
+                                     "TASK-PAGE"
+                                     "MAKE"
+                                     "CL-PPCRE")
+                      :external-docs ("https://40ants.com/routes"))
+  """
+Previously the recommendate way for processing different URL paths was use of REBLOCKS-NAVIGATION-WIDGET system.
+But now Reblocks integrates with 40ANTS-ROUTES and it is possible to specify which widgets to show for the URL path.
+To do this, use ROUTES argument of DEFAPP macro, like this:
 
 ```
-(defroutes tasks-routes
-  (\"/tasks/\\d+\" (make-task-page))
-  (\"/tasks/\" (make-task-list)))
+(defapp tasks
+  :prefix "/"
+  :routes ((page ("/<int:task-id>" :name "task-details")
+             (make-task-page task-id))
+           (page ("/" :name "tasks-list")
+             (make-task-list "First"
+                             "Second"
+                             "Third"))))
 ```
 
-* REBLOCKS/SESSION:INIT must return an instance of the route
-  widget, using the MAKE-TASKS-ROUTES constructor created by DEFROUTES macro.
+In this example we define application with two routes. Route `/` is served by rendering list of tasks.
+Route like `/100500` is served by rendering `task-page` widgets.
 
-Let's start. Note that you can see the full code
-[on Github](https://github.com/40ants/reblocks/blob/reblocks/docs/source/routing.lisp).
+# How does Routing Work
 
+In reblocks, when you start a server, the server holds a root routes collection.
+Routes of each application included into the server are included into this root routes collection using a prefix, specified
+for the DEFAPP form.
 
-# Getting started
-
-> **Warning!**
->
-> As for this version of Reblocks,
-> REBLOCKS-NAVIGATION-WIDGET system is not in Quicklisp
-> yet. To install it you need to clone the repository
-> somewhere where ASDF will find it, for example, to the
-> `~/common-lisp/` or `~/quicklisp/local-projects/`
-> directories.
-
-You can also install the [Ultralisp][Ultralisp] Quicklisp distribution where all Reblocks-related libraries are present and up to date.
-
-Load and import the routing library:
+For example, you can define three apps like this:
 
 ```
-TODO> (ql:quickload '(:reblocks-navigation-widget))
+(defapp site
+  :prefix "/"
+  :routes ((page ("/" :name "landing")
+             (make-landing-page))))
+
+(defapp blog
+  :prefix "/blog/"
+  :routes ((page ("/<int:post-id>" :name "post")
+             (make-post-page post-id))))
+
+(defapp admin
+  :prefix "/admin/"
+  :routes ((page ("/" :name "dashboard")
+             (make-dashboard-page))
+           (page ("/users/" :name "users")
+             (make-users-page))
+           (page ("/users/<int:user-id>" :name "user")
+             (make-user-page user-id))
+           (page ("/posts/" :name "posts")
+             (make-posts-page))
+           (page ("/posts/<int:post-id>" :name "post")
+             (make-post-page user-id))))
 ```
 
-The package definition becomes::
+then server will combine their routes into the routes hierarchy.
 
-```
-TODO> (defpackage todo
-        (:use #:cl
-              #:reblocks-ui/form
-              #:reblocks/html)
-        (:import-from #:reblocks/widget
-                      #:render
-                      #:update
-                      #:defwidget)
-        (:import-from #:reblocks/actions
-                      #:make-js-action)
-        (:import-from #:reblocks/app
-                      #:defapp)
-        (:import-from #:reblocks-navigation-widget
-                      #:defroutes))
-```
-
-
-# Extending the example: to each task an id
-
-We want each task to have an id, so we add a slot to the `task` widget:
-
-```
-TODO> (defwidget task ()
-        ((title
-          :initarg :title
-          :initform nil
-          :accessor title)
-         (done
-          :initarg :done
-          :initform nil
-          :accessor done)
-         (id
-          :initarg :id
-          :initform nil
-          :accessor id
-          :type integer)))
-```
-
-We also need a simple in-memory \"database\". We'll use a hash-table to
-save the tasks. It associates an id to the task:
-
-```
-TODO> (defparameter *store* (make-hash-table) \"Dummy store for tasks: id -> task.\")
-```
-
-Our task constructor will give them an incremental id:
-
-```
-TODO> (defparameter *counter* 0 \"Simple counter for the hash table store.\")
-TODO> (defun make-task (title &key done)
-        \"Create a task and store it by its id.\"
-        (let* ((id (incf *counter*))
-               (task (make-instance 'task :title title :done done :id id)))
-          (setf (gethash id *store*) task)
-          task))
-```
-
-So we create a utility function to find a task by its id. All this
-could just be an interface to a database.
-
-```
-TODO> (defun get-task (id)
-        (gethash id *store*))
-```
-
-When we render the tasks list, we add an href on the task, so we can go to `/tasks/<id>`:
-
-```
-TODO> (defmethod render ((task task))
-        (with-html
-          (:p (:input :type \"checkbox\"
-                      :checked (done task)
-                      :onclick (make-js-action
-                                (lambda (&key &allow-other-keys)
-                                  (toggle task))))
-              (:span (if (done task)
-                         (with-html
-                           (:s (title task)))
-                         (:a :href (format nil \"/tasks/~a\" (id task)) ;; <-- only addition.
-                             (title task)))))))
-```
-
-# The task-page widget
-
-In Reblocks, an HTML block that we want to display, and possibly update
-independently, is a widget. Here, we want to show a task's details on
-their own page, it is then a widget.
-
-```
-TODO> (defwidget task-page ()
-        ((task
-          :initarg :task
-          :initform nil
-          :accessor task)))
-
-TODO> (defmethod render ((task-page task-page))
-        (let ((task (task task-page)))
-          (with-html
-            (:div \"Task \" (id task))
-            (:h1 (title task))
-            (:div (if (done task) \"Done!\" \"To Do.\"))
-            (:div \"Lorem ipsum…\"))))
-```
-
-
-# Defining routes
-
-At this point we can think of our routes like this:
-
-```
-(defroutes tasks-routes
-  (\"/tasks/\\d+\" <create the task-page widget>)
-  (\"/tasks/\" (make-task-list)))
-```
-
-The regexp `\\d+` will capture any URL that is formed of digits and
-contains at least one.
-
-As we see, the TASK-PAGE constructor will need to get the id
-matched by the route.
-
-
-# Path and URL parameters
-
-To get the current path, use `(reblocks/request:get-path)`. Then,
-you can find the matching parameters with [CL-PPCRE][CL-PPCRE].
-
-Our TASK-PAGE constructor becomes:
-
-```
-TODO> (defun make-task-page ()
-        (let* ((path (reblocks/request:get-path))
-               (id (first (ppcre:all-matches-as-strings \"\\d+\" path)))
-               (task (get-task (parse-integer id))))
-          (if task
-              (make-instance 'task-page :task task)
-              (not-found))))
-TODO> (defun not-found ()
-        \"Show a 404 not found page.\"
-        (with-html
-          (:div \"Task not found.\")))
-```
-
-And our router is simply:
-
-```
-TODO> (defroutes tasks-routes
-        (\"/tasks/\\d+\" (make-task-page))
-        (\"/tasks/\" (make-task-list \"Make my first Reblocks app\"
-                                   \"Deploy it somewhere\"
-                                   \"Have a profit\")))
-```
-
-The DEFROUTES macro creates a new class and its constructor, named
-`MAKE-<CLASS-NAME>`.
-
-> **Note**
->
-> It is important to use the constructor instead of MAKE-INSTANCE, as it defines properties on the fly.
-
-
-# Redirections
-
-To perform redirections, use `(reblocks/response:redirect \"/url\")`:
+Somebody could also create a library which returns 40ANTS-ROUTES/ROUTES:ROUTES class instance. For example,
+such library might provide admin views to control some class of entities. In this case abover
+code could be rewritten like this:
 
 
 ```
-TODO> (defroutes tasks-routes
-        (\"/tasks/\\d+\" (make-task-page))
-        (\"/tasks/list/?\" (reblocks/response:redirect \"/tasks/\"))  ;; <-- redirection
-        (\"/tasks/\" (make-task-list \"Make my first Reblocks app\"
-                                   \"Deploy it somewhere\"
-                                   \"Have a profit\")))
+(defapp admin
+  :prefix "/admin/"
+  :routes ((page ("/" :name "dashboard")
+             (make-dashboard-page))
+           (include (crud 'user)
+                    :path \"users\")
+           (include (crud 'post)
+                    :path \"posts\")))
 ```
 
-Here the trailing `/?` allows to catch `/tasks/list` and `/tasks/list/`.
+Here we've used `crud` function which returns a 40ANTS-ROUTES/ROUTES:ROUTES class collection to show the list
+of entities of given type and allow to create, edit, delete them.
 
-And indeed, contrary to what we stated in the introduction,
-REBLOCKS/RESPONSE:REDIRECT does not return a widget but signals a specital condition.
+# Wrapping the Page
 
-
-# Final steps
-
-Make our router the main widget for this session:
-
-```
-TODO> (defmethod reblocks/session:init ((app tasks))
-        (declare (ignorable app))
-        (make-tasks-routes))
-```
-
-Reset the session:
+Often you want to render the same header and footer around each page. In this case, you might use
+argument PAGE-CONSTRUCTOR of the DEFAPP macro. If specified, PAGE-CONSTRUCTOR argument should be
+a function of one argument - widget returned by a route's handler. In the most simple form,
+such page constructor just creates a widget which wraps page content:
 
 ```
-TODO> (defun reset ()
-        (setf *counter* 0)
-        (reblocks/debug:reset-latest-session))
-TODO> (reset)
+(defun wrap-with-frame (widget)
+  (make-instance 'page-frame-widget
+                 :content widget))
 ```
 
-And access the app at <http://localhost:40000/tasks/>.
 
-[Ultralisp]: https://ultralisp.org/
-[CL-PPCRE]: https://edicl.github.io/cl-ppcre/
-")
+# Serving the Static
+
+Another case when you might want to define a route is serving static file.
+The most common case is serving `robots.txt` and `favicon.ico`. In such cases,
+your route handler should return a list instead of widget:
 
 
-(defsection @lowlevel-api (:title "Lowlevel API"
-                           :ignore-words ("JSON"
-                                          "URL"))
-  (route class)
-  (defroute macro)
-  (get-route function)
-  (serve generic-function))
+```
+(defapp app
+  :prefix "/"
+  :routes ((page ("/" :name "index")
+             (make-landing-page))
+           (get ("/favicon.ico")
+             (list 200
+                   (list :content-type "image/x-icon")
+                   (asdf:system-relative-pathname :my-app
+                                                  "favicon.ico")))
+           (get ("/robots.txt")
+             "User-agent: *")))
+```
+
+As you can see, the route's handler might return a list of three items: http code, http headers and a pathname. Or just a string.
+Actually, this reponse is passed to the Clack as is and anything supported by Clack is supported.
+""")

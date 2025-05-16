@@ -12,7 +12,7 @@
 
 (deftest with-javascript-1
   (ok
-   (equal (with-html-string
+   (equal (with-html-string ()
             (with-javascript
               "foo~A" "bar"))
           (with-javascript-to-string "foo~A" "bar"))

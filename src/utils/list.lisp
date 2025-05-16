@@ -15,8 +15,7 @@
            #:list->assoc
            #:ninsert
            #:find-all
-           #:remove-keyword-parameter
-           #:remove-keyword-parameters))
+           #:remove-keyword-parameter))
 (in-package #:reblocks/utils/list)
 
 
@@ -132,6 +131,7 @@ all."
       (values result t)
       (values nil nil))))
 
+
 (defun remove-keyword-parameter (parameter-list keyword)
   "Removes a keyword parameter from a parameter-list.
 \(remove-keyword-parameter '(1 2 3 :a 1 :b 2 :c 3) :b)
@@ -141,16 +141,9 @@ all."
           when (eql i keyword)
             do (setf remove t)
           else when remove
-            do (setf remove nil)
+                 do (setf remove nil)
           else collect i)))
 
-(defun remove-keyword-parameters (parameter-list &rest keywords)
-  "Removes all parameters with keys in 'keywords' from
-'parameter-list'."
-  (loop for argument in keywords
-        with i = parameter-list
-        do (setf i (remove-keyword-parameter i argument))
-        finally (return i)))
 
 (defun list->assoc (lst &key (map #'identity))
   "Nondestructively convert a list of elements to an association

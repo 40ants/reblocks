@@ -11,7 +11,7 @@
 (deftest default-init-method-should-return-string-widget
   (defapp app)
   
-  (with-session
+  (with-test-session ()
     (with-request ("/" :app app)
       (let ((root (reblocks/session:init reblocks/app::*current-app*)))
         (ok (typep root

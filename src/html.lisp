@@ -28,23 +28,46 @@
   ;; pretty html, but allow to disable in tests.
   "We want an HTML nice to read by default.")
 
-(defmacro with-html (&body body)
+(defmacro with-html ((&key
+                      (pretty nil pretty-given-p)
+                      (lang nil lang-given-p))
+                     &body body)
   "Renders body using [Spinneret](https://github.com/ruricolist/spinneret) HTML generator.
 
    "
-  `(let ((spinneret:*html-lang* *lang*)
-         (spinneret:*html* *stream*)
-         ;; We want to an HTML which is nice to read, by default
-         (*print-pretty* *pretty-html*))
-     (spinneret:with-html
+  `(let* ((spinneret:*html* *stream*)
+          (spinneret:*html-lang* ,(if lang-given-p
+                                      lang
+                                      '*lang*))
+          (*print-pretty* ,(if pretty-given-p
+                               pretty
+                               ;; We want to an HTML which is nice to read, by default,
+                               ;; or reuse setting set by outer with-html form:
+                               '*pretty-html*))
+          ;; To make nested with-html and with-html-string work as expected,
+          ;; we need to bind this variable, because it is used as default
+          ;; for these macro:
+          (*pretty-html* *print-pretty*))
+     
+     (spinneret:with-html 
        ,@body)))
 
 
-(defmacro with-html-string (&body body)
+(defmacro with-html-string ((&key
+                             (pretty nil pretty-given-p)
+                             (lang nil lang-given-p))
+                            &body body)
   "Like WITH-HTML, but capture the output as a string."
-  `(with-output-to-string (*stream*)
-     (with-html
-       ,@body)))
+  (let ((with-html-args
+            (append
+             (when pretty-given-p
+               (list :pretty
+                     pretty))
+             (when lang-given-p
+               (list :lang lang)))))
+    `(with-output-to-string (*stream*)
+       (with-html (,@with-html-args)
+         ,@body))))
 
 
 (defun get-rendered-chunk ()

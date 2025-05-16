@@ -1,40 +1,52 @@
 (uiop:define-package #:reblocks/server
   (:use #:cl)
-  (:import-from #:routes)
+  (:import-from #:40ants-routes/with-url
+                #:with-partially-matched-url
+                #:with-url)
   (:import-from #:reblocks/app
+                #:app
+                #:routes-app
+                #:app-routes
                 #:with-app)
+  (:import-from #:reblocks/widget
+                #:widget)
+  (:import-from #:reblocks/page-dependencies
+                #:get-collected-dependencies
+                #:with-collected-dependencies)
   (:import-from #:reblocks/session
                 #:make-session-middleware
                 #:with-session)
   (:import-from #:reblocks/hooks
+                #:with-render-hook
                 #:prepare-hooks)
   (:import-from #:reblocks/routes
+                #:find-route-by-class
+                #:object-routes
+                #:server-routes
                 #:route
                 #:get-route
                 #:add-route
                 #:add-routes)
   (:import-from #:reblocks/app
                 #:get-prefix
-                #:app-serves-hostname-p
-                #:reblocks-webapp-name
+                #:%reblocks-webapp-name
                 #:get-autostarting-apps)
   (:import-from #:reblocks/request
                 #:with-request)
   (:import-from #:reblocks/response
+                #:not-found-error-app
+                #:not-found-error-widget
+                #:not-found-error
                 #:with-response
                 #:get-code
                 #:get-headers
                 #:get-content)
-  (:import-from #:reblocks/request-handler
-                #:handle-request)
-    
   (:import-from #:lack/request
                 #:make-request)
-  (:import-from #:lack/response)
   (:import-from #:clack
                 #:clackup)
-  (:import-from #:cl-strings
-                #:starts-with)
+  (:import-from #:reblocks/request-handler
+                #:handle-normal-request)
   ;; Just dependencies
   (:import-from #:reblocks/debug)
   (:import-from #:log)
@@ -46,33 +58,65 @@
                 #:insert-after
                 #:insert-at)
   (:import-from #:reblocks/page
+                #:page
                 #:ensure-pages-cleaner-is-running)
+  (:import-from #:40ants-routes/routes)
+  (:import-from #:reblocks/variables
+                #:*default-request-timeout*
+                #:*current-app*
+                #:*server*)
+  (:import-from #:40ants-routes/matched-route
+                #:original-route
+                #:matched-route-p)
+  (:import-from #:reblocks/error-handler
+                #:with-immediate-response-handler
+                #:with-handled-errors)
+  (:import-from #:40ants-routes/route
+                #:current-route-p
+                #:current-route)
+  (:import-from #:reblocks/html
+                #:with-html-string)
+  (:import-from #:reblocks/routes/server
+                #:register-dependencies)
+  (:import-from #:reblocks/dependencies
+                #:get-dependencies)
+  (:import-from #:local-time
+                #:adjust-timestamp!
+                #:now)
+  (:import-from #:40ants-routes/defroutes
+                #:include)
+  (:import-from #:serapeum
+                #:->
+                #:fmt)
+  (:import-from #:reblocks/deadline
+                #:with-deadline)
   
-  (:export ;; #:get-server-type
-   ;; #:get-port
-   ;; #:make-server
-   ;; #:handle-http-request
-   #:stop
-   #:start
-   #:serve-static-file
-   #:servers
-   #:running-p
-   #:*default-samesite-policy*
-   #:server
-   #:insert-middleware
-   #:make-middlewares))
+  (:export #:handle-http-request
+           #:stop
+           #:start
+           #:servers
+           #:running-p
+           #:*default-samesite-policy*
+           #:server
+           #:insert-middleware
+           #:make-middlewares
+           #:get-interface
+           #:get-port
+           #:get-server-type
+           #:request-timeout
+           #:server-apps))
 (in-package #:reblocks/server)
 
-
-(defvar *server*)
-(setf (documentation '*server* 'variable)
-      "Will be bound to a server currently processing the request.")
 
 (defvar *servers* (make-hash-table :test 'equal))
 
 
 (defvar *clack-output* nil
   "Here we'll store all output from the Clack, because we don't want it to mix with reblocks own output.")
+
+
+(defun make-initial-server-routes ()
+  (40ants-routes/routes:routes ("server" :routes-class server-routes)))
 
 
 (defclass server ()
@@ -85,11 +129,21 @@
    (server-type :initarg :server-type
                 :reader get-server-type)
    (handler :initform nil
-            :accessor get-handler)
-   (routes :initform (reblocks/routes::make-routes)
-           :accessor routes)
+            :accessor %get-handler)
+   (routes :initform (make-initial-server-routes)
+     :reader object-routes)
    (apps :initform nil
-         :accessor apps))
+         :reader server-apps)
+   (request-timeout
+    :initarg :request-timeout
+    :type (or null integer)
+    :initform *default-request-timeout*
+    :reader request-timeout
+    :documentation
+    "Seconds until we abort a request because it took too long.
+     This prevents threads from hogging the CPU indefinitely.
+
+     You can set this to NIL to disable timeouts (not recommended)."))
   (:documentation "Base class for all Reblocks servers. Redefine it if you want to add additional HTTP midlewares, etc."))
 
 
@@ -146,9 +200,9 @@
 
 
 (defun insert-middleware (layers new-layer &key before after)
-  "Returns a new stack of layers inserting LAYER before or after a layer with given name.
+  "Returns a new stack of layers inserting NEW-LAYER before or after a layer with given name.
 
-   You should not give both BEFORE and AFTER arguments. If given layer not found,
+   You should not give both BEFORE and AFTER arguments. If layer with given name was not found,
    the function will signal error.
 
    Original alist LAYERS is not modified."
@@ -185,105 +239,138 @@
                     (port 8080)
                     (interface "localhost")
                     (server-type :hunchentoot)
-                    (server-class 'server))
+                    (server-class 'server)
+                    (request-timeout *default-request-timeout*))
   "Makes a webserver instance.
 Make instance, then start it with ``start`` method."
   (make-instance server-class
                  :port port
                  :interface interface
-                 :server-type server-type))
-
-
-(defun search-app-for-request-handling (path-info hostname)
-  (dolist (app (apps *server*))
-    (let ((app-prefix (get-prefix app))
-          (app-works-for-this-hostname
-            (app-serves-hostname-p app hostname)))
-      (log:debug "Searching handler in" app app-prefix)
-
-      (when (and app-works-for-this-hostname
-                 (starts-with path-info
-                              app-prefix))
-        (return-from search-app-for-request-handling
-          app)))))
-
-
-(defun make-response-for-clack (response)
-  (etypecase response
-    (lack/response:response
-     (lack/response:finalize-response response))
-    (list response)
-    (function response)))
+                 :server-type server-type
+                 :request-timeout request-timeout))
 
 
 (defmethod handle-http-request :around ((server server) env)
   (log4cl-extras/error:with-log-unhandled ()
-    (let ((*server* server)
-          (reblocks/routes::*routes* (routes server)))
-      (call-next-method))))
+    (let ((*server* server))
+      (let ((result 
+              (with-session (env)
+                (with-request ((make-request env))
+                  (with-response ()
+                    (call-next-method))))))
+        result))))
+
+
+(-> make-404-page ((or null app)
+                   string
+                   widget)
+    (values string &optional))
+
+(defun make-404-page (app url-path error-widget)
+  (cond
+    (app
+     (with-app (app)
+       (with-collected-dependencies ()
+         (with-render-hook (app)
+           (with-html-string ()
+             (handle-normal-request app
+                                    :page
+                                    ;; Application might define a common constructor
+                                    ;; for all pages, to add such common elements like
+                                    ;; header and footer. Here we need to apply this
+                                    ;; application's handler:
+                                    (let ((wrapped-result
+                                            (funcall (reblocks/app::page-constructor app)
+                                                     error-widget)))
+                                      ;; TODO: probably extract common error page
+                                      ;; making code with error-handler.lisp:
+                                      (make-instance 'page
+                                                     :root-widget wrapped-result
+                                                     :path url-path
+                                                     :expire-at (adjust-timestamp!
+                                                                    (now)
+                                                                  ;; It is no make sence to cache 404 pages
+                                                                  (:offset :sec 5)))))
+                  
+             (register-dependencies
+              (append (get-dependencies app)
+                      (get-collected-dependencies))))))))
+    (t
+     (error "No app during 404 error handling"))))
 
 
 (defmethod handle-http-request ((server server) env)
   "Reblocks HTTP dispatcher.
 This function serves all started applications and their static files."
 
-  (let (;; This "hack" is needed to allow widgets to change *random-state*
+  (let ((url-path (getf env :path-info))
+        ;; This "hack" is needed to allow widgets to change *random-state*
         ;; and don't interfere with other threads and requests
         (*random-state* *random-state*))
-    (with-session (env)
-      (with-request ((make-request env))
-        ;; Dynamic hook :handle-http-request makes possible to write
-        ;; some sort of middlewares, which change *request* and *session*
-        ;; variables.
-        (prepare-hooks
-          (reblocks/hooks:with-handle-http-request-hook (env)
-
-            (let* ((path-info (getf env
-                                    ;; Previously, we used :path-info
-                                    ;; attribute here, but it has %20 replaced
-                                    ;; with white-spaces and get-route breaks
-                                    ;; on URIs having spaces, because it calls
-                                    ;; cl-routes and it calls puri:parse-uri
-                                    ;; which requires URI to be url-encoded.
-                                    ;; Hope, this change will not break other
-                                    ;; places where PATH-INFO is used.
-                                    :request-uri))
-                   (hostname (getf env :server-name))
-                   (route (get-route path-info))
-                   (app (search-app-for-request-handling path-info hostname)))
-
-              (log:debug "Processing request to" path-info)
-
-              ;; If dependency found, then return it's content along with content-type
-              (with-app app
-                (make-response-for-clack
-                 (cond
-                   (route
-                    (log:debug "Route was found" route)
-                    (reblocks/routes:serve route env))
-                   (app
-                    (log:debug "App was found" app)
-                    (with-response ()
-                      (let ((response (handle-request app)))
-                        response)))
-                   (t
-                    (log:error "Application dispatch failed for" path-info)
-
-                    (list 404
-                          (list :content-type "text/html")
-                          (list (format nil "File \"~A\" was not found.~%"
-                                        path-info))))))))))))))
+    ;; Dynamic hook :handle-http-request makes possible to write
+    ;; some sort of middlewares, which change *request* and *session*
+    ;; variables.
+    (prepare-hooks
+      (reblocks/hooks:with-handle-http-request-hook (env)
+        (with-immediate-response-handler () 
+          (with-partially-matched-url ((object-routes server)
+                                       url-path)
+            (handler-case 
+                (let* ((app-route (find-route-by-class 'reblocks/app::app-routes))
+                       (app (when app-route
+                              (routes-app app-route))))
+                  ;; In some cases app route might be not found and
+                  ;; we need to handle this case. This might be if all
+                  ;; apps are included into the server's routes using prefixes
+                  ;; instead of /. In this case if route does not start with
+                  ;; any app's prefix, APP will be NIL.
+                  (macrolet ((with-optional-app ((app) &body body)
+                               `(flet ((with-optional-app-thunk ()
+                                         ,@body))
+                                  (declare (dynamic-extent #'with-optional-app-thunk))
+                                  (cond
+                                    (,app (with-app (,app)
+                                            (funcall #'with-optional-app-thunk)))
+                                    (t
+                                     (funcall #'with-optional-app-thunk))))))
+                    (with-optional-app (app)
+                      (cond
+                        ((current-route-p)
+                         (let* ((route (progn
+                                         (unless (matched-route-p (current-route))
+                                           (error "Unexpected class of route was found: ~S"
+                                                  (class-of (current-route))))
+                                         (original-route (current-route)))))
+                           (log:debug "Processing request to" url-path)
+                           
+                           ;; This wrapper calls an interactive debugger
+                           ;; if it is available or shows an error page.
+                           (let ((resp (with-handled-errors ()
+                                         (with-deadline (:seconds (request-timeout server))
+                                           (reblocks/routes:serve route env)))))
+                             (values resp))))
+                        ;; No page was found matching the route
+                        (t
+                         (not-found-error (fmt "Route ~S not found."
+                                               url-path)))))))
+              (not-found-error (c)
+                (list 404
+                      (list :content-type "text/html")
+                      (list
+                       (make-404-page (not-found-error-app c)
+                                      url-path
+                                      (not-found-error-widget c))))))))))))
 
 
 (defun start-server (server &key debug
-                                 (samesite-policy *default-samesite-policy*))
+                              (samesite-policy *default-samesite-policy*))
   "Starts a Clack webserver, returns this server as result.
 
 If server is already started, then logs a warning and does nothing."
 
   (check-type server server)
   
-  (cond ((get-handler server)
+  (cond ((%get-handler server)
          (log:warn "Webserver already started"))
 
         ;; Otherwise, starting a server
@@ -305,7 +392,7 @@ If server is already started, then logs a warning and does nothing."
            ;; about started server and we want to write into a log instead.
            (setf *clack-output* (make-string-output-stream))
            (let ((*standard-output* *clack-output*))
-             (setf (get-handler server)
+             (setf (%get-handler server)
                    (clackup app
                             :address interface
                             :server (get-server-type server)
@@ -322,19 +409,21 @@ If server is already started, then logs a warning and does nothing."
   "Stops a Clack server, but does not deactivates active applications,
    use `stop' function for that."
 
-  (if (get-handler server)
-      (progn (log:info "Stopping server" server)
-             (clack:stop (get-handler server))
-             (setf (get-handler server)
-                   nil))
-      (log:warn "Server wasn't started"))
+  (cond
+    ((%get-handler server)
+     (progn (log:info "Stopping server" server)
+            (clack:stop (%get-handler server))
+            (setf (%get-handler server)
+                  nil)))
+    (t
+     (log:warn "Server wasn't running")))
 
   server)
 
 
 (defun running-p (server)
   "Returns T if server is running and NIL otherwise."
-  (when (get-handler server)
+  (when (%get-handler server)
     t))
 
 
@@ -343,9 +432,9 @@ If server is already started, then logs a warning and does nothing."
     (format stream "~A:~A "
             (get-interface server)
             (get-port server))
-    (if (apps server)
+    (if (server-apps server)
         (format stream "(~{~A~^, ~})"
-                (apps server))
+                (server-apps server))
         (format stream "(no apps)"))
     (format stream "~A"
             (if (running-p server)
@@ -376,14 +465,16 @@ If server is already started, then logs a warning and does nothing."
           collect server))
 
 
-(defun start (&key (debug t)
-                   (port 8080)
-                   (interface "localhost")
-                   (server-type :hunchentoot)
-                   (samesite-policy :lax)
-                   apps
-                   (server-class 'server)
-                   (disable-welcome-app nil))
+(defun start (&key
+              (debug t)
+              (port 8080)
+              (interface "localhost")
+              (server-type :hunchentoot)
+              (samesite-policy :lax)
+              apps
+              (server-class 'server)
+              (request-timeout *default-request-timeout*)
+              (disable-welcome-app nil))
   "Starts reblocks framework hooked into Clack server.
 
    Set DEBUG to true in order for error messages and stack traces to be shown
@@ -400,31 +491,30 @@ If server is already started, then logs a warning and does nothing."
 
   (let ((server (find-server interface port)))
     (reblocks/hooks:with-start-reblocks-hook ()
-      (cond
-        ((and server
-              (running-p server))
-         (restart-case
-             (error "Server already running on port ~A" port)
-           (continue ()
-             :report "Stop the old server and start a new one."
-             (stop)
-             (setf (routes server)
-                   (reblocks/routes::make-routes)))))
-        (t
-         (setf server
-               (make-server :interface interface
-                            :port port
-                            :server-type server-type
-                            :server-class server-class))
-         (setf (gethash (cons interface port) *servers*)
-               server)))
+      (when (and server
+                 (running-p server))
+        (restart-case
+            (error "Server already running on port ~A" port)
+          (continue ()
+            :report "Stop the old server and start a new one."
+            (stop)
+            (setf server nil))))
+      
+      (setf server
+            (make-server :interface interface
+                         :port port
+                         :server-type server-type
+                         :server-class server-class
+                         :request-timeout request-timeout))
+      (setf (gethash (cons interface port) *servers*)
+            server)
       
       (log:info "Starting reblocks" port server-type debug)
 
       ;; TODO: move these settings to the server level
       (if debug
-          (reblocks/debug:on)
-          (reblocks/debug:off))
+        (reblocks/debug:on)
+        (reblocks/debug:off))
 
       (start-server server
                     :samesite-policy samesite-policy
@@ -433,7 +523,9 @@ If server is already started, then logs a warning and does nothing."
       ;; We need to set this bindings to allow apps to use
       ;; REBLOCKS/ROUTES:ADD-ROUTE without given a current
       ;; routes mapping.
-      (let* ((reblocks/routes::*routes* (routes server))
+      ;; 
+      ;; TODO: Not sure if we need this *routes* var:
+      (let* (;; (reblocks/routes::*routes* (object-routes server))
              (apps (or (uiop:ensure-list apps)
                        (get-autostarting-apps))))
         (loop for app-class in apps
@@ -442,10 +534,10 @@ If server is already started, then logs a warning and does nothing."
         ;; If / prefix is not taken, start Welcome Screen app:
         (unless disable-welcome-app
           (loop with found-root = nil
-                for app in (apps server)
+                for app in (server-apps server)
                 for prefix = (get-prefix app)
                 when (string= prefix "/")
-                do (setf found-root t)
+                  do (setf found-root t)
                 finally (unless found-root
                           (start-app server 'welcome-screen-app)))))
       
@@ -457,29 +549,35 @@ If server is already started, then logs a warning and does nothing."
    is only one!"
   (log:debug "Registering" app "routes for" server)
   
-  (loop with seen = (make-hash-table :test 'equal)
-        for app in (cons app (apps server))
-        for prefix = (get-prefix app)
-        when (gethash prefix seen)
-          do (error "Cannot have two defaults dispatchers with prefix \"~A\""
-                    prefix)
-        do (setf (gethash prefix seen)
-                 t))
+  ;; (loop with seen = (make-hash-table :test 'equal)
+  ;;       for app in (cons app (server-apps server))
+  ;;       for prefix = (get-prefix app)
+  ;;       when (gethash prefix seen)
+  ;;         do (error "Cannot have two defaults dispatchers with prefix \"~A\""
+  ;;                   prefix)
+  ;;       do (setf (gethash prefix seen)
+  ;;                t))
   ;; Also, we should add app's routes to the mapper:
-  (add-routes app :routes (routes server)))
+  (when (reblocks/app::app-routes app)
+    (40ants-routes/generics:add-route (object-routes server)
+                                      (include
+                                       (reblocks/app::app-routes app)
+                                       :path (get-prefix app))))
+  ;; (add-routes app :routes (routes server))
+  )
 
 
 (defun start-app (server app-class &rest app-args)
   (cond
-    ((member app-class (mapcar #'reblocks/app::webapp-name (apps server)))
+    ((member app-class (mapcar #'reblocks/app::webapp-name (server-apps server)))
      (log:warn "App ~A already started" app-class))
     (t
      (let* ((app (apply #'make-instance app-class app-args))
             (prefix (get-prefix app)))
        (cond
-         ((member prefix (mapcar #'get-prefix (apps server))
+         ((member prefix (mapcar #'get-prefix (server-apps server))
                   :test #'string-equal)
-          (loop for other-app in (apps server)
+          (loop for other-app in (server-apps server)
                 for other-prefix = (get-prefix other-app)
                 when (string-equal prefix other-prefix)
                   do (error "Unable to start app ~S because app ~S already uses prefix \"~A\""
@@ -491,9 +589,9 @@ If server is already started, then logs a warning and does nothing."
           (register-app-routes server app)
           ;; We need to keep apps sorted from longest prefix to shorters,
           ;; to find a correct app to serve the request:
-          (setf (apps server)
+          (setf (slot-value server 'apps)
                 (sort (list* app
-                             (apps server))
+                             (server-apps server))
                       #'>
                       :key (compose #'length
                                     #'get-prefix)))
@@ -518,11 +616,12 @@ If server is already started, then logs a warning and does nothing."
           collect
           (reblocks/hooks:with-stop-reblocks-hook ()
             ;; TODO: maybe implement stop app generic function again?
-            ;; (loop for app in (apps server)
-            ;;       do (reblocks/app:stop (reblocks-webapp-name app)))
+            ;; (loop for app in (server-apps server)
+            ;;       do (reblocks/app:stop (%reblocks-webapp-name app)))
 
-            (setf (apps server) nil
-                  (routes server) (reblocks/routes::make-routes))
+            (setf (slot-value server 'apps) nil
+                  ;; (routes server) (reblocks/routes::make-routes)
+                  )
             
             (stop-server server)
             (values server))))
@@ -542,15 +641,3 @@ If server is already started, then logs a warning and does nothing."
   (list 200
         (list :content-type (get-content-type route))
         (get-path route)))
-
-
-(defgeneric serve-static-file (uri object &key content-type)
-  (:documentation "Adds a route to serve given object by static URI."))
-
-
-(defmethod serve-static-file (uri (path pathname) &key (content-type "text/plain"))
-  (let* ((route (make-instance 'static-route-from-file
-                               :template (routes:parse-template uri)
-                               :path path
-                               :content-type content-type)))
-    (add-route route)))

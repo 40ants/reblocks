@@ -31,11 +31,18 @@
 the path is ignored. 
 
 ex:
-\(slot-value-by-path employee '(address street)) => \"17 Sunvalley St.\"
-\(slot-value-by-path employee '(address)) => #<ADDRESS {XXX}>
-\(slot-value-by-path employee 'address) => #<ADDRESS {XXX}>
-\(slot-value-by-path address '(street)) => \"17 Sunvalley St.\"
-\(slot-value-by-path address '(nil street)) => \"17 Sunvalley St.\"
+
+```
+(slot-value-by-path employee '(address street)) => \"17 Sunvalley St.\"
+
+(slot-value-by-path employee '(address)) => #<ADDRESS {XXX}>
+
+(slot-value-by-path employee 'address) => #<ADDRESS {XXX}>
+
+(slot-value-by-path address '(street)) => \"17 Sunvalley St.\"
+
+(slot-value-by-path address '(nil street)) => \"17 Sunvalley St.\"
+```
 
 obj - a CLOS object
 path - a list of slot names"

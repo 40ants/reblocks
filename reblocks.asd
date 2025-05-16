@@ -18,8 +18,10 @@
   :source-control (:git "https://github.com/40ants/reblocks")
   :pathname "src"
   :depends-on ("40ants-doc"
+               "40ants-routes"
                "reblocks/app"
                "reblocks/server"
+               "reblocks/request-handler"
                "reblocks/debug"
                "reblocks/default-init"
                "reblocks/commands-hook"
@@ -37,7 +39,6 @@
                ;; This package defines an :around method for reblocks/widgets:render
                ;; which adds a wrapper around widget body
                "reblocks/widgets/render-methods"
-               "reblocks/routes-error-handler"
                "reblocks/dependencies-impl"
                ;; we need to depend on this package, because
                ;; lack:builder will try to find `LACK.MIDDLEWARE.SESSION`

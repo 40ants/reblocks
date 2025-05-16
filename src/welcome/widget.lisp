@@ -33,8 +33,8 @@
   ;; I have to comment out this code because app activity was refactored in the
   ;; latest version. We need to rethink this idea of a welcome screen.
   ;; 
-  (let ((apps (reblocks/server::apps reblocks/server::*server*)))
-    (with-html
+  (let ((apps (reblocks/server:server-apps reblocks/server::*server*)))
+    (with-html ()
       (:h1 "Welcome to Reblocks!")
       (:p ("To learn more about Reblocks, head over its [documentation](http://40ants.com/reblocks/)."))
       (:p ("To learn how to create apps and widgets, see the [quickstart guide](http://40ants.com/reblocks/quickstart/)."))
@@ -46,7 +46,10 @@
                for prefix = (get-prefix app)
                for app-name = (webapp-name app)
                do (:li
-                   (:a :href prefix (format nil "~A" app-name))
+                   ;; After routes refactoring, all apps urls should end with a slash
+                   (:a :href (str:ensure-suffix "/"
+                                                prefix)
+                       (format nil "~A" app-name))
                    (:span (format nil " on \"~A\"" prefix)))))
         
         (:h3)

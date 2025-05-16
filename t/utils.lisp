@@ -26,19 +26,16 @@
   (:import-from #:hamcrest/rove
                 #:assert-that
                 #:contains)
-  (:import-from #:reblocks/routes
-                #:*routes*)
   
-  (:export
-   #:with-request
-   #:with-session
-   #:is-html
-   #:catch-hooks
-   #:assert-hooks-called))
+  (:export #:with-request
+           #:with-test-session
+           #:is-html
+           #:catch-hooks
+           #:assert-hooks-called))
 (in-package #:reblocks-tests/utils)
 
 
-(defmacro with-session (&body body)
+(defmacro with-test-session (() &body body)
   `(let ((*session* (make-hash-table :test 'equal)))
      ,@body))
 
@@ -47,6 +44,8 @@
   :prefix "/"
   :autostart nil)
 
+
+(defvar *current-env*)
 
 (defmacro with-request ((uri &key
                                data
@@ -64,26 +63,32 @@
                 collect (cons (string-downcase key)
                               value))))
     `(prepare-hooks
-       (let* ((env (generate-env ,uri
-                                 :method ,method
-                                 :content ,data
-                                 :headers ',lowercased-headers))
+       (let* ((*current-env* (generate-env
+                              ,uri
+                              :method ,method
+                              :content ,data
+                              :headers ',lowercased-headers))
               ;; we need to setup a current webapp, because
               ;; uri tokenizer needs to know app's uri prefix
-              (*routes* (reblocks/routes::make-routes))
+              ;; (*routes* (reblocks/routes::make-routes))
               (*current-app* (make-instance ',app)))
-         (reblocks/request:with-request ((make-request env))
-           (reblocks/response::with-response ()
+         (reblocks/request:with-request
+             ((make-request *current-env*))
+           (reblocks/response::with-response
+               ()
              ,@body
              ;; Returned value will be set as
              ;; the body of the *response* object.
              ;; But in tests we have no body to return.
-             (values)))))))
+             (values))))
+       ;; This way we make Rove test will not return response
+       ;; structure as a result of test running:
+       (values))))
 
 
 (defmacro is-html (form expected &optional message)
-  `(let* ((reblocks/html:*pretty-html* nil)
-          (result (with-html-string
+  `(let* (;; (reblocks/html:*pretty-html* nil)
+          (result (with-html-string (:pretty nil)
                     ,form)))
      (ok (all-matches ,expected result)
          ;;(string= result ,expected)

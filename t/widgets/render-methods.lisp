@@ -16,7 +16,7 @@
 
 
 (defmethod render ((widget simple-widget))
-  (with-html
+  (with-html ()
     (:p "Hello world")))
 
 
@@ -44,13 +44,13 @@
   ())
 
 (defmethod render ((widget widget-inside-table))
-  (with-html
+  (with-html ()
     (:p "foo bar")))
 
 (deftest test-widget-nested-into-table
   (let ((widget (make-instance 'widget-inside-table)))
     (is-html
-     (with-html
+     (with-html ()
        (:table
         (:tr
          (:td
@@ -62,7 +62,7 @@
 (deftest test-widget-table-child
   (let ((widget (make-instance 'widget-inside-table)))
     (is-html
-     (with-html
+     (with-html ()
        (:table
         (render widget)))
      "<table><tr class=\"widget widget-inside-table\"><p>foo bar</tr></table>")))
@@ -70,7 +70,7 @@
 (deftest test-widget-tr-child
   (let ((widget (make-instance 'widget-inside-table)))
     (is-html
-     (with-html
+     (with-html ()
        (:table
         (:tr
          (render widget))))

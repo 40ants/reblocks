@@ -25,7 +25,9 @@
                 #:fmt)
   (:import-from #:cl-mock
                 #:with-mocks
-                #:answer))
+                #:answer)
+  (:import-from #:40ants-routes/with-url
+                #:with-partially-matched-url))
 (in-package #:reblocks-tests/actions)
 
 
@@ -35,7 +37,7 @@
 
 (deftest get-action-name-from-request-test
   (testing "Checking if get-action-name-from-request works with GET and POST"
-    (with-session
+    (with-test-session ()
         (with-request ("/?action=blah" :method :get)
           (testing "It should work with GET parameters"
             (ok (equal (get-action-name-from-request)
@@ -48,9 +50,9 @@
                      "blah")))))))
 
 
-(defmacro with-test-session (() &body body)
-  `(reblocks/app:with-app (make-instance 'test-app)
-    (with-session
+(defmacro with-test-app (() &body body)
+  `(reblocks/app:with-app ((make-instance 'test-app))
+    (with-test-session ()
         (initialize-session-pages)
       ,@body)))
 
@@ -62,16 +64,27 @@
                                   (new-page t))
                              &body body)
   (let ((content (if new-page
-                     `(with-page-defaults
+                     `(with-page-defaults ()
                         ,@body)
                      `(progn ,@body))))
+    ;; `(let ((uri (etypecase ,uri
+    ;;               (cons (eval ,uri))
+    ;;               (string ,uri)))))
     `(with-request (,uri :method ,method :data ,data :headers ,headers)
-       ,content)))
+       (with-partially-matched-url ((40ants-routes/routes:routes ("empty-routes")
+                                      (reblocks/routes::page ("/")
+                                        ;; Handler is empty
+                                        )
+                                      (reblocks/routes::page ("/foo/bar")
+                                        ;; Handler is empty
+                                        ))
+                                    ,uri)
+         ,content))))
 
 
 (deftest action-evaluation
   (testing "Function eval-action should return action function's result"
-    (with-test-session ()
+    (with-test-app ()
       (with-test-request ("/foo/bar")
         (let ((action-name
                 (internal-make-action (lambda (&rest keys)
@@ -85,7 +98,7 @@
 
 
 (deftest eval-action-with-arguments
-  (with-test-session ()
+  (with-test-app ()
     (let* (action-result action-name)
       (with-test-request ("/")
         (setf action-name
@@ -105,11 +118,14 @@
                              :cancel "Cancel")))))
 
 
+(defclass someapp ()
+  ())
+
+
 (deftest missing-action
   (testing "eval-action should call reblocks/actions:on-missing-action if action is not found"
-    (with-session
-        (defclass someapp ()
-          ())
+    (with-test-session ()
+      
       (let ((app (make-instance 'someapp))
             result)
         (defmethod on-missing-action ((app someapp) action-name)
@@ -122,14 +138,14 @@
 
 
 (deftest make-action-signals-when-action-is-not-defined
-  (with-session
+  (with-test-session ()
       (with-request ("/")
         (ok (signals (make-action "abc123"))
             "Action with name \"abc123\" wasn't defined and function should raise an exception."))))
 
 
 (deftest make-action-success
-  (with-test-session ()
+  (with-test-app ()
     (with-test-request ("/")
       (internal-make-action #'identity "abc123")
      
@@ -146,10 +162,10 @@
   )
 
 (deftest make-action-url-test
-  (with-session
+  (with-test-session ()
       (initialize-session-pages)
-      (with-request ("/foo/bar" :method :get)
-        (with-page-defaults
+      (with-test-request ("/foo/bar" :method :get)
+        (with-page-defaults ()
           (internal-make-action 'test-action "test-action")
       
           (ok (equal (make-action-url "test-action")
@@ -157,7 +173,7 @@
 
 
 (deftest make-js-action-test ()
-  (with-test-session ()
+  (with-test-app ()
     (with-test-request ("/")
       (with-mocks ()
         (answer generate-action-code "action:code")

@@ -25,7 +25,11 @@
                 #:serve
                 #:render-in-head)
   (:import-from #:str
-                #:ends-with-p))
+                #:ends-with-p)
+  (:import-from #:40ants-routes/url-pattern
+                #:url-pattern-pattern)
+  (:import-from #:40ants-routes/route
+                #:url-path))
 (in-package #:reblocks-tests/dependencies)
 
 
@@ -65,12 +69,15 @@
                "application/javascript")
         "content type should be application/javascript")
 
-    (let ((route (get-route dependency)))
+    (let* ((route (get-route dependency))
+           (route-path (when route
+                         (url-pattern-pattern
+                          (url-path route)))))
       (ng (equal route nil)
           "local dependency should have a lisp webserver's route.")
       (when route
-        (ok (equal (routes:route-template route)
-                   (list "static" "js" "some.js"))
+        (ok (equal route-path
+                   "/static/js/some.js")
             "Route should point to a same filename in a special root for static files."))))
 
   (testing "Also, local dependency can be created using a string."
@@ -147,7 +154,7 @@
 
 
 (deftest render-css-dependency
-  (let ((dependency (make-dependency "t/data/some.css" :system "reblocks-tests")))
+  (let* ((dependency (make-dependency "t/data/some.css" :system "reblocks-tests")))
     (is-html (render-in-head dependency)
              "<link rel=stylesheet type=\"text/css\" href=\"/static/css/some.css\" media=screen>"
              "Local CSS dependency should be rendered as a link tag."))
@@ -196,7 +203,7 @@
 
 (deftest deduplication
   (testing "Dependencies should be deduplicated on collection."
-    (with-collected-dependencies
+    (with-collected-dependencies ()
       (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests"))
       (push-dependency (make-dependency #P"t/data/some.js" :system "reblocks-tests"))
       

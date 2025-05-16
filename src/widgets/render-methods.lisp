@@ -23,11 +23,11 @@
 (defmethod render (widget)
   "By default, widget rendered with a text, suggesting to define a rendering method."
   (let ((class-name (class-name (class-of widget))))
-    (with-html
+    (with-html ()
       (:p "Please, define:"
           (:pre (format nil
                         "(defmethod reblocks/widget:render ((widget ~a))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
         (:p \"My ~a widget\")))"
                         class-name
                         class-name))))))
@@ -46,7 +46,7 @@
 
   (destructuring-bind (tag-name . attributes)
       (ensure-list (get-html-tag widget))
-    (with-html
+    (with-html ()
       (:tag
        :name tag-name
        :class (get-css-classes-as-string widget)

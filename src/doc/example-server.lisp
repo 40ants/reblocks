@@ -147,7 +147,7 @@
 
 
 (defmethod reblocks/page:render-dependencies :after ((app examples-server) dependencies)
-  (with-html
+  (with-html ()
     (:link :rel "stylesheet"
            :href "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/a11y-dark.min.css")
     (:script :src "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js")
@@ -216,7 +216,7 @@ pre {
               path)))
     (cond
       ((current-widget widget)
-       (with-html
+       (with-html ()
 
          (:ul :class "tabs small"
               :data-tabs ""
@@ -243,7 +243,7 @@ pre {
                              (reblocks/doc/example::example-code
                               (current-example widget))))))))
       (t
-       (with-html
+       (with-html ()
          (:h1 ("No widget with path ~A" path))
          (cond
            ((zerop (hash-table-count *examples*))
@@ -257,7 +257,7 @@ pre {
 
 
 (defmethod reblocks/widget:render ((widget docs-widget))
-  (reblocks/html:with-html
+  (reblocks/html:with-html ()
     (cond
       (*for-asdf-systems*
        (:h1 "Documentation is available for these systems")

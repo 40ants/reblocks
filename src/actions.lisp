@@ -118,7 +118,8 @@ situation (e.g. redirect, signal an error, etc.)."))
   ;; - session code->action key which maps from string code to a function
   ;; - session code->page key which maps from string code to a page where action was instantiated
   ;; - action->code which maps backward from a function to a code.
-  (let ((page-code->action (page-actions *current-page*))
+  (let ((page-code->action (when (boundp '*current-page*)
+                             (page-actions *current-page*)))
         (session-code->action
           (reblocks/session:get-value 'code->action
                                       ;; Here we are using weakness to make
@@ -137,9 +138,13 @@ situation (e.g. redirect, signal an error, etc.)."))
           (reblocks/session:get-value 'action->code
                                       (make-weak-hash-table :weakness :key))))
 
-    (setf (gethash action-code page-code->action) action-fn)
+    (when (boundp '*current-page*)
+      (setf (gethash action-code page-code->action) action-fn)
+    
+      (setf (gethash action-code session-code->page) *current-page*))
+    
     (setf (gethash action-code session-code->action) action-fn)
-    (setf (gethash action-code session-code->page) *current-page*)
+    
     ;; Now, get or create a table for function->code mapping
     (setf (gethash action-fn session-action->code) action-code))
   
@@ -191,11 +196,12 @@ situation (e.g. redirect, signal an error, etc.)."))
   ```cl-transcript
   (reblocks/app:defapp test-app :autostart nil)
 
-  (let ((reblocks/request::*request*
-          (lack.request:make-request
-           (list :path-info "/blah/minor"
-                 :headers (make-hash-table)))))
-    (reblocks/app:with-app (make-instance 'test-app)
+  (let* ((reblocks/request::*request*
+           (lack.request:make-request
+            (list :path-info "/blah/minor"
+                  :headers (make-hash-table))))
+         (app (make-instance 'test-app)))
+    (reblocks/app:with-app (app)
       (reblocks/app-actions:define-action test-action test-app ())
       (reblocks/actions:make-action-url "test-action")))
   => "/blah/minor?action=test-action"

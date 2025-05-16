@@ -19,6 +19,8 @@
                 #:ensure-gethash)
   (:import-from #:lack.session.store
                 #:remove-session)
+  (:import-from #:str
+                #:starts-with-p)
 
   (:export
    #:with-session
@@ -126,6 +128,30 @@ used to create IDs for html elements, widgets, etc."
   (values))
 
 
+(defvar *bad-dispach*)
+
+(defvar *good-dispatch*)
+
+(defun current-print-settings ()
+  (setf *bad-dispach*
+        *print-pprint-dispatch*)
+  
+  (with-output-to-string (stream)
+    (loop for s being the external-symbol of (find-package :common-lisp)
+          when (starts-with-p "*PRINT"
+                              (symbol-name s))
+            collect (list s
+                          (if (boundp s)
+                              (symbol-value s)
+                              :unbound)) into results
+          finally (loop for (s value) in (sort results
+                                               #'string<
+                                               :key #'first)
+                        unless (string= s "*PRINT-PPRINT-DISPATCH*")
+                          do (format stream "~S: ~S~%"
+                                     s value)))))
+
+
 (defun get-lock (&optional session)
   (let ((session (or session
                      *session*)))
@@ -135,9 +161,15 @@ used to create IDs for html elements, widgets, etc."
     (with-lock-held (*session-lock-table-lock*)
       (ensure-gethash session
                       *session-locks*
-                      (make-recursive-lock
-                       (format nil "Session lock for session ~S"
-                               session))))))
+                      (progn
+                        ;; (log:error "Print settings:~%~"
+                        ;;            (current-print-settings))
+                        (make-recursive-lock
+                         ;; "Session lock for session"
+                         
+                         (format nil "Session lock for session ~S"
+                                 session)
+                         ))))))
 
 (declaim (inline call-with-session-lock))
 
@@ -162,7 +194,7 @@ used to create IDs for html elements, widgets, etc."
         (with-session-lock (*session*)
           (funcall func))
       (reset-session ()
-        :report "Reset current Weblocks session and return 500."
+        :report "Reset current Reblocks session and return 500."
         (log:warn "Resetting current session.")
         (clrhash *session*)
         (list 500 nil (list "Please, reload page to start a new session."))))))

@@ -34,22 +34,9 @@
 
 
 (defclass widget (dom-object-mixin)
-  ((propagate-dirty :accessor widget-propagate-dirty
-                    :initform nil
-                    :initarg :propagate-dirty
-                    :documentation "A list of widgets which will be made
-                    dirty when this widget is made dirty via a POST
-                    request. This slot allows setting up dependencies
-                    between widgets that will make multiple widgets
-                    update automatically during AJAX requests.")
-   (continuation :accessor widget-continuation
-                 :initform nil
-                 :documentation "Stores the continuation object for
-                 widgets that were invoked via one of the do-*
-                 functions ('do-page', etc.). When 'answer' is called
-                 on a widget, this value is used to resume the
-                 computation."))
-  #+lispworks (:optimize-slot-access nil)
+  ()
+  #+lispworks
+  (:optimize-slot-access nil)
   (:metaclass widget-class)
   (:documentation "Base class for all widget objects."))
 
@@ -138,30 +125,6 @@ The default implementation returns
     (join stringified :separator " ")))
 
 
-;; (defgeneric mark-dirty (w &key propagate)
-;;   (:documentation
-;;    "Default implementation adds a widget to a list of dirty
-;; widgets. Normally used during an AJAX request. If there are any
-;; widgets in the 'propagate-dirty' slot of 'w' and 'propagate' is true
-;; \(the default\), these widgets are added to the dirty list as well.
-
-;; Note that this function is automatically called when widget slots are
-;; modified, if slots are marked have affects-dirty-status-p flag.
-
-;; Returns NIL if the widget is already dirty or T and the results
-;; of calling MARK-DIRTY on the list of dependents \(propagate-dirty\)."))
-
-
-;; (defmethod mark-dirty ((w widget) &key (propagate t))
-;;   (unless (reblocks:widget-dirty-p w)
-;;     (pushnew w reblocks::*dirty-widgets*)
-;;     ;; NOTE: we have to check for unbound slots because this function
-;;     ;; may get called at initialization time before those slots are bound
-;;     (values t (when (and propagate (slot-boundp w 'propagate-dirty))
-;;                 (mapc #'mark-dirty
-;;                       (remove nil (widget-propagate-dirty w)))))))
-
-
 (defgeneric update (w &key inserted-after inserted-before removed)
   (:documentation "This method should be called to update widget on a client.
 
@@ -198,7 +161,7 @@ They can be useful to not update the whole parent widget.
            (unless removed
              (with-collected-commands ()
                (prog1
-                   (with-html-string
+                   (with-html-string ()
                      (render w))
                  (setf update-commands
                        (get-collected-commands)))))))

@@ -84,7 +84,7 @@
                         nil))))
              (update widget)))
     
-    (with-html
+    (with-html ()
       (:div :style "width: 50%; margin: 4rem auto"
             (cond
               ((edit-mode-p widget)
@@ -98,14 +98,14 @@
                          :value (name widget))
 
                  (:select :name "profession"
-                          (loop for profession in '("Nothing special"
-                                                    "Software Developer"
-                                                    "Designer"
-                                                    "Product Manager")
-                                for selected = (string= (profession widget)
-                                                        profession)
-                                do (:option :selected selected
-                                            profession)))
+                   (loop for profession in '("Nothing special"
+                                             "Software Developer"
+                                             "Designer"
+                                             "Product Manager")
+                         for selected = (string= (profession widget)
+                                                 profession)
+                         do (:option :selected selected
+                                     profession)))
                  (:textarea :name "bio"
                             (bio widget))
                  

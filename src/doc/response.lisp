@@ -20,20 +20,22 @@
                                       "AJAX"
                                       "HTTP"))
   (@best-practice section)
-  (@api section))
+  ;; (@api section)
+  )
 
 
 (defsection @best-practice (:title "Best Practice")
   "To simplify debugging, it is better to use structured logging and include a request id into all log messages and HTTP server response.
 
-   Adding such request id  is as simple as adding a method for REBLOCKS/REQUEST-HANDLER:HANDLE-REQUEST generic-function:
+   Adding such request id is as simple as adding a method for REBLOCKS/SERVER:HANDLE-HTTP-REQUEST generic-function:
 
    ```lisp
-   (defmethod reblocks/request-handler:handle-request ((app app))
-     (let ((*request-id* (make-request-id)))
+   (defmethod reblocks/server:handle-http-request :around ((server t) env)
+     (let ((request-id (princ-to-string
+                        (uuid:make-v4-uuid))))
        (reblocks/response:add-header :x-request-id
-                                     *request-id*)
-       (with-fields (:request-id *request-id*)
+                                     request-id)
+       (log4cl-extras/context:with-fields (:request-id request-id)
          (call-next-method))))
    ```
 
@@ -45,24 +47,24 @@
 ")
 
 
-(defsection @api (:title "API")
-  (reblocks/response:add-header function)
-  (reblocks/response:add-retpath-to function)
+;; (defsection @api (:title "API")
+;;   (reblocks/response:add-header function)
+;;   (reblocks/response:add-retpath-to function)
 
-  (reblocks/response:status-code function)
-  (reblocks/response:get-content function)
-  (reblocks/response:get-content-type function)
-  (reblocks/response:get-headers function)
-  (reblocks/response:set-cookie function)
-  (reblocks/response:cookies-to-set function)
-  ;; (reblocks/response:get-response generic-function)
-  (reblocks/response:get-response (reader reblocks/response:immediate-response))
-  (reblocks/response:immediate-response function)
-  (reblocks/response:immediate-response condition)
-  (reblocks/response:make-response function)
-  (reblocks/response:make-uri function)
-  (reblocks/response:send-script function)
+;;   (reblocks/response:status-code function)
+;;   (reblocks/response:get-content function)
+;;   (reblocks/response:get-content-type function)
+;;   (reblocks/response:get-headers function)
+;;   (reblocks/response:set-cookie function)
+;;   (reblocks/response:cookies-to-set function)
+;;   ;; (reblocks/response:get-response generic-function)
+;;   (reblocks/response:get-response (reader reblocks/response:immediate-response))
+;;   (reblocks/response:immediate-response function)
+;;   (reblocks/response:immediate-response condition)
+;;   (reblocks/response:make-response function)
+;;   (reblocks/response:make-uri function)
+;;   (reblocks/response:send-script function)
 
-  "# Deprecated"
-  (reblocks/response:get-code function)
-  (reblocks/response:get-custom-headers function))
+;;   "# Deprecated"
+;;   (reblocks/response:get-code function)
+;;   (reblocks/response:get-custom-headers function))

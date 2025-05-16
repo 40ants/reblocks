@@ -42,7 +42,7 @@
    #<REBLOCKS/WIDGETS/MOP:WIDGET-CLASS COMMON-LISP-USER::HELLO>
 
    CL-USER> (defmethod reblocks/widget:render ((widget hello))
-              (reblocks/html:with-html
+              (reblocks/html:with-html ()
                 (:span (\"Hello ~A\" (get-name widget)))))
    #<STANDARD-METHOD REBLOCKS/WIDGET:RENDER (HELLO) {1004E27BC3}>
    ```
@@ -60,24 +60,27 @@
   (hello-world reblocks-example)
 
   
-  "# API"
+  ;; "# API"
   
-  (reblocks/widget:widget class)
-  (reblocks/widget:defwidget macro)
-  (reblocks/widget:render generic-function)
-  (reblocks/widget:update generic-function)
-  (reblocks/widget:get-html-tag generic-function)
-  (reblocks/widget:get-css-classes generic-function)
-  (reblocks/widget:create-widget-from generic-function)
+  ;; (reblocks/widget:widget class)
+  ;; (reblocks/widget:defwidget macro)
+  ;; (reblocks/widget:render generic-function)
+  ;; (reblocks/widget:update generic-function)
+  ;; (reblocks/widget:get-html-tag generic-function)
+  ;; (reblocks/widget:get-css-classes generic-function)
+  ;; (reblocks/widget:create-widget-from generic-function)
 
   "# String widget
 
-   This is a simple type of widget which can be made out of any string."
+   This is a simple type of widget which can be made out of any string.
 
-  (reblocks/widgets/string-widget:string-widget class)
-  (reblocks/widgets/string-widget:make-string-widget function)
-  (reblocks/widgets/string-widget:get-content (accessor reblocks/widgets/string-widget:string-widget))
-  (reblocks/widgets/string-widget:escape-p (accessor reblocks/widgets/string-widget:string-widget)))
+   Create it using REBLOCKS/WIDGETS/STRING-WIDGET:MAKE-STRING-WIDGET function."
+
+  ;; (reblocks/widgets/string-widget:string-widget class)
+  ;; (reblocks/widgets/string-widget:make-string-widget function)
+  ;; (reblocks/widgets/string-widget:get-content (accessor reblocks/widgets/string-widget:string-widget))
+  ;; (reblocks/widgets/string-widget:escape-p (accessor reblocks/widgets/string-widget:string-widget))
+  )
 
 
 (defexample hello-world ()
@@ -86,7 +89,7 @@
            :reader get-name)))
 
   (defmethod reblocks/widget:render ((widget hello))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (:h1 ("Hello ~A" (get-name widget)))
       (:ul (:li "Just a list.")
            (:li "To demonstrate templating.")

@@ -18,16 +18,26 @@
                 #:removef
                 #:assoc-value)
   (:import-from #:serapeum
+                #:->
                 #:soft-list-of
                 #:defvar-unbound)
   (:import-from #:cl-cookie
                 #:cookie)
-  (:import-from #:lack.response
+  (:import-from #:lack/response
                 #:response-headers)
   (:import-from #:reblocks/page
                 #:in-page-context-p
                 #:current-page
                 #:on-page-redirect)
+  (:import-from #:reblocks/widget
+                #:create-widget-from
+                #:widget)
+  (:import-from #:reblocks/widgets/string-widget
+                #:make-string-widget)
+  (:import-from #:reblocks/app
+                #:app)
+  (:import-from #:reblocks/variables
+                #:*current-app*)
   (:export #:immediate-response
            #:make-response
            #:add-header
@@ -43,7 +53,10 @@
            #:add-retpath-to
            #:set-cookie
            #:cookies-to-set
-           #:status-code))
+           #:status-code
+           #:not-found-error
+           #:not-found-error-widget
+           #:not-found-error-app))
 (in-package #:reblocks/response)
 
 
@@ -58,23 +71,23 @@
 
 
 (defun get-headers (&optional (response *response*))
-  (check-type response lack.response:response)
-  (lack.response:response-headers response))
+  (check-type response lack/response:response)
+  (lack/response:response-headers response))
 
 
 (defun get-custom-headers (&optional (response *response*))
   "Function GET-CUSTOM-HEADERS is deprecated. Use GET-HEADERS instead."
-  (check-type response lack.response:response)
+  (check-type response lack/response:response)
   ;; TODO: remove this function after "2023-05-01"
   (log:warn "Function GET-CUSTOM-HEADERS is deprecated. Use GET-HEADERS instead.")
-  (lack.response:response-headers response))
+  (lack/response:response-headers response))
 
 
 (defun get-code (&optional (response *response*))
   "Function GET-CODE is deprecated. Use STATUS-CODE instead."
   ;; TODO: remove this function after "2023-05-01"
   (log:warn "Function GET-CODE is deprecated. Use STATUS-CODE instead.")
-  (lack.response:response-status response))
+  (lack/response:response-status response))
 
 
 (defun status-code (&optional (response *response*))
@@ -86,16 +99,16 @@
    (setf (reblocks/response:status-code)
          404)
    ```"
-  (lack.response:response-status response))
+  (lack/response:response-status response))
 
 
 (defun (setf status-code) (value &optional (response *response*))
-  (setf (lack.response:response-status response)
+  (setf (lack/response:response-status response)
         value))
 
 
 (defun get-content (&optional (response *response*))
-  (lack.response:response-body response))
+  (lack/response:response-body response))
 
 
 (defun get-content-type (&optional (response *response*))
@@ -108,7 +121,7 @@
 
 
 (define-condition immediate-response ()
-  ((response :type lack.response:response
+  ((response :type lack/response:response
              :initarg :response
              :reader get-response)))
 
@@ -117,13 +130,39 @@
   ())
 
 
+(define-condition not-found-error (error)
+  ((app :initarg :app
+        :type (or null app)
+        :reader not-found-error-app)
+   (widget :initarg :widget
+           :type widget
+           :reader not-found-error-widget)))
+
+
+(-> not-found-error ((or widget string))
+    (values &optional))
+
+(defun not-found-error (widget-or-string)
+  "Signals an error about not found page or object.
+
+   As the first argument you should pass a widget which will be shown
+   as the error page's content. Also you migth pass a string, in this
+   case content widget will be created automatically."
+  (error 'not-found-error
+         :app (when (boundp '*current-app*)
+                *current-app*)
+         :widget (etypecase widget-or-string
+                   (widget widget-or-string)
+                   (string (make-string-widget widget-or-string)))))
+
+
 (defun make-response (content &key
                                 (code 200)
                                 (content-type (get-default-content-type-for-response))
                                 (headers (get-headers)))
   (let ((headers (list* :content-type content-type
                         headers)))
-    (lack.response:make-response code headers content)))
+    (lack/response:make-response code headers content)))
 
 
 (defun add-header (name value)
@@ -167,7 +206,7 @@
   (unless (boundp '*response*)
     (error "Call SET-COOKIE function inside WITH-RESPONSE macro."))
 
-  (appendf (lack.response:response-set-cookies response)
+  (appendf (lack/response:response-set-cookies response)
            (list (getf cookie :name)
                  cookie))
   
@@ -178,7 +217,7 @@
   "Returns a list with a map cookie-name -> cookie:cookie object.
    Odd items in this list are cookie names and even are lists with
    cookie parameters."
-  (lack.response:response-set-cookies response))
+  (lack/response:response-set-cookies response))
 
 
 (defun make-uri (new-path &key base-uri)
@@ -268,7 +307,7 @@
                           :code code
                           :content-type content-type
                           :headers headers)))
-    (setf (lack.response:response-set-cookies new-response)
+    (setf (lack/response:response-set-cookies new-response)
           cookies-to-set)
     (error condition-class :response new-response)))
 
@@ -316,7 +355,7 @@
                         ;; in response to the actions and "Back" button might
                         ;; show the old state of the page in case of caching.
                         :cache-control "no-cache, no-store, must-revalidate"))
-         (*response* (lack.response:make-response 200 headers ""))
+         (*response* (lack/response:make-response 200 headers ""))
          (started-at (get-internal-real-time))
          (result (funcall thunk))
          (ended-at (get-internal-real-time))
@@ -328,17 +367,30 @@
     (add-header :server-timing
                 (format nil "render;dur=~A" duration))
 
-    (cond
-      ((and result (listp result))
-       result)
-      ((typep result 'lack.response:response)
-       result)
-      (result
-       (setf (lack.response:response-body *response*)
-             result)
-       *response*)
-      (t
-       *response*))))
+    (let ((prepared-result
+            (cond
+              (result
+               (typecase result
+                 (list
+                  result)
+                 (lack/response:response
+                  result)
+                 (function
+                  result)
+                 (string
+                  (setf (lack/response:response-body *response*)
+                        result)
+                  *response*)
+                 (t
+                  (error "Unknown type of result: ~S"
+                         (type-of result)))))
+              (t
+               *response*))))
+      (typecase prepared-result
+        (lack/response:response
+         (lack/response:finalize-response prepared-result))
+        (t
+         prepared-result)))))
 
 
 (defmacro with-response (() &body body)

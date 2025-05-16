@@ -23,13 +23,14 @@
    Read more about it at [Mozilla's docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing).
 "
 
-  "# API"
-  (status function)
-  (on function)
-  (off function)
-  (reset-latest-session function)
-  (get-session-value function)
+  ;; "# API"
+  ;; (status function)
+  ;; (on function)
+  ;; (off function)
+  ;; (reset-latest-session function)
+  ;; (get-session-value function)
   
-  (*latest-request* variable)
-  (*latest-session* variable))
+  ;; (*latest-request* variable)
+  ;; (*latest-session* variable)
+  )
 

@@ -62,17 +62,18 @@ For example, you might want to store information about the current user if he lo
   (login-example reblocks-example)
 
   "# API"
-  (with-session macro)
-  (get-value function)
-  (delete-value function)
-  (gen-id function)
-  (in-session-p function)
-  (init-session generic-function)
-  (reset function)
-  (expire function)
-  (get-number-of-sessions function)
-  (make-session-middleware function)
-  (get-number-of-anonymous-sessions function))
+  ;; (with-session macro)
+  ;; (get-value function)
+  ;; (delete-value function)
+  ;; (gen-id function)
+  ;; (in-session-p function)
+  ;; (init-session generic-function)
+  ;; (reset function)
+  ;; (expire function)
+  ;; (get-number-of-sessions function)
+  ;; (make-session-middleware function)
+  ;; (get-number-of-anonymous-sessions function)
+  )
 
 
 (defexample login-example ()
@@ -80,7 +81,7 @@ For example, you might want to store information about the current user if he lo
     ())
 
   (defmethod reblocks/widget:render ((widget login-example))
-    (reblocks/html:with-html
+    (reblocks/html:with-html ()
       (flet ((login-callback (&key login &allow-other-keys)
                (setf (reblocks/session:get-value :user) login)
                (reblocks/widget:update widget))

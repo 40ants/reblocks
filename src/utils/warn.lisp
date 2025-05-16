@@ -1,6 +1,8 @@
 (defpackage #:reblocks/utils/warn
   (:use #:cl)
   (:shadow #:style-warning)
+  (:import-from #:reblocks/app
+                #:%reblocks-webapp-debug)
   (:export #:style-warn
            #:style-warning
            #:non-idempotent-rendering
@@ -17,7 +19,7 @@ arguments."
 (define-compiler-macro style-warn (condition &rest warn-args)
   `(when (or (not (boundp '*current-webapp*))
              (null *current-webapp*)
-             (reblocks-webapp-debug *current-webapp*))
+             (%reblocks-webapp-debug *current-webapp*))
      (warn ,condition . ,warn-args)))
 
 
