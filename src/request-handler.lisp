@@ -15,7 +15,6 @@
                 #:current-page
                 #:render-page-with-widgets)
   (:import-from #:reblocks/session)
-  (:import-from #:40ants-routes/route)
   (:import-from #:reblocks/routes)
   (:import-from #:reblocks/widget
                 #:render)
@@ -59,8 +58,6 @@
   (:import-from #:alexandria
                 #:curry
                 #:make-keyword)
-  (:import-from #:40ants-routes/handler
-                #:call-handler)
   (:import-from #:log4cl-extras/error
                 #:print-backtrace)
   
