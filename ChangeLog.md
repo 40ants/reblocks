@@ -13,7 +13,7 @@ Here are changes made in this release:
 * Class `reblocks/routes:route` was removed.
 * Macro `reblocks/routes:defroute` was removed.
 * Function `reblocks/routes:get-route` was removed.
-* Generic-function `reblocks/request-handler:page-not-found-handler` was removed. Now [`reblocks/response:not-found-error`][edbf] function should be used to show a widget for 404 page and this widget will be wraped by funcallable application's slot [`reblocks/app:page-constructor`][fcfd].
+* Generic-function `reblocks/request-handler:page-not-found-handler` was removed. Now [`reblocks/response:not-found-error`][b67b] function should be used to show a widget for 404 page and this widget will be wraped by funcallable application's slot [`reblocks/app:page-constructor`][df27].
 * App's get-prefix is not setfable anymore.
 * Slash / is added to the app prefix, this might break if you use apps with prefix like /foo, because now it will become /foo/. This change is required because.
 * Handle-request generic-function was removed from reblocks/request-handler package.
@@ -37,12 +37,12 @@ Examples of routes for serving favicon and robots.txt:
 * Generic function reblocks/server:serve-static-file was removed
 * App can't be bound to the particular hostname anymore. Just start a different servers on a few ports and route traffic using some kind of reverse proxy.
 * Lambda list of these macros was changed to accept arguments beside a `BODY` argument: with-html, with-html-string, with-app, with-collected-dependencies, with-page-defaults
-* [`reblocks/app:page-constructor`][fcfd] slot was added to [`reblocks/app:app`][0b77] class. This way such common elements as header and footer can be added to all application's pages including error pages.
+* [`reblocks/app:page-constructor`][df27] slot was added to [`reblocks/app:app`][3ace] class. This way such common elements as header and footer can be added to all application's pages including error pages.
 * Previously Reblocks server catched only `ERROR` conditions, now it will do this for any `SERIOUS-CONDITION`,
   because `SBCL`'s timeouts are inherited from the `SERIOUS-CONDITION`.
-* Variable `reblocks/request-handler:*request-timeout*` was removed. Now request-timeout can be specified as an argument to [`reblocks/server:start`][290d] function and it's default value is available as [`reblocks/variables:*default-request-timeout*`][6810].
-* Slot `propagate-dirty` was removed from [`reblocks/widget:widget`][bb4e] class.
-* Slot `continuation` was moved from [`reblocks/widget:widget`][bb4e] class to [`reblocks/widgets/funcall-widget:funcall-widget`][e6c0] class.
+* Variable `reblocks/request-handler:*request-timeout*` was removed. Now request-timeout can be specified as an argument to [`reblocks/server:start`][05a3] function and it's default value is available as [`reblocks/variables:*default-request-timeout*`][3c47].
+* Slot `propagate-dirty` was removed from [`reblocks/widget:widget`][87fb] class.
+* Slot `continuation` was moved from [`reblocks/widget:widget`][87fb] class to [`reblocks/widgets/funcall-widget:funcall-widget`][8f0a] class.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E61-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -62,7 +62,7 @@ Examples of routes for serving favicon and robots.txt:
 
 ### Fixes
 
-* Fixed an error inside [`reblocks/actions:make-js-action`][12c7] function when called without `:ARGS`. (Thanks to olivercsr@github for the `PR`)
+* Fixed an error inside [`reblocks/actions:make-js-action`][a293] function when called without `:ARGS`. (Thanks to olivercsr@github for the `PR`)
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E60-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -91,7 +91,7 @@ An `examples/simple-form.lisp` file was added to demonstrate how this feature wo
 
 ### Changed
 
-* Generic-function [`reblocks/widget:get-html-tag`][e48d] now can return a list like `(list :input :onchange \"somevalue\")` to change not only `HTML` tag of the widget node, but also to add some arguments to it.
+* Generic-function [`reblocks/widget:get-html-tag`][ab65] now can return a list like `(list :input :onchange \"somevalue\")` to change not only `HTML` tag of the widget node, but also to add some arguments to it.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E58-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -101,7 +101,7 @@ An `examples/simple-form.lisp` file was added to demonstrate how this feature wo
 
 ### Added
 
-A new function [`reblocks/response:status-code`][f7de] was added as a replacement to [`reblocks/response:get-code`][de5d].
+A new function [`reblocks/response:status-code`][0d1b] was added as a replacement to [`reblocks/response:get-code`][a88c].
 The new function is setfable. Now you can change `HTTP` status code of the currently rendered page.
 This is especially helpful when rendering \"Not found\" or error pages.
 
@@ -125,7 +125,7 @@ This is especially helpful when rendering \"Not found\" or error pages.
 
 ### Added
 
-* Generic-function [`reblocks/page:body-classes`][05fd] was added and can be used to specify classes
+* Generic-function [`reblocks/page:body-classes`][7a10] was added and can be used to specify classes
   for `HTML` body. This can be helpful when making a site using frameworks like `TailwindCSS`.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E55-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -137,11 +137,11 @@ This is especially helpful when rendering \"Not found\" or error pages.
 ### Added
 
 * Optional argument :defer was added to javascript dependencies.
-* Argument `BASE-URI` was added to [`reblocks/response:make-uri`][fa5b] function.
+* Argument `BASE-URI` was added to [`reblocks/response:make-uri`][f302] function.
 * Now Reblocks responds with Server-Timing and this performance information can be
   viewed in the browser. Read more about this header at
   [Mozilla's docs][587f].
-* Generic-function [`reblocks/widget:update`][efa4] now has an optional argument `REMOVED`.
+* Generic-function [`reblocks/widget:update`][571b] now has an optional argument `REMOVED`.
   You can set it to T to remove widget from the `DOM` tree.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E54-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -152,13 +152,13 @@ This is especially helpful when rendering \"Not found\" or error pages.
 
 ### Added
 
-Function [`reblocks/request:get-remote-ip`][55ba] was added.
+Function [`reblocks/request:get-remote-ip`][3393] was added.
 
 <a id="fixed"></a>
 
 ### Fixed
 
-Now function [`reblocks/actions:make-action-url`][e063] removed old `action` argument if it is present in the
+Now function [`reblocks/actions:make-action-url`][c34a] removed old `action` argument if it is present in the
 current `URL`. This fixes the case when you want to make an action url from the callback processing
 another action.
 
@@ -173,8 +173,8 @@ but only replaces the keys corresponding to a form data fields.
 
 ### Changed
 
-Now all commands added using [`reblocks/response:send-script`][9d5d] or [`reblocks/commands:add-command`][5d7b]
-during the call to [`reblocks/widget:update`][efa4] generic-function, are added after the command
+Now all commands added using [`reblocks/response:send-script`][d548] or [`reblocks/commands:add-command`][69f4]
+during the call to [`reblocks/widget:update`][571b] generic-function, are added after the command
 for updating `DOM` node on the frontend. This fixes a problem happened when you attach
 some `JS` handlers to the `DOM` node, but after the update these handlers are deleted.
 
@@ -186,7 +186,7 @@ some `JS` handlers to the `DOM` node, but after the update these handlers are de
 
 ### Added
 
-* Documentation on [`reblocks/widgets/string-widget:string-widget`][293a] class and it's methods.q
+* Documentation on [`reblocks/widgets/string-widget:string-widget`][14b0] class and it's methods.q
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E51-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -196,14 +196,14 @@ some `JS` handlers to the `DOM` node, but after the update these handlers are de
 
 ### Changed
 
-* Function [`reblocks/actions:make-js-action`][12c7] now accepts `ARGS` argument. If given, it will be serialized as a dictionary and embedded into the action calling code. This way you can pass the arguments back into your lisp callback.
+* Function [`reblocks/actions:make-js-action`][a293] now accepts `ARGS` argument. If given, it will be serialized as a dictionary and embedded into the action calling code. This way you can pass the arguments back into your lisp callback.
 
 <a id="added"></a>
 
 ### Added
 
 * Added `includeCSS` and `includeJS` command handlers. This makes it possible to send such kind of commands via a websocket.
-* Now all widgets rendered on a page are collected into a hash table and you can find them by dom-id using [`reblocks/page:find-widget-by-id`][7790] function.
+* Now all widgets rendered on a page are collected into a hash table and you can find them by dom-id using [`reblocks/page:find-widget-by-id`][7c09] function.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E50-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -240,18 +240,18 @@ leading to posible DoS attack. Page expiration is controlled by two values:
 * A maximum number of pages per session. This may be needed to protect from
   opening too many pages within one session.
 
-Also, you can use [`reblocks/page:extend-expiration-time`][afbb] function to extend current page's
+Also, you can use [`reblocks/page:extend-expiration-time`][a9c1] function to extend current page's
 expiration time.
 
 When all pages in the session are expired, session is removed from the memory too.
 
-Generic-function [`reblocks/page:on-page-refresh`][fdf6] was added.
+Generic-function [`reblocks/page:on-page-refresh`][5ac3] was added.
 
 <a id="cached-widget-dependencies"></a>
 
 #### Cached widget dependencies
 
-Another interesting feature is mixin class [`reblocks/cached-dependencies-mixin:cached-dependencies-mixin`][66f5].
+Another interesting feature is mixin class [`reblocks/cached-dependencies-mixin:cached-dependencies-mixin`][561f].
 
 <a id="changed"></a>
 
@@ -265,15 +265,15 @@ These functions were moved to separate package `REBLOCKS/PAGE-DEPENDENCIES`:
 * already-loaded-p
 * page-dependencies
 
-New generic-function [`reblocks/session:init-session`][3f66] was introduced. Define a method if you
+New generic-function [`reblocks/session:init-session`][fcef] was introduced. Define a method if you
 need to add something into the user's session when it is initialized. This function will
 be called once per user.
 
-Generic function `REBLOCKS/SESSION:INIT` was replaced with [`reblocks/page:init-page`][bb7e] and it will
+Generic function `REBLOCKS/SESSION:INIT` was replaced with [`reblocks/page:init-page`][2049] and it will
 be called each time a user opens site in a new browser window or tab. When user refreshes
 the page it will not be called.
 
-Function [`reblocks/debug:reset-latest-session`][6c68] now provides a convenient restart to enable debug mode.
+Function [`reblocks/debug:reset-latest-session`][2c09] now provides a convenient restart to enable debug mode.
 
 <a id="deleted"></a>
 
@@ -287,10 +287,10 @@ Also `root-widget-key` and corresponding package `reblocks/widgets/root` were re
 ## 0.49.0 (2022-11-26)
 
 New functional was added which allows to control how does `HTTP` middlewares list is generated for the server.
-You might define your own [`reblocks/server:server`][e7d3] class and a method for [`reblocks/server:make-middlewares`][a00b] generic-function.
-Inside this method, you might inject additional middlewares using [`reblocks/server:insert-middleware`][7211] function.
+You might define your own [`reblocks/server:server`][ed58] class and a method for [`reblocks/server:make-middlewares`][a9d7] generic-function.
+Inside this method, you might inject additional middlewares using [`reblocks/server:insert-middleware`][a7ef] function.
 
-Also, a variable [`reblocks/server:*default-samesite-policy*`][1f79] was introdiced, to control default value of the SameSite `HTTP` header.
+Also, a variable [`reblocks/server:*default-samesite-policy*`][23ec] was introdiced, to control default value of the SameSite `HTTP` header.
 
 As a bonus, loading of reblocks-docs system was fixed.
 
@@ -336,7 +336,7 @@ Here is an example how to expire a cookie right now:
 ### Fixed
 
 * Error page rendering was fixed. Now such variables as page description, tags and title are
-  bound to their defaults while calling [`reblocks/error-handler:on-error`][3f3b] generic-function.
+  bound to their defaults while calling [`reblocks/error-handler:on-error`][3b6b] generic-function.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E46-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -346,7 +346,7 @@ Here is an example how to expire a cookie right now:
 
 ### Changed
 
-* Generic-function [`reblocks/error-handler:on-error`][3f3b] now accepts `BACKTRACE` argument which may
+* Generic-function [`reblocks/error-handler:on-error`][3b6b] now accepts `BACKTRACE` argument which may
   contain a string with a backtrace. Previously, default method of this generic-function
   has rendered wrong backtrace when you aborted request in debugger.
 * Also, a function [`log4cl-extras/error:print-backtrace`][6a57] is used now to format a backtrace
@@ -367,7 +367,7 @@ Here is an example how to expire a cookie right now:
 
 ### Fixed
 
-* Fixed how [`reblocks/page:get-title`][dd64] and other similar functions change the state.
+* Fixed how [`reblocks/page:get-title`][22f1] and other similar functions change the state.
   Previously there was a bug and these functions have changed a global variables.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -389,7 +389,7 @@ Here is an example how to expire a cookie right now:
 
 ### Added
 
-* Added function [`reblocks/preview:stop`][6f8d] to stop an app for previewing widgets during development.
+* Added function [`reblocks/preview:stop`][2f26] to stop an app for previewing widgets during development.
 
 <a id="fixed"></a>
 
@@ -398,7 +398,7 @@ Here is an example how to expire a cookie right now:
 * Fixed the way how dependencies are rendered in `AJAX` action response. Previously,
   when many widgets of the same class were updated on one user action Reblocks sent
   a duplicate css/js dependencies.
-* Function [`reblocks/request:refresh-request-p`][6547] was fixed and now works as expected.
+* Function [`reblocks/request:refresh-request-p`][a653] was fixed and now works as expected.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E45-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -423,10 +423,10 @@ Here is an example how to expire a cookie right now:
 * Fixed the way how welcome page app is started. Now it always started unless some
   other application does not use "/" prefix.
 * Also, fixed the way how application is choosen depending on request url path.
-* Function [`reblocks/server:stop`][7cc7] now removes all application and routes from the
+* Function [`reblocks/server:stop`][8c37] now removes all application and routes from the
   server instance. This way when you'll start it again, server might serve another
   set of the applications.
-* Now if you redefine your app using [`reblocks/app:defapp`][b91e] macro and change
+* Now if you redefine your app using [`reblocks/app:defapp`][a44d] macro and change
   `AUTOSTART` argument from `T` to `NIL`, this app will be removed from the list
   of applications to autostart.
 
@@ -434,7 +434,7 @@ Here is an example how to expire a cookie right now:
 
 ### Added
 
-* Now macro [`reblocks/app:defapp`][b91e] supports `DOCUMENTATION` argument. Use it to add documentation
+* Now macro [`reblocks/app:defapp`][a44d] supports `DOCUMENTATION` argument. Use it to add documentation
   to application's class.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E43-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
@@ -445,7 +445,7 @@ Here is an example how to expire a cookie right now:
 
 ### Changed
 
-* Argument `CACHE-IN-MEMORY` was added to [`reblocks/dependencies:make-dependency`][5291] function.
+* Argument `CACHE-IN-MEMORY` was added to [`reblocks/dependencies:make-dependency`][a509] function.
   It allows to compile local dependency into the memory. This way you can build a standalone
   executable webserver without `JS` and `CSS` dependencies!
 * jQuery and some other dependencies now are cached in memory at compilation time.
@@ -464,8 +464,8 @@ Here is an example how to expire a cookie right now:
 * Fixed the error occured after you stopped the webserver and started it again using the same port.
   Previously Reblocks complained that the server is already running on this port.
 * Fixed the way how Reblocks signal an error on missing action. Now it does this by default
-  from the default implementation of the [`reblocks/actions:on-missing-action`][e53b] generic-function.
-  But if variable [`reblocks/variables:*ignore-missing-actions*`][fa78] is `t`, then error will not be signaled
+  from the default implementation of the [`reblocks/actions:on-missing-action`][6586] generic-function.
+  But if variable [`reblocks/variables:*ignore-missing-actions*`][05af] is `t`, then error will not be signaled
   and user will be redirected to the application's previx path.
 
 <a id="changed"></a>
@@ -474,7 +474,7 @@ Here is an example how to expire a cookie right now:
 
 * Documentation examples server was changed to render a list of `ASDF` systems for which documentation
   was built.
-* `reblocks/preview:preview` ([`1`][8412] [`2`][0100]) is able to accept a widget's class as a symbol.
+* `reblocks/preview:preview` ([`1`][bef8] [`2`][582f]) is able to accept a widget's class as a symbol.
 
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E41-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -495,10 +495,10 @@ Here is an example how to expire a cookie right now:
 ### Added
 
 * Added a welcome screen app on "/" that lists the active apps.
-* Generic-function [`reblocks/widget:create-widget-from`][997d] now returns a more user-friendly error
+* Generic-function [`reblocks/widget:create-widget-from`][5f3d] now returns a more user-friendly error
   message, explaining that the widget is not of a good type, instead
   of "no applicable generic method".
-* A new function [`reblocks/preview:preview`][8412] was added. Give it a widget and it will setup
+* A new function [`reblocks/preview:preview`][bef8] was added. Give it a widget and it will setup
   a server on a random port and show the widget in a browser!
 * Ability to run many web servers each on it's own `HTTP` port. Each server can have
   it's own set of applications.
@@ -509,18 +509,18 @@ Here is an example how to expire a cookie right now:
 * Changed a library used to log unhandled errors.
   Now [log4cl-extras][8f00] is used,
   because it is a successor of [log4cl-json][0303].
-* Function [`reblocks/server:stop`][7cc7] now accepts optional `interface` and `port` arguments.
-* Function `reblocks/action::function-or-action->action` was renamed to [`reblocks/actions:make-action`][2542] and made public.
+* Function [`reblocks/server:stop`][8c37] now accepts optional `interface` and `port` arguments.
+* Function `reblocks/action::function-or-action->action` was renamed to [`reblocks/actions:make-action`][bb12] and made public.
   Old `reblocks/action:make-action` was renamed to `reblocks/action::internal-make-action`.
 * `JS` function initiateActionWithArgs now uses `POST` method by default.
-* Function [`reblocks/actions:make-action-url`][e063] is exported now and it keeps query params by default.
+* Function [`reblocks/actions:make-action-url`][c34a] is exported now and it keeps query params by default.
 
 <a id="new-functions"></a>
 
 ### New Functions
 
-* [`reblocks/server:servers`][a5c9]
-* [`reblocks/server:running-p`][abbd]
+* [`reblocks/server:servers`][be4d]
+* [`reblocks/server:running-p`][0642]
 
 <a id="removals"></a>
 
@@ -543,7 +543,7 @@ Here is an example how to expire a cookie right now:
 
 Also removed:
 
-* A variable `*current-page-headers*`, define an `:AFTER` method for [`reblocks/page:render-headers`][b0e8] instead.
+* A variable `*current-page-headers*`, define an `:AFTER` method for [`reblocks/page:render-headers`][7a69] instead.
 * `*approved-return-codes*`
 * `*current-page-keywords*`
 * `*current-page-title*`
@@ -561,12 +561,12 @@ the same path relative to the current directory and throw error if file can't be
 This could happen if you've compiled the webserver into a binary and moved it to another
 container or machine.
 
-[`reblocks/server:start`][290d] function now accepts `SAMESITE-POLICY` argument which should be one of
+[`reblocks/server:start`][05a3] function now accepts `SAMESITE-POLICY` argument which should be one of
 keywords: `:LAX`, `:STRICT` or `:NONE`. This parameter modifies `SameSite` part of the cookies
 sent to the client.
 
-Hooks `API` was refactored in a backward incompatible manner. [`reblocks/hooks:defhook`][9689] macro now requires
-to specify hook's arguments and all macros generated by the [`reblocks/hooks:defhook`][9689] also require arguments
+Hooks `API` was refactored in a backward incompatible manner. [`reblocks/hooks:defhook`][49fd] macro now requires
+to specify hook's arguments and all macros generated by the [`reblocks/hooks:defhook`][49fd] also require arguments
 specification.
 
 jQuery was upgraded from 1.8.2 to 3.6.0. It's plugins jquery.ba-bbq.js and jquery-seq.js were
@@ -1762,56 +1762,56 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 * Previous history wasn't tracked.
 
 
-[2542]: api.html#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29
-[e063]: api.html#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29
-[12c7]: api.html#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
-[e53b]: api.html#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29
-[0b77]: api.html#x-28REBLOCKS-2FAPP-3AAPP-20CLASS-29
-[b91e]: api.html#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[fcfd]: api.html#x-28REBLOCKS-2FAPP-3APAGE-CONSTRUCTOR-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20REBLOCKS-2FAPP-3AAPP-29-29
-[66f5]: api.html#x-28REBLOCKS-2FCACHED-DEPENDENCIES-MIXIN-3ACACHED-DEPENDENCIES-MIXIN-20CLASS-29
-[5d7b]: api.html#x-28REBLOCKS-2FCOMMANDS-3AADD-COMMAND-20FUNCTION-29
-[6c68]: api.html#x-28REBLOCKS-2FDEBUG-3ARESET-LATEST-SESSION-20FUNCTION-29
-[5291]: api.html#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
-[3f3b]: api.html#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29
-[9689]: api.html#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
-[05fd]: api.html#x-28REBLOCKS-2FPAGE-3ABODY-CLASSES-20GENERIC-FUNCTION-29
-[afbb]: api.html#x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29
-[7790]: api.html#x-28REBLOCKS-2FPAGE-3AFIND-WIDGET-BY-ID-20FUNCTION-29
-[dd64]: api.html#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
-[bb7e]: api.html#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29
-[fdf6]: api.html#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29
-[b0e8]: api.html#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
-[0100]: api.html#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20CLASS-29
-[8412]: api.html#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
-[6f8d]: api.html#x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29
-[55ba]: api.html#x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29
-[6547]: api.html#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
-[de5d]: api.html#x-28REBLOCKS-2FRESPONSE-3AGET-CODE-20FUNCTION-29
-[fa5b]: api.html#x-28REBLOCKS-2FRESPONSE-3AMAKE-URI-20FUNCTION-29
-[edbf]: api.html#x-28REBLOCKS-2FRESPONSE-3ANOT-FOUND-ERROR-20FUNCTION-29
-[9d5d]: api.html#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
-[f7de]: api.html#x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29
-[1f79]: api.html#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
-[7211]: api.html#x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29
-[a00b]: api.html#x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29
-[abbd]: api.html#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
-[e7d3]: api.html#x-28REBLOCKS-2FSERVER-3ASERVER-20CLASS-29
-[a5c9]: api.html#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29
-[290d]: api.html#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
-[7cc7]: api.html#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
-[3f66]: api.html#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
-[6810]: api.html#x-28REBLOCKS-2FVARIABLES-3A-2ADEFAULT-REQUEST-TIMEOUT-2A-20-28VARIABLE-29-29
-[fa78]: api.html#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
-[997d]: api.html#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
-[e48d]: api.html#x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29
-[efa4]: api.html#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
-[bb4e]: api.html#x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29
-[e6c0]: api.html#x-28REBLOCKS-2FWIDGETS-2FFUNCALL-WIDGET-3AFUNCALL-WIDGET-20CLASS-29
-[293a]: api.html#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
 [eeaa]: http://keepachangelog.com/
 [6a57]: https://40ants.com/log4cl-extras/#x-28LOG4CL-EXTRAS-2FERROR-3APRINT-BACKTRACE-20FUNCTION-29
 [46b9]: https://40ants.com/reblocks-navigation-widget/#x-28-23A-28-2826-29-20BASE-CHAR-20-2E-20-22reblocks-navigation-widget-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29
+[bb12]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29
+[c34a]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29
+[a293]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29
+[6586]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29
+[3ace]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3AAPP-20CLASS-29
+[a44d]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[df27]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3APAGE-CONSTRUCTOR-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20REBLOCKS-2FAPP-3AAPP-29-29
+[561f]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FCACHED-DEPENDENCIES-MIXIN-3ACACHED-DEPENDENCIES-MIXIN-20CLASS-29
+[69f4]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FCOMMANDS-3AADD-COMMAND-20FUNCTION-29
+[2c09]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FDEBUG-3ARESET-LATEST-SESSION-20FUNCTION-29
+[a509]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29
+[3b6b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29
+[49fd]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29
+[7a10]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3ABODY-CLASSES-20GENERIC-FUNCTION-29
+[a9c1]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29
+[7c09]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AFIND-WIDGET-BY-ID-20FUNCTION-29
+[22f1]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29
+[2049]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29
+[5ac3]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29
+[7a69]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29
+[582f]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20CLASS-29
+[bef8]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29
+[2f26]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29
+[3393]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29
+[a653]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29
+[a88c]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3AGET-CODE-20FUNCTION-29
+[f302]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3AMAKE-URI-20FUNCTION-29
+[b67b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ANOT-FOUND-ERROR-20FUNCTION-29
+[d548]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
+[0d1b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29
+[23ec]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
+[a7ef]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29
+[a9d7]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29
+[0642]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
+[ed58]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASERVER-20CLASS-29
+[be4d]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29
+[05a3]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
+[8c37]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
+[fcef]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
+[3c47]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FVARIABLES-3A-2ADEFAULT-REQUEST-TIMEOUT-2A-20-28VARIABLE-29-29
+[05af]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
+[5f3d]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
+[ab65]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29
+[571b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
+[87fb]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29
+[8f0a]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGETS-2FFUNCALL-WIDGET-3AFUNCALL-WIDGET-20CLASS-29
+[14b0]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29
 [3faf]: https://40ants.com/routes/#x-28-23A-28-2813-29-20BASE-CHAR-20-2E-20-2240ants-routes-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29
 [587f]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
 [91c9]: https://github.com/40ants/lack
