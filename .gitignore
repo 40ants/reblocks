@@ -6,4 +6,5 @@
 /lispapp
 .DS_Store
 *.fasl
+*.lx64fsl
 .aider*

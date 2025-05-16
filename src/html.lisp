@@ -37,16 +37,18 @@
    "
   `(let* ((spinneret:*html* *stream*)
           (spinneret:*html-lang* ,(if lang-given-p
-                                    lang
-                                    '*lang*))
-          ;; We want to an HTML which is nice to read, by default
+                                      lang
+                                      '*lang*))
           (*print-pretty* ,(if pretty-given-p
-                             pretty
-                             '*print-pretty*))
+                               pretty
+                               ;; We want to an HTML which is nice to read, by default,
+                               ;; or reuse setting set by outer with-html form:
+                               '*pretty-html*))
           ;; To make nested with-html and with-html-string work as expected,
           ;; we need to bind this variable, because it is used as default
           ;; for these macro:
           (*pretty-html* *print-pretty*))
+     
      (spinneret:with-html 
        ,@body)))
 
@@ -59,7 +61,8 @@
   (let ((with-html-args
             (append
              (when pretty-given-p
-               (list :pretty pretty))
+               (list :pretty
+                     pretty))
              (when lang-given-p
                (list :lang lang)))))
     `(with-output-to-string (*stream*)
