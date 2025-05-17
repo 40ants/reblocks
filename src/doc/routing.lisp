@@ -10,8 +10,6 @@
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
                 #:pythonic-string-syntax)
-  (:shadowing-import-from #:40ants-routes/defroutes
-                          #:get)
   (:export #:@routing))
 (in-package #:reblocks/doc/routing)
 
@@ -27,8 +25,7 @@
                                      "HTML"
                                      "TASK-PAGE"
                                      "MAKE"
-                                     "CL-PPCRE")
-                      :external-docs ("https://40ants.com/routes"))
+                                     "CL-PPCRE"))
   """
 Previously the recommendate way for processing different URL paths was use of REBLOCKS-NAVIGATION-WIDGET system.
 But now Reblocks integrates with 40ANTS-ROUTES and it is possible to specify which widgets to show for the URL path.
@@ -128,15 +125,32 @@ your route handler should return a list instead of widget:
   :prefix "/"
   :routes ((page ("/" :name "index")
              (make-landing-page))
+
+           ;; First way of serving the favicon:
+           (static-file "/favicon.ico"
+             (asdf:system-relative-pathname :my-app "favicon.ico")
+             :content-type "image/x-icon")
+
+           ;; Alternative would be:
            (get ("/favicon.ico")
              (list 200
                    (list :content-type "image/x-icon")
                    (asdf:system-relative-pathname :my-app
                                                   "favicon.ico")))
+           ;; Also we can return just a string and it will become
+           ;; a page's content:
            (get ("/robots.txt")
              "User-agent: *")))
 ```
 
-As you can see, the route's handler might return a list of three items: http code, http headers and a pathname. Or just a string.
+Here we see a two alternative ways to serve a favicon file:
+
+1. The first way is to use REBLOCKS/ROUTES:STATIC-FILE function for constructing the route.
+2. The second way is more generic - it uses 40ANTS-ROUTES/DEFROUTES:GET with
+   the body returning a list in the format defined by [Clack](https://github.com/fukamachi/clack)
+   web server.
+
+As you can see, when you are using 40ANTS-ROUTES/DEFROUTES:GET, the route's handler might
+return a list of three items: http code, http headers and a pathname. Or just a string.
 Actually, this reponse is passed to the Clack as is and anything supported by Clack is supported.
 """)

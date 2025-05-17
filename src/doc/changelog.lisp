@@ -34,10 +34,12 @@
                                                    "REBLOCKS/ERROR-HANDLER"
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
-                                    :external-links (("Ultralisp" . "https://ultralisp.org"))
-                                    :external-docs ("https://40ants.com/log4cl-extras/"
-                                                    "https://40ants.com/routes/"
-                                                    "https://40ants.com/reblocks-navigation-widget/"))
+                                    :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.63.0 2025-05-17
+          "
+- Class `reblocks/server::static-route-from-file` was renamed and now exported as REBLOCKS/ROUTES:STATIC-FILE-ROUTE along with
+  a constructor function REBLOCKS/ROUTES:STATIC-FILE.
+")
   (0.62.0 2025-05-08
           """
 This release contains many changes, but the main one is that now Reblocks uses 40ANTS-ROUTES system to provide a native way to define routes for multipage applications. Previously you have to process routes manually or use REBLOCKS-NAVIGATION-WIDGET system.
