@@ -2,6 +2,13 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E63-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.63.0 (2025-05-17)
+
+* Class `reblocks/server::static-route-from-file` was renamed and now exported as [`reblocks/routes:static-file-route`][eeba] along with
+  a constructor function [`reblocks/routes:static-file`][08a9].
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E62-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.62.0 (2025-05-08)
@@ -1795,6 +1802,8 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [b67b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ANOT-FOUND-ERROR-20FUNCTION-29
 [d548]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
 [0d1b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29
+[08a9]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-20FUNCTION-29
+[eeba]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-ROUTE-20CLASS-29
 [23ec]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
 [a7ef]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29
 [a9d7]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29
