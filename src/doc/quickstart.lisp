@@ -35,7 +35,6 @@
                                         "TASK-LIST"
                                         "RENDER"
                                         "AJAX")
-                         :external-docs ("https://40ants.com/reblocks-ui")
                          :external-links (("Webinspector" . "https://developers.google.com/web/tools/chrome-devtools/inspect-styles/")
                                           ("Ultralisp" . "https://ultralisp.org/")
                                           ("Reblocks-ui" . "https://github.com/40ants/reblocks-ui/")

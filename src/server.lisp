@@ -625,19 +625,3 @@ If server is already started, then logs a warning and does nothing."
             
             (stop-server server)
             (values server))))
-
-;;;; Static files
-
-(defclass static-route-from-file (route)
-  ((path :initarg :path
-         :reader get-path)
-   (content-type :initarg :content-type
-                 :reader get-content-type)))
-
-
-(defmethod reblocks/routes:serve ((route static-route-from-file) env)
-  "Returns a file's content"
-  (declare (ignorable env))
-  (list 200
-        (list :content-type (get-content-type route))
-        (get-path route)))

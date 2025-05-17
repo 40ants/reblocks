@@ -21,9 +21,7 @@
                                         "MAKE-WIDGET"
                                         ;; TODO: make an external-link
                                         "REBLOCKS-NAVIGATION-WIDGET"
-                                        )
-                         ;; :external-docs ("https://40ants.com/reblocks-navigation-widget/")
-                         )
+                                        ))
   "
 # Widgets
 
