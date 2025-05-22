@@ -24,14 +24,15 @@
                                        "REBLOCKS-UI"))
   (@page section)
   (@html section)
-  (@widgets section))
+  (@widgets section)
+  (@sub-widgets section))
 
 
 (defsection @html (:title "HTML Rendering"
                    :external-links (("Spinneret" . "https://github.com/ruricolist/spinneret")
                                     ("CL-WHO" . "https://edicl.github.io/cl-who/")
                                     ("REBLOCKS-UI" . "https://github.com/40ants/reblocks-ui")))
-"""
+  """
 Out of the box, Reblocks provides a few facilities for HTML generation.
 They are based on [`Spinneret`][Spinneret] templating engine. Old version of Weblocks used
 [CL-WHO][CL-WHO] instead. But Spinneret is more flexible and what is more important,
@@ -66,16 +67,16 @@ REBLOCKS/HTML:WITH-HTML-STRING:
     (:li "Three")))
 ;..
 ;=> "<ul>
-;->  <li>One
-;->  <li>Two
-;->  <li>Three
-;-> </ul>"
-```
+                                        ;->  <li>One
+                                        ;->  <li>Two
+                                        ;->  <li>Three
+                                        ;-> </ul>"
+  ```
   
-You can use any other templating engine, just ensure
-it writes output to the REBLOCKS/HTML:*STREAM* variable.
+  You can use any other templating engine, just ensure
+  it writes output to the REBLOCKS/HTML:*STREAM* variable.
 
-For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
+  For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
 
   """
 )
@@ -132,6 +133,34 @@ For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
   
   """)
 
+(defsection @sub-widgets (:title "Sub-widget Rendering")
+  """
+  Reblocks pages are represented by a root widget which can have sub-widgets. Thus we have
+  a widgets trivial-mimes:find-mime.types
+
+  To render subwidgets, you have to call REBLOCKS/WIDGET:RENDER generic-function
+  on each subwidget insite the widget's REBLOCKS/WIDGET:RENDER generic-function method:
+
+  ```
+  (defmethod reblocks/widget:render ((obj some-widget))
+    (reblocks/widget:render (header-widget obj))
+    (reblocks/widget:render (table-widget obj)))
+  ```
+
+  If you are using REBLOCKS/HTML:WITH-HTML macro and wrap subwidgets with a custom HTML
+  tag, then you can use implicit rendering and just pass subwidgets to Spinneret's HTML tag:
+
+  ```
+  (defmethod reblocks/widget:render ((obj some-widget))
+    (reblocks/html:with-html ()
+      (:div :class "flex flex-col"
+            (header-widget obj)
+            (table-widget obj))))
+  ```
+
+  This works because Reloblocks defines a method for `spinneret:html` generic-function.
+  """
+  )
 
 (defsection @page (:title "Page Rendering")
   """
