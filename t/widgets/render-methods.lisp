@@ -67,6 +67,7 @@
         (render widget)))
      "<table><tr class=\"widget widget-inside-table\"><p>foo bar</tr></table>")))
 
+
 (deftest test-widget-tr-child
   (let ((widget (make-instance 'widget-inside-table)))
     (is-html
@@ -74,4 +75,14 @@
        (:table
         (:tr
          (render widget))))
+     "<table><tr><td class=\"widget widget-inside-table\"><p>foo bar</td></table>")))
+
+
+(deftest test-widget-tr-child-using-implicit-render
+  (let ((widget (make-instance 'widget-inside-table)))
+    (is-html
+     (with-html ()
+       (:table
+        (:tr
+         widget)))
      "<table><tr><td class=\"widget widget-inside-table\"><p>foo bar</td></table>")))

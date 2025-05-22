@@ -13,6 +13,8 @@
   (:import-from #:closer-mop
                 #:funcallable-standard-object
                 #:required-args)
+  (:import-from #:serapeum
+                #:->)
   (:export #:safe-apply
            #:safe-funcall
            #:public-file-relative-path
@@ -178,16 +180,20 @@ answering its result."
   (merge-files file-list saved-path
                :linkage-element-fn (lambda (stream) (write-byte 10 stream))))
 
+
+(-> relative-path (pathname pathname)
+    (values pathname &optional))
+
 (defun relative-path (full-path prefix-path)
-  (princ-to-string
-   (make-pathname :directory (cons :relative
-                                   (nthcdr (length (pathname-directory prefix-path))
-                                           (pathname-directory full-path)))
-                  :name (pathname-name full-path)
-                  :type (pathname-type full-path))))
+  (make-pathname :directory (cons :relative
+                                  (nthcdr (length (pathname-directory prefix-path))
+                                          (pathname-directory full-path)))
+                 :name (pathname-name full-path)
+                 :type (pathname-type full-path)))
+
 
 (defun gzip-file (input output &key (if-exists #+ccl :overwrite #-ccl :supersede) (if-does-not-exist :create)
-                  (minimum-length 300))
+                                 (minimum-length 300))
   "Redefined salsa2:gzip-file with more keywords."
   (with-open-file (istream input :element-type '(unsigned-byte 8))
     (unless (< (file-length istream) minimum-length)
