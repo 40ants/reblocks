@@ -14,18 +14,20 @@
 (in-readtable pythonic-string-syntax)
 
 
-(defsection @rendering (:title "Content Rendering")
+(defsection @rendering (:title "Content Rendering"
+                        :ignore-words ("HTML"
+                                       "DIV"
+                                       "CSS"
+                                       "JS"
+                                       "CL-WHO"
+                                       "UI"
+                                       "REBLOCKS-UI"))
   (@page section)
-  (@html section))
+  (@html section)
+  (@widgets section))
 
 
 (defsection @html (:title "HTML Rendering"
-                   :ignore-words ("HTML"
-                                  "DIV"
-                                  "CSS"
-                                  "CL-WHO"
-                                  "UI"
-                                  "REBLOCKS-UI")
                    :external-links (("Spinneret" . "https://github.com/ruricolist/spinneret")
                                     ("CL-WHO" . "https://edicl.github.io/cl-who/")
                                     ("REBLOCKS-UI" . "https://github.com/40ants/reblocks-ui")))
@@ -75,26 +77,63 @@ it writes output to the REBLOCKS/HTML:*STREAM* variable.
 
 For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
 
-## API
-  
-"""
-
-  ;; (reblocks/html:with-html macro)
-  ;; (reblocks/html:with-html-string macro)
-  ;; (reblocks/html:*stream* variable)
-  ;; (reblocks/html:*lang* variable)
-  ;; (reblocks/html:*pretty-html* variable)
+  """
 )
 
 
-(defsection @page (:title "Page Rendering"
-                   :ignore-words ("HTML"
-                                  "CSS"
-                                  "JS"))
-  ;; (reblocks/page:render generic-function)
-  ;; (reblocks/page:render-body generic-function)
-  ;; (reblocks/page:render-dependencies generic-function)
+(defsection @widgets (:title "Widget Rendering")
+  """
+  For rendering a widget content you have to define a method for REBLOCKS/WIDGET:RENDER generic-function.
+  Use REBLOCKS/HTML:WITH-HTML macro to write HTML using lisp expression. Under the hood, this macro
+  uses a great [Spinneret](https://github.com/ruricolist/spinneret) library:
+  
+  ```
+  (defwidget foo ()
+    ())
 
+
+  (defmethod reblocks/widget:render ((obj foo))
+    (reblocks/html:with-html ()
+      (:p "Hello world!")))
+
+  ```
+
+  Also, any string or object, returned from the render method, will be used
+  to render widget's content. For example, you might do:
+
+  ```
+  (defmethod reblocks/widget:render ((obj foo))
+    "<b>Hello</b> world!")
+  ```
+
+  But in this case, symbols `<` and `>` will be escaped and you will not see "Hello" in bold font.
+
+  If you don't want to use Spinneret for rendering but want to get HTML non-escaped, you need to write
+  HTML string into the REBLOCKS/HTML:*STREAM* stream like this:
+  Note, in this case we should explicitly say that our method does not return anything useful:
+
+  ```
+  (defmethod reblocks/widget:render ((obj foo))
+    (write-string "<b>Hello</b> world!"
+                  reblocks/html:*stream*
+                  )
+    (values))
+  ```
+
+  This will render "Hello" in bold as desired.
+
+  You can use this method for rendering some widgets using template engines other than Spinneret, such as:
+
+  - https://github.com/mmontone/djula
+  - https://github.com/kanru/cl-mustache
+  - https://github.com/moderninterpreters/markup
+
+  Just use engine you like and write it's output to REBLOCKS/HTML:*STREAM*!
+  
+  """)
+
+
+(defsection @page (:title "Page Rendering")
   """
   These functions can be used during rendering
   to retrieve an information about the page:
@@ -107,14 +146,13 @@ For more advanced UI, look at the [REBLOCKS-UI][REBLOCKS-UI] documentation.
   only after that renders page HTML headers.
   Thus you might use `setf` on these functions during
   widget rendering to change the title, description
-  or keywords.
-  """
-  ;; (reblocks/page:get-title function)
-  ;; (reblocks/page:get-description function)
-  ;; (reblocks/page:get-keywords function)
-  ;; (reblocks/page:get-language function)
+  or keywords:
+  
+  - REBLOCKS/PAGE:GET-TITLE
+  - REBLOCKS/PAGE:GET-DESCRIPTION
+  - REBLOCKS/PAGE:GET-KEYWORDS
+  - REBLOCKS/PAGE:GET-LANGUAGE
 
-  """
   If you want to change these variables globally for the whole
   application, then define a before method like this:
 
