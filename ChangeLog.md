@@ -2,6 +2,23 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E64-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.64.0 (2025-05-22)
+
+<a id="backward-incompatible-changes"></a>
+
+### Backward incompatible changes
+
+* Function [`reblocks/utils/misc:relative-path`][2db6] now accepts the pathnames and returns a pathname instead of string.
+
+<a id="new"></a>
+
+### New
+
+* A special method was added for Spinneret's `html` generic-function. This method calls [`reblocks/widget:render`][5607]
+  generic-function if you use a widget in the body of Spinneret `HTML` tag.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E63-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.63.0 (2025-05-17)
@@ -1813,10 +1830,12 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [05a3]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29
 [8c37]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29
 [fcef]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29
+[2db6]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FUTILS-2FMISC-3ARELATIVE-PATH-20FUNCTION-29
 [3c47]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FVARIABLES-3A-2ADEFAULT-REQUEST-TIMEOUT-2A-20-28VARIABLE-29-29
 [05af]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29
 [5f3d]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29
 [ab65]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29
+[5607]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29
 [571b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29
 [87fb]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29
 [8f0a]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGETS-2FFUNCALL-WIDGET-3AFUNCALL-WIDGET-20CLASS-29
