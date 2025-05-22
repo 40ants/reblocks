@@ -35,6 +35,17 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.64.0 2025-05-22
+          "
+# Backward incompatible changes
+
+- Function REBLOCKS/UTILS/MISC:RELATIVE-PATH now accepts the pathnames and returns a pathname instead of string.
+
+# New
+
+- A special method was added for Spinneret's `html` generic-function. This method calls REBLOCKS/WIDGET:RENDER
+  generic-function if you use a widget in the body of Spinneret HTML tag.
+")
   (0.63.0 2025-05-17
           "
 - Class `reblocks/server::static-route-from-file` was renamed and now exported as REBLOCKS/ROUTES:STATIC-FILE-ROUTE along with

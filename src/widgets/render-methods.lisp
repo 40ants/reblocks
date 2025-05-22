@@ -55,3 +55,5 @@
        (call-next-method)))))
 
 
+(defmethod spinneret:html ((widget reblocks/widget:widget))
+  (render widget))
