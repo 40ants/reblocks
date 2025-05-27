@@ -35,6 +35,13 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.64.1 2025-05-27
+          "
+# Fixed
+
+* Fixed the `Unknown type of result: REBLOCKS/WIDGETS/STRING-WIDGET:STRING-WIDGET` error, occured in Reblocks applications initialized old-way by `init-page` method.
+
+  Thanks for the report to Mariano Montone!")
   (0.64.0 2025-05-22
           "
 # Backward incompatible changes

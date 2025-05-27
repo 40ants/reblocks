@@ -23,6 +23,8 @@
   (:import-from #:str
                 #:ensure-prefix
                 #:ensure-suffix)
+  (:import-from #:reblocks/routes
+                #:page)
   (:export #:defapp
            #:app
            #:get-autostarting-apps
@@ -153,7 +155,7 @@ called (primarily for backward compatibility"
                               :documentation))
          (routes (or
                   routes
-                  '((40ants-routes/defroutes:get ("/")
+                  '((page ("/")
                       (make-default-init-page-widget)))))
          (documentation (when documentation
                           (list (list :documentation documentation)))))
