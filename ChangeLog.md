@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E64-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.64.1 (2025-05-27)
+
+<a id="fixed"></a>
+
+### Fixed
+
+* Fixed the `Unknown type of result: REBLOCKS/WIDGETS/STRING-WIDGET:STRING-WIDGET` error, occured in Reblocks applications initialized old-way by `init-page` method.
+
+Thanks for the report to Mariano Montone!
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E64-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.64.0 (2025-05-22)
