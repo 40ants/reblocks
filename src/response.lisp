@@ -377,6 +377,8 @@
                   result)
                  (function
                   result)
+                 (pathname
+                  (list 200 result))
                  (string
                   (setf (lack/response:response-body *response*)
                         result)
