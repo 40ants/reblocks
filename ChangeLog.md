@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E64-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.64.2 (2025-06-08)
+
+<a id="improvement"></a>
+
+### Improvement
+
+* Handle pathnames in responses. See commit: 425155b28b77 and Github issue: #83
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E64-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.64.1 (2025-05-27)
