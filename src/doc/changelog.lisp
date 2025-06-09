@@ -35,6 +35,11 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.64.2 2025-06-08
+          "
+# Improvement
+
+* Handle pathnames in responses. See commit: 425155b28b77 and Github issue: #83")
   (0.64.1 2025-05-27
           "
 # Fixed
