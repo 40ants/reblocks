@@ -5,9 +5,12 @@
   (:export #:add-command
            #:get-collected-commands
            #:with-collected-commands
-           #:add-commands))
-(in-package #:reblocks/commands)
+           #:add-commands
+           #:browser-history-push-state
+           #:browser-history-back
+           #:browser-history-forward))
 
+(in-package #:reblocks/commands)
 
 (defvar *commands*)
 
@@ -65,3 +68,27 @@
    Commands list can be aquired using GET-COLLECTED-COMMANDS function."
   `(let (*commands*)
      ,@body))
+
+(defun browser-history-push-state (url &optional (state "{}"))
+  "Invoke history.pushState on the client.
+
+See: https://developer.mozilla.org/en-US/docs/Web/API/History_API"
+
+  (add-command :update-history
+               :operation "pushState"
+               :state state
+               :url url))
+
+(defun browser-history-forward ()
+  "Invoke history.forward() on the client.
+
+See: https://developer.mozilla.org/en-US/docs/Web/API/History_API"
+  (add-command :update-history
+               :operation "forward"))
+
+(defun browser-history-back ()
+  "Invoke history.back() on the client.
+
+See: https://developer.mozilla.org/en-US/docs/Web/API/History_API"
+  (add-command :update-history
+               :operation "back"))

@@ -238,6 +238,19 @@ window.commandHandlers = {
     'includeJS': function(params) {
         include_dom(params.url);
     },
+    'updateHistory' : function(params) {
+        switch(params.operation) {
+            case 'pushState':
+                history.pushState(JSON.parse(params.state), null, params.url);
+                break;
+            case 'back':
+                history.back();
+                break;
+            case 'forward':
+                history.forward();
+                break;
+        }
+    }
 };
 
 function processCommand(command) {
