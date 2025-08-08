@@ -241,7 +241,7 @@ window.commandHandlers = {
     'updateHistory' : function(params) {
         switch(params.operation) {
             case 'pushState':
-                history.pushState(JSON.parse(params.state), null, params.url);
+                history.pushState(JSON.parse(params.state), '', params.url);
                 break;
             case 'back':
                 history.back();
