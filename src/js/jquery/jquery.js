@@ -241,7 +241,12 @@ window.commandHandlers = {
     'updateHistory' : function(params) {
         switch(params.operation) {
             case 'pushState':
-                history.pushState(JSON.parse(params.state), '', params.url);
+                let historyState = {
+                    //location: document.location,
+                    state: JSON.parse(params.state),
+                    popActionCode: params.popActionCode
+                };
+                history.pushState(historyState, '', params.url);
                 break;
             case 'back':
                 history.back();
@@ -252,6 +257,19 @@ window.commandHandlers = {
         }
     }
 };
+
+window.addEventListener("popstate", (event) => {
+    let historyState = event.state;
+    console.log(historyState);
+    if (historyState?.popActionCode) {
+        initiateAction(historyState.popActionCode, {
+            args: {
+                location: document.location,
+                state: JSON.stringify(historyState.state)
+            }
+        });
+    }
+});
 
 function processCommand(command) {
     var method = command.method;
