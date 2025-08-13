@@ -395,6 +395,8 @@ function include_css(css_file) {
     appendStyleSheet(css_file);
 }
 
+window.loadedDependencies = [];
+
 function include_dom(script_filename) {
     if (!window.loadedDependencies.includes(script_filename)) {
         var html_doc = document.getElementsByTagName('head').item(0);
