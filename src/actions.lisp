@@ -37,6 +37,8 @@
                 #:dict)
   (:import-from #:reblocks/utils/uri
                 #:remove-parameter-from-uri)
+  (:import-from #:str
+                #:trim-right)
   (:import-from #:parenscript
                 #:ps*)
   (:import-from #:cl-ppcre
