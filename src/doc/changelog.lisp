@@ -35,6 +35,16 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.65.0 2025-09-22
+          "
+# Improvement
+
+* REBLOCKS/ACTIONS:MAKE-JS-ACTION function now accepts as values a Parenscript code.
+
+  Such code will be rendred as string and passed to the fronted as raw Javasript,
+  not as a string. This allows to execute arbitrary Javascript code to calculate
+  action's argument right before the action execution.
+")
   (0.64.2 2025-06-08
           "
 # Improvement
