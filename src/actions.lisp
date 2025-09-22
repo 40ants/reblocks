@@ -32,9 +32,17 @@
   (:import-from #:reblocks/app-actions
                 #:get-action)
   (:import-from #:serapeum
+                #:fmt
+                #:->
                 #:dict)
   (:import-from #:reblocks/utils/uri
                 #:remove-parameter-from-uri)
+  (:import-from #:str
+                #:trim-right)
+  (:import-from #:parenscript
+                #:ps*)
+  (:import-from #:cl-ppcre
+                #:regex-replace-all)
   
   (:export #:eval-action
            #:on-missing-action
@@ -225,18 +233,59 @@ situation (e.g. redirect, signal an error, etc.)."))
                  (quri:url-encode-params params))))
 
 
+(-> %expand-parenscript-code (hash-table)
+    (values hash-table &optional))
+
+(defun %expand-parenscript-code (args)
+  (loop with expanded-args = (dict)
+        for name being the hash-key of args
+          using (hash-value value)
+        do (setf (gethash name expanded-args)
+                 (cond
+                   ((and (typep value 'cons)
+                         (not (null (car value)))
+                         (symbolp (car value)))
+                    (fmt "javascript%%~A%%"
+                         (ps* value)))
+                   (t
+                    value)))
+        finally (return expanded-args)))
+
+
+(-> %replace-javascript-strings (string)
+    (values string &optional))
+
+(defun %replace-javascript-strings (string)
+  "This function unescapes raw javascript strings from arguments."
+  (regex-replace-all "\"javascript%%(.*?);%%\"" string
+                     "\\1"))
+
 (defun make-js-action (action &key args)
   "Returns JS code which can be inserted into `onclick` attribute and will
    execute given Lisp function on click.
 
-   It accepts any function as input and produces a string with JavaScript code."
+   It accepts any function as input and produces a string with JavaScript code.
+
+   Args hash-table can be include as values cons structures with Parenscipt, like:
+
+   ```
+   '(ps:chain event target value)
+   ```
+
+   Such code will be rendred as string and passed to the fronted as raw Javasript,
+   not as a string. This allows to execute arbitrary Javascript code to calculate
+   action's argument right before the action execution.
+   "
   (check-type args (or null hash-table))
   
   (let* ((action-code (make-action action))
-         (serialized-args
+         (pre-serialized-args
            (when args
              (yason:with-output-to-string* ()
-               (yason:encode (dict "args" args))))))
+               (yason:encode (dict "args"
+                                   (%expand-parenscript-code args))))))
+         (serialized-args (when pre-serialized-args
+                            (%replace-javascript-strings pre-serialized-args))))
     (format nil *js-default-action*
             action-code
             serialized-args)))
