@@ -2,6 +2,20 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E65-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.65.0 (2025-09-22)
+
+<a id="improvement"></a>
+
+### Improvement
+
+* [`reblocks/actions:make-js-action`][a293] function now accepts as values a Parenscript code.
+
+Such code will be rendred as string and passed to the fronted as raw Javasript,
+  not as a string. This allows to execute arbitrary Javascript code to calculate
+  action's argument right before the action execution.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E64-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.64.2 (2025-06-08)
