@@ -25,6 +25,7 @@
                "reblocks/debug"
                "reblocks/default-init"
                "reblocks/commands-hook"
+               "reblocks/commands-history"
                "reblocks/widgets/string-widget"
                "reblocks/widgets/funcall-widget"
                "reblocks/welcome/widget"
