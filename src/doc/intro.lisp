@@ -17,7 +17,7 @@
                                           "RSS"))
   "
 
-![](https://ultralisp.org/projects/40ants/reblocks.svg)
+[![](https://ultralisp.org/projects/40ants/reblocks.svg)](https://ultralisp.org/projects/40ants/reblocks)
 
 Reblocks is the fork of the Weblocks web frameworks written by Slava Akhmechet
 and maintained by Scott L. Burson and Olexiy Zamkoviy.
