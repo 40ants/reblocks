@@ -29,6 +29,7 @@
   
   (:export #:with-request
            #:with-test-session
+           #:with-test-routes
            #:is-html
            #:catch-hooks
            #:assert-hooks-called))
@@ -84,6 +85,19 @@
        ;; This way we make Rove test will not return response
        ;; structure as a result of test running:
        (values))))
+
+
+(defmacro with-test-routes ((&rest args &key (uri "/") &allow-other-keys) &body body)
+  "Test macro that sets up proper routing context for route-url calls.
+   URI should match one of the app's routes to establish proper namespace context."
+  (with-gensyms (uri-var)
+    (let ((filtered-args (alexandria:remove-from-plist args :uri)))
+      `(let ((,uri-var ,uri))
+         (with-test-session ()
+           (with-request (,uri-var ,@filtered-args)
+             (40ants-routes/with-url:with-partially-matched-url 
+                 ((reblocks/app:app-routes *current-app*) ,uri-var)
+               ,@body))))))))
 
 
 (defmacro is-html (form expected &optional message)
