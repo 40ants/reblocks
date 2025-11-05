@@ -19,38 +19,38 @@
 
 [![](https://ultralisp.org/projects/40ants/reblocks.svg)](https://ultralisp.org/projects/40ants/reblocks)
 
-Reblocks is the fork of the Weblocks web frameworks written by Slava Akhmechet
+Reblocks is a fork of the Weblocks web framework written by Slava Akhmechet
 and maintained by Scott L. Burson and Olexiy Zamkoviy.
 
 Some time ago I (Alexander Artemenko) found this old Weblocks and liked its idea
-of building web application out of widgets. But framework's code was complex
+of building web applications out of widgets. But the framework's code was complex
 and hard to change. Thus I decided to refactor it into a smaller core plus
 separate libraries implementing more advanced features.
 
-A few years this refactored code lived in the repository https://github.com/40ants/weblocks and
+For a few years this refactored code lived in the repository https://github.com/40ants/weblocks and
 it was possible to install it from Ultralisp only. I didn't publish it
-to Quicklisp to not break sites using old version of the Weblocks. But at January 2022
-I decided to rename ASDF system into the \"reblocks\" to make it installable from
-the Quicklisp under this name.
+to Quicklisp to not break sites using the old version of Weblocks. But in January 2022
+I decided to rename the ASDF system to \"reblocks\" to make it installable from
+Quicklisp under this name.
 
 Core Features of Reblocks
 =========================
 
 * Application pages are built from \"widgets\".
-* All business logic could be implemented in Common Lisp in server-side.
-* Framework's code is separated by functionality into a separate packages.
-* Project now has a [hyperlinked documentation](https://40ants.com/reblocks/)
+* All business logic can be implemented in Common Lisp on the server-side.
+* The framework's code is separated by functionality into separate packages.
+* The project now has [hyperlinked documentation](https://40ants.com/reblocks/)
   with code snippets and embedded interactive demos.
 
-Framework's API is still under active development. All significant changes are
-described in the REBLOCKS/DOC/CHANGELOG:@CHANGELOG. You can add ChangeLog page
-into your RSS reader to be notified on new releases.
+The framework's API is still under active development. All significant changes are
+described in the REBLOCKS/DOC/CHANGELOG:@CHANGELOG. You can add the ChangeLog page
+to your RSS reader to be notified of new releases.
 
 Removed Features
 ================
 
-These features are present in the oldshool Weblocks version but were removed
-from the core of the Reblocks. Some of them might be implemented as a separate ASDF
+These features are present in the old-school Weblocks version but were removed
+from the core of Reblocks. Some of them might be implemented as separate ASDF
 systems.
 
 * Views
@@ -63,7 +63,7 @@ You can read about these tools in the REBLOCKS/DOC/INDEX::@REMOVED-FEATURES sect
 Learning Reblocks
 =================
 
-To learn, how to use Reblocks to build a simple single-page application, proceed to the
+To learn how to use Reblocks to build a simple single-page application, proceed to the
 REBLOCKS/DOC/QUICKSTART:@QUICKSTART section.
 
 To learn how a real-world application can be built,
@@ -74,7 +74,7 @@ inspect [Ultralisp's](https://ultralisp.org) code:
 Getting Support
 ===============
 
-* In case any bugs, please, [create an issue](https://github.com/40ants/reblocks/issues) on the GitHub.
+* In case of any bugs, please [create an issue](https://github.com/40ants/reblocks/issues) on GitHub.
 * If you have some ideas to share or want to discuss a feature request, use [GitHub Discussions](https://github.com/40ants/reblocks/discussions).
 
 ")
