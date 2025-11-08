@@ -46,32 +46,32 @@ The functions and macros to work with pages are defined in the
 
 # Page life-cycle
 
-When user opens a new page of the app, INIT-PAGE generic-function
-get called. It should return or root widget or an object of PAGE class.
+When a user opens a new page of the app, the INIT-PAGE generic function
+gets called. It should return a root widget or an object of the PAGE class.
 
-If variable *PAGES-EXPIRE-IN* is not NIL, then page will be deleted from memory
-after this number of seconds. Hovewer, each action call extends expiration time
+If the variable *PAGES-EXPIRE-IN* is not NIL, then the page will be deleted from memory
+after this number of seconds. However, each action call extends the expiration time
 to *EXTEND-PAGE-EXPIRATION-BY* seconds.
 
-A variable *MAX-PAGES-PER-SESSION* controls the maximum number of pages in one user
-session. Older pages will be expired at the moment, when user tries to open a new page.
+The variable *MAX-PAGES-PER-SESSION* controls the maximum number of pages in one user
+session. Older pages will be expired at the moment when a user tries to open a new page.
 
-These settings are NIL by default, but may be used to protect server for DoS attacks
-where attacker tries to fill all server memory with useless pages.
+These settings are NIL by default, but may be used to protect the server from DoS attacks
+where an attacker tries to fill all server memory with useless pages.
 
-If you define your own page class, then you can define
-PAGE-EXPIRE-IN, EXTEND-PAGE-EXPIRATION-BY and MAX-PAGES-PER-SESSION generic-functions
-to control how long page should live.
+If you define your own page class, you can define
+PAGE-EXPIRE-IN, EXTEND-PAGE-EXPIRATION-BY and MAX-PAGES-PER-SESSION generic functions
+to control how long the page should live.
 
 # Page metadata
 
 Any data can be associated with a page. For example, dependencies loaded into the page
-are saved into the metadata, to avoid assets duplication.
+are saved into the metadata to avoid asset duplication.
 
-You can get current page using CURRENT-PAGE function and then retrieve metadata with
-PAGE-METADATA and change it using (SETF PAGE-METADATA) or ENSURE-PAGE-METADATA macro.
-Warning, if there are some parallel threads which might change metadata
-then you should wrap all changing code in WITH-METADATA-LOCK macro.
+You can get the current page using the CURRENT-PAGE function and then retrieve metadata with
+PAGE-METADATA and change it using (SETF PAGE-METADATA) or the ENSURE-PAGE-METADATA macro.
+Warning: if there are parallel threads which might change metadata,
+then you should wrap all changing code in the WITH-METADATA-LOCK macro.
 "
   ;; "# API"
   ;; (page class)

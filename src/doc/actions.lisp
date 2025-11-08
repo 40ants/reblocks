@@ -35,7 +35,7 @@
                                      "USER")
                       :external-links (("sticky" . "https://www.haproxy.com/blog/client-ip-persistence-or-source-ip-hash-load-balancing/")))
   """
-  Actions is the core component allowing interactivity in Reblocks applications.
+  Actions are the core component allowing interactivity in Reblocks applications.
 
   Actions are callbacks that are stored in a session and can be called from the browser
   using AJAX, POST or GET requests.
@@ -47,15 +47,15 @@
 
   ## Application actions
 
-  This kind of actions is good when you want to build a scalable application,
-  because amount of memory they are taking does not grow with number of user
+  This kind of action is good when you want to build a scalable application,
+  because the amount of memory they are taking does not grow with the number of user
   sessions.
 
-  Application action should be a function which only depends on it's argument.
-  They should not closeup any variables because the same function will be called
-  for every application's user.
+  An application action should be a function which only depends on its argument.
+  They should not close up any variables because the same function will be called
+  for every application user.
 
-  Here is an example, how to define such action which will create a new user:
+  Here is an example of how to define such an action which will create a new user:
 
   ```lisp
   (reblocks/app:defapp demo-actions
@@ -79,22 +79,22 @@
 
   ## Session actions
 
-  Session actions can be a stand-alone functions or closures. This makes
-  it easier to catch some variables and to use them when user interacts
-  with application.
+  Session actions can be stand-alone functions or closures. This makes
+  it easier to catch some variables and to use them when the user interacts
+  with the application.
 
-  However, such closures are stored in a hash table bound to the each session.
-  This makes a few consequences:
+  However, such closures are stored in a hash table bound to each session.
+  This has a few consequences:
 
-  - it impossible to use database as a session storage and after application
-    restart all session actions are expire.
-  - it makes harder to scale application, because now you need to
+  - it is impossible to use a database as session storage and after application
+    restart all session actions expire.
+  - it makes it harder to scale the application, because now you need to
     redirect each user to a single backend, using [sticky sessions][sticky] on the
     balancer.
   - session actions tend to accumulate over time and eat more memory.
 
-  In the next example, we can see how it is easy to catch USER variable
-  into the action's closure and then use it when email will be provided:
+  In the next example, we can see how easy it is to catch the USER variable
+  into the action's closure and then use it when an email is provided:
 
   ```lisp
   (let ((user "Bob"))
@@ -118,26 +118,26 @@
   => NIL
   ```
 
-  With application-wide action you'll have to render user's id in the hidden
-  field of HTML form and then to retrieve the user object from the database
-  when action get called.
+  With an application-wide action you'll have to render the user's id in a hidden
+  field of the HTML form and then retrieve the user object from the database
+  when the action gets called.
 
-  Now lets see how to use actions from the frontend!
+  Now let's see how to use actions from the frontend!
 
   ## Using at the Frontend
 
-  At the fronted you might want to call actions as the result of user's click,
+  At the frontend you might want to call actions as the result of a user's click,
   form submit or some other act, for example, by timer.
 
-  Reblocks provides a thin JS layer which includes following functions:
+  Reblocks provides a thin JS layer which includes the following functions:
 
   - `initiateAction(actionCode, options)`
   - `initiateFormAction(actionCode, form, options)`
 
   **`initiateAction(actionCode, options)`**
 
-  This function calls given action using AJAX. You have to pass optional
-  arguments as JS object `options`:
+  This function calls a given action using AJAX. You have to pass optional
+  arguments as a JS object `options`:
 
   ```json
   {
@@ -149,22 +149,22 @@
   }
   ```
 
-  Here is an example which uses MAKE-ACTION and renders usual HTML link as a button
-  bound to an anonymous lisp function:
+  Here is an example which uses MAKE-ACTION and renders a usual HTML link as a button
+  bound to an anonymous Lisp function:
 
   """
   (button-click reblocks-example)
 
   """
-  Also, you might generate a link using MAKE-ACTION-URL function and use it as HREF
-  argument of any link on a page. Click on such link will trigger the action.
+  Also, you might generate a link using the MAKE-ACTION-URL function and use it as the HREF
+  argument of any link on a page. Clicking on such a link will trigger the action.
 
   Here I intentionally didn't add a "button" class to show that this is just a link.
 
-  Pay attention how this example flickers when you click the link. This is because
+  Pay attention to how this example flickers when you click the link. This is because
   the whole iframe's content is reloaded when you click the link. In the previous
-  example this is not happening because click leads to an AJAX requst and only a
-  piece of page get updated.
+  example this is not happening because the click leads to an AJAX request and only a
+  piece of the page gets updated.
   """
 
   (just-href reblocks-example)
@@ -178,12 +178,12 @@
   """
   **`initiateFormAction(actionCode, form, options)`**
 
-  This version of function accepts a form jquery object as the second argument.
-  Options argument has the same meaning as for `initiateAction` function,
-  but `args` attrbute is formed from the serialized form fields and default
+  This version of the function accepts a form jQuery object as the second argument.
+  The options argument has the same meaning as for the `initiateAction` function,
+  but the `args` attribute is formed from the serialized form fields and the default
   `method` is taken from the form's `method` attribute.
 
-  Next example shows how to process a form submit, using a callback,
+  The next example shows how to process a form submit, using a callback
   registered with MAKE-JS-FORM-ACTION:
   """
   

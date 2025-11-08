@@ -22,12 +22,12 @@
                                       "CSS"
                                       "AJAX"))
   """
-  Commands are small pieces of information sent to the fronted for execution.
-  they are used to update widgets, to load JS or CSS code or to call some other functions
+  Commands are small pieces of information sent to the frontend for execution.
+  They are used to update widgets, to load JS or CSS code or to call some other functions
   inside the frontend.
 
-  Right now this mechanism is not really useful because there is no a way to define
-  custom commands handler on the frontend. But in the future such facility may be added.
+  Right now this mechanism is not really useful because there is no way to define
+  a custom commands handler on the frontend. But in the future such a facility may be added.
   """
   
   ;; (@commands-api section)

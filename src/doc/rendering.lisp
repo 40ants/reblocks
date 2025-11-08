@@ -34,12 +34,12 @@
                                     ("REBLOCKS-UI" . "https://github.com/40ants/reblocks-ui")))
   """
 Out of the box, Reblocks provides a few facilities for HTML generation.
-They are based on [`Spinneret`][Spinneret] templating engine. Old version of Weblocks used
-[CL-WHO][CL-WHO] instead. But Spinneret is more flexible and what is more important,
+They are based on the [`Spinneret`][Spinneret] templating engine. The old version of Weblocks used
+[CL-WHO][CL-WHO] instead. But Spinneret is more flexible and, more importantly,
 it escapes content by default, preventing HTML injection vulnerability.
 
-Most of the time, you only will need a REBLOCKS/HTML:WITH-HTML macro, which is
-similary to Spinneret's one, but binds a few special variables to a stream
+Most of the time, only the REBLOCKS/HTML:WITH-HTML macro will be needed, which is
+similar to Spinneret's one, but binds a few special variables to a stream
 to write output to and how to write it:
 
 ```cl-transcript
@@ -56,7 +56,7 @@ to write output to and how to write it:
 ;=> NIL
 ```
 
-Sometimes you might want to get a HTML string instead. In this case you might use
+Sometimes it might be desirable to get an HTML string instead. In this case, use
 REBLOCKS/HTML:WITH-HTML-STRING:
 
 ```cl-transcript
@@ -84,9 +84,9 @@ REBLOCKS/HTML:WITH-HTML-STRING:
 
 (defsection @widgets (:title "Widget Rendering")
   """
-  For rendering a widget content you have to define a method for REBLOCKS/WIDGET:RENDER generic-function.
-  Use REBLOCKS/HTML:WITH-HTML macro to write HTML using lisp expression. Under the hood, this macro
-  uses a great [Spinneret](https://github.com/ruricolist/spinneret) library:
+  For rendering widget content, a method for the REBLOCKS/WIDGET:RENDER generic function must be defined.
+  Use the REBLOCKS/HTML:WITH-HTML macro to write HTML using lisp expressions. Under the hood, this macro
+  uses the great [Spinneret](https://github.com/ruricolist/spinneret) library:
   
   ```
   (defwidget foo ()
@@ -99,19 +99,19 @@ REBLOCKS/HTML:WITH-HTML-STRING:
 
   ```
 
-  Also, any string or object, returned from the render method, will be used
-  to render widget's content. For example, you might do:
+  Also, any string or object returned from the render method will be used
+  to render the widget's content. For example:
 
   ```
   (defmethod reblocks/widget:render ((obj foo))
     "<b>Hello</b> world!")
   ```
 
-  But in this case, symbols `<` and `>` will be escaped and you will not see "Hello" in bold font.
+  But in this case, the symbols `<` and `>` will be escaped and "Hello" will not appear in bold font.
 
-  If you don't want to use Spinneret for rendering but want to get HTML non-escaped, you need to write
-  HTML string into the REBLOCKS/HTML:*STREAM* stream like this:
-  Note, in this case we should explicitly say that our method does not return anything useful:
+  If Spinneret is not desired for rendering but unescaped HTML is wanted, write
+  the HTML string into the REBLOCKS/HTML:*STREAM* stream like this:
+  Note that in this case it should be explicitly stated that the method does not return anything useful:
 
   ```
   (defmethod reblocks/widget:render ((obj foo))
@@ -123,23 +123,23 @@ REBLOCKS/HTML:WITH-HTML-STRING:
 
   This will render "Hello" in bold as desired.
 
-  You can use this method for rendering some widgets using template engines other than Spinneret, such as:
+  This method can be used for rendering some widgets using template engines other than Spinneret, such as:
 
   - https://github.com/mmontone/djula
   - https://github.com/kanru/cl-mustache
   - https://github.com/moderninterpreters/markup
 
-  Just use engine you like and write it's output to REBLOCKS/HTML:*STREAM*!
+  Just use the engine of choice and write its output to REBLOCKS/HTML:*STREAM*!
   
   """)
 
 (defsection @sub-widgets (:title "Sub-widget Rendering")
   """
-  Reblocks pages are represented by a root widget which can have sub-widgets. Thus we have
-  a widgets trivial-mimes:find-mime.types
+  Reblocks pages are represented by a root widget which can have sub-widgets. Thus there is
+  a widget tree.
 
-  To render subwidgets, you have to call REBLOCKS/WIDGET:RENDER generic-function
-  on each subwidget insite the widget's REBLOCKS/WIDGET:RENDER generic-function method:
+  To render subwidgets, call the REBLOCKS/WIDGET:RENDER generic function
+  on each subwidget inside the widget's REBLOCKS/WIDGET:RENDER generic function method:
 
   ```
   (defmethod reblocks/widget:render ((obj some-widget))
@@ -147,8 +147,8 @@ REBLOCKS/HTML:WITH-HTML-STRING:
     (reblocks/widget:render (table-widget obj)))
   ```
 
-  If you are using REBLOCKS/HTML:WITH-HTML macro and wrap subwidgets with a custom HTML
-  tag, then you can use implicit rendering and just pass subwidgets to Spinneret's HTML tag:
+  If using the REBLOCKS/HTML:WITH-HTML macro and wrapping subwidgets with a custom HTML
+  tag, then implicit rendering can be used by just passing subwidgets to Spinneret's HTML tag:
 
   ```
   (defmethod reblocks/widget:render ((obj some-widget))
@@ -158,22 +158,22 @@ REBLOCKS/HTML:WITH-HTML-STRING:
             (table-widget obj))))
   ```
 
-  This works because Reloblocks defines a method for `spinneret:html` generic-function.
+  This works because Reblocks defines a method for the `spinneret:html` generic function.
   """
   )
 
 (defsection @page (:title "Page Rendering")
   """
   These functions can be used during rendering
-  to retrieve an information about the page:
+  to retrieve information about the page:
 
   - REBLOCKS/PAGE:RENDER generic-function
   - REBLOCKS/PAGE:RENDER-BODY generic-function
   - REBLOCKS/PAGE:RENDER-DEPENDENCIES generic-function
   
-  Render protocol first renders the widget tree and
-  only after that renders page HTML headers.
-  Thus you might use `setf` on these functions during
+  The render protocol first renders the widget tree and
+  only after that renders the page HTML headers.
+  Thus `setf` can be used on these functions during
   widget rendering to change the title, description
   or keywords:
   
@@ -182,8 +182,8 @@ REBLOCKS/HTML:WITH-HTML-STRING:
   - REBLOCKS/PAGE:GET-KEYWORDS
   - REBLOCKS/PAGE:GET-LANGUAGE
 
-  If you want to change these variables globally for the whole
-  application, then define a before method like this:
+  If changing these variables globally for the whole
+  application is desired, then define a before method like this:
 
   ```lisp
   (defmethod reblocks/page:render :before ((app disk-analyzer) inner-html &rest rest)

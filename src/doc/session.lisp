@@ -28,27 +28,27 @@
                                      "ID"))
 
   "
-The functions and macros to manipulate the session are defined in the
+The functions and macros to manipulate sessions are defined in the
 REBLOCKS/SESSION package.
 
 # Session initialization
 
-When a new user opens the site in the browser, Reblocks does these steps:
+When a new user opens the site in a browser, Reblocks does these steps:
 
 * Creates a new session object. You can consider it a hash table where some
-  data could be stored.
-* Generates an unique id and put's this session object to the hash map of all
+  data can be stored.
+* Generates a unique ID and puts this session object in the hash map of all
   sessions.
-* Calls the INIT-SESSION generic function to determine what widget should be shown to the user.
+* Calls the INIT-SESSION generic function to determine which widget should be shown to the user.
 * Renders the root widget to HTML and sends it to the browser.
-* Along with this HTML response, sends `Set-Cookie` header to save session id
+* Along with this HTML response, sends the `Set-Cookie` header to save the session ID
   in the browser.
 
-The method you define for INIT-SESSION generic-function should return a root widget.
-This widget may include children and render them in it's
-REBLOCKS/WIDGET:RENDER generic-function implementation.
+The method you define for the INIT-SESSION generic function should return a root widget.
+This widget may include children and render them in its
+REBLOCKS/WIDGET:RENDER generic function implementation.
 
-You will find an example of [INIT-SESSION][generic-function] in the REBLOCKS/DOC/QUICKSTART::@QUICKSTART section.
+You will find an example of [INIT-SESSION][generic function] in the REBLOCKS/DOC/QUICKSTART::@QUICKSTART section.
 
 # Storing data
 
@@ -56,7 +56,7 @@ You can store any kind of data in a session.
 
 To set a value, use `(SETF GET-VALUE)` function.
 
-For example, you might want to store information about the current user if he logged in:
+For example, you might want to store information about the current user if they logged in:
 
 "
   (login-example reblocks-example)

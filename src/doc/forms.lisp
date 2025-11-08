@@ -22,31 +22,31 @@
                      ("FORM-VIEW" . "https://quickref.common-lisp.net/weblocks.html#go-to-the-WEBLOCKS_2236_2236FORM_002dVIEW-class")))
   "
 
-> **Warning!** This section is outdated and belongs to the old Weblocks documention.
-> All widgets, described below, were removed from the core framework.
-> Probably we need only to link to the [reblocks-ui](https://github.com/40ants/reblocks-ui) here.
+> **Warning!** This section is outdated and belongs to the old Weblocks documentation.
+> All widgets described below were removed from the core framework.
+> Probably only a link to [reblocks-ui](https://github.com/40ants/reblocks-ui) is needed here.
 >
-> Below you'll find a description how did forms work in the
-> original Weblocks. It is given to here to show who one might
-> handle data-models changes. Probably someone will want to
+> Below is a description of how forms worked in the
+> original Weblocks. It is given here to show how one might
+> handle data model changes. Probably someone will want to
 > resurrect this method in a Weblocks extension library.
 
-Forms enable the user to communicate with a web application.
+Forms enable users to communicate with a web application.
 
-Usually the server side action boils down to selecting, modifying, creating or
-deleting data sets (this is sometimes abbreviated as CRUD: Create/Read/Update/Delete)
+Usually the server-side action boils down to selecting, modifying, creating or
+deleting data sets (this is sometimes abbreviated as CRUD: Create/Read/Update/Delete).
 
 Building web forms is usually a cumbersome process. Elaborate but
-complicated solutions have been devised
+complicated solutions have been devised such as
 [php-quickform](https://pear.php.net/manual/en/package.html.html-quickform.tutorial.php),
-but so far we haven't found any of them to match the ease of use and flexibility of
+but so far none of them have been found to match the ease of use and flexibility of
 Weblocks' declarative view DSL.
 
 
 Introduction
 ============
 
-The form mechanism consists of two parts, the [DATAFORM][DATAFORM] widget and
+The form mechanism consists of two parts: the [DATAFORM][DATAFORM] widget and
 the [FORM-VIEW][FORM-VIEW] view type.
 
 Forms are usually built by defining form views using the [DEFVIEW][DEFVIEW] macro
@@ -68,8 +68,8 @@ Let the model be defined thus:
    (body :type string)))
 ```
 
-This view should apply to users that are not developers: they may
-enter a summary and body but that's it.
+This view should apply to users who are not developers: they may
+enter a summary and body, but that's it.
 
 ```          
 (defview bug-report-form-view
@@ -92,15 +92,15 @@ Let's use this view to derive the view for developers:
 ```
 
 The status field will automatically be displayed as a dropdown control
-since the scaffold inspector has decided this upon the slot's type.
+since the scaffold inspector has decided this based on the slot's type.
 
-You can define scaffolding rules for your own types.
+Scaffolding rules can be defined for custom types.
 
-As part of the validation process Weblocks will also check whether a
-user input matches the slot's type regardless of whether you use
-scaffolding or not.
+As part of the validation process, Weblocks will also check whether
+user input matches the slot's type regardless of whether
+scaffolding is used or not.
 
-But let's assume that we want custom labels for the dropdown:
+But let's assume that custom labels are wanted for the dropdown:
 
 
 ```
@@ -118,7 +118,7 @@ Quickforms
 Quickforms are specialized Dataforms.
 
 They provide a way to build forms based entirely on a view; they are handy
-for operations where you don't have the user working on an actual model instance.
+for operations where the user is not working on an actual model instance.
 
 Let's dive right into it:
 
@@ -133,16 +133,16 @@ Let's dive right into it:
       (str (slot-value data 'some-text)))))
 ```
 
-This will display form with single field. After form submit we'll see text with value submitted.
-`DATA` object here is a class created dynamically from view fields.
+This will display a form with a single field. After form submission, text with the submitted value will be seen.
+The `DATA` object here is a class created dynamically from view fields.
 
 
 ```
 :persistp nil
 ```
 
-in view definition is necessary, we don't want dynamic class to persist.
+in the view definition is necessary, as the dynamic class should not persist.
 
 There are options in [MAKE-QUICKFORM][MAKE-QUICKFORM] for validation, control flow and other things.
-See [MAKE-QUICKFORM][MAKE-QUICKFORM] documentation.
+See the [MAKE-QUICKFORM][MAKE-QUICKFORM] documentation.
 ")

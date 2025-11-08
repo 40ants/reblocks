@@ -18,8 +18,8 @@
                                    "HTTP"))
   "# Performance
 
-   Reblocks return response timing in the Server-Timing HTTP header.
-   This performance information can be viewed in the browser.
+   Reblocks returns response timing in the Server-Timing HTTP header.
+   This performance information can be viewed in browsers.
    Read more about it at [Mozilla's docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing).
 "
 

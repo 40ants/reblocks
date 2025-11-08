@@ -25,9 +25,9 @@
 
 
 (defsection @best-practice (:title "Best Practice")
-  "To simplify debugging, it is better to use structured logging and include a request id into all log messages and HTTP server response.
+  "To simplify debugging, it is better to use structured logging and include a request ID in all log messages and HTTP server responses.
 
-   Adding such request id is as simple as adding a method for REBLOCKS/SERVER:HANDLE-HTTP-REQUEST generic-function:
+   Adding such a request ID is as simple as adding a method for the REBLOCKS/SERVER:HANDLE-HTTP-REQUEST generic function:
 
    ```lisp
    (defmethod reblocks/server:handle-http-request :around ((server t) env)
@@ -39,11 +39,11 @@
          (call-next-method))))
    ```
 
-   Here we use LOG4CL-EXTRAS/CONTEXT:WITH-FIELDS macro for structured logging and REBLOCKS/RESPONSE:ADD-HEADER
-   to add the `X-Request-Id` header to webserver's response.
+   Here we use the LOG4CL-EXTRAS/CONTEXT:WITH-FIELDS macro for structured logging and REBLOCKS/RESPONSE:ADD-HEADER
+   to add the `X-Request-Id` header to the webserver's response.
 
-   Also, you might want to define a method for REBLOCKS/ERROR-HANDLER:ON-ERROR generic-function and show
-   current request-id to the user. This way he could provide id to support simplifying issue investigation.
+   Also, you might want to define a method for the REBLOCKS/ERROR-HANDLER:ON-ERROR generic function and show
+   the current request ID to the user. This way they could provide the ID to support, simplifying issue investigation.
 ")
 
 
