@@ -7,6 +7,7 @@
 
 (defsection @templates (:title "Templates"
                         :ignore-words ("CLOS"
+                                       "HTML"
                                        "URI"))
   "
 Templates were something different from views. They are another layer which

@@ -23,6 +23,8 @@
                                      "ASDF"
                                      "TODO"
                                      "HTML"
+                                     "HTTP"
+                                     "ID"
                                      "TASK-PAGE"
                                      "MAKE"
                                      "CL-PPCRE"))

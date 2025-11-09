@@ -18,6 +18,7 @@
                        :ignore-words ("URL"
                                       "SETF"
                                       "AJAX"
+                                      "ID"
                                       "HTTP"))
   (@best-practice section)
   ;; (@api section)
