@@ -84,6 +84,7 @@
   ;; (reblocks/dependencies:render-in-head generic-function)
   ;; (reblocks/dependencies:serve generic-function)
 
+  ;; (reblocks/page-dependencies:get-dependencies generic-function)
   ;; (reblocks/page-dependencies:push-dependency function)
   ;; (reblocks/page-dependencies:push-dependencies function)
   ;; (reblocks/page-dependencies:with-collected-dependencies macro)

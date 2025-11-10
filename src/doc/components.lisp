@@ -108,6 +108,7 @@ You might define your own server class and inherit it from REBLOCKS/SERVER:SERVE
 This will allow you to customize a list of HTTP middlewares.
 "
   ;; Here is the list of functions useful when working with Reblocks servers:
+  ;; (reblocks/session:init generic-function)
   ;; (reblocks/server:server class)
   ;; (reblocks/server:start function)
   ;; (reblocks/server:stop function)
