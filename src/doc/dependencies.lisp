@@ -32,7 +32,7 @@
                                           "REBLOCKS-LASS:MAKE-DEPENDENCY"
                                           "REBLOCKS-LASS"))
   "When Reblocks renders a page, it collects CSS and JS dependencies from all widgets
-   by calling the generic function REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
+   by calling the generic-function REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
    is called on the current app to get such common dependencies as jQuery and CSS framework.
 
    If defining a custom method for the REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES generic function,
