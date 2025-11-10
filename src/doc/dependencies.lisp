@@ -31,15 +31,15 @@
                                           ;; after documenting reblocks-lass using 40ants-doc
                                           "REBLOCKS-LASS:MAKE-DEPENDENCY"
                                           "REBLOCKS-LASS"))
-  "When Reblocks renders page, it collects CSS and JS dependencies from all widgets
-   by calling generic-function REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
+  "When Reblocks renders a page, it collects CSS and JS dependencies from all widgets
+   by calling the generic-function REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES. Also, this function
    is called on the current app to get such common dependencies as jQuery and CSS framework.
 
-   If you are defining your own method for REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES generic-function,
-   make sure it returns a list of REBLOCKS/DEPENDENCIES:DEPENDENCY objects.
+   If defining a custom method for the REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES generic function,
+   ensure it returns a list of REBLOCKS/DEPENDENCIES:DEPENDENCY objects.
 
-   Typically, you already have JS or CSS file somewhere near your ASDF system. In this case,
-   you can use REBLOCKS/DEPENDENCIES:MAKE-DEPENDENCY function like this:
+   Typically, there is already a JS or CSS file somewhere near the ASDF system. In this case,
+   use the REBLOCKS/DEPENDENCIES:MAKE-DEPENDENCY function like this:
 
    ```
    (defmethod reblocks/dependencies:get-dependencies ((app my-app))
@@ -48,8 +48,8 @@
             (call-next-method)))
    ```
 
-   Other way to specify a dependency is to use Parenscript or LASS to define JS or CSS right inside
-   the method. Here we define CSS code for the widget:
+   Another way to specify a dependency is to use Parenscript or LASS to define JS or CSS right inside
+   the method. Here CSS code is defined for the widget:
 
    ```
    (defmethod reblocks/dependencies:get-dependencies ((widget my-custom-widget))
@@ -61,8 +61,8 @@
       (call-next-method)))
    ```
 
-   Pay attention, this code uses REBLOCKS-LASS:MAKE-DEPENDENCY function which is available from
-   the separate asdf system REBLOCKS-LASS.
+   Note that this code uses the REBLOCKS-LASS:MAKE-DEPENDENCY function which is available from
+   the separate ASDF system REBLOCKS-LASS.
 
 "
   ;;    ## API
@@ -84,6 +84,7 @@
   ;; (reblocks/dependencies:render-in-head generic-function)
   ;; (reblocks/dependencies:serve generic-function)
 
+  ;; (reblocks/page-dependencies:get-dependencies generic-function)
   ;; (reblocks/page-dependencies:push-dependency function)
   ;; (reblocks/page-dependencies:push-dependencies function)
   ;; (reblocks/page-dependencies:with-collected-dependencies macro)

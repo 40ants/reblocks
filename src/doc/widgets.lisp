@@ -16,24 +16,24 @@
                                      "JS"
                                      "HTML"
                                      "DIV"))
-  "Widget objects should subclasses of REBLOCKS/WIDGET:WIDGET class
-   also, minimally you have to define a method for the
-   REBLOCKS/WIDGET:RENDER generic-function. This function should return
-   use REBLOCKS/HTML:WITH-HTML macro to render the widget.
+  "Widget objects should be subclasses of the REBLOCKS/WIDGET:WIDGET class.
+   Also, minimally you have to define a method for the
+   REBLOCKS/WIDGET:RENDER generic function. This function should
+   use the REBLOCKS/HTML:WITH-HTML macro to render the widget.
 
-   Other parts of API around widgets are:
+   Other parts of the API around widgets are:
 
    - REBLOCKS/DEPENDENCIES:GET-DEPENDENCIES - returns a list of CSS/JS dependencies.
-   - REBLOCKS/WIDGET:UPDATE - marks a widget as need to update on the frontend.
-   - REBLOCKS/WIDGET:GET-HTML-TAG - returns a HTML tag instead of standard DIV.
-   - REBLOCKS/WIDGET:GET-CSS-CLASSES - returns a list of CSS classes. By default returns :WIDGET and a widget class's name.
-   - REBLOCKS/WIDGET:CREATE-WIDGET-FROM - return a widget for representing an object. This way widgets can be created out of strings, functions, etc.
+   - REBLOCKS/WIDGET:UPDATE - marks a widget as needing to update on the frontend.
+   - REBLOCKS/WIDGET:GET-HTML-TAG - returns an HTML tag instead of the standard DIV.
+   - REBLOCKS/WIDGET:GET-CSS-CLASSES - returns a list of CSS classes. By default returns :WIDGET and the widget class's name.
+   - REBLOCKS/WIDGET:CREATE-WIDGET-FROM - returns a widget for representing an object. This way widgets can be created out of strings, functions, etc.
 
    # Example
 
-   To define a widget, use REBLOCKS/WIDGET:DEFWIDGET macro. It creates a class
-   with a proper meta-class. Old Weblocks version used this metaclass to
-   discover changes slots, and probably this feature will be returned back some day.
+   To define a widget, use the REBLOCKS/WIDGET:DEFWIDGET macro. It creates a class
+   with a proper meta-class. The old Weblocks version used this metaclass to
+   discover slot changes, and probably this feature will be returned some day.
 
    ```
    CL-USER> (reblocks/widget:defwidget hello ()
@@ -47,7 +47,7 @@
    #<STANDARD-METHOD REBLOCKS/WIDGET:RENDER (HELLO) {1004E27BC3}>
    ```
 
-   Then call this, to run a webserver and preview your widget in the browser:
+   Then call this to run a webserver and preview your widget in the browser:
 
    ```
    CL-USER> (reblocks/preview:preview
@@ -55,7 +55,7 @@
                             :name \"Bob\"))
    ```
 
-   A result will look like this:"
+   The result will look like this:"
 
   (hello-world reblocks-example)
 
@@ -74,7 +74,7 @@
 
    This is a simple type of widget which can be made out of any string.
 
-   Create it using REBLOCKS/WIDGETS/STRING-WIDGET:MAKE-STRING-WIDGET function."
+   Create it using the REBLOCKS/WIDGETS/STRING-WIDGET:MAKE-STRING-WIDGET function."
 
   ;; (reblocks/widgets/string-widget:string-widget class)
   ;; (reblocks/widgets/string-widget:make-string-widget function)

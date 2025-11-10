@@ -46,7 +46,7 @@
 
 # Initial Setup
 
-> It is better to use the latest Reblocks because version from Quicklisp can be outdated.
+> It is better to use the latest Reblocks because the version from Quicklisp can be outdated.
 > You can install the [Ultralisp][Ultralisp] Quicklisp distribution where all Reblocks-related libraries are present and up to date.
 
 
@@ -99,15 +99,15 @@ At this stage, we will create a simple Reblocks application:
 
 ```
 
-By default, the name of the app defines the url where it will
-accessible. If we omit PREFIX argument here, then the application
-will be accessable at <http://localhost:8080/tasks>. But we want
+By default, the name of the app defines the URL where it will be
+accessible. If we omit the PREFIX argument here, then the application
+will be accessible at <http://localhost:8080/tasks>. But we want
 to make it work at the site's root.
 
 Also pay attention to the ROUTES argument. This is how we can
-define a set of application's pages. Previously for the same effect
-we have to use a separate ASDF system `reblocks-navigation-widget`,
-but now this kind of routing is embedded into the Reblocks.
+define a set of application pages. Previously for the same effect
+we had to use a separate ASDF system `reblocks-navigation-widget`,
+but now this kind of routing is embedded into Reblocks.
 
 Run `start` function from the REPL to make our webserver running on port 8080.
 
@@ -200,13 +200,13 @@ a list item widget holding the reference to the task object:
 ```
 
 This code defines a `list-item` widget, the building block of our
-application. REBLOCKS/WIDGET:DEFWIDGET macro is similar to Common Lisp's DEFCLASS,
+application. The REBLOCKS/WIDGET:DEFWIDGET macro is similar to Common Lisp's DEFCLASS,
 in fact it is only a wrapper around it. It takes a name, a list of
 super-classes (here `()`) and a list of slot definitions.
 
-We can create a list-item with `make-list-item` function.
+We can create a list-item with the `make-list-item` function.
 
-Now we need to define a method for REBLOCKS/WIDGET:RENDER generic-function to render
+Now we need to define a method for the REBLOCKS/WIDGET:RENDER generic-function to render
 this widget:
 
 ```
@@ -224,7 +224,7 @@ The REBLOCKS/HTML:WITH-HTML macro uses
 [Spinneret][Spinneret] under the hood,
 but you can use anything that outputs html.
 
-We can check how the generated html looks like by calling
+We can check how the generated HTML looks by calling the
 REBLOCKS/WIDGET:RENDER generic-function in the REPL:
 
 
@@ -270,22 +270,22 @@ Let's add an onclick handler which will change task's state from `todo` to `done
 ```
 
 Here we've defined the `toggle` function which will be called
-when user clicks the task list item. Also, we've added `on-click` argument
-to the `:input` element. Function REBLOCKS/ACTIONS:MAKE-JS-ACTION
-accepts a lisp function and returns a string with JavaScript code which
-calls this lisp function from the frontend side.
+when the user clicks the task list item. Also, we've added an `on-click` argument
+to the `:input` element. The REBLOCKS/ACTIONS:MAKE-JS-ACTION function
+accepts a Lisp function and returns a string with JavaScript code which
+calls this Lisp function from the frontend side.
 
-After changing a task state, `toggle` function calls
+After changing a task state, the `toggle` function calls the
 REBLOCKS/WIDGET:UPDATE generic-function to send updated widget HTML code
-from the backend to the frontend. This mechanism is close to the [HTMX](https://htmx.org/),
+from the backend to the frontend. This mechanism is close to [HTMX](https://htmx.org/),
 but with Reblocks you don't need to define a special API handler for each action
-or to embed something into the HTML attributes - Reblocks does this for you and
-keeps in the session a closure, created by lambda form.
+or embed something into the HTML attributes - Reblocks does this for you and
+keeps a closure in the session, created by the lambda form.
 
 > **This is really amazing!**
 > 
-> With Reblocks, you can handle all the business logic on
-> server-side, because an action can be any lisp function, even an
+> With Reblocks, you can handle all the business logic on the
+> server-side, because an action can be any Lisp function, even an
 > anonymous lambda, closuring all necessary variables.
 
 
@@ -306,7 +306,7 @@ TODO> (reblocks-tests/utils:with-test-session ()
 
 ## Rendering a List of Tasks
 
-Now we will created a widget for displaying the list of tasks.
+Now we will create a widget for displaying the list of tasks.
 
 First, we will define a widget and a constructor function:
 
@@ -327,7 +327,7 @@ First, we will define a widget and a constructor function:
 
 ```
 
-The constructor allows to create a bunch of test tasks by giving their titles.
+The constructor allows us to create a bunch of test tasks by giving their titles.
 
 Now let's define a render function for the `task-list` widget:
 
@@ -352,9 +352,9 @@ To check how this works, redefine our application like this:
                              "Third"))))
 ```
 
-Restart the application and reload the page. Test your form now and see in a
-[Webinspector][Webinspector] how Reblocks sends requests to the server and receives
-HTML code with rendered HTML block.
+Restart the application and reload the page. Test your form now and see in the
+[Web Inspector][Webinspector] how Reblocks sends requests to the server and receives
+HTML code with the rendered HTML block.
 
 
 At this stage you should see something like that:
@@ -365,7 +365,7 @@ At this stage you should see something like that:
 ## Adding a New Task
 
 To make our application even more usable, we need to create a form for adding new tasks.
-Update the method for REBLOCKS/WIDGET:RENDER generic-function like this:
+Update the method for the REBLOCKS/WIDGET:RENDER generic-function like this:
 
 ```
 (defun add-task (task-list  title)
@@ -393,14 +393,14 @@ Update the method for REBLOCKS/WIDGET:RENDER generic-function like this:
                      :value "Add")))))
 ```
 
-Here we've used REBLOCKS/ACTIONS:MAKE-JS-FORM-ACTION function to create a JavaScript code
+Here we've used the REBLOCKS/ACTIONS:MAKE-JS-FORM-ACTION function to create JavaScript code
 for calling the `on-submit` function on the backend.
-This callback just calls `add-task` function which created a new list item and calls REBLOCKS/WIDGET:UPDATE
+This callback just calls the `add-task` function which creates a new list item and calls the REBLOCKS/WIDGET:UPDATE
 generic-function to update the whole list of tasks.
 
-If you need to work with large lists or complex data, then it is better to update not the whole collection
+If you need to work with large lists or complex data, then it is better to not update the whole collection
 widget but only insert a new item into the DOM. To accomplish this, you can provide an INSERTED-AFTER argument
-to REBLOCKS/WIDGET:UPDATE generic-function:
+to the REBLOCKS/WIDGET:UPDATE generic-function:
 
 
 ```
@@ -413,9 +413,9 @@ to REBLOCKS/WIDGET:UPDATE generic-function:
 
     ;; This time we are calling update on a new list item:
     (update new-item
-            ;; And providing to the frontend
+            ;; And providing the frontend
             ;; a hint that we've inserted this new-item
-            ;; after the some other item:
+            ;; after some other item:
             :inserted-after last-item)))
 ```
 
@@ -435,15 +435,15 @@ or for interactive demo see:
 
 Full source of this step is in [here](https://github.com/40ants/reblocks/tree/master/examples/todo/step3.lisp).
 
-Now, we'll add an ability to open the task details page. There are few possibilities to accomplish this task in the Reblocks:
+Now, we'll add the ability to open the task details page. There are a few possibilities to accomplish this task in Reblocks:
 
-1. We can make a \"single page application\" and when user clicks on a list item, the whole list widget will be replaced with a widget showing details about the task. This is good if we are building a widget to be embedded into some other page where we don't want to change the URL. But in this scenario we also need to implement controls for returning back to the tasks list or hook into browser's API for managing history state. Also, in this mode all states of the application will have the same URL and it will be impossible for user to share a link to a single task.
-2. We can implement a classical web-app where task details page will have it's own URL. This makes history and sharing works as user expects. For this reason and also to show you how routing works in Reblocks, we'll go by this way.
+1. We can make a \"single page application\" and when the user clicks on a list item, the whole list widget will be replaced with a widget showing details about the task. This is good if we are building a widget to be embedded into some other page where we don't want to change the URL. But in this scenario we also need to implement controls for returning back to the tasks list or hook into the browser's API for managing history state. Also, in this mode all states of the application will have the same URL and it will be impossible for the user to share a link to a single task.
+2. We can implement a classical web app where the task details page will have its own URL. This makes history and sharing work as the user expects. For this reason and also to show you how routing works in Reblocks, we'll go this way.
 
 
 ## Task Details Widget
 
-For showing task details we need yet another widget. You see, a widget is a representation of some data and there could be a multiple kinds of representation for the same data! In our example, the same task might be rendered as a list item or as a whole page's content.
+For showing task details we need yet another widget. You see, a widget is a representation of some data and there could be multiple kinds of representation for the same data! In our example, the same task might be rendered as a list item or as a whole page's content.
 
 To render task with all details, define a `task-page` widget like this:
 
@@ -469,9 +469,9 @@ To render task with all details, define a `task-page` widget like this:
 
 ```
 
-Note, the constructor calls to REBLOCKS/RESPONSE:NOT-FOUND-ERROR function which will
-interrupt request processing and show an 404 error page to the user. This function
-accepts a text or a widget, so you might define a widget to render 404 page as you like!
+Note, the constructor calls the REBLOCKS/RESPONSE:NOT-FOUND-ERROR function which will
+interrupt request processing and show a 404 error page to the user. This function
+accepts text or a widget, so you might define a widget to render the 404 page as you like!
 
 Now we need to write a render method for the `task-page` widget:
 
@@ -490,20 +490,20 @@ Now we need to write a render method for the `task-page` widget:
                  (:span :style "font-weight: normal"
                         (title task)))
             (:div (if (string= (description task) "")
-                      "No defails on this task."
+                      "No details on this task."
                       (description task)))
             (:div :style "display: flex; gap: 1rem"
                   (:a :href list-url
                       "Back to task list."))))))
 ```
 
-Pay attention how we did use ROUTE-URL to get URL of the page with tasks list. If we would hardcode here
-something like `/`, then our applications URL become incorrect in case if this application will be
-mounted to the server using some prefix like `/tasks/`, but ROUTE-URL function will always give a correct path.
+Pay attention to how we used ROUTE-URL to get the URL of the page with the tasks list. If we hardcoded
+something like `/` here, then our application's URL would become incorrect in case this application is
+mounted to the server using some prefix like `/tasks/`, but the ROUTE-URL function will always give the correct path.
 
 ## New Route
 
-Talking about the routing, now we need to redefine routes of our application and add a new page:
+Talking about routing, now we need to redefine the routes of our application and add a new page:
 
 ```
 (defapp tasks
@@ -523,15 +523,15 @@ Here we've defined a new page like this:
   (make-task-page task-id))
 ```
 
-Path `"/<int:task-id>"` tell Reblocks to extract an argument TASK-ID if URL matches to the route, and
-this variable will be bound during handler body `(make-task-page task-id)` execution.
+The path `"/<int:task-id>"` tells Reblocks to extract an argument TASK-ID if the URL matches the route, and
+this variable will be bound during the handler body `(make-task-page task-id)` execution.
 
-Also, note that this route has a NAME argument with `"task-details"` value. Now we can use this name
-to get an URL of this new page using ROUTE-URL function.
+Also, note that this route has a NAME argument with the `"task-details"` value. Now we can use this name
+to get the URL of this new page using the ROUTE-URL function.
 
 ## Referring to a New Page
 
-Let's adjust render method of tasks-list widget to make it use ROUTE-URL for linking to the task's page:
+Let's adjust the render method of the tasks-list widget to make it use ROUTE-URL for linking to the task's page:
 
 ```
 (defmethod reblocks/widget:render ((list-item list-item))
@@ -557,7 +557,7 @@ Now our web application should work like this:
 ![](docs/images/quickstart/step3.gif)
 
 
-Go, try it! This demo is interative:
+Go, try it! This demo is interactive:
 """
 
   (step3-example reblocks-example)
@@ -568,11 +568,11 @@ Go, try it! This demo is interative:
 
 # Editing Task
 
-Now our app almost functional. The only thing we are lacking is an ability to edit
-task's title and description. Let's modify task details page to include an edit mode!
+Now our app is almost functional. The only thing we are lacking is the ability to edit
+the task's title and description. Let's modify the task details page to include an edit mode!
 
 What we will do is add a state flag to the task details widget. When the flag is true, we
-will show a editable form instead of usual representation of the task:
+will show an editable form instead of the usual representation of the task:
 
 ```
 (defmethod render ((task-page task-page))
@@ -616,7 +616,7 @@ will show a editable form instead of usual representation of the task:
                     (:span :style "font-weight: normal"
                            (title task)))
                (:div (if (string= (description task) "")
-                         "No defails on this task."
+                         "No details on this task."
                          (description task)))
                (:div :style "display: flex; gap: 1rem"
                      (:a :href list-url
@@ -645,7 +645,7 @@ And interactive version is here:
 
 As a homework:
 
-1. Play with lambdas and add a \"Delete\" button next after
+1. Play with lambdas and add a \"Delete\" button after
    each task.
 2. Add the ability to sort tasks by name or by completion flag.
 3. Save tasks in a database (this [Cookbook chapter][DB-Cookbook] might help).
@@ -828,7 +828,7 @@ As a homework:
                  (:span :style "font-weight: normal"
                         (title task)))
             (:div (if (string= (description task) "")
-                      "No defails on this task."
+                      "No details on this task."
                       (description task)))
             (:div :style "display: flex; gap: 1rem"
                   (:a :href list-url
@@ -905,7 +905,7 @@ As a homework:
                     (:span :style "font-weight: normal"
                            (title task)))
                (:div (if (string= (description task) "")
-                         "No defails on this task."
+                         "No details on this task."
                          (description task)))
                (:div :style "display: flex; gap: 1rem"
                      (:a :href list-url

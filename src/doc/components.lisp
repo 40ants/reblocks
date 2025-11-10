@@ -32,9 +32,9 @@ requests. When a client sends its first request to a Reblocks application then
 a new session is started for it and a widget tree is associated with this session.
 
 This initial widget tree <sup>[1](#tree)</sup> is computed as defined by the application developer.
-A generic-function REBLOCKS/SESSION:INIT is called by Reblocks
-to initialize a new session. This function should return a single widget which become
-a root of a tree:
+The generic-function REBLOCKS/SESSION:INIT is called by Reblocks
+to initialize a new session. This function should return a single widget which becomes
+the root of a tree:
 
 ```
 TODO> (defmethod reblocks/session:init ((app tasks))
@@ -52,7 +52,7 @@ A client's request for a specific URI modifies the widget tree: widgets
 called **dispatchers** choose their one child based on the current request
 URI.
 
-Old version of Weblocks had a MAKE-WIDGET function. You was able to use strings
+The old version of Weblocks had a MAKE-WIDGET function. It was possible to use strings
 and function designators <sup>[3](#function-designators) instead of widgets in this context.
 Probably, we will return this functionality some day.
 
@@ -102,12 +102,13 @@ REBLOCKS-NAVIGATION-WIDGET system. Read its documentation to learn more.
 To make everything work, you need to start one or more webservers on some TCP ports.
 
 When you are starting a server, usually you specify an interface and port to listen on
-and a list os Reblocks apps to serve.
+and a list of Reblocks apps to serve.
 
 You might define your own server class and inherit it from REBLOCKS/SERVER:SERVER class.
-This will allow to customize a list of HTTP middlewares.
+This will allow you to customize a list of HTTP middlewares.
 "
   ;; Here is the list of functions useful when working with Reblocks servers:
+  ;; (reblocks/session:init generic-function)
   ;; (reblocks/server:server class)
   ;; (reblocks/server:start function)
   ;; (reblocks/server:stop function)

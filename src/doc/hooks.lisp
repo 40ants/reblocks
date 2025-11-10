@@ -83,25 +83,25 @@
                                    "WITH"
                                    "REBLOCKS"
                                    "HOOKS"))
-  "Reblocks provides a hooks mechanism to allow to set callbacks on different events.
-   These callbacks are cooled \"hooks\". Each hook can be added on one of three levels:
+  "Reblocks provides a hooks mechanism to allow setting callbacks on different events.
+   These callbacks are called \"hooks\". Each hook can be added at one of three levels:
 
    - application;
    - session;
    - request.
 
-   Hooks added on request level expire after the request was processed. This could be useful
-   for commiting changes to the database.
+   Hooks added at the request level expire after the request was processed. This could be useful
+   for committing changes to the database.
 
-   Session level hooks are called have a longer life time and work while user session is active.
-   They are bound to a session. Some user might have a hook installed in his session and other user don't.
-   This way you might implement such things like turning on debug information, etc.
+   Session level hooks have a longer life time and work while the user session is active.
+   They are bound to a session. Some users might have a hook installed in their session and other users don't.
+   This way you might implement features like turning on debug information, etc.
 
-   Application level hooks are stored permanently and work for every user. Despite the name, they aren't
-   bound to an application. These hooks are global and work for any application and any reblocks server.
+   Application level hooks are stored permanently and work for every user. Despite the name, they are not
+   bound to an application. These hooks are global and work for any application and any Reblocks server.
 
-   Hooks are defined to be called on some event happened in the reblocks application.
-   Here is a list of hooks, predefined in the Reblocks:"
+   Hooks are defined to be called when some event happens in the Reblocks application.
+   Here is a list of hooks, predefined in Reblocks:"
 
   (handle-http-request hook)
   (start-reblocks hook)
@@ -112,8 +112,8 @@
 
   "# How to use these hooks?
 
-   Lets pretend we want to create an extension which will collect all SQL queries
-   and render them in hidden panel like Django Debug Toolbar does? To accomplish
+   Let's pretend we want to create an extension which will collect all SQL queries
+   and render them in a hidden panel like Django Debug Toolbar does. To accomplish
    this task, we need to add an application-wide RENDER hook:
 
    ```
@@ -133,25 +133,25 @@
        (inject-debug-panel resulting-html)))
    ```
 
-   As you can see, we've added a hook using ON-APPLICATION-HOOK-RENDER macro
-   and used CALL-NEXT-HOOK function inside it's body. This is very similar
+   As you can see, we've added a hook using the ON-APPLICATION-HOOK-RENDER macro
+   and used the CALL-NEXT-HOOK function inside its body. This is very similar
    to generic functions, but instead of methods, we are calling nested hooks. Hooks added
-   later wraps hooks added earlier.
+   later wrap hooks added earlier.
 
-   If you don't call CALL-NEXT-HOOK function explicitly, it will be called implicitly
+   If you don't call the CALL-NEXT-HOOK function explicitly, it will be called implicitly
    after your hook's body. This makes your code called before hook's event.
 
    # Defining your own hooks
 
-   You can use hooks mechanics in your own code by defining and calling hooks.
+   You can use hook mechanics in your own code by defining and calling hooks.
 
-   First, you need to define a hook using DEFHOOK macro. Then choose piece of code
-   you want to make hookable and wrap it with another macro, defined by DEFHOOK.
+   First, you need to define a hook using the DEFHOOK macro. Then choose a piece of code
+   you want to make hookable and wrap it with another macro defined by DEFHOOK.
 
-   For example, you creating a Reblocks extension which allows users to register
-   on a website. You also want to allow develope who will use your extension
-   to define additional actions when a new user get registered on site. For example,
-   admin might want to validate age and also to send user a greeting email after registration.
+   For example, if you are creating a Reblocks extension which allows users to register
+   on a website. You also want to allow developers who will use your extension
+   to define additional actions when a new user gets registered on the site. For example,
+   an admin might want to validate age and also send the user a greeting email after registration.
 
    To accomplish this task, we need to define a hook:
 
@@ -161,7 +161,7 @@
        \"Called around the code which creates a new user. Returns a user object.\")
    ```
 
-   This macro will define more macros inside REBLOCKS/HOOKS package:
+   This macro will define more macros inside the REBLOCKS/HOOKS package:
 
    * ON-SESSION-HOOK-CREATE-USER
    * ON-REQUEST-HOOK-CREATE-USER
@@ -169,12 +169,12 @@
    * WITH-CREATE-USER-HOOK
    * CALL-CREATE-USER-HOOK
 
-   Now, you need to use WITH-CREATE-USER-HOOK macro to wrap around
+   Now, you need to use the WITH-CREATE-USER-HOOK macro to wrap around
    code creating the user. In some cases, when you just want to call hooks
    you can use `CALL-…-HOOK` version which is equal to calling `WITH-…-HOOK`
    without any body.
 
-   Here is how you can use it now:
+   Here is how you can use it:
 
    ```
    (defun process-new-user-form (age name email)

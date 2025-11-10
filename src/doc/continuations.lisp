@@ -7,7 +7,7 @@
 
 (defsection @continuations (:title "Continuations-based tools")
   "
-> **Warning!** Continuations support support was removed in the Reblocks fork.
+> **Warning!** Continuations support was removed in the Reblocks fork.
 
-This feature will reborn as a separate library with a custom widget class.
+This feature will be reborn as a separate library with a custom widget class.
 ")

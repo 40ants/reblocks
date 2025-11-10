@@ -19,21 +19,21 @@
                                   "URL"
                                   "WEBAPP"))
   "
-Reblocks sites contains one or more apps. Where each app is responsible
-for serving requests starting from some prefix.
+Reblocks sites contain one or more apps, where each app is responsible
+for serving requests starting from a specific prefix.
 
-For example, your site can have a few apps mounted to `/`, `/shop/`, `/blog/` and `/admin/`
+For example, a site can have a few apps mounted to `/`, `/shop/`, `/blog/` and `/admin/`
 prefixes.
 
-The simplest way to define a new app is to use DEFAPP macro like this:
+The simplest way to define a new app is to use the DEFAPP macro like this:
 
 ```
 (defapp blog
   :prefix \"/blog/\")
 ```
 
-And then to define a method for REBLOCKS/SESSION:INIT generic-function. It will be called if
-user will open https://yoursite.com/blog/ in his browser.
+And then define a method for the REBLOCKS/SESSION:INIT generic function. It will be called if
+a user opens https://yoursite.com/blog/ in their browser.
 
 "
   ;; ## API

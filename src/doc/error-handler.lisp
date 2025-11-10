@@ -10,13 +10,13 @@
 (defsection @error-handling (:title "Error Handling"
                              :ignore-words ())
   "
-When error happens, Reblocks either renders an error page or opens an interactive debugger.
+When an error happens, Reblocks either renders an error page or opens an interactive debugger.
 
-Interactive debugger is opened only if server is running in debug mode. Also, in this mode,
-error page contains a backtrace.
+The interactive debugger is opened only if the server is running in debug mode. Also, in this mode,
+the error page contains a backtrace.
 
-If you want to customize how does error page look like, define a method for
-ON-ERROR generic-function.
+If customizing how the error page looks is desired, define a method for
+the ON-ERROR generic function.
 "
   ;; (on-error generic-function)
   )
