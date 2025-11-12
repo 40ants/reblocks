@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>reblocks-docs ChangeLog</title>
+        <link>https://40ants.com/reblocks</link>
+        <generator>xml-emitter</generator>
+        <language>en-us</language>
+        <item>
+            <title>0.65.0  (2025-09-22)</title>
+            <description>&lt;h1 id=&quot;improvement&quot;&gt;Improvement&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:make-js-action&lt;/code&gt;&lt;/a&gt; function now accepts as values a Parenscript code.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Such code will be rendred as string and passed to the fronted as raw Javasript,
+  not as a string. This allows to execute arbitrary Javascript code to calculate
+  action&apos;s argument right before the action execution.&lt;/p&gt;</description>
+            <pubDate>Mon, 22 Sep 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.64.2  (2025-06-08)</title>
+            <description>&lt;h1 id=&quot;improvement&quot;&gt;Improvement&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Handle pathnames in responses. See commit: 425155b28b77 and Github issue: #83&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 08 Jun 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.64.1  (2025-05-27)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed the &lt;code&gt;Unknown type of result: REBLOCKS/WIDGETS/STRING-WIDGET:STRING-WIDGET&lt;/code&gt; error, occured in Reblocks applications initialized old-way by &lt;code&gt;init-page&lt;/code&gt; method.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Thanks for the report to Mariano Montone!&lt;/p&gt;</description>
+            <pubDate>Tue, 27 May 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.64.0  (2025-05-22)</title>
+            <description>&lt;h1 id=&quot;backward-incompatible-changes&quot;&gt;Backward incompatible changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FUTILS-2FMISC-3ARELATIVE-PATH-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FUTILS-2FMISC-3ARELATIVE-PATH-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/utils/misc:relative-path&lt;/code&gt;&lt;/a&gt; now accepts the pathnames and returns a pathname instead of string.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;new&quot;&gt;New&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;A special method was added for Spinneret&apos;s &lt;code&gt;html&lt;/code&gt; generic-function. This method calls &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3ARENDER-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/widget:render&lt;/code&gt;&lt;/a&gt;
+  generic-function if you use a widget in the body of Spinneret &lt;code&gt;HTML&lt;/code&gt; tag.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 22 May 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.63.0  (2025-05-17)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Class &lt;code&gt;reblocks/server::static-route-from-file&lt;/code&gt; was renamed and now exported as &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-ROUTE-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-ROUTE-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/routes:static-file-route&lt;/code&gt;&lt;/a&gt; along with
+  a constructor function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/routes:static-file&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.62.0  (2025-05-08)</title>
+            <description>&lt;p&gt;This release contains many changes, but the main one is that now Reblocks uses &lt;a href=&quot;https://40ants.com/routes/#x-28-23A-28-2813-29-20BASE-CHAR-20-2E-20-2240ants-routes-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29&quot;&gt;&lt;code&gt;40ants-routes&lt;/code&gt;&lt;/a&gt; system to provide a native way to define routes for multipage applications. Previously you have to process routes manually or use &lt;a href=&quot;https://40ants.com/reblocks-navigation-widget/#x-28-23A-28-2826-29-20BASE-CHAR-20-2E-20-22reblocks-navigation-widget-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29&quot;&gt;&lt;code&gt;reblocks-navigation-widget&lt;/code&gt;&lt;/a&gt; system.&lt;/p&gt;&lt;p&gt;Here are changes made in this release:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Class &lt;code&gt;reblocks/routes:route&lt;/code&gt; was removed.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Macro &lt;code&gt;reblocks/routes:defroute&lt;/code&gt; was removed.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;reblocks/routes:get-route&lt;/code&gt; was removed.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;code&gt;reblocks/request-handler:page-not-found-handler&lt;/code&gt; was removed. Now &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ANOT-FOUND-ERROR-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FRESPONSE-3ANOT-FOUND-ERROR-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/response:not-found-error&lt;/code&gt;&lt;/a&gt; function should be used to show a widget for 404 page and this widget will be wraped by funcallable application&apos;s slot &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3APAGE-CONSTRUCTOR-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20REBLOCKS-2FAPP-3AAPP-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FAPP-3APAGE-CONSTRUCTOR-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20REBLOCKS-2FAPP-3AAPP-29-29&quot;&gt;&lt;code&gt;reblocks/app:page-constructor&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;App&apos;s get-prefix is not setfable anymore.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Slash / is added to the app prefix, this might break if you use apps with prefix like /foo, because now it will become /foo/. This change is required because.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Handle-request generic-function was removed from reblocks/request-handler package.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Timing reporting was removed from request handling code.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Timeout handling was removed from request handling code for a while. Previously there was 180s timeout. It only worked for &lt;code&gt;SBCL&lt;/code&gt; and used unsafe with-timeout function. We need to support deadline propagation instead.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;A macro reblocks/routes:page was added. It can be used to define a route returning a page&apos;s root widget.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Among other app routes you can define a non page routes such as routes for serving static files.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Examples of routes for serving favicon and robots.txt:&lt;/p&gt;&lt;p&gt;#+begin_src lisp
+  ;; static
+  (get (&amp;quot;/favicon.ico&amp;quot;)
+    (list 200
+          (list :content-type &amp;quot;image/x-icon&amp;quot;)
+          (asdf:system-relative-pathname :reblocks-ui2-demo &amp;quot;demo/favicons/favicon.ico&amp;quot;)))
+  (get (&amp;quot;/robots.txt&amp;quot;)
+    &amp;quot;User-agent: *&amp;quot;)
+  #+end_src&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Generic function reblocks/server:serve-static-file was removed&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;App can&apos;t be bound to the particular hostname anymore. Just start a different servers on a few ports and route traffic using some kind of reverse proxy.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Lambda list of these macros was changed to accept arguments beside a &lt;code&gt;BODY&lt;/code&gt; argument: with-html, with-html-string, with-app, with-collected-dependencies, with-page-defaults&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3APAGE-CONSTRUCTOR-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20REBLOCKS-2FAPP-3AAPP-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FAPP-3APAGE-CONSTRUCTOR-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20REBLOCKS-2FAPP-3AAPP-29-29&quot;&gt;&lt;code&gt;reblocks/app:page-constructor&lt;/code&gt;&lt;/a&gt; slot was added to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3AAPP-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FAPP-3AAPP-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/app:app&lt;/code&gt;&lt;/a&gt; class. This way such common elements as header and footer can be added to all application&apos;s pages including error pages.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Previously Reblocks server catched only &lt;code&gt;ERROR&lt;/code&gt; conditions, now it will do this for any &lt;code&gt;SERIOUS-CONDITION&lt;/code&gt;,
+  because &lt;code&gt;SBCL&lt;/code&gt;&apos;s timeouts are inherited from the &lt;code&gt;SERIOUS-CONDITION&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Variable &lt;code&gt;reblocks/request-handler:*request-timeout*&lt;/code&gt; was removed. Now request-timeout can be specified as an argument to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:start&lt;/code&gt;&lt;/a&gt; function and it&apos;s default value is available as &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FVARIABLES-3A-2ADEFAULT-REQUEST-TIMEOUT-2A-20-28VARIABLE-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FVARIABLES-3A-2ADEFAULT-REQUEST-TIMEOUT-2A-20-28VARIABLE-29-29&quot;&gt;&lt;code&gt;reblocks/variables:*default-request-timeout*&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Slot &lt;code&gt;propagate-dirty&lt;/code&gt; was removed from &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/widget:widget&lt;/code&gt;&lt;/a&gt; class.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Slot &lt;code&gt;continuation&lt;/code&gt; was moved from &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3AWIDGET-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/widget:widget&lt;/code&gt;&lt;/a&gt; class to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGETS-2FFUNCALL-WIDGET-3AFUNCALL-WIDGET-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGETS-2FFUNCALL-WIDGET-3AFUNCALL-WIDGET-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/widgets/funcall-widget:funcall-widget&lt;/code&gt;&lt;/a&gt; class.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 08 May 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.61.1  (2024-09-14)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now local dependencies also could be created with &lt;code&gt;:DEFER&lt;/code&gt; argument. (Thanks for the &lt;code&gt;PR&lt;/code&gt; to Breinstew@github)&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 14 Sep 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.61.0  (2024-09-14)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed an error inside &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:make-js-action&lt;/code&gt;&lt;/a&gt; function when called without &lt;code&gt;:ARGS&lt;/code&gt;. (Thanks to olivercsr@github for the &lt;code&gt;PR&lt;/code&gt;)&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 14 Sep 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.60.0  (2024-07-28)</title>
+            <description>&lt;h1 id=&quot;incompatible-changed&quot;&gt;Incompatible Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;JS&lt;/code&gt; function initiateFormAction now accepts four arguments instead of three.
+  Second argument should be an event, third - the form object and fourth an options object.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This change allows to submit form using different buttons having their values passed to a
+  lisp callback.&lt;/p&gt;&lt;p&gt;An &lt;code&gt;examples/simple-form.lisp&lt;/code&gt; file was added to demonstrate how this feature works when
+  form has Submit and Cancel buttons.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; if you&apos;ve used Reblocks-&lt;code&gt;UI&lt;/code&gt; system, then you&apos;ll need to update it to the newest version.&lt;/p&gt;</description>
+            <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.59.0  (2024-01-26)</title>
+            <description>&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3AGET-HTML-TAG-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/widget:get-html-tag&lt;/code&gt;&lt;/a&gt; now can return a list like &lt;code&gt;(list :input :onchange \&amp;quot;somevalue\&amp;quot;)&lt;/code&gt; to change not only &lt;code&gt;HTML&lt;/code&gt; tag of the widget node, but also to add some arguments to it.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 26 Jan 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.58.0  (2024-01-13)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;p&gt;A new function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/response:status-code&lt;/code&gt;&lt;/a&gt; was added as a replacement to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3AGET-CODE-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FRESPONSE-3AGET-CODE-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/response:get-code&lt;/code&gt;&lt;/a&gt;.
+The new function is setfable. Now you can change &lt;code&gt;HTTP&lt;/code&gt; status code of the currently rendered page.
+This is especially helpful when rendering \&amp;quot;Not found\&amp;quot; or error pages.&lt;/p&gt;</description>
+            <pubDate>Sat, 13 Jan 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.57.0  (2024-01-08)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Error about missing action now is continuable. In case if \&amp;quot;continue\&amp;quot; restart was selected,
+  page is refreshed to update actions in the session.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now it is possible to use symbol as an action and it will be funcalled to handle an action.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 08 Jan 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.56.0  (2024-01-01)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3ABODY-CLASSES-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3ABODY-CLASSES-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:body-classes&lt;/code&gt;&lt;/a&gt; was added and can be used to specify classes
+  for &lt;code&gt;HTML&lt;/code&gt; body. This can be helpful when making a site using frameworks like &lt;code&gt;TailwindCSS&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.55.0  (2023-12-05)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Optional argument :defer was added to javascript dependencies.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Argument &lt;code&gt;BASE-URI&lt;/code&gt; was added to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3AMAKE-URI-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FRESPONSE-3AMAKE-URI-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/response:make-uri&lt;/code&gt;&lt;/a&gt; function.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now Reblocks responds with Server-Timing and this performance information can be
+  viewed in the browser. Read more about this header at
+  &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing&quot;&gt;Mozilla&apos;s docs&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/widget:update&lt;/code&gt;&lt;/a&gt; now has an optional argument &lt;code&gt;REMOVED&lt;/code&gt;.
+  You can set it to T to remove widget from the &lt;code&gt;DOM&lt;/code&gt; tree.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 05 Dec 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.54.0  (2023-10-22)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FREQUEST-3AGET-REMOTE-IP-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/request:get-remote-ip&lt;/code&gt;&lt;/a&gt; was added.&lt;/p&gt;&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;p&gt;Now function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:make-action-url&lt;/code&gt;&lt;/a&gt; removed old &lt;code&gt;action&lt;/code&gt; argument if it is present in the
+current &lt;code&gt;URL&lt;/code&gt;. This fixes the case when you want to make an action url from the callback processing
+another action.&lt;/p&gt;&lt;p&gt;JavaScript function &lt;code&gt;initiateFormAction&lt;/code&gt; now does not overwrites whole options.args object,
+but only replaces the keys corresponding to a form data fields.&lt;/p&gt;</description>
+            <pubDate>Sun, 22 Oct 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.53.0  (2023-06-20)</title>
+            <description>&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;p&gt;Now all commands added using &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/response:send-script&lt;/code&gt;&lt;/a&gt; or &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FCOMMANDS-3AADD-COMMAND-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FCOMMANDS-3AADD-COMMAND-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/commands:add-command&lt;/code&gt;&lt;/a&gt;
+during the call to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3AUPDATE-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/widget:update&lt;/code&gt;&lt;/a&gt; generic-function, are added after the command
+for updating &lt;code&gt;DOM&lt;/code&gt; node on the frontend. This fixes a problem happened when you attach
+some &lt;code&gt;JS&lt;/code&gt; handlers to the &lt;code&gt;DOM&lt;/code&gt; node, but after the update these handlers are deleted.&lt;/p&gt;</description>
+            <pubDate>Tue, 20 Jun 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.52.0  (2023-06-08)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Documentation on &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGETS-2FSTRING-WIDGET-3ASTRING-WIDGET-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/widgets/string-widget:string-widget&lt;/code&gt;&lt;/a&gt; class and it&apos;s methods.q&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 08 Jun 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.51.0  (2023-05-27)</title>
+            <description>&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AMAKE-JS-ACTION-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:make-js-action&lt;/code&gt;&lt;/a&gt; now accepts &lt;code&gt;ARGS&lt;/code&gt; argument. If given, it will be serialized as a dictionary and embedded into the action calling code. This way you can pass the arguments back into your lisp callback.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added &lt;code&gt;includeCSS&lt;/code&gt; and &lt;code&gt;includeJS&lt;/code&gt; command handlers. This makes it possible to send such kind of commands via a websocket.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now all widgets rendered on a page are collected into a hash table and you can find them by dom-id using &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AFIND-WIDGET-BY-ID-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3AFIND-WIDGET-BY-ID-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:find-widget-by-id&lt;/code&gt;&lt;/a&gt; function.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 27 May 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.50.0  (2022-12-03)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;p&gt;Fixed a bug when session lock was written into the session itself instead of into the
+inner hash table.&lt;/p&gt;&lt;p&gt;Fixed error handling when debug-mode is off. Previously, the debugger was invoked before showing 500 error page to the user.&lt;/p&gt;&lt;p&gt;Now every response has \&amp;quot;Cache-Control: no-cache, no-store, must-revalidate\&amp;quot; header to prevent
+caching of dynamic content in the browser. This fixes the issue when you did some changes using actions then went to
+another page and returned using \&amp;quot;Back\&amp;quot; button in the browser. Previously browser was able to show you an old content of the
+page.&lt;/p&gt;&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;h2 id=&quot;current-page-abstraction&quot;&gt;Current page abstraction&lt;/h2&gt;&lt;p&gt;Added a notion of the current page. Now all actions are bound to some page and
+pages can expire, clearing actions from the memory. This should prevent memory leak
+leading to posible DoS attack. Page expiration is controlled by two values:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;A number of seconds while page should be considered alive. This prevents
+  evil person from filling memory by creation of many separate sessions.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;A maximum number of pages per session. This may be needed to protect from
+  opening too many pages within one session.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Also, you can use &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3AEXTEND-EXPIRATION-TIME-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:extend-expiration-time&lt;/code&gt;&lt;/a&gt; function to extend current page&apos;s
+expiration time.&lt;/p&gt;&lt;p&gt;When all pages in the session are expired, session is removed from the memory too.&lt;/p&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3AON-PAGE-REFRESH-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:on-page-refresh&lt;/code&gt;&lt;/a&gt; was added.&lt;/p&gt;&lt;h2 id=&quot;cached-widget-dependencies&quot;&gt;Cached widget dependencies&lt;/h2&gt;&lt;p&gt;Another interesting feature is mixin class &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FCACHED-DEPENDENCIES-MIXIN-3ACACHED-DEPENDENCIES-MIXIN-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FCACHED-DEPENDENCIES-MIXIN-3ACACHED-DEPENDENCIES-MIXIN-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/cached-dependencies-mixin:cached-dependencies-mixin&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;p&gt;These functions were moved to separate package &lt;code&gt;REBLOCKS/PAGE-DEPENDENCIES&lt;/code&gt;:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;with-collected-dependencies&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;get-collected-dependencies&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;push-dependencies&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;already-loaded-p&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;page-dependencies&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;New generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSESSION-3AINIT-SESSION-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/session:init-session&lt;/code&gt;&lt;/a&gt; was introduced. Define a method if you
+need to add something into the user&apos;s session when it is initialized. This function will
+be called once per user.&lt;/p&gt;&lt;p&gt;Generic function &lt;code&gt;REBLOCKS/SESSION:INIT&lt;/code&gt; was replaced with &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3AINIT-PAGE-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:init-page&lt;/code&gt;&lt;/a&gt; and it will
+be called each time a user opens site in a new browser window or tab. When user refreshes
+the page it will not be called.&lt;/p&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FDEBUG-3ARESET-LATEST-SESSION-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FDEBUG-3ARESET-LATEST-SESSION-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/debug:reset-latest-session&lt;/code&gt;&lt;/a&gt; now provides a convenient restart to enable debug mode.&lt;/p&gt;&lt;h1 id=&quot;deleted&quot;&gt;Deleted&lt;/h1&gt;&lt;p&gt;Function &lt;code&gt;reblocks/widgets/root:get&lt;/code&gt; was deleted. Use &lt;code&gt;(page-root-widget (current-page))&lt;/code&gt; instead.
+Also &lt;code&gt;root-widget-key&lt;/code&gt; and corresponding package &lt;code&gt;reblocks/widgets/root&lt;/code&gt; were removed.&lt;/p&gt;</description>
+            <pubDate>Sat, 03 Dec 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.49.0  (2022-11-26)</title>
+            <description>&lt;p&gt;New functional was added which allows to control how does &lt;code&gt;HTTP&lt;/code&gt; middlewares list is generated for the server.
+You might define your own &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASERVER-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ASERVER-20CLASS-29&quot;&gt;&lt;code&gt;reblocks/server:server&lt;/code&gt;&lt;/a&gt; class and a method for &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:make-middlewares&lt;/code&gt;&lt;/a&gt; generic-function.
+Inside this method, you might inject additional middlewares using &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:insert-middleware&lt;/code&gt;&lt;/a&gt; function.&lt;/p&gt;&lt;p&gt;Also, a variable &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29&quot;&gt;&lt;code&gt;reblocks/server:*default-samesite-policy*&lt;/code&gt;&lt;/a&gt; was introdiced, to control default value of the SameSite &lt;code&gt;HTTP&lt;/code&gt; header.&lt;/p&gt;&lt;p&gt;As a bonus, loading of reblocks-docs system was fixed.&lt;/p&gt;</description>
+            <pubDate>Sat, 26 Nov 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.48.0  (2022-11-07)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;p&gt;Now Reblocks remembers which dependencies are already loaded into the page and
+will not fetch them again. This fixes issue when it fetched jQuery and broke
+it&apos;s extensions making further action calls made via &lt;code&gt;GET&lt;/code&gt; instead of Ajax.&lt;/p&gt;</description>
+            <pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.47.0  (2022-11-04)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;p&gt;Added ability to set cookie in response handler. You can do it in any render method.&lt;/p&gt;&lt;p&gt;Here is an example how to expire a cookie right now:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;lisp&quot;&gt;(reblocks/response:set-cookie
+     (list :name &amp;quot;auth_token&amp;quot;
+           :value &amp;quot;&amp;quot;
+           :path &amp;quot;/&amp;quot;
+           :expires (get-universal-time)
+           :secure t
+           :samesite :lax))&lt;/code&gt;&lt;/pre&gt;</description>
+            <pubDate>Fri, 04 Nov 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.46.1  (2022-09-16)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Error page rendering was fixed. Now such variables as page description, tags and title are
+  bound to their defaults while calling &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/error-handler:on-error&lt;/code&gt;&lt;/a&gt; generic-function.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 16 Sep 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.46.0  (2022-07-03)</title>
+            <description>&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FERROR-HANDLER-3AON-ERROR-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/error-handler:on-error&lt;/code&gt;&lt;/a&gt; now accepts &lt;code&gt;BACKTRACE&lt;/code&gt; argument which may
+  contain a string with a backtrace. Previously, default method of this generic-function
+  has rendered wrong backtrace when you aborted request in debugger.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Also, a function &lt;a href=&quot;https://40ants.com/log4cl-extras/#x-28LOG4CL-EXTRAS-2FERROR-3APRINT-BACKTRACE-20FUNCTION-29&quot;&gt;&lt;code&gt;log4cl-extras/error:print-backtrace&lt;/code&gt;&lt;/a&gt; is used now to format a backtrace
+  for error page and now it looks the same as backtrace in logs.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Plus, a backtrace now logged only once when unhandled error happens.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;removed&quot;&gt;Removed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Macro &lt;code&gt;WITH-HANDLED-ERRORS&lt;/code&gt; is not exported from &lt;code&gt;REBLOCKS/ERROR-HANDLER&lt;/code&gt; package anymore.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 03 Jul 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.45.3  (2022-06-25)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed how &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3AGET-TITLE-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:get-title&lt;/code&gt;&lt;/a&gt; and other similar functions change the state.
+  Previously there was a bug and these functions have changed a global variables.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 25 Jun 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.45.2  (2022-06-06)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed loading of &lt;code&gt;CSS&lt;/code&gt; styles for new widgets appearing on a page.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed starting server in debug mode.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 06 Jun 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.45.1  (2022-06-02)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPREVIEW-3ASTOP-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/preview:stop&lt;/code&gt;&lt;/a&gt; to stop an app for previewing widgets during development.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed the way how dependencies are rendered in &lt;code&gt;AJAX&lt;/code&gt; action response. Previously,
+  when many widgets of the same class were updated on one user action Reblocks sent
+  a duplicate css/js dependencies.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FREQUEST-3AREFRESH-REQUEST-P-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/request:refresh-request-p&lt;/code&gt;&lt;/a&gt; was fixed and now works as expected.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 02 Jun 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.45.0  (2022-02-14)</title>
+            <description>&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Interactive demos now are rendered just as code block into markdown documents.
+  Such code block is followed by a link to &lt;code&gt;HTML&lt;/code&gt; documentation if &lt;code&gt;ASDF&lt;/code&gt; system
+  defines a &lt;code&gt;homepage&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.44.0  (2022-02-09)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed the way how welcome page app is started. Now it always started unless some
+  other application does not use &amp;quot;/&amp;quot; prefix.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Also, fixed the way how application is choosen depending on request url path.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:stop&lt;/code&gt;&lt;/a&gt; now removes all application and routes from the
+  server instance. This way when you&apos;ll start it again, server might serve another
+  set of the applications.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now if you redefine your app using &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;reblocks/app:defapp&lt;/code&gt;&lt;/a&gt; macro and change
+  &lt;code&gt;AUTOSTART&lt;/code&gt; argument from &lt;code&gt;T&lt;/code&gt; to &lt;code&gt;NIL&lt;/code&gt;, this app will be removed from the list
+  of applications to autostart.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now macro &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FAPP-3ADEFAPP-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;reblocks/app:defapp&lt;/code&gt;&lt;/a&gt; supports &lt;code&gt;DOCUMENTATION&lt;/code&gt; argument. Use it to add documentation
+  to application&apos;s class.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 09 Feb 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.43.0  (2022-02-07)</title>
+            <description>&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Argument &lt;code&gt;CACHE-IN-MEMORY&lt;/code&gt; was added to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FDEPENDENCIES-3AMAKE-DEPENDENCY-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/dependencies:make-dependency&lt;/code&gt;&lt;/a&gt; function.
+  It allows to compile local dependency into the memory. This way you can build a standalone
+  executable webserver without &lt;code&gt;JS&lt;/code&gt; and &lt;code&gt;CSS&lt;/code&gt; dependencies!&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;jQuery and some other dependencies now are cached in memory at compilation time.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.42.0  (2022-02-06)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now each app set&apos;s its own root widget. Root widgets is choosen depending on current application.
+  and current application depends on the url path prefix. Previously site with multiple apps
+  always shown the same root widget.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed the error occured after you stopped the webserver and started it again using the same port.
+  Previously Reblocks complained that the server is already running on this port.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed the way how Reblocks signal an error on missing action. Now it does this by default
+  from the default implementation of the &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AON-MISSING-ACTION-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:on-missing-action&lt;/code&gt;&lt;/a&gt; generic-function.
+  But if variable &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FVARIABLES-3A-2AIGNORE-MISSING-ACTIONS-2A-20-28VARIABLE-29-29&quot;&gt;&lt;code&gt;reblocks/variables:*ignore-missing-actions*&lt;/code&gt;&lt;/a&gt; is &lt;code&gt;t&lt;/code&gt;, then error will not be signaled
+  and user will be redirected to the application&apos;s previx path.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;changed&quot;&gt;Changed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Documentation examples server was changed to render a list of &lt;code&gt;ASDF&lt;/code&gt; systems for which documentation
+  was built.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/preview:preview&lt;/code&gt; (&lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29&quot;&gt;&lt;code&gt;1&lt;/code&gt;&lt;/a&gt; &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20CLASS-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPREVIEW-3APREVIEW-20CLASS-29&quot;&gt;&lt;code&gt;2&lt;/code&gt;&lt;/a&gt;) is able to accept a widget&apos;s class as a symbol.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 06 Feb 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.41.0  (2022-01-05)</title>
+            <description>&lt;h1 id=&quot;removed&quot;&gt;Removed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;reblocks/utils/misc:asdf-system-directory&lt;/code&gt;. Use &lt;code&gt;asdf:system-source-directory&lt;/code&gt; instead.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.40.0  (2022-01-03)</title>
+            <description>&lt;h1 id=&quot;added&quot;&gt;Added&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added a welcome screen app on &amp;quot;/&amp;quot; that lists the active apps.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FWIDGET-3ACREATE-WIDGET-FROM-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/widget:create-widget-from&lt;/code&gt;&lt;/a&gt; now returns a more user-friendly error
+  message, explaining that the widget is not of a good type, instead
+  of &amp;quot;no applicable generic method&amp;quot;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;A new function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPREVIEW-3APREVIEW-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/preview:preview&lt;/code&gt;&lt;/a&gt; was added. Give it a widget and it will setup
+  a server on a random port and show the widget in a browser!&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Ability to run many web servers each on it&apos;s own &lt;code&gt;HTTP&lt;/code&gt; port. Each server can have
+  it&apos;s own set of applications.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added a log in &lt;code&gt;weblocks/app:start&lt;/code&gt; to show the prefix of the app
+  that is started.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Changed &lt;code&gt;(weblocks/debug:on)&lt;/code&gt; and &lt;code&gt;off&lt;/code&gt; so they set the log
+  level to &lt;code&gt;debug&lt;/code&gt; and &lt;code&gt;warn&lt;/code&gt;, respectively.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Changed a library used to log unhandled errors.
+  Now &lt;a href=&quot;https://github.com/40ants/log4cl-extras&quot;&gt;log4cl-extras&lt;/a&gt; is used,
+  because it is a successor of &lt;a href=&quot;https://github.com/40ants/log4cl-json&quot;&gt;log4cl-json&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ASTOP-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:stop&lt;/code&gt;&lt;/a&gt; now accepts optional &lt;code&gt;interface&lt;/code&gt; and &lt;code&gt;port&lt;/code&gt; arguments.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;reblocks/action::function-or-action-&amp;gt;action&lt;/code&gt; was renamed to &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:make-action&lt;/code&gt;&lt;/a&gt; and made public.
+  Old &lt;code&gt;reblocks/action:make-action&lt;/code&gt; was renamed to &lt;code&gt;reblocks/action::internal-make-action&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;JS&lt;/code&gt; function initiateActionWithArgs now uses &lt;code&gt;POST&lt;/code&gt; method by default.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FACTIONS-3AMAKE-ACTION-URL-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/actions:make-action-url&lt;/code&gt;&lt;/a&gt; is exported now and it keeps query params by default.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;new-functions&quot;&gt;New Functions&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ASERVERS-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:servers&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:running-p&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;removals&quot;&gt;Removals&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Package &lt;code&gt;reblocks/widgets/base&lt;/code&gt; was removed. All code now is in the &lt;code&gt;reblocks/widget&lt;/code&gt; package,
+  which was a nickname previously.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/app:get-active-apps&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/app:finalize-webapp&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/app:app-active-p&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/app:start&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/app:stop&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;reblocks/app:restart&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;JS&lt;/code&gt; function &lt;code&gt;initiateActionWithArgsAndDeferredCallback&lt;/code&gt; was removed because of leaky
+  abstraction of a single deferred object per page.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;JS&lt;/code&gt; functions &lt;code&gt;initiateActionWithArgs&lt;/code&gt; and &lt;code&gt;initiateActionWithArgsAndCallback&lt;/code&gt; were combined
+  into a single &lt;code&gt;initiateAction&lt;/code&gt; function.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;JS&lt;/code&gt; functions &lt;code&gt;initiateFormAction&lt;/code&gt; and &lt;code&gt;initiateFormActionWithCallback&lt;/code&gt; were combined
+  into a &lt;code&gt;initiateFormAction&lt;/code&gt; function.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Also removed:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;A variable &lt;code&gt;*current-page-headers*&lt;/code&gt;, define an &lt;code&gt;:AFTER&lt;/code&gt; method for &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FPAGE-3ARENDER-HEADERS-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/page:render-headers&lt;/code&gt;&lt;/a&gt; instead.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*approved-return-codes*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*current-page-keywords*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*current-page-title*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*style-warn-on-circular-dirtying*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*style-warn-on-late-propagation*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*rewrite-for-session-urls*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Functions &lt;code&gt;reblocks/routes:add-route&lt;/code&gt; and &lt;code&gt;reblocks/routes:add-routes&lt;/code&gt; were made internal.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;other-changes&quot;&gt;Other changes&lt;/h1&gt;&lt;p&gt;If local dependency can&apos;t be found relative to the given &lt;code&gt;ASDF&lt;/code&gt; system, we try to search
+the same path relative to the current directory and throw error if file can&apos;t be found.
+This could happen if you&apos;ve compiled the webserver into a binary and moved it to another
+container or machine.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FSERVER-3ASTART-20FUNCTION-29&quot;&gt;&lt;code&gt;reblocks/server:start&lt;/code&gt;&lt;/a&gt; function now accepts &lt;code&gt;SAMESITE-POLICY&lt;/code&gt; argument which should be one of
+keywords: &lt;code&gt;:LAX&lt;/code&gt;, &lt;code&gt;:STRICT&lt;/code&gt; or &lt;code&gt;:NONE&lt;/code&gt;. This parameter modifies &lt;code&gt;SameSite&lt;/code&gt; part of the cookies
+sent to the client.&lt;/p&gt;&lt;p&gt;Hooks &lt;code&gt;API&lt;/code&gt; was refactored in a backward incompatible manner. &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;reblocks/hooks:defhook&lt;/code&gt;&lt;/a&gt; macro now requires
+to specify hook&apos;s arguments and all macros generated by the &lt;a href=&quot;https://40ants.com/reblocks/api/#x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/reblocks/api/&quot; data-node=&quot;x-28REBLOCKS-2FHOOKS-3ADEFHOOK-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;reblocks/hooks:defhook&lt;/code&gt;&lt;/a&gt; also require arguments
+specification.&lt;/p&gt;&lt;p&gt;jQuery was upgraded from 1.8.2 to 3.6.0. It&apos;s plugins jquery.ba-bbq.js and jquery-seq.js were
+turned off.&lt;/p&gt;</description>
+            <pubDate>Mon, 03 Jan 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.39.1  (2020-01-20)</title>
+            <description>&lt;h1 id=&quot;fixed&quot;&gt;Fixed&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed processing of the value &lt;code&gt;x-forwarded-port&lt;/code&gt;. Previously, when Weblocks
+  was used along with lastest (after the 2019-09-07) &lt;code&gt;Woo&lt;/code&gt; server, this header
+  lead to the 500 error. Because behavior of the &lt;code&gt;Woo&lt;/code&gt; was changed:&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/fukamachi/woo/issues/84&quot;&gt;https://github.com/fukamachi/woo/issues/84&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Now Woo does not parses numeric headers and Weblocks has to do it itself.&lt;/p&gt;</description>
+            <pubDate>Mon, 20 Jan 2020 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.39.0  (2019-09-16)</title>
+            <description>&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;A new macro &lt;code&gt;reblocks/routes:defroute&lt;/code&gt; was added.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;It defines a handler for a given route. By default route should return
+  a serialized &lt;code&gt;JSON&lt;/code&gt;:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;lisp&quot;&gt;(defroute (app /api/data)
+    &amp;quot;{\&amp;quot;my-data\&amp;quot;: [1, 2, 3]}&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;but you can redefine the content type:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;lisp&quot;&gt;(defroute (app /api/data :content-type &amp;quot;application/xml&amp;quot;)
+    &amp;quot;&amp;lt;my-data&amp;gt;&amp;lt;item&amp;gt;1&amp;lt;/item&amp;gt;&amp;lt;item&amp;gt;2&amp;lt;/item&amp;gt;&amp;lt;/my-data&amp;gt;&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;each route is associate with application class and these routes
+  are added to the mapper when you call a &lt;code&gt;start&lt;/code&gt; method.&lt;/p&gt;</description>
+            <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.38.1  (2019-08-02)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;A small fix to make it work with &lt;code&gt;weblocks-websocket&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 02 Aug 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.38.0  (2019-07-07)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Unhandled error processing was fixed. There were numerous problems with error processing:&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Previosly server stopped to work because clack tried to write into a closed stream.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Also, before this fix, error page didn&apos;t showed propertly.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Any error in the route lead to a server stop because there wasn&apos;t any handler at all.
+Now they are handled with &lt;code&gt;on-error&lt;/code&gt; method as errors in block/page rendering.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;All of them are fixed now.&lt;/p&gt;</description>
+            <pubDate>Sun, 07 Jul 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.37.0  (2019-06-01)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Removed check if &lt;code&gt;:bordeaux-threads&lt;/code&gt; is in the &lt;code&gt;*features*&lt;/code&gt;, because this does not work
+  in runtime in precompiled binary.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.36.0  (2019-05-03)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added function &lt;code&gt;weblocks/session:expire&lt;/code&gt;, which can be used to tell Weblocks to delete current session
+  after request processing.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Also, now session middleware is created explicitly along with memory store. This made possible to add
+  another two functions to gather some statistics about number of sessions:&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;weblocks/session:get-number-of-sessions&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;weblocks/session:get-number-of-anonymous-sessions&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;The function &lt;code&gt;weblocks/widgets/base:get-html-tag&lt;/code&gt; was fixed to
+  render tables correctly. If the widget&apos;s parent is a &lt;code&gt;:table&lt;/code&gt;
+  element, then this function returns &lt;code&gt;:tr&lt;/code&gt; (instead of a
+  &lt;code&gt;:div&lt;/code&gt;). If it is &lt;code&gt;:tr&lt;/code&gt;, it returns &lt;code&gt;:td&lt;/code&gt;, and &lt;code&gt;:div&lt;/code&gt;
+  otherwise.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;A new setting &lt;code&gt;weblocks/html:*pretty-html*&lt;/code&gt; was created, to further control pretty printing of html
+  both in code and in tests.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 03 May 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.35.3  (2019-03-31)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added a &lt;code&gt;weblocks/response:add-retpath-to&lt;/code&gt; function, useful to add a
+  &lt;code&gt;retpath&lt;/code&gt; &lt;code&gt;GET&lt;/code&gt; parameter to the &lt;code&gt;URL&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;For example, calling:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;lisp&quot;&gt;(add-retpath-to &amp;quot;/login&amp;quot; :retpath
+  &amp;quot;http://example.com:10050/foo/bar&amp;quot;)
+
+  Will return:
+
+```lisp
+&amp;quot;/login?retpath=http%3A%2F%2Fexample.com%3A10050%2Ffoo%2Fbar&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Argument &lt;code&gt;:retpath&lt;/code&gt; is optional. By default, function
+  will take an &lt;code&gt;URL&lt;/code&gt; of the current web page.&lt;/p&gt;</description>
+            <pubDate>Sun, 31 Mar 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.35.2  (2019-03-21)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Subsystem &lt;code&gt;weblocks/utils/i18n&lt;/code&gt; was added to asd file, because
+  otherwise system &lt;code&gt;weblocks-ui&lt;/code&gt; can&apos;t be installed from the &lt;a href=&quot;https://ultralisp.org&quot;&gt;Ultralisp&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.35.1  (2019-02-02)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Previosly, when you called &lt;code&gt;(weblocks/debug:off)&lt;/code&gt;, subsequent
+  call to &lt;code&gt;(weblocks/debug:status)&lt;/code&gt; returned &lt;code&gt;T&lt;/code&gt;, but should return
+  &lt;code&gt;NIL&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This was fixed now.&lt;/p&gt;</description>
+            <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.35.0  (2019-01-22)</title>
+            <description>&lt;p&gt;Request handling pipeline was refactored.&lt;/p&gt;&lt;p&gt;The idea of this refactoring, is to separate roles of the functions
+which process requests. Now &lt;code&gt;weblocks/server:handle-http-request&lt;/code&gt;
+prepares data received from the &lt;code&gt;Clack&lt;/code&gt; and calls
+&lt;code&gt;weblocks/request-handler:handle-request&lt;/code&gt; to do the real job.&lt;/p&gt;&lt;p&gt;In it&apos;s turn, &lt;code&gt;weblocks/request-handler:handle-request&lt;/code&gt; should return
+an object of type &lt;code&gt;weblocks/response:response&lt;/code&gt; containing a content,
+&lt;code&gt;HTTP&lt;/code&gt; status code and headers of the response. Any error signal, thrown
+from the &lt;code&gt;handle-request&lt;/code&gt; is considered by &lt;code&gt;handle-http-request&lt;/code&gt; as
+an &amp;quot;unhandled error&amp;quot; and returned with 500 &lt;code&gt;HTTP&lt;/code&gt; status code.&lt;/p&gt;&lt;p&gt;Here is a list of changes:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Macro &lt;code&gt;weblocks/hooks:on-application-hook-handle-request&lt;/code&gt; was
+  renamed to &lt;code&gt;weblocks/hooks:on-application-hook-handle-http-request&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;code&gt;weblocks/request-handler:handle-client-request&lt;/code&gt;
+  was renamed to &lt;code&gt;weblocks/request-handler:handle-request&lt;/code&gt; and now
+  this function should return either &lt;code&gt;string&lt;/code&gt; or an object of type
+  &lt;code&gt;response&lt;/code&gt;. Previously, it also made a non-local exit by throwing a
+  tag, if request was aborted (for example to return a redirect
+  response). But now it should only unwind a stack in case if some
+  unhandled errow was thrown. Any condition of type
+  &lt;code&gt;weblocks/response:immediate-response&lt;/code&gt; will be catched inside a
+  &lt;code&gt;:around weblocks/request-handler:handle-request&lt;/code&gt; method and
+  returned as usual &lt;code&gt;response&lt;/code&gt; object.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks/response:abort-processing&lt;/code&gt; was renamed to
+  &lt;code&gt;weblocks/response:immediate-return&lt;/code&gt;, symbols &lt;code&gt;*code*&lt;/code&gt;,
+  &lt;code&gt;*headers*&lt;/code&gt; and &lt;code&gt;*content-type&lt;/code&gt; are not exported anymore. Instead
+  of these global variables, use newly exported functions
+  &lt;code&gt;get-content&lt;/code&gt;, &lt;code&gt;get-code&lt;/code&gt;, &lt;code&gt;get-headers&lt;/code&gt;, &lt;code&gt;get-custom-headers&lt;/code&gt;
+  and &lt;code&gt;get-content-type&lt;/code&gt; to extract information from the &lt;code&gt;response&lt;/code&gt; object.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Package &lt;code&gt;weblocks/response&lt;/code&gt; does not export symbols &lt;code&gt;*code*&lt;/code&gt; and
+  &lt;code&gt;*content-type*&lt;/code&gt; anymore, but exports a function &lt;code&gt;make-response&lt;/code&gt;
+  which can be used by a &lt;code&gt;weblocks/request-handler:handle-reqiest&lt;/code&gt; to
+  return response.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 22 Jan 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.34.0  (2019-01-19)</title>
+            <description>&lt;h1 id=&quot;new&quot;&gt;New&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks/request:get-scheme&lt;/code&gt; was added and it is uses
+  &lt;code&gt;X-Forwarded-Proto&lt;/code&gt; header, if it is available.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks/request:get-port&lt;/code&gt; now will use &lt;code&gt;X-Forwarded-Port&lt;/code&gt;
+  header if it is available.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks/request:get-host&lt;/code&gt; now will use &lt;code&gt;X-Forwarded-Host&lt;/code&gt;
+  header if it is available.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed issue introduced in &lt;code&gt;0.33.2&lt;/code&gt; release - system
+  &lt;code&gt;lack-middleware-session&lt;/code&gt; was loaded successfully, but &lt;code&gt;SBCL&lt;/code&gt; was
+  unable to find &lt;code&gt;lack-middleware-session&lt;/code&gt; package.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now &lt;code&gt;HTML&lt;/code&gt; is pretty-printed by default on all implementations.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks/request:get-uri&lt;/code&gt; was fixed to work correctly when
+  server is behind a reverse proxy which provides &lt;code&gt;X-Forwarded-*&lt;/code&gt; headers.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 19 Jan 2019 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.33.2  (2018-12-06)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added dependency on &lt;code&gt;lack-middleware-session&lt;/code&gt; system
+  because wee use it to store sessions.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 06 Dec 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.33.1  (2018-11-24)</title>
+            <description>&lt;h1 id=&quot;improvements&quot;&gt;Improvements&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now unhandled exceptions are logged with tracebacks if you are using
+  &lt;code&gt;log4cl-json&lt;/code&gt; library. To turn it on, just do:&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code class=&quot;common-lisp&quot;&gt;(log4cl-json:setup)&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;response:redirect&lt;/code&gt; and it&apos;s &lt;code&gt;JS&lt;/code&gt; counterpart was fixed
+  and now work as expected.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Request processing was streamlined and now
+  &lt;code&gt;weblocks/server:handle-request&lt;/code&gt; does not contain non-local
+  exits. This fixes usage of the &lt;code&gt;handle-request&lt;/code&gt; hook, because
+  previously, if you wrap some code around &lt;code&gt;(call-next-hook)&lt;/code&gt;, then
+  part following &lt;code&gt;call-next-hook&lt;/code&gt; was ignored.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;(weblocks/hooks:on-application-hook-handle-request
+  connect-to-database ()
+
+  (let ((success nil))
+    (unwind-protect (progn (setup-transaction)
+                           (weblocks/hooks:call-next-hook)
+                           (setf success t))
+      (if success
+          (commit)
+          (rollback)))))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Before this fix, &lt;code&gt;rollback&lt;/code&gt; always called, because execution never
+  hitted &lt;code&gt;(setf success t)&lt;/code&gt;. Now this is fixed.&lt;/p&gt;</description>
+            <pubDate>Sat, 24 Nov 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.33.0  (2018-11-22)</title>
+            <description>&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Removed external symbol &lt;code&gt;weblocks/app:make-uri&lt;/code&gt; because it wasn&apos;t
+  fbound to any function after some refactoring.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Use &lt;code&gt;weblocks/response:make-uri&lt;/code&gt; instead.&lt;/p&gt;&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;A separate file &lt;code&gt;widget.lisp&lt;/code&gt; was added to define a
+  &lt;code&gt;weblocks/widget&lt;/code&gt; package. This solves issues when
+  &lt;code&gt;ASDF&lt;/code&gt; package inferred loading is unable to find &lt;code&gt;weblocks/widget&lt;/code&gt;
+  system. Seems it plays badly when &lt;code&gt;weblocks/widget&lt;/code&gt; is nickname for
+  &lt;code&gt;weblocks/widgets/base&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 22 Nov 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.32.1  (2018-08-13)</title>
+            <description>&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;A new hook was added - &lt;code&gt;start-weblocks&lt;/code&gt;. It is called around the
+  code in &lt;code&gt;(weblocks/server:start)&lt;/code&gt; and can be used to setup some
+  additional routes, for example.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Previosly, there was an error if you are using &lt;code&gt;ASDF&lt;/code&gt;&apos;s package inferred
+  system class and don&apos;t have explicit dependency on the &lt;code&gt;weblocks&lt;/code&gt;
+  page.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The error was raised during code loading:&lt;/p&gt;&lt;p&gt;&lt;code&gt;
+  ;;; &amp;gt; Error: There is no applicable method for the generic function:
+  &amp;gt;          #&amp;lt;STANDARD-GENERIC-FUNCTION WEBLOCKS/JS/BASE:MAKE-JS-BACKEND #x3020027E292F&amp;gt;
+  &amp;gt;        when called with arguments:
+  &amp;gt;          (:JQUERY)
+&lt;/code&gt;&lt;/p&gt;&lt;p&gt;Now it is fixed and package &lt;code&gt;weblocks/js/jquery&lt;/code&gt; is a dependency of
+  &lt;code&gt;weblocks/server&lt;/code&gt; and always loads.&lt;/p&gt;</description>
+            <pubDate>Mon, 13 Aug 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.32.0  (2018-06-26)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now weblocks system explicitly requires &lt;code&gt;ASDF&lt;/code&gt; &amp;gt;= 3.1, because it uses
+  &lt;code&gt;package-inferred-system&lt;/code&gt; class.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 26 Jun 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.31.1  (2018-06-16)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed error about missing &apos;bool type under &lt;code&gt;SBCL&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 16 Jun 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.31.0  (2018-05-29)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;We don&apos;t enforce &lt;code&gt;*print-pretty*&lt;/code&gt; inside of
+  &lt;code&gt;weblocks/html:with-html&lt;/code&gt; macro. This hack was required because
+  the bug in the spinneret, which was fixed at 2018-01-04:&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/ruricolist/spinneret/commit/06b280612aff07cf376f593746d080230f2c7462&quot;&gt;https://github.com/ruricolist/spinneret/commit/06b280612aff07cf376f593746d080230f2c7462&lt;/a&gt;&lt;/p&gt;</description>
+            <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.30.1  (2018-05-20)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Error was fixed when you are trying to start a server which is already
+  running. Now you have a &amp;quot;restart&amp;quot; to stop the old version of the
+  server before starting the new one.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;However, it does not work with &lt;code&gt;Woo&lt;/code&gt; server, because C library libev
+  crashes with error:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;Assertion failed: ((&amp;quot;libev: a signal must not be attached to two different loops&amp;quot;, !signals [w-&amp;gt;signum - 1].loop || signals [w-&amp;gt;signum - 1].loop == loop)), function ev_signal_start, file ev.c, line 4082&lt;/code&gt;&lt;/pre&gt;</description>
+            <pubDate>Sun, 20 May 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.30.0  (2018-05-19)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed the order of commands for frontend. Now they are returned in the chronological order.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 19 May 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.29.0  (2018-05-05)</title>
+            <description>&lt;h1 id=&quot;backward-incompatibilities&quot;&gt;Backward incompatibilities&lt;/h1&gt;&lt;p&gt;Class &lt;code&gt;weblocks/dependencies:dependency&lt;/code&gt; now requires that &lt;code&gt;type&lt;/code&gt;
+attribute shoulde be of type &lt;code&gt;(member :css :js :png :jpg :gif)&lt;/code&gt;&lt;/p&gt;&lt;p&gt;Also, functions &lt;code&gt;make-local-js-dependency&lt;/code&gt;,
+&lt;code&gt;make-local-css-dependency&lt;/code&gt;, &lt;code&gt;make-local-image-dependency&lt;/code&gt;,
+&lt;code&gt;make-remote-js-dependency&lt;/code&gt; and &lt;code&gt;make-remote-css-dependency&lt;/code&gt; were
+removed from package &lt;code&gt;weblocks/dependencies&lt;/code&gt;. Use &lt;code&gt;make-dependency&lt;/code&gt;
+function, it will figure out which dependency type to create itself.&lt;/p&gt;&lt;h1 id=&quot;improvements&quot;&gt;Improvements&lt;/h1&gt;&lt;p&gt;A new function &lt;code&gt;weblocks/debug:get-session-value&lt;/code&gt; was added. It can be
+used to get values from the last session seen by weblocks.&lt;/p&gt;</description>
+            <pubDate>Sat, 05 May 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.28.0  (2018-04-23)</title>
+            <description>&lt;p&gt;Error handling was fixed. Previously it aborted Woo&apos;s worker thread and
+break the server.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;weblocks/variables::*catch-errors-p*&lt;/code&gt; was renamed to
+&lt;code&gt;weblocks/variables::*invoke-debugger-on-error*&lt;/code&gt; and it&apos;s value was
+inverted. If this variable is True, then debugger will be
+invoked. Otherwise - Weblocks will return 500 error page.&lt;/p&gt;&lt;p&gt;Argument &lt;code&gt;:invoke-debugger-on-errors&lt;/code&gt; of &lt;code&gt;weblocks/debug:on&lt;/code&gt;
+function was renamed to &lt;code&gt;:invoke-debugger-on-error&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Method &lt;code&gt;weblocks/error-handler:on-error&lt;/code&gt; now is called when you abort
+request processing from the debugger. It is called with current app as
+the first argument and the &lt;code&gt;nil&lt;/code&gt; instead of condition.&lt;/p&gt;</description>
+            <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.27.2  (2018-04-09)</title>
+            <description>&lt;p&gt;Fixed a typo in  &lt;code&gt;string-widget&lt;/code&gt; and &lt;code&gt;funcall-widget&lt;/code&gt; package definitions.&lt;/p&gt;</description>
+            <pubDate>Mon, 09 Apr 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.27.1  (2018-04-09)</title>
+            <description>&lt;p&gt;Now &lt;code&gt;string-widget&lt;/code&gt; and &lt;code&gt;funcall-widget&lt;/code&gt; depends on
+&lt;code&gt;weblocks/widgets/base&lt;/code&gt; instead of &lt;code&gt;weblocks/widget&lt;/code&gt;.&lt;/p&gt;</description>
+            <pubDate>Mon, 09 Apr 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.27.0  (2018-03-11)</title>
+            <description>&lt;p&gt;Reloading of the defapp definition now does not tries to restart an
+application. Previously, restart caused the problem – when there is only
+one application, whole Weblocks server was shut down. So, I&apos;ve removed
+this implicit action.&lt;/p&gt;&lt;p&gt;Code which logs action result on the client-side was improved.&lt;/p&gt;</description>
+            <pubDate>Sun, 11 Mar 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.26.0  (2018-02-20)</title>
+            <description>&lt;p&gt;Symbols &lt;code&gt;add-application-hook&lt;/code&gt;, &lt;code&gt;add-request-hook&lt;/code&gt;,
+&lt;code&gt;add-session-hook&lt;/code&gt;, &lt;code&gt;prepare-hooks&lt;/code&gt; and &lt;code&gt;call-hook&lt;/code&gt;
+aren&apos;t exported from &lt;code&gt;weblocks/hooks&lt;/code&gt; anymore. Use new macro
+&lt;code&gt;defhook&lt;/code&gt; instead.&lt;/p&gt;&lt;p&gt;Here is how it works:&lt;/p&gt;&lt;p&gt;You use &lt;code&gt;defhook&lt;/code&gt; as the toplevel form of your file if you want to define
+a new hook. This macro will create few other macroses in
+&lt;code&gt;weblocks/hooks&lt;/code&gt; package and will export them. For example:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;common-lisp&quot;&gt;(defhook database-opened
+   &amp;quot;This hook is called when your application opens a database.&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This code will add these macroses into the &lt;code&gt;weblocks/hooks&lt;/code&gt; package:
+&lt;code&gt;on-session-hook-database-opened&lt;/code&gt;,
+&lt;code&gt;on-request-hook-database-opened&lt;/code&gt;,
+&lt;code&gt;on-application-hook-database-opened&lt;/code&gt;,
+&lt;code&gt;with-database-opened-hook&lt;/code&gt; and
+&lt;code&gt;call-database-opened-hook&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;You need to wrap code, which opens a database, with
+&lt;code&gt;with-database-opened-hook&lt;/code&gt;:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;common-lisp&quot;&gt;(weblocks/hooks:with-database-opened-hook ()
+   (do-some-staff-to-open-database))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And in any other piece of code, you can define callbacks, using one of
+other three macroses:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;common-lisp&quot;&gt;(weblocks/hooks:on-session-hook-database-opened
+    log-database-opening ()
+
+  (weblocks/hooks:call-next-hook)
+  (log:info &amp;quot;Database was opened&amp;quot;))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Usage of &lt;code&gt;defhook&lt;/code&gt; macro gives more transparency to all defined hooks,
+because all of them now visible as external symbols in
+&lt;code&gt;weblocks/hooks&lt;/code&gt; package.&lt;/p&gt;</description>
+            <pubDate>Tue, 20 Feb 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.25.2  (2018-02-04)</title>
+            <description>&lt;p&gt;System &lt;code&gt;weblocks/hooks&lt;/code&gt; now depends on &lt;code&gt;log4cl&lt;/code&gt; and
+&lt;code&gt;metatilities&lt;/code&gt;, because previously sometimes it was impossible to load &lt;code&gt;weblocks&lt;/code&gt;.&lt;/p&gt;</description>
+            <pubDate>Sun, 04 Feb 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.25.1  (2018-02-04)</title>
+            <description>&lt;p&gt;Old tests for widgets, removed from core framework were removed.&lt;/p&gt;&lt;p&gt;Tests for widget&apos;s &lt;code&gt;MOP&lt;/code&gt; methods were ported to Rove.&lt;/p&gt;&lt;p&gt;Package &lt;code&gt;weblocks/utils/close&lt;/code&gt; now loaded with main &lt;code&gt;:weblocks&lt;/code&gt;
+system.&lt;/p&gt;&lt;p&gt;Few old widget tests were removed.&lt;/p&gt;&lt;p&gt;Added function &lt;code&gt;weblocks/session:reset&lt;/code&gt; which resets current session.&lt;/p&gt;</description>
+            <pubDate>Sun, 04 Feb 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.25.0  (2018-01-31)</title>
+            <description>&lt;h1 id=&quot;good-news-everyone&quot;&gt;Good news, everyone!&lt;/h1&gt;&lt;p&gt;Quickstart tutorial was fixed!&lt;/p&gt;&lt;h1 id=&quot;widget-related-changes&quot;&gt;Widget related changes&lt;/h1&gt;&lt;p&gt;Function &lt;code&gt;render-widget&lt;/code&gt; was replaced with &lt;code&gt;weblocks/widget:render
+:around&lt;/code&gt; method. Method implementation were moved to
+&lt;code&gt;weblocks/widgets/render-methods&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Funcall-widget&apos;s package was refactored to conform package inferred
+requirements.&lt;/p&gt;&lt;h1 id=&quot;actions-processing&quot;&gt;Actions processing&lt;/h1&gt;&lt;p&gt;Function &lt;code&gt;make-js-action&lt;/code&gt; was moved to &lt;code&gt;weblocks/actions&lt;/code&gt; package.&lt;/p&gt;&lt;h1 id=&quot;application-and-server-restarting&quot;&gt;Application and server restarting&lt;/h1&gt;&lt;p&gt;Package &lt;code&gt;weblocks/app&lt;/code&gt; now exports functions &lt;code&gt;stop&lt;/code&gt; and &lt;code&gt;restart&lt;/code&gt;.
+Previously they were internal and were called like &lt;code&gt;stop-webapp&lt;/code&gt; and
+&lt;code&gt;restart-webapp&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Package &lt;code&gt;weblocks/server&lt;/code&gt; does not export &lt;code&gt;start-weblocks&lt;/code&gt; and
+&lt;code&gt;stop-weblocks&lt;/code&gt; functions. They were replaced with just &lt;code&gt;start&lt;/code&gt; and
+&lt;code&gt;stop&lt;/code&gt;. Also, it&apos;s internal generics &lt;code&gt;start&lt;/code&gt; and &lt;code&gt;stop&lt;/code&gt; were
+renamed and transformed to &lt;code&gt;start-server&lt;/code&gt; and &lt;code&gt;stop-server&lt;/code&gt;
+functions.&lt;/p&gt;&lt;h1 id=&quot;session-initialization-changes&quot;&gt;Session initialization changes&lt;/h1&gt;&lt;p&gt;File &lt;code&gt;default-application.lisp&lt;/code&gt; was removed, because now every
+application has default session initialization method.&lt;/p&gt;&lt;p&gt;File &lt;code&gt;default-init.lisp&lt;/code&gt; was refactored. Now it provides default
+method for &lt;code&gt;weblocks/session:init&lt;/code&gt; generic and &lt;code&gt;:around&lt;/code&gt; method for
+same generic, which allows end user just to return a string or a
+function from his &lt;code&gt;init&lt;/code&gt; method.&lt;/p&gt;&lt;p&gt;Now user can return any string or function from his method
+&lt;code&gt;weblocks/session:init&lt;/code&gt; and it will be passed to a new generic
+&lt;code&gt;weblocks/widget:create-widget-from&lt;/code&gt; to create a root widget. You can
+also define &lt;code&gt;create-widget-from&lt;/code&gt; for you custom types.&lt;/p&gt;&lt;h1 id=&quot;debug&quot;&gt;Debug&lt;/h1&gt;&lt;p&gt;Function &lt;code&gt;weblocks/debug:on&lt;/code&gt; now turns on mode when Weblocks does not
+intercept unhandled conditions, but calls an interactive debugger.&lt;/p&gt;&lt;h1 id=&quot;removals&quot;&gt;Removals&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;session-name-string-pair&lt;/code&gt; this function was removed in previous
+  releases, but didn&apos;t find it&apos;s way to the changelog, still used in
+  some older tests not ported to the Rove.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Macro &lt;code&gt;defrender&lt;/code&gt; was removed.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.24.0  (2018-01-29)</title>
+            <description>&lt;p&gt;All rendering code was refactored.&lt;/p&gt;&lt;p&gt;Macroses &lt;code&gt;with-html&lt;/code&gt; and &lt;code&gt;with-html-to-string&lt;/code&gt; replaced
+with &lt;code&gt;weblocks.html:with-html&lt;/code&gt; and &lt;code&gt;weblocks.html:with-html-string&lt;/code&gt;.
+Stream &lt;code&gt;*weblocks-output-stream*&lt;/code&gt; was moved to
+&lt;code&gt;weblocks.html::*stream*&lt;/code&gt; and is not external anymore. Please, don&apos;t
+use it directly.&lt;/p&gt;&lt;h1 id=&quot;widget-refactorings&quot;&gt;Widget refactorings&lt;/h1&gt;&lt;p&gt;Procedure &lt;code&gt;update-widget-tree&lt;/code&gt; was removed and not widgets can&apos;t
+change html header&apos;s tags, description, title, etc. If you need this,
+change them in the &lt;code&gt;render&lt;/code&gt; method.&lt;/p&gt;&lt;p&gt;Macro &lt;code&gt;root-widget&lt;/code&gt; was removed and replaced with function
+&lt;code&gt;weblocks.widgets.root:get&lt;/code&gt;.&lt;/p&gt;&lt;h1 id=&quot;request-level&quot;&gt;Request level&lt;/h1&gt;&lt;p&gt;Functions &lt;code&gt;post-action-redirect&lt;/code&gt;, &lt;code&gt;post-render-redirect&lt;/code&gt; and
+&lt;code&gt;initial-request-p&lt;/code&gt; were removed from &lt;code&gt;weblocks&lt;/code&gt; package.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;pure-request-p&lt;/code&gt; was moved to &lt;code&gt;weblocks.request&lt;/code&gt; package.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*json-content-type*&lt;/code&gt; was removed.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*latest-request*&lt;/code&gt; was moved to
+&lt;code&gt;weblocks.debug:*latest-request*&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Functions &lt;code&gt;parse-location-hash&lt;/code&gt;, &lt;code&gt;ajax-request-p&lt;/code&gt; were moved to
+&lt;code&gt;weblocks.request&lt;/code&gt; package.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;redirect&lt;/code&gt; was moved to &lt;code&gt;weblocks.response:redirect&lt;/code&gt;.
+Functionality, related to opening another window instead of redirection
+or deferring redirection until the end of action or rendering was
+removed.&lt;/p&gt;&lt;h1 id=&quot;request-handler&quot;&gt;Request handler&lt;/h1&gt;&lt;p&gt;Functions &lt;code&gt;remove-duplicate-dirty-widgets&lt;/code&gt;,
+&lt;code&gt;update-location-hash-dependents&lt;/code&gt; and &lt;code&gt;update-widget-tree&lt;/code&gt; were
+removed.&lt;/p&gt;&lt;p&gt;Call to &lt;code&gt;weblocks::update-dialog-on-request&lt;/code&gt; from
+&lt;code&gt;handle-client-request&lt;/code&gt; was commented.&lt;/p&gt;&lt;h1 id=&quot;error-handler&quot;&gt;Error handler&lt;/h1&gt;&lt;p&gt;Generic method &lt;code&gt;weblocks/error-handler:on-error&lt;/code&gt; now accepts two
+arguments - application object and condition.&lt;/p&gt;&lt;h1 id=&quot;application-level&quot;&gt;Application level&lt;/h1&gt;&lt;p&gt;All code from &lt;code&gt;uri-parameters-slotmap.lisp&lt;/code&gt; was removed.&lt;/p&gt;&lt;p&gt;All code, related to application class, was moved to the package
+&lt;code&gt;weblocks.app&lt;/code&gt;. Base aplication class was renamed to
+&lt;code&gt;weblocks.app:app&lt;/code&gt;, and macro for definition of the new
+application was renamed to &lt;code&gt;weblocks.app:defapp&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;All code related to application&apos;s metaclass, was moved to
+the package &lt;code&gt;weblocks.app-mop&lt;/code&gt;. Metaclass was renamed to
+&lt;code&gt;weblocks.app-mop:app-class&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Application&apos;s slot &lt;code&gt;html-indent-p&lt;/code&gt; and corresponding accessor
+&lt;code&gt;weblocks-webapp-html-indent-p&lt;/code&gt; were removed because now spinneret
+generates non indented code.&lt;/p&gt;&lt;p&gt;Slot &lt;code&gt;init-user-session&lt;/code&gt; was completely removed and replace with a generic
+&lt;code&gt;weblocks.session:init&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;These dependency related slots and accessors were removed:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;application-dependencies&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;weblocks-webapp-application-dependencies&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;bundle-dependency-types&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;version-dependency-types&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;gzip-dependency-types&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;And macro for defining a special readers for them was removed as well:
+&lt;code&gt;def-debug-p-slot-readers&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Also, these arguments to &lt;code&gt;defapp&lt;/code&gt; was removed:
+&lt;code&gt;:ignore-default-dependencies&lt;/code&gt;, &lt;code&gt;:dependencies&lt;/code&gt;&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;update-thread-status&lt;/code&gt; and method &lt;code&gt;webapp-update-thread-status&lt;/code&gt;
+were removed.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;get-webapps-for-class&lt;/code&gt; was renamed to &lt;code&gt;app-active-p&lt;/code&gt; and
+now returns &lt;code&gt;t&lt;/code&gt; if application of given class is already active.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;start-webapp&lt;/code&gt; was renamed to &lt;code&gt;weblocks.app:start&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;get-webapp&lt;/code&gt; was renamed to &lt;code&gt;get-active-app&lt;/code&gt; and optional
+argument &lt;code&gt;error-p&lt;/code&gt; was renamed to keyword argument &lt;code&gt;signal-error&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;find-app&lt;/code&gt; was removed.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;in-webapp&lt;/code&gt; was moved to &lt;code&gt;weblocks.debug:in-app&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*default-webapp*&lt;/code&gt; was removed.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*active-webapps*&lt;/code&gt; was renamed to
+&lt;code&gt;weblocks.app::*active-apps*&lt;/code&gt; and made internal. Use
+&lt;code&gt;weblocks.app:get-active-apps&lt;/code&gt; function.&lt;/p&gt;&lt;p&gt;Reader &lt;code&gt;weblocks-webapp-prefix&lt;/code&gt; was renamed to
+&lt;code&gt;weblocks.app:get-prefix&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Slot &lt;code&gt;default-store-name&lt;/code&gt; and its accessor
+&lt;code&gt;webapp-default-store-name&lt;/code&gt; were removed.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*current-webapp*&lt;/code&gt; was moved to
+&lt;code&gt;weblocks.variables::*current-app*&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Functions &lt;code&gt;compute-webapp-public-files-uri-prefix&lt;/code&gt;,
+&lt;code&gt;compute-webapp-public-files-uri-prefix&lt;/code&gt;,
+&lt;code&gt;compute-webapp-public-files-path&lt;/code&gt;,
+&lt;code&gt;make-webapp-public-file-uri&lt;/code&gt;,
+&lt;code&gt;weblocks-webapp-public-files-cache-time&lt;/code&gt; and variable
+&lt;code&gt;*default-public-files-path*&lt;/code&gt; were removed because
+now there is another way to serve static.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;webapp-serves-hostname&lt;/code&gt; was renamed to
+&lt;code&gt;weblocks.app:app-serves-hostname-p&lt;/code&gt; and now accepts app as the first
+argument and hostname as the second.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*uri-tokens*&lt;/code&gt; was removed and weblocks does not set
+&apos;last-request-uri session value to all uri tokens anymore.&lt;/p&gt;&lt;p&gt;Macro &lt;code&gt;with-webapp&lt;/code&gt; was moved to &lt;code&gt;weblocks.app:with-app&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;webapp-permanent-action&lt;/code&gt; was moved to
+&lt;code&gt;weblocks.app-actions:get-action&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;add-webapp-permanent-action&lt;/code&gt; was moved to
+&lt;code&gt;weblocks.app-actions:add-action&lt;/code&gt; and &lt;code&gt;remove-webapp-permanent-action&lt;/code&gt; to
+&lt;code&gt;weblocks.app-actions:remove-action&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Macroses &lt;code&gt;define-permanent-action&lt;/code&gt; and &lt;code&gt;define-permanent-action/cc&lt;/code&gt;
+were moved to &lt;code&gt;weblocks.app-actions:define-action&lt;/code&gt; and
+&lt;code&gt;weblocks.app-actions:define-action/cc&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;make-webapp-uri&lt;/code&gt; was removed, use
+&lt;code&gt;weblocks/response:make-uri&lt;/code&gt; instedad.&lt;/p&gt;&lt;p&gt;Accessor &lt;code&gt;webapp-js-backend&lt;/code&gt; was renamed to get-js-backend&lt;/p&gt;&lt;p&gt;These functions were moved into the separate package
+&lt;code&gt;weblocks.current-app&lt;/code&gt; and renamed:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;webapp-prefix&lt;/code&gt; -&amp;gt; &lt;code&gt;get-prefix&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;actions-and-commands&quot;&gt;Actions and commands&lt;/h1&gt;&lt;p&gt;Function &lt;code&gt;weblocks.actions:add-command&lt;/code&gt; was moved to
+&lt;code&gt;weblocks.commands&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Function &lt;code&gt;weblocks:get-request-action&lt;/code&gt; was moved to
+&lt;code&gt;weblocks/actions:get-request-action&lt;/code&gt;&lt;/p&gt;&lt;p&gt;Keyword argment &lt;code&gt;:action&lt;/code&gt; was removed from action calls.&lt;/p&gt;&lt;h1 id=&quot;javascript&quot;&gt;Javascript&lt;/h1&gt;&lt;p&gt;Package &lt;code&gt;weblocks.js&lt;/code&gt; was renamed to &lt;code&gt;weblocks/js/base&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Functions &lt;code&gt;escape-script-tags&lt;/code&gt;, &lt;code&gt;%js&lt;/code&gt; and macroses
+&lt;code&gt;with-javascript&lt;/code&gt;, &lt;code&gt;with-javascript-to-string&lt;/code&gt; were moved to the
+package &lt;code&gt;weblocks/js/base&lt;/code&gt;.&lt;/p&gt;&lt;h1 id=&quot;variables&quot;&gt;Variables&lt;/h1&gt;&lt;p&gt;These variables were moved from &lt;code&gt;weblocks&lt;/code&gt; package to
+&lt;code&gt;weblocks/variables&lt;/code&gt;:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*current-page-title*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*current-page-keywords*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*current-page-headers*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*rewrite-for-session-urls*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*default-content-type*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*ignore-missing-actions*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;symbols-moved-from-weblocks-to-other-packages&quot;&gt;Symbols moved from :weblocks to other packages&lt;/h1&gt;&lt;h2 id=&quot;to-weblocks-widgets-dom&quot;&gt;To :weblocks/widgets/dom&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;dom-object-mixin&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;dom-id&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2 id=&quot;to-weblocks-utils-uri&quot;&gt;To :weblocks/utils/uri&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-uri-path&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;add-get-param-to-url&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;remove-parameter-from-uri&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2 id=&quot;to-weblocks-linguistic-grammar&quot;&gt;To :weblocks/linguistic/grammar&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;pluralize&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;singularize&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;proper-number-form&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;vowelp&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;consonantp&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;proper-indefinite-article&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;articlize&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*current-locale*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;current-locale&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;russian-proper-number-form&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;noun-vocative-to-genitive&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*debug-words-forms*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*debug-words-genders*&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;determine-gender&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2 id=&quot;to-weblocks-utils-warn&quot;&gt;To weblocks/utils/warn&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;style-warn&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;webapp-style-warning&lt;/code&gt; renamed to &lt;code&gt;style-warning&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;non-idempotent-rendering&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;misunderstood-action&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2 id=&quot;to-weblocks-actions&quot;&gt;To weblocks/actions&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;function-or-action-&amp;gt;action&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;make-action&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;generate-action-code&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;removals&quot;&gt;Removals&lt;/h1&gt;&lt;p&gt;To make Weblocks core smaller, many files were removed: &lt;code&gt;views&lt;/code&gt;, &lt;code&gt;widgets&lt;/code&gt;,
+&lt;code&gt;html-parts&lt;/code&gt;, &lt;code&gt;utilities&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Systems &lt;code&gt;weblocks-util&lt;/code&gt;, &lt;code&gt;weblocks-testutils&lt;/code&gt; were removed.&lt;/p&gt;&lt;p&gt;Accessor &lt;code&gt;dom-class&lt;/code&gt; and generic function &lt;code&gt;dom-classes&lt;/code&gt; were removed
+and replaced with generic function &lt;code&gt;weblocks/widget:get-css-classes&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Generic function &lt;code&gt;weblocks:handle-error-condition&lt;/code&gt; was removed.&lt;/p&gt;&lt;p&gt;Variable &lt;code&gt;*dirty-widgets*&lt;/code&gt; was removed along with
+&lt;code&gt;render-dirty-widgets&lt;/code&gt; function.&lt;/p&gt;&lt;h1 id=&quot;dependencies&quot;&gt;Dependencies&lt;/h1&gt;&lt;p&gt;Rendering of remote (non cached) dependencies was fixed.&lt;/p&gt;</description>
+            <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.23.0  (2018-01-11)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Symbol &lt;code&gt;weblocks.routes:*routes*&lt;/code&gt; is not external anymore.
+  Use &lt;code&gt;weblocks.routes:add-route&lt;/code&gt; and &lt;code&gt;weblocks.routes:get-route&lt;/code&gt;
+  to add new routes and to search a route matched on a path.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed getting the rendered widgets in &lt;code&gt;weblocks.widget:update&lt;/code&gt;
+  method when making &lt;code&gt;:update-widget&lt;/code&gt; or &lt;code&gt;:insert-widget (before)&lt;/code&gt;
+  commands.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Temporary added method &lt;code&gt;weblocks::child-of-p&lt;/code&gt; for new type of
+  widget. This should fix some issues, with widgets updating.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.22.2  (2018-01-07)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Class &lt;code&gt;weblocks.widget:widget&lt;/code&gt; was exported, to make possible to
+  define widgets based on it and some mixins.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 07 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.22.1  (2018-01-07)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Code broken in previos release was fixed.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 07 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.22.0  (2018-01-06)</title>
+            <description>&lt;p&gt;Most functions from &lt;code&gt;weblocks.request&lt;/code&gt; were refactored and renamed:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-parameters&lt;/code&gt; -&amp;gt; &lt;code&gt;get-parameters&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-parameter&lt;/code&gt; -&amp;gt; &lt;code&gt;get-parameter&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-header&lt;/code&gt; -&amp;gt; &lt;code&gt;get-header&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;remove-request-header&lt;/code&gt; -&amp;gt; &lt;code&gt;remove-header&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-server-name&lt;/code&gt; -&amp;gt; &lt;code&gt;get-host&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-server-port&lt;/code&gt; -&amp;gt; &lt;code&gt;get-port&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-uri&lt;/code&gt; -&amp;gt; &lt;code&gt;get-uri&lt;/code&gt; (and now it returns full &lt;code&gt;URI&lt;/code&gt; with
+  scheme, host and port;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-path-info&lt;/code&gt; -&amp;gt; &lt;code&gt;get-path&lt;/code&gt; (and now it has keyword argument
+  &lt;code&gt;with-params&lt;/code&gt; to copy behaviour of old &lt;code&gt;request-uri&lt;/code&gt; and return
+  strings like &lt;code&gt;/some/path?with=parameters&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;request-method&lt;/code&gt; -&amp;gt; &lt;code&gt;get-method&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;All these function now accept keyword argument &lt;code&gt;:request&lt;/code&gt;. Previously
+  it was &lt;code&gt;&amp;amp;optional&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Another change is a new function &lt;code&gt;weblocks.response:make-uri&lt;/code&gt;. It can
+  be used to build new uri, based on the uri of the current request. This
+  can be useful when embedding links into emails, for example.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Warning!&lt;/b&gt; These changes require a newer version of Lack.&lt;/p&gt;&lt;p&gt;I&apos;ve made a pull request &lt;a href=&quot;https://github.com/fukamachi/lack/pull/31&quot;&gt;https://github.com/fukamachi/lack/pull/31&lt;/a&gt;
+   it is not merged yet, so, alternative version of Lack can be used, by
+   installing it using Qlot, from here:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/40ants/lack&quot;&gt;https://github.com/40ants/lack&lt;/a&gt;&lt;/p&gt;</description>
+            <pubDate>Sat, 06 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.21.0  (2018-01-01)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Macro &lt;code&gt;weblocks.session:get-value&lt;/code&gt; was replaced with a regular
+  function.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks.session:set-value&lt;/code&gt; was removed and replaced with
+  a setter &lt;code&gt;(setf get-value)&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.20.1  (2017-12-20)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Removed debug these debug messages from client-side &lt;code&gt;JS&lt;/code&gt;:&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;LOADED&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Starting &lt;code&gt;AJAX&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Stopping &lt;code&gt;AJAX&lt;/code&gt; progress;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Some &lt;code&gt;AJAX&lt;/code&gt; error;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Action success.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 20 Dec 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.20.0  (2017-12-15)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Package &lt;code&gt;weblocks.debug&lt;/code&gt; now does not export &lt;code&gt;*on&lt;/code&gt; variable,
+  but provides three functions &lt;code&gt;on&lt;/code&gt;, &lt;code&gt;off&lt;/code&gt; and &lt;code&gt;status&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;New method &lt;code&gt;weblocks.server:serve-static-file&lt;/code&gt; was introduced.
+  It can be used to create static routes which will respond with
+  file&apos;s content. For example, you could add this to your app&apos;s
+  &lt;code&gt;initialize-instance&lt;/code&gt; method:&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code class=&quot;common-lisp&quot;&gt;(weblocks.server:serve-static-file
+   &amp;quot;/favicon.png&amp;quot;
+   (asdf:system-relative-pathname :app &amp;quot;favicon.png&amp;quot;))&lt;/code&gt;&lt;/pre&gt;</description>
+            <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.19.2  (2017-11-29)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now weblocks rebinds &lt;code&gt;*random-state*&lt;/code&gt; to itself for each request to
+  allow it to use &lt;code&gt;setf&lt;/code&gt; and change &lt;code&gt;*random-state*&lt;/code&gt; until the end
+  of request processing.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 29 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.19.1  (2017-11-23)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Dirty widgets rendering was fixed.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 23 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.19.0  (2017-11-13)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Variable &lt;code&gt;*expired-action-handler*&lt;/code&gt;, method
+  &lt;code&gt;expired-action-handler&lt;/code&gt; and function
+  &lt;code&gt;default-expired-action-handler&lt;/code&gt; were replaced with method
+  &lt;code&gt;weblocks.actions:on-missing-action&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now we are trying to call action only if action&apos;s name was given.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Old method &lt;code&gt;weblocks:handle-client-request ((app weblocks-webapp))&lt;/code&gt;
+  was removed. Look at it&apos;s newer version in &lt;code&gt;weblocks.request-handler&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 13 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.18.0  (2017-11-12)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Commented out call to &lt;code&gt;update-widget-tree&lt;/code&gt; inside of &lt;code&gt;(setf
+  widget-children)&lt;/code&gt;, because it breaks on
+  &lt;code&gt;(get-widgets-by-type &apos;selector :root obj)&lt;/code&gt; sometimes. Seems this is
+  because I&apos;ve removed selector&apos;s code previously.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;b&gt;Warning!&lt;/b&gt; Probably parent/children handling code will be removed soon.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Backtrace printing code was replaced with direct usage of
+  &lt;code&gt;trivial-backtrace:print-backtrace&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Call to &lt;code&gt;prepare-hooks&lt;/code&gt; was moved from &lt;code&gt;weblocks.request-handler:handle-client-request&lt;/code&gt;
+  to the the weblocks.server:handler-request, to fix session hooks processing when
+  &lt;code&gt;:process-request&lt;/code&gt; hook is called.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.17.2  (2017-11-11)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Error handling code was fixed. It was broken in 0.17.1 and prevented
+  system loading.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 11 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.17.1  (2017-11-11)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed error handling when debug mode is &amp;quot;off&amp;quot;. Now weblocks returns
+  result of &lt;code&gt;(weblocks.error-handler:on-error app)&lt;/code&gt; call.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 11 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.17.0  (2017-11-11)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added a &lt;code&gt;weblocks.actions&lt;/code&gt; package.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Also, a &lt;code&gt;commands&lt;/code&gt; were introduced. Commands describe remote calls
+  which have to be applied on a client as a result of action&apos;s
+  execution. Previously, weblocks used similar technic to replace dirty
+  widgets and to execute some javascript code before or after
+  replacement. The new mechanism of &amp;quot;commands&amp;quot; is more generic and uses
+  the &lt;code&gt;JSON-RPC&lt;/code&gt; to pass function name and parameters from backend to
+  client-side.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added &lt;code&gt;weblocks.session:in-session-p&lt;/code&gt; function which returns &lt;code&gt;t&lt;/code&gt;
+  if session data can be retrived or stored without error.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now function &lt;code&gt;initiateActionWithArgsAndCallback&lt;/code&gt; send arguments as
+  &lt;code&gt;JSON&lt;/code&gt; payload. This allows to send any datastructures as action&apos;s params.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks.response:send-script&lt;/code&gt; was changed to use new
+  mechanizm with commands. When you send script from the action, it will
+  add a command &lt;code&gt;:execute-code&lt;/code&gt; to the stack. All commands are
+  executed in same order as they were added. If you want some code to be
+  executed before widget update, just execute &lt;code&gt;send-code&lt;/code&gt; before
+  &lt;code&gt;weblocks.widget:update&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 11 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.16.0  (2017-11-04)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;New package was introduced - &lt;code&gt;weblocks.widget&lt;/code&gt; it contains a new
+  &lt;code&gt;widget&lt;/code&gt; class with simplified rendering based on &lt;code&gt;spinneret&lt;/code&gt;
+  templating library.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now class &lt;code&gt;route&lt;/code&gt; is exported from &lt;code&gt;weblocks.routes&lt;/code&gt; and should be
+  used instead of &lt;code&gt;routes:route&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;New package &lt;code&gt;weblocks.error-handler&lt;/code&gt; was introduced. It contains a
+  &lt;code&gt;on-error&lt;/code&gt; generic method which is called when some unhandled error
+  raise by application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed issue of adding multuple routes mapped to the same path. Now if
+  url mapper already have a route all subsequent attempts to add a route
+  with same path are ignored.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed error:&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;code&gt;
+  Undefined function WEBLOCKS:WEBAPP-SESSION-KEY called with arguments
+  (#&amp;lt;APP::APP #x3020052F01DD&amp;gt;)
+&lt;/code&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed &lt;code&gt;Content-Type&lt;/code&gt; of the default 500 page. Previously it was
+  &lt;code&gt;plain/text&lt;/code&gt; and browser didn&apos;t undestand that and downloaded the
+  file.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Now &lt;code&gt;Content-Type&lt;/code&gt; is &lt;code&gt;text/plain&lt;/code&gt;.&lt;/p&gt;</description>
+            <pubDate>Sat, 04 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.15.0  (2017-11-03)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now weblocks does not checks if all tokens from &lt;code&gt;URL&lt;/code&gt; were consumed by
+  app during root widget rendering. Previously it returned 404 if some
+  token weren&apos;t consumed. Implement this logic in your app if needed.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Macro &lt;code&gt;assert-hooks-called&lt;/code&gt; was changed to return hooks in the order
+  they were called. Also, now it waits hooks description as a &lt;code&gt;DSL&lt;/code&gt;,
+  like:&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;code&gt;lisp
+  (assert-hooks-called
+    (:fact-created contact &amp;quot;vasya@pupkin.com&amp;quot;)
+    (:fact-removed contact &amp;quot;vasya@pupkin.com&amp;quot;))
+&lt;/code&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;New system &lt;code&gt;weblocks-testutils&lt;/code&gt; was introduced. It
+  compiles &lt;code&gt;weblocks.t.utils&lt;/code&gt; package which macroses useful for
+  unittesting.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Also, a new macro &lt;code&gt;catch-hooks&lt;/code&gt; was added to check if some
+  hooks were called during a unittest.
+* Now weblocks does not open a new tab or window on 500 error
+  during an action execution.&lt;/p&gt;</description>
+            <pubDate>Fri, 03 Nov 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.14.4  (2017-10-07)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;No more &lt;code&gt;declaim optimize&lt;/code&gt; in different places. These
+  declarations changed compiler&apos;s settings at unexpected moments.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed error happened when &amp;quot;File not found&amp;quot;, and now
+  &lt;code&gt;with-hook&lt;/code&gt; macro returns the value of the last form&apos;s evaluation.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 07 Oct 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.14.3  (2017-09-23)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Default method of &lt;code&gt;render-page&lt;/code&gt; was fixed to really wrap
+  page with &lt;code&gt;&amp;lt;html&amp;gt;...&lt;/code&gt; block.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed a way how weblocks.debug:*latest-session* is
+  processed.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Function &lt;code&gt;weblocks.request:remove-request-header&lt;/code&gt; now
+  returns a new instance of request object and does not modify the
+  original request. This fixes issue in &lt;code&gt;weblocks-websocket&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 23 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.14.2  (2017-09-22)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added package &lt;code&gt;weblocks.debug&lt;/code&gt; and keeping latest
+  session was rewritten using &lt;code&gt;:process-request&lt;/code&gt; hook.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 22 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.14.1  (2017-09-22)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added function &lt;code&gt;weblocks.request:remove-request-header&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added a hook &lt;code&gt;(:reset-session session)&lt;/code&gt;, which is
+  called around a code for clearing given session. Right now it is
+  called only from &lt;code&gt;weblocks.sessions:reset-latest-session&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 22 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.14.0  (2017-09-20)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;html&lt;/code&gt;, &lt;code&gt;menu&lt;/code&gt;, &lt;code&gt;suggest&lt;/code&gt; and &lt;code&gt;repl&lt;/code&gt; utilities
+  were excluded.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Code which was in &lt;code&gt;request-handler.lisp&lt;/code&gt;, was excluded
+  from build and partly moved to &lt;code&gt;request-handler2.lisp&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added &lt;code&gt;:stop-weblocks&lt;/code&gt; hook.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Misc helper for repl were removed: &lt;code&gt;sessions&lt;/code&gt;,
+  &lt;code&gt;in-session&lt;/code&gt; and &lt;code&gt;pt&lt;/code&gt;. May be the will be restored in separate
+  package.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Page boilerplate rendering method &lt;code&gt;render-page&lt;/code&gt; now
+  does not use complex templating with contextes.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Symbols refactoring:&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*style-warn-on-circular-dirtying*&lt;/code&gt; variable -&amp;gt;
+&lt;code&gt;weblocks.variables&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*style-warn-on-late-propagation*&lt;/code&gt; variable -&amp;gt;
+&lt;code&gt;weblocks.variables&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;gen-id&lt;/code&gt; function -&amp;gt; &lt;code&gt;weblocks.session&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;send-script&lt;/code&gt; function -&amp;gt; &lt;code&gt;weblocks.response&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;with-html-form&lt;/code&gt; macro -&amp;gt; &lt;code&gt;weblocks-ui&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;*approved-return-codes*&lt;/code&gt; variable -&amp;gt; &lt;code&gt;weblocks.variables&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;handle-ajax-request&lt;/code&gt; method -&amp;gt; &lt;code&gt;weblocks.request-handler&lt;/code&gt;;&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;update-location-hash-dependents&lt;/code&gt; function -&amp;gt;
+&lt;code&gt;weblocks.request-handler&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;render-link&lt;/code&gt; function was moved to &lt;code&gt;weblocks-ui.form&lt;/code&gt; in
+separate system.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 20 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.13.11  (2017-09-12)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added &lt;code&gt;weblocks.hooks:call-hook&lt;/code&gt; helper.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now &lt;code&gt;call-next-hook&lt;/code&gt; is called automatically if it
+  wasn&apos;t called explicitly.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 12 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.13.10  (2017-09-06)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added &lt;code&gt;:handle-request&lt;/code&gt; dynamic hook called around request handling code.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Called when &lt;code&gt;weblocks.request:*request*&lt;/code&gt; and &lt;code&gt;weblocks.session:*session*&lt;/code&gt; are already bound.&lt;/p&gt;</description>
+            <pubDate>Wed, 06 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.13.10  (2017-09-06)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added &lt;code&gt;:handle-request&lt;/code&gt; dynamic hook called around request handling code.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Called when &lt;code&gt;weblocks.request:*request*&lt;/code&gt; and &lt;code&gt;weblocks.session:*session*&lt;/code&gt; are already bound.&lt;/p&gt;</description>
+            <pubDate>Wed, 06 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.13.9  (2017-09-02)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added integrity field for remove javascript dependencies.
+  Also, &lt;code&gt;get-cross-origin&lt;/code&gt; and &lt;code&gt;:cross-origin&lt;/code&gt; were removed to
+  &lt;code&gt;get-crossorigin&lt;/code&gt; and &lt;code&gt;:crossorigin&lt;/code&gt;, to conform the html
+  attibute&apos;s spelling.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 02 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.13.8  (2017-09-02)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed error on &lt;code&gt;(weblocks:redirect...)&lt;/code&gt; call.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed dependency handling in ajax requests.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Now if unhandled exception occure, Woo&apos;s handler remains
+  working. Previously, handler&apos;s thread shut down on any unhandled exception.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Ajax progress now does not inserted into the document,
+  but if element with id &lt;code&gt;ajax-progress&lt;/code&gt; is present, it will be shown
+  and hidden by jQuery&apos;s &lt;code&gt;.show&lt;/code&gt; and &lt;code&gt;.hide&lt;/code&gt; methods. Also, they
+  take optional speed parameters from &lt;code&gt;data-*&lt;/code&gt; attributes
+  &lt;code&gt;data-show-speed&lt;/code&gt; and &lt;code&gt;data-hide-speed&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Reformatted documentation. Started to &lt;a href=&quot;http://keepachangelog.com/&quot;&gt;keep a changelog&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 02 Sep 2017 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.13.7  (2017-04-15)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Previous history wasn&apos;t tracked.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 15 Apr 2017 00:00:00 +0000</pubDate>
+        </item>
+    </channel>
+</rss>
