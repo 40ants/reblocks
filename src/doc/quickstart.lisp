@@ -34,6 +34,7 @@
                                         "TOGGLE"
                                         "TASK-LIST"
                                         "RENDER"
+                                        "WITH-TEST-ROUTES"
                                         "AJAX")
                          :external-links (("Webinspector" . "https://developers.google.com/web/tools/chrome-devtools/inspect-styles/")
                                           ("Ultralisp" . "https://ultralisp.org/")
@@ -555,6 +556,31 @@ Let's adjust the render method of the tasks-list widget to make it use ROUTE-URL
 Now our web application should work like this:
 
 ![](docs/images/quickstart/step3.gif)
+
+## Testing Pages with Route References
+
+Now that we have pages that use ROUTE-URL to reference each other, we can test them in the REPL using the WITH-TEST-ROUTES macro. This macro sets up the proper routing context so that ROUTE-URL calls work correctly:
+
+```
+TODO> (ql:quickload :reblocks-tests)
+
+TODO> (reblocks-tests/utils:with-test-routes (:uri "/1" :app 'tasks)
+          (render (make-task-page 1)))
+<div class="widget task-page" id=dom0>
+  <div style="display: flex; flex-direction: column; gap: 1rem">
+    <h1 style="display: flex; gap: 1rem; margin-bottom: 0">
+      <b>[TODO]</b>
+      <span style="font-weight: normal">First</span>
+    </h1>
+    <div>No defails on this task.</div>
+    <div style="display: flex; gap: 1rem">
+      <a href="/">Back to task list.</a>
+    </div>
+  </div>
+</div>
+```
+
+Note how the ROUTE-URL call `(route-url "tasks-list")` correctly resolves to `"/"`.
 
 
 Go, try it! This demo is interactive:
