@@ -34,6 +34,7 @@
                                         "TOGGLE"
                                         "TASK-LIST"
                                         "RENDER"
+                                        "WITH-TEST-ROUTES"
                                         "AJAX")
                          :external-links (("Webinspector" . "https://developers.google.com/web/tools/chrome-devtools/inspect-styles/")
                                           ("Ultralisp" . "https://ultralisp.org/")
@@ -558,7 +559,7 @@ Now our web application should work like this:
 
 ## Testing Pages with Route References
 
-Now that we have pages that use ROUTE-URL to reference each other, we can test them in the REPL using the REBLOCKS-TESTS/UTILS:WITH-TEST-ROUTES macro. This macro sets up the proper routing context so that ROUTE-URL calls work correctly:
+Now that we have pages that use ROUTE-URL to reference each other, we can test them in the REPL using the WITH-TEST-ROUTES macro. This macro sets up the proper routing context so that ROUTE-URL calls work correctly:
 
 ```
 TODO> (ql:quickload :reblocks-tests)
