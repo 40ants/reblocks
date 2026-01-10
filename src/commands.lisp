@@ -6,8 +6,8 @@
            #:get-collected-commands
            #:with-collected-commands
            #:add-commands))
-(in-package #:reblocks/commands)
 
+(in-package #:reblocks/commands)
 
 (defvar *commands*)
 
