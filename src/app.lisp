@@ -41,7 +41,9 @@
 
 (defclass app-routes (40ants-routes/routes:routes)
   ((app :initform nil
-        :type (or null reblocks/app:app)
+        ;; When the type for this slot is defined
+        ;; then when reloading the ASDF system, "Control stack exhausted" happened:
+        ;; :type (or null reblocks/app:app)
         :documentation "App instance will be set during server initialization."
         :accessor routes-app)))
 
