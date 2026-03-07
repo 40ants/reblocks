@@ -35,6 +35,12 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.65.1 2026-03-08
+          "
+# Fixed
+
+* Fixed error \"Control stack exhausted\" which has happened when a system with reblocks application was reloaded.ss
+")
   (0.65.0 2025-09-22
           "
 # Improvement
