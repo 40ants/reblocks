@@ -104,7 +104,8 @@
            #:get-port
            #:get-server-type
            #:request-timeout
-           #:server-apps))
+           #:server-apps
+           #:app-http-request-wrapper))
 (in-package #:reblocks/server)
 
 
@@ -235,6 +236,18 @@
   (:documentation "Handles HTTP request, passed by Clack"))
 
 
+(defgeneric app-http-request-wrapper (app thunk)
+  (:documentation "Wraps HTTP request handling code while APP is activated.
+
+                   Define an :around method for this generic-function to setup a database connection which will be available even when a 404 page is rendered and no route were matched to a page.
+
+                   For some cases, APP can be NIL if route does not match to any application.
+
+                   By default, just funcalls the THUNK argument.")
+  (:method ((app t) (thunk t))
+    (funcall thunk)))
+
+
 (defun make-server (&key
                     (port 8080)
                     (interface "localhost")
@@ -299,6 +312,17 @@ Make instance, then start it with ``start`` method."
      (error "No app during 404 error handling"))))
 
 
+(defmacro with-optional-app ((app) &body body)
+  `(flet ((with-optional-app-thunk ()
+            ,@body))
+     (declare (dynamic-extent #'with-optional-app-thunk))
+     (cond
+       (,app (with-app (,app)
+               (app-http-request-wrapper app #'with-optional-app-thunk)))
+       (t
+        (app-http-request-wrapper nil #'with-optional-app-thunk)))))
+
+
 (defmethod handle-http-request ((server server) env)
   "Reblocks HTTP dispatcher.
 This function serves all started applications and their static files."
@@ -315,51 +339,42 @@ This function serves all started applications and their static files."
         (with-immediate-response-handler () 
           (with-partially-matched-url ((object-routes server)
                                        url-path)
-            (handler-case 
-                (let* ((app-route (find-route-by-class 'reblocks/app::app-routes))
-                       (app (when app-route
-                              (routes-app app-route))))
-                  ;; In some cases app route might be not found and
-                  ;; we need to handle this case. This might be if all
-                  ;; apps are included into the server's routes using prefixes
-                  ;; instead of /. In this case if route does not start with
-                  ;; any app's prefix, APP will be NIL.
-                  (macrolet ((with-optional-app ((app) &body body)
-                               `(flet ((with-optional-app-thunk ()
-                                         ,@body))
-                                  (declare (dynamic-extent #'with-optional-app-thunk))
-                                  (cond
-                                    (,app (with-app (,app)
-                                            (funcall #'with-optional-app-thunk)))
-                                    (t
-                                     (funcall #'with-optional-app-thunk))))))
-                    (with-optional-app (app)
-                      (cond
-                        ((current-route-p)
-                         (let* ((route (progn
-                                         (unless (matched-route-p (current-route))
-                                           (error "Unexpected class of route was found: ~S"
-                                                  (class-of (current-route))))
-                                         (original-route (current-route)))))
-                           (log:debug "Processing request to" url-path)
-                           
-                           ;; This wrapper calls an interactive debugger
-                           ;; if it is available or shows an error page.
-                           (let ((resp (with-handled-errors ()
-                                         (with-deadline (:seconds (request-timeout server))
-                                           (reblocks/routes:serve route env)))))
-                             (values resp))))
-                        ;; No page was found matching the route
-                        (t
-                         (not-found-error (fmt "Route ~S not found."
-                                               url-path)))))))
-              (not-found-error (c)
-                (list 404
-                      (list :content-type "text/html")
-                      (list
-                       (make-404-page (not-found-error-app c)
-                                      url-path
-                                      (not-found-error-widget c))))))))))))
+            (let* ((app-route (find-route-by-class 'reblocks/app::app-routes))
+                   (app (when app-route
+                          (routes-app app-route))))
+              ;; In some cases app route might be not found and
+              ;; we need to handle this case. This might be if all
+              ;; apps are included into the server's routes using prefixes
+              ;; instead of /. In this case if route does not start with
+              ;; any app's prefix, APP will be NIL.
+              (with-optional-app (app)
+                (handler-case 
+                    (cond
+                      ((current-route-p)
+                       (let* ((route (progn
+                                       (unless (matched-route-p (current-route))
+                                         (error "Unexpected class of route was found: ~S"
+                                                (class-of (current-route))))
+                                       (original-route (current-route)))))
+                         (log:debug "Processing request to" url-path)
+                         
+                         ;; This wrapper calls an interactive debugger
+                         ;; if it is available or shows an error page.
+                         (let ((resp (with-handled-errors ()
+                                       (with-deadline (:seconds (request-timeout server))
+                                         (reblocks/routes:serve route env)))))
+                           (values resp))))
+                      ;; No page was found matching the route
+                      (t
+                       (not-found-error (fmt "Route ~S not found."
+                                             url-path))))
+                  (not-found-error (c)
+                    (list 404
+                          (list :content-type "text/html")
+                          (list
+                           (make-404-page (not-found-error-app c)
+                                          url-path
+                                          (not-found-error-widget c))))))))))))))
 
 
 (defun start-server (server &key debug

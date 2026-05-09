@@ -35,6 +35,11 @@
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
                                                    "REBLOCKS/SESSION:INIT")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.66.0 2026-05-09
+          "
+# Added
+
+* Generic-function REBLOCKS/SERVER:APP-HTTP-REQUEST-WRAPPER was added. It allows to wrap each requests processing with a custom code such as database connection establishement. Previosly you might be used REBLOCKS/SERVER:HANDLE-HTTP-REQUEST generic-function for the same purpose, but it does not work when a 404 page is rendered.")
   (0.65.1 2026-03-08
           "
 # Fixed
