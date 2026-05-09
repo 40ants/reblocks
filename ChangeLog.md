@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E66-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.66.0 (2026-05-09)
+
+<a id="added"></a>
+
+### Added
+
+* Generic-function [`reblocks/server:app-http-request-wrapper`][53bc] was added. It allows to wrap each requests processing with a custom code such as database connection establishement. Previosly you might be used [`reblocks/server:handle-http-request`][2e91] generic-function for the same purpose, but it does not work when a 404 page is rendered.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E65-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.65.1 (2026-03-08)
@@ -1868,6 +1878,8 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [08a9]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-20FUNCTION-29
 [eeba]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-ROUTE-20CLASS-29
 [23ec]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
+[53bc]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AAPP-HTTP-REQUEST-WRAPPER-20GENERIC-FUNCTION-29
+[2e91]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AHANDLE-HTTP-REQUEST-20GENERIC-FUNCTION-29
 [a7ef]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AINSERT-MIDDLEWARE-20FUNCTION-29
 [a9d7]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3AMAKE-MIDDLEWARES-20GENERIC-FUNCTION-29
 [0642]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3ARUNNING-P-20FUNCTION-29
