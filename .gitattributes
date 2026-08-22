@@ -1,8 +1,7 @@
-* text=auto
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
-*.pdf binary
-*.zip binary
-*.jar binary
+# Starting from git 2.55
+# git diff recognizes Common Lisp defun,
+# but diff plugin still has name "scheme".
+# More details in: https://scottlburson2.blogspot.com/2026/08/git-support-for-lisp-improved-in-2550.html
+
+*.lisp diff=scheme
+
