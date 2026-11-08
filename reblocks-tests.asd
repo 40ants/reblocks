@@ -9,6 +9,7 @@
                "reblocks-tests/reblocks"
                "reblocks-tests/request"
                "reblocks-tests/response"
+               "reblocks-tests/routes"
                "reblocks-tests/request-handler"
                "reblocks-tests/actions"
                "reblocks-tests/commands"

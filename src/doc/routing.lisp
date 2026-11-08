@@ -5,7 +5,8 @@
   (:import-from #:reblocks/routes
                 #:route
                 #:serve
-                #:page)
+                #:page
+                #:mount-route)
   (:import-from #:named-readtables
                 #:in-readtable)
   (:import-from #:pythonic-string-reader
@@ -20,6 +21,9 @@
 (defsection @routing (:title "Routing"
                       :ignore-words ("URL"
                                      "DEFAPP"
+                                     "API"
+                                     "JSON"
+                                     "CLACK"
                                      "ASDF"
                                      "TODO"
                                      "HTML"
@@ -155,4 +159,25 @@ Here we see two alternative ways to serve a favicon file:
 As can be seen, when using 40ANTS-ROUTES/DEFROUTES:GET, the route's handler might
 return a list of three items: HTTP code, HTTP headers and a pathname. Or just a string.
 Actually, this response is passed to Clack as is and anything supported by Clack is supported.
+
+# Mounting a Clack Application
+
+Sometimes you might want to plug a whole Clack application into a Reblocks app.
+Typical use-cases are serving an OpenRPC or JSON API under an `/api/` path.
+
+For this, use the REBLOCKS/ROUTES:MOUNT-ROUTE function. It takes a URL pattern and
+a Clack application — a function of one argument (the Clack env) returning
+a Clack response:
+
+```
+(defapp my-app
+  :prefix "/"
+  :routes ((page ("/" :name "index")
+             (make-main-page))
+           (mount-route "/api/"
+             (openrpc-server/clack:make-clack-app my-api))))
+```
+
+Here the OpenRPC API provided by `my-api` becomes available under the `/api/` URL path,
+while other pages are served by Reblocks as usual.
 """)

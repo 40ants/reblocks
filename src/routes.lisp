@@ -20,7 +20,9 @@
            #:static-file-route
            #:file-pathname
            #:file-content-type
-           #:static-file))
+           #:static-file
+           #:mount-route
+           #:mount-route-app))
 (in-package #:reblocks/routes)
 
 
@@ -75,6 +77,56 @@
                    :content-type content-type)))
 
 
+(defclass mount-route (40ants-routes/route:route)
+  ((app :initarg :app
+        :type function
+        :reader mount-route-app
+        :documentation "Clack application to serve on this route."))
+  (:documentation "A route class to serve any Clack application inside a Reblocks app.
+
+                   Use MOUNT-ROUTE constructor to create routes of this class."))
+
+
+(-> mount-route (string function
+                 &key
+                 (:method keyword)
+                 (:name string)
+                 (:title string))
+    (values mount-route &optional))
+
+
+(defun mount-route (pattern app &key (method :get) name title)
+  "Creates a route serving APP — any Clack application — under PATTERN inside a Reblocks app.
+
+   APP should be a function of one argument (Clack env) returning a Clack response:
+   a list of status code, headers and content.
+
+   PATTERN is a string like \"/api/\" — it is parsed the same way as in PAGE and other routes.
+
+   Example of mounting an OpenRPC API:
+
+   ```lisp
+   (defapp my-app
+     :prefix \"/\"
+     :routes ((page (\"/\" :name \"index\")
+                (make-main-page))
+              (mount-route \"/api/\"
+                (openrpc-server/clack:make-clack-app my-api))))
+   ```
+
+   METHOD, NAME and TITLE are optional, NAME defaults to a gensym like in STATIC-FILE."
+  (let ((name (or name
+                  (string-downcase
+                   (gensym "UNNAMED-ROUTE-"))))
+        (pattern (parse-url-pattern pattern)))
+    (make-instance 'mount-route
+                   :name name
+                   :title title
+                   :method method
+                   :pattern pattern
+                   :app app)))
+
+
 (defgeneric object-routes (obj)
   (:documentation "Returns a routes object bound to a server or application."))
 
@@ -109,3 +161,8 @@
   (list 200
         (list :content-type (file-content-type route))
         (file-pathname route)))
+
+
+(defmethod serve ((route mount-route) env)
+  "Serves the route by calling the Clack application stored in the route."
+  (funcall (mount-route-app route) env))
