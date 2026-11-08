@@ -18,6 +18,7 @@
                                                    "AJAX"
                                                    "JSON"
                                                    "JSON-RPC"
+                                                   "RPC"
                                                    "SBCL"
                                                    "ASDF"
                                                    "MOP"

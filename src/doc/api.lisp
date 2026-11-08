@@ -26,6 +26,7 @@
                     "API"
                     "TODO"
                     "RFC"
+                    "RPC"
                     "AJAX"
                     "CSS"
                     "CDN"
