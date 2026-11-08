@@ -2,6 +2,18 @@
 
 # ChangeLog
 
+<a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E67-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.67.0 (2026-11-08)
+
+<a id="added"></a>
+
+### Added
+
+* `reblocks/routes:mount-route` ([`1`][3d0e] [`2`][f489]) route class and a constructor function of the same name.
+  It allows to serve any Clack application (for example, an Open`RPC` or `JSON` `API` built with `CLACK`) on a route inside a [`reblocks/app:defapp`][a44d].
+  The `APP` argument is required and receives the Clack env, returning a Clack response.
+
 <a id="x-28REBLOCKS-2FDOC-2FCHANGELOG-3A-3A-7C0-2E66-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.66.0 (2026-05-09)
@@ -1875,6 +1887,8 @@ Called when `weblocks.request:*request*` and `weblocks.session:*session*` are al
 [b67b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ANOT-FOUND-ERROR-20FUNCTION-29
 [d548]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASEND-SCRIPT-20FUNCTION-29
 [0d1b]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FRESPONSE-3ASTATUS-CODE-20FUNCTION-29
+[f489]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3AMOUNT-ROUTE-20CLASS-29
+[3d0e]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3AMOUNT-ROUTE-20FUNCTION-29
 [08a9]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-20FUNCTION-29
 [eeba]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FROUTES-3ASTATIC-FILE-ROUTE-20CLASS-29
 [23ec]: https://40ants.com/reblocks/api/#x-28REBLOCKS-2FSERVER-3A-2ADEFAULT-SAMESITE-POLICY-2A-20-28VARIABLE-29-29
