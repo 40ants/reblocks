@@ -18,6 +18,7 @@
                                                    "AJAX"
                                                    "JSON"
                                                    "JSON-RPC"
+                                                   "RPC"
                                                    "SBCL"
                                                    "ASDF"
                                                    "MOP"
@@ -33,8 +34,18 @@
                                                    "WITH-HANDLED-ERRORS"
                                                    "REBLOCKS/ERROR-HANDLER"
                                                    "REBLOCKS/PAGE-DEPENDENCIES"
-                                                   "REBLOCKS/SESSION:INIT")
+                                                   "REBLOCKS/SESSION:INIT"
+                                                   "REBLOCKS/APP:DEFAPP"
+                                                   "CLACK")
                                     :external-links (("Ultralisp" . "https://ultralisp.org")))
+  (0.67.0 2026-11-08
+          "
+# Added
+
+* REBLOCKS/ROUTES:MOUNT-ROUTE route class and a constructor function of the same name.
+  It allows to serve any Clack application (for example, an OpenRPC or JSON API built with CLACK) on a route inside a REBLOCKS/APP:DEFAPP.
+  The APP argument is required and receives the Clack env, returning a Clack response.
+")
   (0.66.0 2026-05-09
           "
 # Added
